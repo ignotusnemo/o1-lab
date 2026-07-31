@@ -1,0 +1,43 @@
+<h2 id="fixed-point">What “recursive” has to mean</h2>
+<p>A verifier embedded in a proof is not yet a recursive fixed point. The new relation must be able to host the verifier for a proof of its own class, and the public input/output layout must close under repeated application. Otherwise each recursion step silently grows a new circuit or relies on a native decision that cannot itself be continued.</p>
+<p>The milestone recorded on July 5 constructed a link class in which a link proof verifies a predecessor link proof of the same class. The test produced a short chain:</p>
+<div class="equation">π₀ (genesis) → π₁ → π₂ → native decision at the tip</div>
+<p>The smallest honest class that could host its own verifier used a field shape of 2<sup>23</sup>. The number was not selected as a security parameter; it was the capacity boundary at which the complete verifier replay, matrix relation and public I/O fit without changing class at the next step.</p>
+
+<h2 id="basefold">Replaying the PCS verifier in trace</h2>
+<p>The path to that result ran through an in-trace BaseFold verifier. A native verifier consumes roots, round messages, query openings and Merkle authentication. The recursive relation has to reproduce the same transcript order, derive the same challenges, check the same folds and bind the terminal claims without trusting a host-computed boolean.</p>
+<p>The implementation separated three boundaries:</p>
+<ol>
+  <li>the FieldR1cs relation expresses verifier arithmetic over GF(2<sup>128</sup>);</li>
+  <li>the transcript trace reproduces Fiat–Shamir absorption and challenge derivation;</li>
+  <li>public I/O pins predecessor and successor state so the recursive link cannot substitute a different claim.</li>
+</ol>
+<div class="note">
+  <strong>Why “verify inside the circuit” is insufficient</strong>
+  <p>The recursive relation must bind the exact proof bytes, statement and transcript schedule that the native verifier accepts. A verifier-shaped computation with a different challenge order is a different protocol.</p>
+</div>
+
+<h2 id="class">Closing the class</h2>
+<p>The link envelope carries the class identity and fixed public layout. The predecessor proof is decoded as that same class, its matrix claim is folded, and the resulting state becomes the input to the next link. Genesis uses a separate base witness, but after the first link the recursive rule is stable.</p>
+<p>The fixed-point test was deliberately a stub link: it proved recursion mechanics before full block content was attached. That distinction is part of the result. The test answered “can this verifier class verify itself?” It did not yet answer “does the relation prove every rule of an accepted block?”</p>
+
+<h2 id="real-blocks">From stub links to real blocks</h2>
+<p>Later work attached accepted-block batches to the same skeleton: header semantics, chainwork continuity, transaction roots, authorization, exact UTXO transition, state roots and the chain accumulator. The recursive object became HistoryStep, but the fixed-point requirement did not change. Each step still authenticates its predecessor and exposes a successor state in the same public format.</p>
+<p>This sequencing avoided a common failure mode. Building the entire block relation first would have made it difficult to distinguish a recursion bug from an application-relation bug. Closing the verifier on a stub link isolated the recursive boundary before the relation became large.</p>
+
+<h2 id="performance">Shape-level performance work</h2>
+<p>Once the class closed, constants mattered. One later change seeded the class statement digest once per build rather than reconstructing it through repeated work. On the recorded m24 benchmark, prove time fell from 206 seconds to 36 seconds. This did not change the statement or fixed point; it removed duplicated computation around a class-fixed value.</p>
+<p>The same period exposed a variable-length transcript finalization bug. A half-filled rate block could leave the high half of a child UTXO root outside the exact-transition digest. Padding and finalizing the schedule fixed the binding. The incident is a reminder that recursive soundness is not determined by the outer proof alone: byte schedules at every digest boundary are part of the relation.</p>
+
+<h2 id="invariants">The invariants that survived</h2>
+<ul>
+  <li>A link verifies a predecessor of the same authenticated class.</li>
+  <li>Genesis is a base case, not a bypass around class identity.</li>
+  <li>Public start and end claims are equal across adjacent links.</li>
+  <li>Transcript challenges are derived inside the verified trace.</li>
+  <li>The terminal native decision checks the same relation used recursively.</li>
+</ul>
+
+<h2 id="lesson">What this milestone is worth</h2>
+<p>The fixed point turned recursion from a roadmap word into a measured capacity fact. It gave later optimization a stable target: reduce the cost of the same class, not keep inventing a larger verifier for the next level. It also made the HistoryStep architecture possible—a current state can carry one proof whose verifier cost does not grow with chain age.</p>
+

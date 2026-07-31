@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Why two authenticated matrix classes were enough, and why a third class was rejected after measurement rather than intuition.">
+  <meta name="author" content="O(1) Lab">
+  <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, zero-knowledge proofs, proof systems, cryptography, recursive proofs, binary fields, polynomial commitments">
+  <link rel="canonical" href="https://research.parano1d.org/research/b64-b255-proof-classes/">
+  <link rel="alternate" type="application/rss+xml" title="O(1) Lab Research" href="https://research.parano1d.org/feed.xml">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="O(1) Lab Research">
+  <meta property="og:url" content="https://research.parano1d.org/research/b64-b255-proof-classes/">
+  <meta property="og:title" content="B64 and B255: choosing proof classes from measured cadence · O(1) Lab">
+  <meta property="og:description" content="Why two authenticated matrix classes were enough, and why a third class was rejected after measurement rather than intuition.">
+  <meta property="og:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="B64 and B255: choosing proof classes from measured cadence · O(1) Lab">
+  <meta name="twitter:description" content="Why two authenticated matrix classes were enough, and why a third class was rejected after measurement rather than intuition.">
+  <meta name="twitter:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta property="article:published_time" content="2026-07-17T00:00:00Z">
+  <meta property="article:section" content="Recursive proving">
+  <meta property="article:author" content="O(1) Lab">
+  <title>B64 and B255: choosing proof classes from measured cadence · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"B64 and B255: choosing proof classes from measured cadence","description":"The two-class laboratory measured production HistoryStep preparation and verification at the exact B64 and B255 geometries, authenticated the frozen matrix pack, and tested the wallet path from one page to the 1,020-input maximum. The result fixed a small-machine B64 floor and a B255 high-throughput class without adding an intermediate consensus geometry.","datePublished":"2026-07-17","dateModified":"2026-07-17","mainEntityOfPage":"https://research.parano1d.org/research/b64-b255-proof-classes/","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://research.parano1d.org"},"image":"https://research.parano1d.org/assets/og-research.png","about":"Recursive proving"}</script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/" aria-label="O(1) Lab home">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>O(1) Lab</strong><small>Research</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+      <a href="/#latest">Latest</a>
+      <a aria-current="page" href="/research/">All research</a>
+      <a href="/about/">About</a>
+      <span class="nav-rule" aria-hidden="true"></span>
+      <a href="https://docs.parano1d.org">Docs <span aria-hidden="true">↗</span></a>
+      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/research/">← All research</a><div class="article-meta"><span>Engineering study</span><span>Recursive proving</span><time datetime="2026-07-17">Jul 17, 2026</time></div><h1>B64 and B255: choosing proof classes from measured cadence</h1><p class="article-dek">Why two authenticated matrix classes were enough, and why a third class was rejected after measurement rather than intuition.</p><div class="article-byline"><span>By O(1) Lab</span><span>4 min read</span><span>Reproducible benchmark</span></div></div>
+      <div class="research-art art--classes" aria-hidden="true">
+    <span class="art-grid"></span>
+    <span class="art-orbit art-orbit--a"></span>
+    <span class="art-orbit art-orbit--b"></span>
+    <span class="art-axis"></span>
+    <span class="art-node art-node--a"></span>
+    <span class="art-node art-node--b"></span>
+    <span class="art-node art-node--c"></span>
+    <span class="art-code">①</span>
+  </div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#question">The class-count question</a><a href="#geometry">The two geometries</a><a href="#wallet">One capsule across 1,020 inputs</a><a href="#history-step">Production HistoryStep measurements</a><a href="#lto">A code-generation experiment, not a protocol change</a><a href="#pack">Reproducing the authenticated pack</a><a href="#decision">The decision</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>The two-class laboratory measured production HistoryStep preparation and verification at the exact B64 and B255 geometries, authenticated the frozen matrix pack, and tested the wallet path from one page to the 1,020-input maximum. The result fixed a small-machine B64 floor and a B255 high-throughput class without adding an intermediate consensus geometry.</p></div><h2 id="question">The class-count question</h2>
+<p>A recursive proof system can always add another circuit class. That does not mean it should. Every class adds an authenticated matrix leaf, release artifact, selection rule, test surface and long-lived consensus branch. The B64/B255 study asked a narrower question: can two fixed geometries cover both ordinary machines and maximum block fan-in while keeping the class ladder small?</p>
+<p>The answer could not come from row counts alone. It required the production HistoryStep assembler, prover, terminal codec and verifier; the exact frozen matrices; the wallet authorization path; and sustained measurements against the fifteen-second block target.</p>
+
+<h2 id="geometry">The two geometries</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Class</th><th>Field shape</th><th>Physical user pages</th><th>Role</th></tr></thead>
+  <tbody>
+    <tr><td>B64</td><td>m23</td><td>0–64</td><td>Small-machine production floor</td></tr>
+    <tr><td>B255</td><td>m24</td><td>65–255</td><td>Maximum block page class</td></tr>
+  </tbody>
+</table></div>
+<p>A logical PagedSpend may contain at most 128 pages, 1,020 inputs and 256 outputs. A block may contain at most 255 physical user pages, 1,020 inputs and 510 outputs. Those limits are not a third proof class: the same fixed parent representation covers both m23 and m24.</p>
+
+<div class="failure">
+  <strong>Rejected branch</strong>
+  <p>The laboratory explored an A128 middle class, capsule transposition and a Merkle forest. Those experiments were removed when measurements showed that the launch ladder could return to the existing B64/B255 geometries. Keeping the extra class would have preserved complexity without establishing a necessary operating region.</p>
+</div>
+
+<h2 id="wallet">One capsule across 1,020 inputs</h2>
+<p>The wallet benchmark measured page construction, logical hashing, one unchanged witness-hiding capsule, atomic-intent encoding and decoding, and local capsule admission. Network latency and HistoryStep proving were excluded.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Case</th><th>Pages</th><th>Total p50</th><th>Total p95</th><th>Proof / intent</th></tr></thead>
+  <tbody>
+    <tr><td>1 input</td><td>1</td><td>228.30 ms</td><td>352.47 ms</td><td>56.49 / 56.81 KiB</td></tr>
+    <tr><td>100 inputs</td><td>13</td><td>217.32 ms</td><td>255.46 ms</td><td>56.58 / 60.69 KiB</td></tr>
+    <tr><td>1,020 inputs</td><td>128</td><td>233.06 ms</td><td>285.81 ms</td><td>56.11 / 96.50 KiB</td></tr>
+  </tbody>
+</table></div>
+<p>The capsule median stays around two hundred milliseconds while page hashing and intent bytes grow with fan-in. That is the intended invariant: inputs owned by the same secret do not create one zero-knowledge authorization proof per page.</p>
+
+<h2 id="history-step">Production HistoryStep measurements</h2>
+<p>The first twenty-sample run used an Intel Core i7-1365U with AVX2 and VPCLMULQDQ, no AVX-512, under an active desktop session. The benchmark authenticated the frozen two-entry pack, constructed an honest recursive B64 parent and measured the production HistoryStep path. Parent construction, wallet-capsule generation, PoW search and durable block commit were setup or out of scope.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Class</th><th>Useful rows</th><th>Prepare p50 / p95</th><th>Verify p50 / p95</th><th>Terminal</th></tr></thead>
+  <tbody>
+    <tr><td>B64 / m23</td><td>5,705,307</td><td>12.174 / 15.182 s</td><td>0.655 / 0.906 s</td><td>766,549 B</td></tr>
+    <tr><td>B255 / m24</td><td>15,368,233</td><td>26.203 / 32.009 s</td><td>0.771 / 0.859 s</td><td>807,189 B</td></tr>
+  </tbody>
+</table></div>
+<p>The B64 median had 2.826 seconds of margin but the sustained p95 missed the target by 182 milliseconds. B255 needed 2.134× more complete-prepare throughput to place its p95 at fifteen seconds. The machine was therefore a valid B64 functional floor and not a B255 host.</p>
+
+<h2 id="lto">A code-generation experiment, not a protocol change</h2>
+<p>The next run changed only release code generation: thin LTO and one codegen unit. The relation, witness, matrix pack and benchmark methodology were unchanged.</p>
+<div class="metric-row">
+  <div class="metric"><strong>14.387 s</strong><span>B64 prepare p95</span></div>
+  <div class="metric"><strong>613 ms</strong><span>Margin under the target</span></div>
+  <div class="metric"><strong>29.755 s</strong><span>B255 prepare p95</span></div>
+</div>
+<p>B64 prepare p50 improved from 12.174 to 11.472 seconds and p95 from 15.182 to 14.387 seconds. B255 improved too, but remained outside the laptop class. Profiling placed almost all time in PCS commitment and the post-commit recursive phase, not PagedSpend or networking.</p>
+
+<h2 id="pack">Reproducing the authenticated pack</h2>
+<p>Proof timing is not enough if a release depends on generated matrices. The laboratory regenerated the complete B64/B255 pack from an empty output root and compared the runtime metadata and both matrix leaves byte for byte.</p>
+<ul>
+  <li>generation time: 5,596.2 seconds;</li>
+  <li>B64 compressed leaf: 4,584,391 bytes;</li>
+  <li>B255 compressed leaf: 11,912,603 bytes;</li>
+  <li>runtime metadata: 1,732,922 bytes;</li>
+  <li>complete pinned pack: 18,229,916 bytes.</li>
+</ul>
+<p>The fresh generation matched the recorded digests. This turned “the matrices can be rebuilt” into a release check rather than an assumption.</p>
+
+<h2 id="decision">The decision</h2>
+<p>The measured boundary supported two conclusions. First, B64 is a real lower hardware class only when the release profile and thermal conditions keep its tail under cadence. Second, B255 is a distinct high-throughput class; pretending it can run on the same laptop would make the class label meaningless.</p>
+<p>Most importantly, no measurement established a need for a third class. The two-leaf ladder remained smaller, easier to authenticate and easier to reason about.</p>
+
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Research record</p><h2 id="evidence-title">Evidence and artifacts</h2><p>The links below preserve the implementation, measurement or derivation behind this article.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/tree/main/research/two_class"><span><small>Code</small><strong>Two-class laboratory</strong></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/blob/main/research/two_class/results/2026-07-17-history-step-lto-20-sample.md"><span><small>Data</small><strong>HistoryStep measurements</strong></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/blob/main/research/two_class/results/2026-07-17-history-step-pack-reproduction.md"><span><small>Artifact</small><strong>Reproducible matrix pack</strong></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Adjacent research"><a href="/research/executable-soundness-ledger/"><small>Earlier</small><strong>Executable soundness</strong><span>←</span></a><a href="/research/frost-gkr-global-trace-protocol/"><small>Later</small><strong>FROST-GKR</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>O(1) Lab</strong><p>Protocol research behind ParanO(1)d.</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>Research</strong><a href="/research/">Archive</a><a href="/feed.xml">RSS feed</a><a href="/papers/FROST_GKR.pdf">FROST-GKR paper</a></div>
+      <div><strong>Project</strong><a href="https://parano1d.org">Website</a><a href="https://docs.parano1d.org">Documentation</a><a href="https://github.com/ignotusnemo/parano1d">Source</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>research.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js" defer></script>
+</body>
+</html>

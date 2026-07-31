@@ -1,0 +1,192 @@
+[
+  {
+    "slug": "frost-gkr-global-trace-protocol",
+    "date": "2026-07-31",
+    "kind": "Paper",
+    "topic": "Proof systems",
+    "status": "Paper and artifact",
+    "featured": true,
+    "title": "FROST-GKR: a global trace protocol for batched Poseidon2b",
+    "shortTitle": "FROST-GKR",
+    "dek": "A three-column committed trace reduces an entire batch of Poseidon2b executions with two constraint sumchecks.",
+    "abstract": "FROST-GKR represents every permutation slot, round and lane on one Boolean product domain. One degree-nine zero-check enforces the full round relation; one degree-two reduction returns shifted evaluations to the original committed columns. For the evaluated 59-permutation workload, the reduction cuts 472 per-permutation constraint sumchecks to two.",
+    "authors": ["Andrew Boyle", "O(1) Lab"],
+    "art": "frost",
+    "evidence": [
+      {"label": "Read the paper", "href": "/papers/FROST_GKR.pdf", "type": "PDF"},
+      {"label": "Benchmark artifact", "href": "https://github.com/ignotusnemo/parano1d/tree/main/research/frost_gkr", "type": "Code"},
+      {"label": "Preserved implementation", "href": "https://github.com/ignotusnemo/parano1d/commit/8e514ff4eb59e7925992e8274c4f10214d7c6b9f", "type": "Commit"}
+    ]
+  },
+  {
+    "slug": "b64-b255-proof-classes",
+    "date": "2026-07-17",
+    "kind": "Engineering study",
+    "topic": "Recursive proving",
+    "status": "Reproducible benchmark",
+    "featured": true,
+    "title": "B64 and B255: choosing proof classes from measured cadence",
+    "shortTitle": "B64 / B255",
+    "dek": "Why two authenticated matrix classes were enough, and why a third class was rejected after measurement rather than intuition.",
+    "abstract": "The two-class laboratory measured production HistoryStep preparation and verification at the exact B64 and B255 geometries, authenticated the frozen matrix pack, and tested the wallet path from one page to the 1,020-input maximum. The result fixed a small-machine B64 floor and a B255 high-throughput class without adding an intermediate consensus geometry.",
+    "authors": ["O(1) Lab"],
+    "art": "classes",
+    "evidence": [
+      {"label": "Two-class laboratory", "href": "https://github.com/ignotusnemo/parano1d/tree/main/research/two_class", "type": "Code"},
+      {"label": "HistoryStep measurements", "href": "https://github.com/ignotusnemo/parano1d/blob/main/research/two_class/results/2026-07-17-history-step-lto-20-sample.md", "type": "Data"},
+      {"label": "Reproducible matrix pack", "href": "https://github.com/ignotusnemo/parano1d/blob/main/research/two_class/results/2026-07-17-history-step-pack-reproduction.md", "type": "Artifact"}
+    ]
+  },
+  {
+    "slug": "binary-field-kernels",
+    "date": "2026-07-09",
+    "kind": "Engineering study",
+    "topic": "Binary fields",
+    "status": "Production implementation",
+    "featured": true,
+    "title": "Binary-field kernels across PCLMUL, VPCLMUL, AVX-512 and PMULL",
+    "shortTitle": "Binary-field kernels",
+    "dek": "One fixed proof layout, several runtime-selected execution backends, and a 5.4× Poseidon2b batch-hashing result on AVX2 with VPCLMULQDQ.",
+    "abstract": "The proof stack works over GF(2^128), making carry-less multiplication the central arithmetic primitive. The implementation keeps witness and proof geometry independent of the host ISA while selecting x86-64 and ARM64 kernels at runtime. This note records the register-domain Poseidon2b work, its measured impact, and the portability rules that keep optimization outside consensus.",
+    "authors": ["O(1) Lab"],
+    "art": "kernel",
+    "evidence": [
+      {"label": "VPCLMUL kernel commit", "href": "https://github.com/ignotusnemo/parano1d/commit/6e29b73e", "type": "Commit"},
+      {"label": "Runtime dispatch", "href": "https://github.com/ignotusnemo/parano1d/blob/main/noid_core/src/cpu.rs", "type": "Code"},
+      {"label": "Poseidon2b batch implementation", "href": "https://github.com/ignotusnemo/parano1d/blob/main/noid_poseidon2b/src/batch.rs", "type": "Code"}
+    ]
+  },
+  {
+    "slug": "proof-carrying-state-sync",
+    "date": "2026-07-12",
+    "kind": "Systems research",
+    "topic": "Proof-carrying State",
+    "status": "Production protocol",
+    "featured": true,
+    "title": "Proof-carrying State: synchronization without execution replay",
+    "shortTitle": "Proof-carrying State",
+    "dek": "Permanent headers, one recursive boundary terminal and exact live State replace historical transaction execution during bootstrap.",
+    "abstract": "A new node still validates proof of work and still downloads current State. What it no longer does is download every historical transaction body and execute the chain from genesis. This study records the authenticated snapshot boundary, disk-staged installation, retained suffix and the distinction between constant proof verification and costs that necessarily scale with headers or live State.",
+    "authors": ["O(1) Lab"],
+    "art": "state",
+    "evidence": [
+      {"label": "O(1) synchronization design", "href": "https://github.com/ignotusnemo/parano1d/commit/9fffd832", "type": "Commit"},
+      {"label": "Exact boundary binding", "href": "https://github.com/ignotusnemo/parano1d/commit/3dd2c3bf", "type": "Commit"},
+      {"label": "Bounded State installation", "href": "https://github.com/ignotusnemo/parano1d/commit/63d47e7a", "type": "Commit"}
+    ]
+  },
+  {
+    "slug": "single-global-walk",
+    "date": "2026-07-06",
+    "kind": "Negative result",
+    "topic": "Recursive proving",
+    "status": "Failure analysis and replacement",
+    "featured": true,
+    "title": "The 30 GB wall and the single global walk",
+    "shortTitle": "The 30 GB wall",
+    "dek": "Per-family recursive replay was algebraically clean and operationally impossible. A heterogeneous union reduced nine family types to one walk and one channel schedule.",
+    "abstract": "A direct recursive composition assigned an independent 66-layer Poseidon2b walk to every authentication family. Memory grew with the number of families and exhausted a 30 GB machine. The replacement localized family patterns inside one shared slot domain and discharged every family through one global walk, one carry selection and one unioned substitution.",
+    "authors": ["O(1) Lab"],
+    "art": "walk",
+    "evidence": [
+      {"label": "Two-family union primitive", "href": "https://github.com/ignotusnemo/parano1d/commit/6d0cfaf0", "type": "Commit"},
+      {"label": "Nine-family assembly core", "href": "https://github.com/ignotusnemo/parano1d/commit/4bdd7b5a", "type": "Commit"},
+      {"label": "Current region source binding", "href": "https://github.com/ignotusnemo/parano1d/blob/main/noid_recursive/src/acceptance/trace/region_source_binding.rs", "type": "Code"}
+    ]
+  },
+  {
+    "slug": "recursive-fixed-point",
+    "date": "2026-07-05",
+    "kind": "Protocol note",
+    "topic": "Recursive proving",
+    "status": "Implemented milestone",
+    "featured": false,
+    "title": "Closing the recursive verifier at a real fixed point",
+    "shortTitle": "Recursive fixed point",
+    "dek": "A link proof verifies a predecessor of its own class, with the complete verifier replay hosted at a 2^23 field shape.",
+    "abstract": "Recursive proofs are easy to describe before the verifier itself has to fit inside the relation. This note follows the path from an in-trace BaseFold replay to a same-class link proof, explains why the fixed shape matters, and separates the original stub-link milestone from the later full accepted-block relation.",
+    "authors": ["O(1) Lab"],
+    "art": "recursion",
+    "evidence": [
+      {"label": "In-trace BaseFold replay", "href": "https://github.com/ignotusnemo/parano1d/commit/fc328e70", "type": "Commit"},
+      {"label": "Fixed-point milestone", "href": "https://github.com/ignotusnemo/parano1d/commit/519ee567", "type": "Commit"},
+      {"label": "Recursive acceptance code", "href": "https://github.com/ignotusnemo/parano1d/tree/main/noid_recursive/src/acceptance", "type": "Code"}
+    ]
+  },
+  {
+    "slug": "owner-batched-authorization",
+    "date": "2026-06-24",
+    "kind": "Protocol study",
+    "topic": "Wallet authorization",
+    "status": "Production design trail",
+    "featured": false,
+    "title": "From duplicated wallet proofs to owner-batched authorization",
+    "shortTitle": "Owner-batched authorization",
+    "dek": "Public transaction logic moved out of the wallet proof; many inputs owned by one secret became one witness-hiding authorization capsule.",
+    "abstract": "The original wallet transmitted both a public-logic STARK and a secret-knowledge proof. The block rebuilt the public relation anyway. Removing that duplication clarified the security boundary: native admission checks public arithmetic, the wallet proves ownership, and the block proof proves the canonical transition. Owner batching and PagedSpend then let one capsule authorize up to 1,020 inputs.",
+    "authors": ["O(1) Lab"],
+    "art": "authorization",
+    "evidence": [
+      {"label": "Auth-only transition", "href": "https://github.com/ignotusnemo/parano1d/commit/539107f7", "type": "Commit"},
+      {"label": "Owner-batched statement", "href": "https://github.com/ignotusnemo/parano1d/commit/4462a209", "type": "Commit"},
+      {"label": "PagedSpend capsule", "href": "https://github.com/ignotusnemo/parano1d/commit/25a1887f", "type": "Commit"}
+    ]
+  },
+  {
+    "slug": "binding-a-mixed-opening",
+    "date": "2026-06-21",
+    "kind": "Security note",
+    "topic": "Polynomial commitments",
+    "status": "Bug analysis and repair",
+    "featured": false,
+    "title": "Binding a compact FRI opening back to its committed source",
+    "shortTitle": "Source binding",
+    "dek": "Transcript binding was not source binding. Query-level authentication closed a commit-to-A, open-from-A′ attack in the mixed-opening path.",
+    "abstract": "An early mixed-opening verifier proved that a low-degree combination matched prover-supplied values, but did not authenticate the compact FRI round-zero oracle back to the original interleaved commitment. This note states the attack, explains why absorbing more roots cannot fix it, and records the source Merkle and shared-query repair.",
+    "authors": ["O(1) Lab"],
+    "art": "binding",
+    "evidence": [
+      {"label": "Source-binding implementation", "href": "https://github.com/ignotusnemo/parano1d/commit/e5e4655a", "type": "Commit"},
+      {"label": "Mixed-opening verifier", "href": "https://github.com/ignotusnemo/parano1d/blob/main/noid_fri_binius/src/mixed_open.rs", "type": "Code"},
+      {"label": "Interleaved commitment", "href": "https://github.com/ignotusnemo/parano1d/blob/main/noid_fri_binius/src/interleaved_commit.rs", "type": "Code"}
+    ]
+  },
+  {
+    "slug": "pcs-implementation-trail",
+    "date": "2026-06-21",
+    "kind": "Research retrospective",
+    "topic": "Polynomial commitments",
+    "status": "Implementation record",
+    "featured": false,
+    "title": "A PCS implementation trail through a binary proof stack",
+    "shortTitle": "PCS implementation trail",
+    "dek": "Ladder-batched FRI, interleaved FRI-Binius and in-trace BaseFold were not interchangeable upgrades; each solved a different boundary.",
+    "abstract": "This retrospective reconstructs the polynomial-commitment work from repository evidence. It starts with a ladder-batched FRI prototype whose proof bytes were dominated by a multipoint opening, follows the interleaved binary-field commitment and its source-binding repair, and ends at the BaseFold verifier replay needed for recursion.",
+    "authors": ["O(1) Lab"],
+    "art": "pcs",
+    "evidence": [
+      {"label": "Ladder-batch FRI and VSHIFT", "href": "https://github.com/ignotusnemo/parano1d/commit/63ac7af1", "type": "Commit"},
+      {"label": "FRI-Binius implementation", "href": "https://github.com/ignotusnemo/parano1d/commit/5d92116b", "type": "Commit"},
+      {"label": "BaseFold verifier replay", "href": "https://github.com/ignotusnemo/parano1d/commit/fc328e70", "type": "Commit"}
+    ]
+  },
+  {
+    "slug": "executable-soundness-ledger",
+    "date": "2026-07-14",
+    "kind": "Security engineering",
+    "topic": "Soundness",
+    "status": "Executable ledger",
+    "featured": false,
+    "title": "Treating soundness as executable protocol data",
+    "shortTitle": "Executable soundness",
+    "dek": "A security floor should move when the protocol moves. The ledger turns batching, Fiat–Shamir and QROM terms into checked inputs rather than prose copied between documents.",
+    "abstract": "ParanO(1)d combines wallet authorization, recursive HistoryStep and hash assumptions. The weakest composed post-quantum bound is 79 bits. This note explains how the executable ledger derives that floor, why a finite-length random-combination analysis replaced a misleading asymptotic shorthand, and which claims are deterministic rather than probabilistic.",
+    "authors": ["O(1) Lab"],
+    "art": "soundness",
+    "evidence": [
+      {"label": "Executable soundness ledger", "href": "https://github.com/ignotusnemo/parano1d/blob/main/noid_gkr/src/zk_auth_qrom.rs", "type": "Code"},
+      {"label": "Protocol security model", "href": "https://docs.parano1d.org/protocol/security-model/", "type": "Documentation"},
+      {"label": "Finite-length UDR derivation", "href": "https://github.com/ignotusnemo/parano1d/commit/4eaed4d0", "type": "Commit"}
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse"><path d="M46 0H0v46" fill="none" stroke="#1c3d2c" stroke-width="1"/></pattern>
+    <radialGradient id="glow" cx="72%" cy="38%" r="48%"><stop offset="0" stop-color="#1c7a4d" stop-opacity=".72"/><stop offset="1" stop-color="#07120d" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#07120d"/>
+  <rect width="1200" height="630" fill="url(#grid)" opacity=".52"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <g transform="translate(80 76)">
+    <rect width="62" height="62" rx="14" fill="#2fe985"/>
+    <circle cx="31" cy="31" r="18" fill="none" stroke="#07120d" stroke-width="3"/>
+    <path d="M29.5 20.5h4v21h-4zm-5.2 3.7 5.8-3.7v4.3l-5.8 3.5z" fill="#07120d"/>
+    <text x="82" y="28" fill="#f8fff9" font-family="Noto Sans, sans-serif" font-size="25" font-weight="700">O(1) Lab</text>
+    <text x="82" y="52" fill="#83a891" font-family="Noto Sans Mono, monospace" font-size="12" letter-spacing="3">RESEARCH</text>
+  </g>
+  <text x="80" y="345" fill="#f8fff9" font-family="Noto Sans, sans-serif" font-size="72" font-weight="700" letter-spacing="-4">Research for</text>
+  <text x="80" y="425" fill="#f8fff9" font-family="Noto Sans, sans-serif" font-size="72" font-weight="700" letter-spacing="-4">proof-native systems.</text>
+  <text x="82" y="488" fill="#9db4a7" font-family="Noto Sans, sans-serif" font-size="23">Papers · protocol work · engineering studies · negative results</text>
+  <g fill="none" stroke="#2fe985" stroke-width="2" opacity=".72">
+    <circle cx="960" cy="302" r="150"/><circle cx="960" cy="302" r="96" stroke="#66b8d7"/>
+    <path d="M760 430 1112 176" stroke="#d8f52d"/>
+  </g>
+  <g fill="#07120d" stroke-width="3"><rect x="803" y="388" width="20" height="20" transform="rotate(45 813 398)" stroke="#2fe985"/><rect x="950" y="292" width="20" height="20" transform="rotate(45 960 302)" stroke="#2fe985"/><rect x="1098" y="184" width="20" height="20" transform="rotate(45 1108 194)" stroke="#d8f52d"/></g>
+  <text x="1075" y="575" text-anchor="end" fill="#83a891" font-family="Noto Sans Mono, monospace" font-size="13" letter-spacing="2">RESEARCH.PARANO1D.ORG</text>
+</svg>

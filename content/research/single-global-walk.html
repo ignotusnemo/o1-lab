@@ -1,0 +1,55 @@
+<h2 id="clean-design">The clean design that did not fit</h2>
+<p>The recursive verifier had to replay several Poseidon2b-based authentication families: source-tree hashes, source-leaf hashes, high-pair leaves at multiple fold layers, Merkle paths and the relations that bind their openings. The first composition was structurally attractive. Give each family its own slot schedule, its own carry selection and its own sixty-six-layer deep-chain walk, then combine the terminal claims.</p>
+<p>Algebraically, every family remained easy to read. Operationally, memory scaled with the number of families because every independent walk materialized another large set of trace columns. On a 30 GB development machine the multi-family assembly ran out of memory before the protocol could be tested at its real shape.</p>
+<div class="failure">
+  <strong>Negative result</strong>
+  <p>“One walk per family” was not a tolerable implementation detail. It was an asymptotic architecture error at the recursive boundary.</p>
+</div>
+
+<h2 id="shared-object">Find the shared object</h2>
+<p>Every family was ultimately asking the same question: does this sequence of width-four states follow the Poseidon2b permutation? The family-specific difference was not the permutation. It was the source of the inputs, the fixed schedule and the relation that consumes the outputs.</p>
+<p>The replacement constructed one meta-domain with a fixed period <em>P</em>. Each family occupies a disjoint slot range inside that period. The committed carry columns <code>C0..C3</code>, the walk input and the Poseidon2b walk are shared. Only family input columns and fixed patterns differ.</p>
+<div class="protocol-flow" aria-label="Single global walk architecture">
+  <div class="flow-step"><small>Family A</small><strong>Source leaves</strong><span>Localized slots and patterns</span></div>
+  <div class="flow-step"><small>Family B…N</small><strong>Merkle and fold families</strong><span>Localized slots and patterns</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>Shared</small><strong>One carry selection</strong><span>One C0…C3 column set</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>Shared</small><strong>One deep-chain walk</strong><span>Every occupied slot</span></div>
+</div>
+
+<h2 id="localization">Localizing family equations</h2>
+<p>Combining domains creates a subtle problem. A fixed pattern originally defined over a family's own stride repeats periodically. If copied directly into the meta-domain, its constants fire inside other families' slots. Ungated carry-forward equations may also read across a family boundary.</p>
+<p>The union primitive rebuilds every pattern as a table of length <em>P</em>, places the family's values only in its assigned range and writes zero elsewhere. A family term therefore vanishes outside its region. Terms that have no fixed factor receive an explicit region selector. Clean-start families are arranged so their first active node never reads a carry from the preceding region.</p>
+<div class="equation">Σ family_terms(w) = Σ<sub>e</sub> α<sup>e+1</sup> · s₀[e](w) &nbsp;&nbsp; over one shared slot domain</div>
+<p>At an A slot, only A terms are live. At a B slot, only B terms are live. The right-hand side is family-agnostic because it describes the same permutation input relation in both cases.</p>
+
+<h2 id="primitive">The two-family kill shot</h2>
+<p>The first end-to-end primitive combined two genuinely different deep-chain families: a source-leaf chain and a Merkle path. It drove one carry selection, one deep-chain walk and one unioned substitution through the real outer PCS and public I/O. The Merkle direction bits kept a separate booleanity sumcheck, but not a second permutation walk.</p>
+<p>The regression tests changed an input symbol or sibling while leaving a satisfiable trace. The altered committed column then failed at the opening boundary. This was important: the test demonstrated that the union was not merely capable of accepting its own assembled witness; it still bound each family back to its commitment.</p>
+
+<h2 id="nine-families">From two families to nine</h2>
+<p>The next assembly composed the actual source-binding graph. It included the source-tree family, source-leaf queries and one high-pair family for each fold layer—nine family types in the measured shape. All of them shared:</p>
+<ul>
+  <li>one slot domain;</li>
+  <li>one carry selection;</li>
+  <li>one Poseidon2b deep-chain walk;</li>
+  <li>one unioned substitution;</li>
+  <li>one real FRI-channel schedule.</li>
+</ul>
+<p>The channel was driven once from cap absorption through mixed-opening challenges, round roots, final codeword, source-binding roots and shared query indices. Those challenges fed both the algebra and the source-opening claims. Each family retained its own committed input columns, but did not instantiate its own verifier walk.</p>
+
+<h2 id="memory-work">The broader memory pass</h2>
+<p>The single global walk removed the dominant multiplicative factor. It also made later memory work worthwhile rather than cosmetic. The implementation moved constraint matrices to CSR, right-sized BaseFold ping-pong buffers, bounded lincheck transients, capped scratch by bytes and dictionary-encoded repeated matrix coefficients.</p>
+<p>Those changes solve different problems. CSR and dictionary encoding reduce static matrix representation. Bounded scratch controls transient allocation. The global walk changes the composition topology itself. Treating all three as “memory optimizations” would hide why the original approach failed.</p>
+
+<h2 id="result">What the result establishes</h2>
+<p>The research milestone did not claim a universal compiler for arbitrary verifier families. It established a concrete construction for heterogeneous Poseidon2b trace families that share a permutation relation and can be localized inside one fixed domain. The complete production relation continued to evolve after the primitive, but the topology survived: share the expensive walk and keep family-specific algebra at its boundary.</p>
+<div class="result">
+  <strong>Reusable lesson</strong>
+  <p>When many recursive checks contain the same expensive subcomputation, batch the subcomputation before optimizing its implementation. A faster copy of every walk would still have left memory proportional to the family count.</p>
+</div>
+
+<h2 id="why-publish">Why publish the failure</h2>
+<p>The 30 GB wall is useful because it is easy to reproduce conceptually and easy to miss in a small circuit. Per-family modularity looked safer, and every isolated test passed. The failure appeared only when the real family graph was assembled. Preserving that history makes the final single-walk construction intelligible instead of presenting it as an unexplained optimization.</p>
+

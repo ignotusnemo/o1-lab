@@ -1,0 +1,13 @@
+{
+  "name": "o1-lab-research",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static research journal for O(1) Lab",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs",
+    "serve": "python3 -m http.server 4173"
+  }
+}
+

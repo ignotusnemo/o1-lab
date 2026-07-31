@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Permanent headers, one recursive boundary terminal and exact live State replace historical transaction execution during bootstrap.">
+  <meta name="author" content="O(1) Lab">
+  <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, zero-knowledge proofs, proof systems, cryptography, recursive proofs, binary fields, polynomial commitments">
+  <link rel="canonical" href="https://research.parano1d.org/research/proof-carrying-state-sync/">
+  <link rel="alternate" type="application/rss+xml" title="O(1) Lab Research" href="https://research.parano1d.org/feed.xml">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="O(1) Lab Research">
+  <meta property="og:url" content="https://research.parano1d.org/research/proof-carrying-state-sync/">
+  <meta property="og:title" content="Proof-carrying State: synchronization without execution replay · O(1) Lab">
+  <meta property="og:description" content="Permanent headers, one recursive boundary terminal and exact live State replace historical transaction execution during bootstrap.">
+  <meta property="og:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Proof-carrying State: synchronization without execution replay · O(1) Lab">
+  <meta name="twitter:description" content="Permanent headers, one recursive boundary terminal and exact live State replace historical transaction execution during bootstrap.">
+  <meta name="twitter:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta property="article:published_time" content="2026-07-12T00:00:00Z">
+  <meta property="article:section" content="Proof-carrying State">
+  <meta property="article:author" content="O(1) Lab">
+  <title>Proof-carrying State: synchronization without execution replay · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Proof-carrying State: synchronization without execution replay","description":"A new node still validates proof of work and still downloads current State. What it no longer does is download every historical transaction body and execute the chain from genesis. This study records the authenticated snapshot boundary, disk-staged installation, retained suffix and the distinction between constant proof verification and costs that necessarily scale with headers or live State.","datePublished":"2026-07-12","dateModified":"2026-07-12","mainEntityOfPage":"https://research.parano1d.org/research/proof-carrying-state-sync/","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://research.parano1d.org"},"image":"https://research.parano1d.org/assets/og-research.png","about":"Proof-carrying State"}</script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/" aria-label="O(1) Lab home">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>O(1) Lab</strong><small>Research</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+      <a href="/#latest">Latest</a>
+      <a aria-current="page" href="/research/">All research</a>
+      <a href="/about/">About</a>
+      <span class="nav-rule" aria-hidden="true"></span>
+      <a href="https://docs.parano1d.org">Docs <span aria-hidden="true">↗</span></a>
+      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/research/">← All research</a><div class="article-meta"><span>Systems research</span><span>Proof-carrying State</span><time datetime="2026-07-12">Jul 12, 2026</time></div><h1>Proof-carrying State: synchronization without execution replay</h1><p class="article-dek">Permanent headers, one recursive boundary terminal and exact live State replace historical transaction execution during bootstrap.</p><div class="article-byline"><span>By O(1) Lab</span><span>4 min read</span><span>Production protocol</span></div></div>
+      <div class="research-art art--state" aria-hidden="true">
+    <span class="art-grid"></span>
+    <span class="art-orbit art-orbit--a"></span>
+    <span class="art-orbit art-orbit--b"></span>
+    <span class="art-axis"></span>
+    <span class="art-node art-node--a"></span>
+    <span class="art-node art-node--b"></span>
+    <span class="art-node art-node--c"></span>
+    <span class="art-code">①</span>
+  </div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#remove-replay">Remove replay, not verification</a><a href="#cost-model">The honest cost model</a><a href="#paths">Two synchronization paths</a><a href="#boundary">Bind every object to one boundary</a><a href="#staging">Disk staging as a consensus boundary</a><a href="#peer">The peer is a data source</a><a href="#finality">Recent reorganization and finality</a><a href="#research-result">The research result</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>A new node still validates proof of work and still downloads current State. What it no longer does is download every historical transaction body and execute the chain from genesis. This study records the authenticated snapshot boundary, disk-staged installation, retained suffix and the distinction between constant proof verification and costs that necessarily scale with headers or live State.</p></div><h2 id="remove-replay">Remove replay, not verification</h2>
+<p>Historical replay combines several different tasks and calls all of them “synchronization.” A node reads headers to compare proof of work. It downloads transaction bodies to reconstruct state. It executes every historical rule to decide whether the reconstructed state is valid. As the chain ages, the third task grows even when the present State stays the same size.</p>
+<p>ParanO(1)d replaces historical execution replay with a recursive HistoryStep. Each accepted block proves the exact transition from its authenticated parent State to its child State. The current boundary therefore carries a proof of the transition chain that produced it.</p>
+<div class="result">
+  <strong>What disappears</strong>
+  <p>A joining node does not download and execute every historical transaction body. It verifies one recursive terminal at a finalized boundary, reconstructs the exact committed live State, then applies a bounded recent suffix.</p>
+</div>
+
+<h2 id="cost-model">The honest cost model</h2>
+<p>“O(1) synchronization” is easy to overstate. The proof-verification work at the boundary is constant in chain age. Header work and State transfer are not.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Phase</th><th>Scales with</th><th>Why it remains</th></tr></thead>
+  <tbody>
+    <tr><td>Header validation</td><td>Chain height</td><td>Proof of work and chainwork must be compared</td></tr>
+    <tr><td>HistoryStep terminal</td><td>Constant proof verification</td><td>Recursive validity at the selected boundary</td></tr>
+    <tr><td>State transfer</td><td>Live State</td><td>A node must obtain the data it will serve</td></tr>
+    <tr><td>Recent suffix</td><td>At most 18 complete blocks</td><td>Connect the finalized boundary to the live tip</td></tr>
+  </tbody>
+</table></div>
+<p>The architecture removes an age-dependent execution log. It does not claim that proof of work can be compared without reading headers or that a multi-gigabyte current State can be installed without moving multi-gigabyte data.</p>
+
+<h2 id="paths">Two synchronization paths</h2>
+<h3>A short gap</h3>
+<p>Every full node retains the latest eighteen complete accepted blocks. A peer within that window requests atomic bundles containing the semantic block and matching HistoryStep terminal. It checks header continuity, exact difficulty and timestamp rules, Poseidon2b proof of work, transaction and State commitments, recursive validity, fork choice and finality before materializing writes.</p>
+
+<h3>A deep gap</h3>
+<p>A peer farther behind selects a finalized snapshot boundary:</p>
+<ol>
+  <li>download and validate permanent headers;</li>
+  <li>select the canonical finalized boundary;</li>
+  <li>obtain and verify the matching HistoryStep terminal;</li>
+  <li>download the State manifest and referenced segments;</li>
+  <li>reconstruct the exact global State root and counters;</li>
+  <li>install the staged State transactionally;</li>
+  <li>verify and apply the retained complete suffix.</li>
+</ol>
+
+<h2 id="boundary">Bind every object to one boundary</h2>
+<p>A valid proof for height <em>h</em> must not authenticate a manifest from <em>h − 1</em> or a segment set from another branch. The snapshot manifest therefore binds the boundary height, State root, slot geometry, active count, allocation counter, segment identifiers, segment roots and lengths. The recursive terminal, canonical header and manifest must name the same boundary.</p>
+<p>Several July 12 implementation passes focused specifically on typestate around that boundary: header staging, selected proof sessions, durable proof jobs and exact boundary binding. These are not network cosmetics. They prevent a peer from combining individually valid objects into an invalid snapshot package.</p>
+
+<h2 id="staging">Disk staging as a consensus boundary</h2>
+<p>Segments arrive into an isolated scratch environment. The active database is not updated page by page. Only after every segment, counter, root, boundary header and terminal agrees does the node atomically replace the installed State.</p>
+<p>If the process exits, startup removes the incomplete staging environment and resumes from the last canonical database. This avoids a recovery mode where consensus code has to decide which fraction of a peer-provided snapshot became authoritative.</p>
+<div class="note">
+  <strong>Bounded memory</strong>
+  <p>Header staging and State installation are disk-backed and allocation-bounded. The peer controls payload bytes but does not control an unbounded decoder allocation or force the complete candidate State into RAM.</p>
+</div>
+
+<h2 id="peer">The peer is a data source</h2>
+<p>A seed or snapshot peer does not sign the State and does not become a checkpoint authority. It supplies headers, terminals, manifests and segment bytes. The joining node derives canonicality from proof of work and validates the recursive and State commitments itself.</p>
+<p>This is the central difference between a convenient snapshot and a trustless snapshot. In the latter, changing the distributor does not change what State the verifier accepts.</p>
+
+<h2 id="finality">Recent reorganization and finality</h2>
+<p>The finalized boundary cannot be reorganized. Fork choice considers only candidates that preserve it, and the accepted rollback depth is less than eighteen blocks. Recent complete blocks and undo data cover the suffix. A deeper competing branch is rejected rather than “repaired” by installing a different snapshot.</p>
+<p>This rule keeps the snapshot authority aligned with recursive validity. Without a hard boundary, a node could authenticate one present and then be asked to reconstruct a deep alternative history whose bodies it intentionally did not retain.</p>
+
+<h2 id="research-result">The research result</h2>
+<p>The important result is not a fast file-transfer protocol. It is the division of verification work:</p>
+<ul>
+  <li>headers establish the greatest-work eligible chain;</li>
+  <li>HistoryStep establishes validity at the boundary;</li>
+  <li>the manifest and segment roots establish the exact current State;</li>
+  <li>the retained suffix establishes freshness to the live tip.</li>
+</ul>
+<p>Once those roles are separate, synchronization can be optimized without turning a cache, checkpoint publisher or convenient peer into a hidden source of consensus authority.</p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Research record</p><h2 id="evidence-title">Evidence and artifacts</h2><p>The links below preserve the implementation, measurement or derivation behind this article.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/9fffd832"><span><small>Commit</small><strong>O(1) synchronization design</strong></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/3dd2c3bf"><span><small>Commit</small><strong>Exact boundary binding</strong></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/63d47e7a"><span><small>Commit</small><strong>Bounded State installation</strong></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Adjacent research"><a href="/research/binary-field-kernels/"><small>Earlier</small><strong>Binary-field kernels</strong><span>←</span></a><a href="/research/executable-soundness-ledger/"><small>Later</small><strong>Executable soundness</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>O(1) Lab</strong><p>Protocol research behind ParanO(1)d.</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>Research</strong><a href="/research/">Archive</a><a href="/feed.xml">RSS feed</a><a href="/papers/FROST_GKR.pdf">FROST-GKR paper</a></div>
+      <div><strong>Project</strong><a href="https://parano1d.org">Website</a><a href="https://docs.parano1d.org">Documentation</a><a href="https://github.com/ignotusnemo/parano1d">Source</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>research.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js" defer></script>
+</body>
+</html>

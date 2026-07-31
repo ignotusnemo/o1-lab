@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="A three-column committed trace reduces an entire batch of Poseidon2b executions with two constraint sumchecks.">
+  <meta name="author" content="O(1) Lab">
+  <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, zero-knowledge proofs, proof systems, cryptography, recursive proofs, binary fields, polynomial commitments">
+  <link rel="canonical" href="https://research.parano1d.org/research/frost-gkr-global-trace-protocol/">
+  <link rel="alternate" type="application/rss+xml" title="O(1) Lab Research" href="https://research.parano1d.org/feed.xml">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="O(1) Lab Research">
+  <meta property="og:url" content="https://research.parano1d.org/research/frost-gkr-global-trace-protocol/">
+  <meta property="og:title" content="FROST-GKR: a global trace protocol for batched Poseidon2b · O(1) Lab">
+  <meta property="og:description" content="A three-column committed trace reduces an entire batch of Poseidon2b executions with two constraint sumchecks.">
+  <meta property="og:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="FROST-GKR: a global trace protocol for batched Poseidon2b · O(1) Lab">
+  <meta name="twitter:description" content="A three-column committed trace reduces an entire batch of Poseidon2b executions with two constraint sumchecks.">
+  <meta name="twitter:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta property="article:published_time" content="2026-07-31T00:00:00Z">
+  <meta property="article:section" content="Proof systems">
+  <meta property="article:author" content="Andrew Boyle">
+  <meta property="article:author" content="O(1) Lab">
+  <title>FROST-GKR: a global trace protocol for batched Poseidon2b · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"ScholarlyArticle","headline":"FROST-GKR: a global trace protocol for batched Poseidon2b","description":"FROST-GKR represents every permutation slot, round and lane on one Boolean product domain. One degree-nine zero-check enforces the full round relation; one degree-two reduction returns shifted evaluations to the original committed columns. For the evaluated 59-permutation workload, the reduction cuts 472 per-permutation constraint sumchecks to two.","datePublished":"2026-07-31","dateModified":"2026-07-31","mainEntityOfPage":"https://research.parano1d.org/research/frost-gkr-global-trace-protocol/","author":[{"@type":"Person","name":"Andrew Boyle"},{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://research.parano1d.org"},"image":"https://research.parano1d.org/assets/og-research.png","about":"Proof systems"}</script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/" aria-label="O(1) Lab home">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>O(1) Lab</strong><small>Research</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+      <a href="/#latest">Latest</a>
+      <a aria-current="page" href="/research/">All research</a>
+      <a href="/about/">About</a>
+      <span class="nav-rule" aria-hidden="true"></span>
+      <a href="https://docs.parano1d.org">Docs <span aria-hidden="true">↗</span></a>
+      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/research/">← All research</a><div class="article-meta"><span>Paper</span><span>Proof systems</span><time datetime="2026-07-31">Jul 31, 2026</time></div><h1>FROST-GKR: a global trace protocol for batched Poseidon2b</h1><p class="article-dek">A three-column committed trace reduces an entire batch of Poseidon2b executions with two constraint sumchecks.</p><div class="article-byline"><span>By Andrew Boyle · O(1) Lab</span><span>5 min read</span><span>Paper and artifact</span></div></div>
+      <div class="research-art art--frost" aria-hidden="true">
+    <span class="art-grid"></span>
+    <span class="art-orbit art-orbit--a"></span>
+    <span class="art-orbit art-orbit--b"></span>
+    <span class="art-axis"></span>
+    <span class="art-node art-node--a"></span>
+    <span class="art-node art-node--b"></span>
+    <span class="art-node art-node--c"></span>
+    <span class="art-code">①</span>
+  </div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#problem">The repeated-permutation problem</a><a href="#trace">Three committed columns</a><a href="#reductions">Two constraint reductions</a><a href="#composition">What the protocol proves</a><a href="#soundness">Soundness and exact accounting</a><a href="#measurement">The 59-permutation measurement</a><a href="#publication">Publication and artifact</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>FROST-GKR represents every permutation slot, round and lane on one Boolean product domain. One degree-nine zero-check enforces the full round relation; one degree-two reduction returns shifted evaluations to the original committed columns. For the evaluated 59-permutation workload, the reduction cuts 472 per-permutation constraint sumchecks to two.</p></div><h2 id="problem">The repeated-permutation problem</h2>
+<p>Hash-based proof systems execute the same cryptographic permutation many times. The inputs change; the round constants, nonlinear layer and linear maps do not. A conventional layer-by-layer arithmetization often throws away that regularity. Each permutation gets its own columns and its own sequence of reductions, even when fifty-nine instances perform exactly the same sixty-six-round computation.</p>
+<p>FROST-GKR starts from a different object. It places the entire batch on one Boolean product domain whose coordinates are the permutation slot, round and state lane. The protocol does not descend through separate circuit layers. It commits to a global execution trace and reduces relations over that trace to openings of the same committed columns.</p>
+
+<figure class="figure">
+  <img src="/assets/frost-hypercube.png" alt="FROST-GKR hypercube showing slot, round and lane coordinates joined into one committed execution domain">
+  <figcaption>The FROST domain. Slot, round and lane are Boolean coordinates of one multilinear trace rather than separate circuits for separate permutations.</figcaption>
+</figure>
+
+<h2 id="trace">Three committed columns</h2>
+<p>For <em>B</em> live Poseidon2b executions, let <em>L = 2<sup>s</sup></em> be the padded slot count. Poseidon2b has width four and sixty-six nonlinear rounds. FROST reserves 128 round positions and uses four lane positions, so the complete table has:</p>
+<div class="equation">n = s + 7 + 2 &nbsp;&nbsp; and &nbsp;&nbsp; N = 2<sup>n</sup> = 512L</div>
+<p>The witness has only three multilinear columns:</p>
+<ul>
+  <li><code>z</code> contains the state entering a round and the final state row;</li>
+  <li><code>s_in</code> contains an active S-box input;</li>
+  <li><code>s_out</code> contains the corresponding S-box output.</li>
+</ul>
+<p>All three columns are committed before the verifier samples a relation challenge. Public selectors identify live slots, live rounds and active S-box lanes. The degree-seven map is evaluated directly over GF(2<sup>128</sup>): Frobenius squaring makes <code>x²</code> and <code>x⁴</code> linear operations, while <code>x³</code> and <code>x⁷</code> require two general multiplications. This is an implementation advantage; the formal sumcheck degree remains seven.</p>
+
+<h2 id="reductions">Two constraint reductions</h2>
+<p>The protocol has two algebraic jobs. First it must prove every local Poseidon2b round equation. Then it must prove that materialized next-round and lane-projected views are actually derived from the original commitment.</p>
+<div class="protocol-flow" aria-label="FROST-GKR reduction stages">
+  <div class="flow-step"><small>Commit</small><strong>3 trace columns</strong><span>Fix the witness before relation challenges</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>n rounds · degree 9</small><strong>Global zero-check</strong><span>All live Poseidon2b cells at once</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>n rounds · degree 2</small><strong>Shift reduction</strong><span>Return derived views to committed columns</span></div>
+</div>
+
+<h3>The global relation</h3>
+<p>One degree-nine zero-check enforces the S-box, round constants, full and partial linear layers, and adjacency for every live slot. For a slot padded batch, the main sumcheck has <em>n</em> rounds regardless of the number of live permutations except through the logarithmic slot dimension.</p>
+<p>The terminal contains one direct evaluation of <code>Z</code> and eleven evaluations of shifted or lane-projected views. Those eleven claims cannot simply be relabelled as openings of <code>S_in</code>, <code>S_out</code> and <code>Z</code>: incrementing a binary round index is not an affine transformation of the multilinear variables.</p>
+
+<h3>The shifted-view reduction</h3>
+<p>A second, degree-two sumcheck batches the eleven linear functionals and reduces them to direct evaluations of the three committed polynomials at a fresh point. The resulting opening interface is small and explicit: two point claims on <code>Z</code>, one on <code>S_in</code> and one on <code>S_out</code>. A polynomial commitment with native multipoint openings may handle them directly; the paper also describes a generic three-column terminal batching layer.</p>
+
+<div class="result">
+  <strong>Reduction invariant</strong>
+  <p>The persistent object is the committed execution trace. Every derived view used by the relation is returned to that commitment before the protocol ends.</p>
+</div>
+
+<h2 id="composition">What the protocol proves</h2>
+<p>The internal relation certifies that every live slot is a correct Poseidon2b execution. An application still has to constrain the exposed input and output rows. It may fix a public input, equate one slot output with the next slot input, or bind the final output to a public digest. These endpoint equations use the same committed state column, so sequential chains, trees and sponge constructions compose without repeating the internal permutation relation.</p>
+<p>This separation matters. FROST-GKR is not a complete SNARK by itself and does not pretend to be one. It is an algebraic reduction protocol parameterized by an evaluation-binding multilinear polynomial commitment. Its soundness statement therefore separates the internal reduction, endpoint relation and PCS terms.</p>
+
+<h2 id="soundness">Soundness and exact accounting</h2>
+<p>For a trace with <em>n</em> variables, the interactive algebraic error of the internal reductions is bounded by:</p>
+<div class="equation">ε<sub>FROST</sub> ≤ (18n + 14) / |F|</div>
+<p>At the evaluated instance, <em>n = 15</em> and <em>F = GF(2<sup>128</sup>)</em>, so the term is below 2<sup>−119</sup> before adding endpoint-relation and polynomial-commitment soundness. The generic transcript uses <code>22n + 18</code> field elements when full round-polynomial coefficient vectors are transmitted.</p>
+
+<div class="table-wrap"><table>
+  <thead><tr><th>Stage</th><th>Rounds</th><th>Degree</th><th>Terminal result</th></tr></thead>
+  <tbody>
+    <tr><td>Commit</td><td>—</td><td>—</td><td>Three fixed witness polynomials</td></tr>
+    <tr><td>Global relation</td><td>n</td><td>9</td><td>12 evaluations at r′</td></tr>
+    <tr><td>Shift reduction</td><td>n</td><td>2</td><td>Three direct claims at r″</td></tr>
+    <tr><td>Generic terminal batching</td><td>3n</td><td>2</td><td>One claim per committed column</td></tr>
+  </tbody>
+</table></div>
+
+<h2 id="measurement">The 59-permutation measurement</h2>
+<p>The publication artifact preserves a revision where a per-permutation product-chain reduction and FROST-GKR prove the same batch of fifty-nine width-four Poseidon2b permutations. Before timing, the harness constructs honest proofs, verifies both protocols, discharges the terminal MLE claims natively and checks exact algebraic-proof accounting.</p>
+<div class="metric-row">
+  <div class="metric"><strong>472 → 2</strong><span>Constraint sumchecks</span></div>
+  <div class="metric"><strong>287,712 → 5,568 B</strong><span>Raw algebraic proof payload</span></div>
+  <div class="metric"><strong>1,605.931 → 150.218 ms</strong><span>Paper's median reduction-prover run</span></div>
+</div>
+<div class="table-wrap"><table>
+  <thead><tr><th>Metric</th><th>Per-permutation chain</th><th>FROST-GKR</th><th>Reduction</th></tr></thead>
+  <tbody>
+    <tr><td>Constraint sumcheck rounds</td><td>4,248</td><td>30</td><td>141.60×</td></tr>
+    <tr><td>Total sumcheck rounds</td><td>4,263</td><td>75</td><td>56.84×</td></tr>
+    <tr><td>Raw algebraic proof</td><td>287,712 B</td><td>5,568 B</td><td>51.67×</td></tr>
+  </tbody>
+</table></div>
+<p>The paper reports a clean publication rerun with a 1,605.931 ms legacy median and a 150.218 ms FROST median. The preserved repository result records a separate twenty-sample run on an Intel Core i7-1365U: 1,495.629 ms and 142.475 ms respectively. Both measure the reduction layer, not a complete succinct argument.</p>
+
+<div class="note">
+  <strong>Measurement boundary</strong>
+  <p>The byte figures count raw field elements. They exclude serialization framing, PCS openings and Merkle authentication paths. Native terminal discharge in the harness checks the preserved comparison; it is not presented as a deployed commitment layer.</p>
+</div>
+
+<h2 id="publication">Publication and artifact</h2>
+<p>FROST-GKR is research by O(1) Lab. The paper is authored by Andrew Boyle and includes the complete trace relation, composition theorem, completeness and interactive soundness arguments, exact transcript accounting and the reference comparison.</p>
+<p><a href="/papers/FROST_GKR.pdf">Read the full paper (PDF)</a> or inspect the <a href="https://github.com/ignotusnemo/parano1d/tree/main/research/frost_gkr">reproducible benchmark artifact</a>.</p>
+
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Research record</p><h2 id="evidence-title">Evidence and artifacts</h2><p>The links below preserve the implementation, measurement or derivation behind this article.</p></div><div class="evidence-links"><a href="/papers/FROST_GKR.pdf"><span><small>PDF</small><strong>Read the paper</strong></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/tree/main/research/frost_gkr"><span><small>Code</small><strong>Benchmark artifact</strong></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/8e514ff4eb59e7925992e8274c4f10214d7c6b9f"><span><small>Commit</small><strong>Preserved implementation</strong></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Adjacent research"><a href="/research/b64-b255-proof-classes/"><small>Earlier</small><strong>B64 / B255</strong><span>←</span></a><span></span></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>O(1) Lab</strong><p>Protocol research behind ParanO(1)d.</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>Research</strong><a href="/research/">Archive</a><a href="/feed.xml">RSS feed</a><a href="/papers/FROST_GKR.pdf">FROST-GKR paper</a></div>
+      <div><strong>Project</strong><a href="https://parano1d.org">Website</a><a href="https://docs.parano1d.org">Documentation</a><a href="https://github.com/ignotusnemo/parano1d">Source</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>research.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js" defer></script>
+</body>
+</html>

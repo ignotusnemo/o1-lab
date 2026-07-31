@@ -1,0 +1,66 @@
+<h2 id="question">The class-count question</h2>
+<p>A recursive proof system can always add another circuit class. That does not mean it should. Every class adds an authenticated matrix leaf, release artifact, selection rule, test surface and long-lived consensus branch. The B64/B255 study asked a narrower question: can two fixed geometries cover both ordinary machines and maximum block fan-in while keeping the class ladder small?</p>
+<p>The answer could not come from row counts alone. It required the production HistoryStep assembler, prover, terminal codec and verifier; the exact frozen matrices; the wallet authorization path; and sustained measurements against the fifteen-second block target.</p>
+
+<h2 id="geometry">The two geometries</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Class</th><th>Field shape</th><th>Physical user pages</th><th>Role</th></tr></thead>
+  <tbody>
+    <tr><td>B64</td><td>m23</td><td>0–64</td><td>Small-machine production floor</td></tr>
+    <tr><td>B255</td><td>m24</td><td>65–255</td><td>Maximum block page class</td></tr>
+  </tbody>
+</table></div>
+<p>A logical PagedSpend may contain at most 128 pages, 1,020 inputs and 256 outputs. A block may contain at most 255 physical user pages, 1,020 inputs and 510 outputs. Those limits are not a third proof class: the same fixed parent representation covers both m23 and m24.</p>
+
+<div class="failure">
+  <strong>Rejected branch</strong>
+  <p>The laboratory explored an A128 middle class, capsule transposition and a Merkle forest. Those experiments were removed when measurements showed that the launch ladder could return to the existing B64/B255 geometries. Keeping the extra class would have preserved complexity without establishing a necessary operating region.</p>
+</div>
+
+<h2 id="wallet">One capsule across 1,020 inputs</h2>
+<p>The wallet benchmark measured page construction, logical hashing, one unchanged witness-hiding capsule, atomic-intent encoding and decoding, and local capsule admission. Network latency and HistoryStep proving were excluded.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Case</th><th>Pages</th><th>Total p50</th><th>Total p95</th><th>Proof / intent</th></tr></thead>
+  <tbody>
+    <tr><td>1 input</td><td>1</td><td>228.30 ms</td><td>352.47 ms</td><td>56.49 / 56.81 KiB</td></tr>
+    <tr><td>100 inputs</td><td>13</td><td>217.32 ms</td><td>255.46 ms</td><td>56.58 / 60.69 KiB</td></tr>
+    <tr><td>1,020 inputs</td><td>128</td><td>233.06 ms</td><td>285.81 ms</td><td>56.11 / 96.50 KiB</td></tr>
+  </tbody>
+</table></div>
+<p>The capsule median stays around two hundred milliseconds while page hashing and intent bytes grow with fan-in. That is the intended invariant: inputs owned by the same secret do not create one zero-knowledge authorization proof per page.</p>
+
+<h2 id="history-step">Production HistoryStep measurements</h2>
+<p>The first twenty-sample run used an Intel Core i7-1365U with AVX2 and VPCLMULQDQ, no AVX-512, under an active desktop session. The benchmark authenticated the frozen two-entry pack, constructed an honest recursive B64 parent and measured the production HistoryStep path. Parent construction, wallet-capsule generation, PoW search and durable block commit were setup or out of scope.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Class</th><th>Useful rows</th><th>Prepare p50 / p95</th><th>Verify p50 / p95</th><th>Terminal</th></tr></thead>
+  <tbody>
+    <tr><td>B64 / m23</td><td>5,705,307</td><td>12.174 / 15.182 s</td><td>0.655 / 0.906 s</td><td>766,549 B</td></tr>
+    <tr><td>B255 / m24</td><td>15,368,233</td><td>26.203 / 32.009 s</td><td>0.771 / 0.859 s</td><td>807,189 B</td></tr>
+  </tbody>
+</table></div>
+<p>The B64 median had 2.826 seconds of margin but the sustained p95 missed the target by 182 milliseconds. B255 needed 2.134× more complete-prepare throughput to place its p95 at fifteen seconds. The machine was therefore a valid B64 functional floor and not a B255 host.</p>
+
+<h2 id="lto">A code-generation experiment, not a protocol change</h2>
+<p>The next run changed only release code generation: thin LTO and one codegen unit. The relation, witness, matrix pack and benchmark methodology were unchanged.</p>
+<div class="metric-row">
+  <div class="metric"><strong>14.387 s</strong><span>B64 prepare p95</span></div>
+  <div class="metric"><strong>613 ms</strong><span>Margin under the target</span></div>
+  <div class="metric"><strong>29.755 s</strong><span>B255 prepare p95</span></div>
+</div>
+<p>B64 prepare p50 improved from 12.174 to 11.472 seconds and p95 from 15.182 to 14.387 seconds. B255 improved too, but remained outside the laptop class. Profiling placed almost all time in PCS commitment and the post-commit recursive phase, not PagedSpend or networking.</p>
+
+<h2 id="pack">Reproducing the authenticated pack</h2>
+<p>Proof timing is not enough if a release depends on generated matrices. The laboratory regenerated the complete B64/B255 pack from an empty output root and compared the runtime metadata and both matrix leaves byte for byte.</p>
+<ul>
+  <li>generation time: 5,596.2 seconds;</li>
+  <li>B64 compressed leaf: 4,584,391 bytes;</li>
+  <li>B255 compressed leaf: 11,912,603 bytes;</li>
+  <li>runtime metadata: 1,732,922 bytes;</li>
+  <li>complete pinned pack: 18,229,916 bytes.</li>
+</ul>
+<p>The fresh generation matched the recorded digests. This turned “the matrices can be rebuilt” into a release check rather than an assumption.</p>
+
+<h2 id="decision">The decision</h2>
+<p>The measured boundary supported two conclusions. First, B64 is a real lower hardware class only when the release profile and thermal conditions keep its tail under cadence. Second, B255 is a distinct high-throughput class; pretending it can run on the same laptop would make the class label meaningless.</p>
+<p>Most importantly, no measurement established a need for a third class. The two-leaf ladder remained smaller, easier to authenticate and easier to reason about.</p>
+

@@ -1,0 +1,47 @@
+<h2 id="why-binary">Why binary-field kernels dominate</h2>
+<p>ParanO(1)d's proof machinery and Poseidon2b implementation work over GF(2<sup>128</sup>). Addition is XOR. Multiplication is carry-less polynomial multiplication followed by reduction. That makes hardware carry-less multiply—not ordinary integer multiply—the key primitive for prover throughput, verifier throughput and proof-of-work hashing.</p>
+<p>The architectural constraint was stricter than “make the fast machine faster.” Proof shapes, witness layout and transcript bytes had to remain identical across machines. An ISA backend may change execution, never the statement being proved.</p>
+
+<h2 id="dispatch">One layout, runtime dispatch</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Platform</th><th>Baseline</th><th>Wider path</th><th>Lane model</th></tr></thead>
+  <tbody>
+    <tr><td>x86-64</td><td>SSE4.1 + PCLMULQDQ</td><td>AVX2 + VPCLMULQDQ</td><td>Two packed field elements</td></tr>
+    <tr><td>x86-64</td><td>—</td><td>AVX-512 + VPCLMULQDQ</td><td>Four-lane arithmetic, wider batch chunks</td></tr>
+    <tr><td>ARM64</td><td>NEON + PMULL</td><td>Register-domain batch kernel</td><td>One field element per 128-bit vector</td></tr>
+  </tbody>
+</table></div>
+<p>The released binary detects the host at startup and selects the widest supported implementation. The logical packed type stays fixed. AVX-512 operates on adjacent logical packs rather than redefining their meaning, so enabling it cannot change proof or witness serialization.</p>
+
+<h2 id="poseidon">Keeping Poseidon2b in registers</h2>
+<p>A naïve vector implementation still loses time if every round crosses between scalar memory representation and vector registers. The register-domain kernel keeps the four-lane permutation state in vectors across the complete schedule. Squaring uses the specialized binary-field path; multiplications use VPCLMULQDQ or PMULL; round constants and linear layers are applied without leaving the selected domain.</p>
+<p>The July 9 AVX2+VPCLMULQDQ implementation produced two connected measurements on the development laptop:</p>
+<div class="metric-row">
+  <div class="metric"><strong>5.4×</strong><span>Poseidon2b batch-hashing speedup</span></div>
+  <div class="metric"><strong>34.9 s</strong><span>m24 prove before the kernel</span></div>
+  <div class="metric"><strong>18.9 s</strong><span>m24 prove after the kernel</span></div>
+</div>
+<p>The proof-time improvement is smaller than the isolated hashing speedup because the complete prover also performs assembly, PCS work and non-hash algebra. That difference is useful: it locates the next bottleneck instead of turning a microbenchmark into an end-to-end claim.</p>
+
+<h2 id="flat-basis">Flat basis at the right boundary</h2>
+<p>The code uses a flat, GCM-compatible representation where the hardware multiplication is natural. Tower-basis objects still exist where the protocol needs them, but repeatedly converting every scalar operation would erase the benefit of the instruction set. MLE evaluation and Poseidon2b batching therefore keep long hot loops in the flat basis and cross representation boundaries deliberately.</p>
+<div class="note">
+  <strong>Protocol rule</strong>
+  <p>The field element is the same mathematical element on every backend. Runtime dispatch chooses an implementation of multiplication and hashing; it does not choose consensus parameters.</p>
+</div>
+
+<h2 id="portability">Portability without a silent scalar mode</h2>
+<p>The production node requires hardware support that can sustain the proof workload. On x86-64 that means SSE4.1 and PCLMULQDQ; on ARM64 it means NEON and PMULL. Wider paths are optional accelerators. A scalar implementation remains useful as a reference and for differential tests, but silently running a production node on it would turn a compatibility feature into a liveness failure.</p>
+<p>This is especially relevant on virtual machines. A physical processor may support PCLMULQDQ while a hypervisor exposes a generic guest CPU without it. The node checks guest-visible features and reports the missing instruction rather than entering an unexpectedly slow mode.</p>
+
+<h2 id="verification">How the backends are checked</h2>
+<p>Each optimized path is compared against the canonical scalar semantics. Batch digests must match scalar digests for complete and partial chunks; field multiplication must match the reference reduction; runtime selection must never call a target-feature function before its gate has passed.</p>
+<p>The resulting design has three useful properties:</p>
+<ol>
+  <li>proof bytes are portable between machines;</li>
+  <li>validators do not trust a miner's optimized result—they recompute the canonical digest;</li>
+  <li>new ISA tiers can be added behind the same dispatch surface without adding protocol branches.</li>
+</ol>
+
+<h2 id="lesson">The engineering lesson</h2>
+<p>Binary fields are sometimes described as a cryptographic design choice and sometimes as a hardware optimization. In this system they are both. Frobenius operations simplify the algebra, while carry-less multiply instructions make the implementation viable. Treating the two layers together exposed end-to-end gains that neither a protocol-only analysis nor an isolated SIMD benchmark would have shown.</p>

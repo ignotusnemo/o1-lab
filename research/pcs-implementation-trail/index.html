@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Ladder-batched FRI, interleaved FRI-Binius and in-trace BaseFold were not interchangeable upgrades; each solved a different boundary.">
+  <meta name="author" content="O(1) Lab">
+  <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, zero-knowledge proofs, proof systems, cryptography, recursive proofs, binary fields, polynomial commitments">
+  <link rel="canonical" href="https://research.parano1d.org/research/pcs-implementation-trail/">
+  <link rel="alternate" type="application/rss+xml" title="O(1) Lab Research" href="https://research.parano1d.org/feed.xml">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="O(1) Lab Research">
+  <meta property="og:url" content="https://research.parano1d.org/research/pcs-implementation-trail/">
+  <meta property="og:title" content="A PCS implementation trail through a binary proof stack · O(1) Lab">
+  <meta property="og:description" content="Ladder-batched FRI, interleaved FRI-Binius and in-trace BaseFold were not interchangeable upgrades; each solved a different boundary.">
+  <meta property="og:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A PCS implementation trail through a binary proof stack · O(1) Lab">
+  <meta name="twitter:description" content="Ladder-batched FRI, interleaved FRI-Binius and in-trace BaseFold were not interchangeable upgrades; each solved a different boundary.">
+  <meta name="twitter:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta property="article:published_time" content="2026-06-21T00:00:00Z">
+  <meta property="article:section" content="Polynomial commitments">
+  <meta property="article:author" content="O(1) Lab">
+  <title>A PCS implementation trail through a binary proof stack · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"A PCS implementation trail through a binary proof stack","description":"This retrospective reconstructs the polynomial-commitment work from repository evidence. It starts with a ladder-batched FRI prototype whose proof bytes were dominated by a multipoint opening, follows the interleaved binary-field commitment and its source-binding repair, and ends at the BaseFold verifier replay needed for recursion.","datePublished":"2026-06-21","dateModified":"2026-06-21","mainEntityOfPage":"https://research.parano1d.org/research/pcs-implementation-trail/","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://research.parano1d.org"},"image":"https://research.parano1d.org/assets/og-research.png","about":"Polynomial commitments"}</script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/" aria-label="O(1) Lab home">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>O(1) Lab</strong><small>Research</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+      <a href="/#latest">Latest</a>
+      <a aria-current="page" href="/research/">All research</a>
+      <a href="/about/">About</a>
+      <span class="nav-rule" aria-hidden="true"></span>
+      <a href="https://docs.parano1d.org">Docs <span aria-hidden="true">↗</span></a>
+      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/research/">← All research</a><div class="article-meta"><span>Research retrospective</span><span>Polynomial commitments</span><time datetime="2026-06-21">Jun 21, 2026</time></div><h1>A PCS implementation trail through a binary proof stack</h1><p class="article-dek">Ladder-batched FRI, interleaved FRI-Binius and in-trace BaseFold were not interchangeable upgrades; each solved a different boundary.</p><div class="article-byline"><span>By O(1) Lab</span><span>3 min read</span><span>Implementation record</span></div></div>
+      <div class="research-art art--pcs" aria-hidden="true">
+    <span class="art-grid"></span>
+    <span class="art-orbit art-orbit--a"></span>
+    <span class="art-orbit art-orbit--b"></span>
+    <span class="art-axis"></span>
+    <span class="art-node art-node--a"></span>
+    <span class="art-node art-node--b"></span>
+    <span class="art-node art-node--c"></span>
+    <span class="art-code">①</span>
+  </div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#not-a-ranking">This is not a PCS ranking</a><a href="#ladder">Ladder-batched FRI and VSHIFT</a><a href="#interleaved">Interleaved FRI-Binius</a><a href="#recursion">The verifier became the workload</a><a href="#boundaries">Three boundaries, three evaluation questions</a><a href="#what-was-learned">What the trail changed</a><a href="#preservation">Why preserve superseded implementations</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>This retrospective reconstructs the polynomial-commitment work from repository evidence. It starts with a ladder-batched FRI prototype whose proof bytes were dominated by a multipoint opening, follows the interleaved binary-field commitment and its source-binding repair, and ends at the BaseFold verifier replay needed for recursion.</p></div><h2 id="not-a-ranking">This is not a PCS ranking</h2>
+<p>The repository does not contain one linear contest where a succession of polynomial commitments were benchmarked under identical conditions and the fastest won. It contains a sequence of implementation boundaries. Early work needed a practical batched opening for AIR traces. Interleaved binary-field work needed to bind many columns efficiently. Recursive HistoryStep later needed to replay the verifier inside a fixed field relation.</p>
+<p>Each construction solved a different problem. This retrospective records the implemented trail without pretending that measurements from one stage are a fair benchmark of another.</p>
+
+<h2 id="ladder">Ladder-batched FRI and VSHIFT</h2>
+<p>The May 2 implementation added a ladder-batched FRI opening and a VSHIFT gadget. A CarryRippleAir benchmark exercised a 64-bit ripple-carry adder with one shifted column. Per-slot ladder reductions were followed by one multipoint FRI opening rather than one FRI proof per slot.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Workload</th><th>Rows</th><th>Adders</th><th>Prove</th><th>Verify</th><th>Proof</th></tr></thead>
+  <tbody>
+    <tr><td>Small</td><td>2<sup>8</sup></td><td>4</td><td>30.57 ms</td><td>11.76 ms</td><td>34.55 KB</td></tr>
+    <tr><td>Mid</td><td>2<sup>12</sup></td><td>64</td><td>175.77 ms</td><td>33.97 ms</td><td>185.86 KB</td></tr>
+    <tr><td>Production-shaped</td><td>2<sup>16</sup></td><td>1,024</td><td>2.05 s</td><td>65.06 ms</td><td>385.17 KB</td></tr>
+  </tbody>
+</table></div>
+<p>The bucket accounting was more useful than the top-line time. At the largest shape, commitment consumed about 70% of prover time. The multipoint FRI object consumed 381.62 KB—99.1% of proof bytes—while the ladder block was only 1.53 KB. The algebraic batching worked; the opening dominated the artifact.</p>
+
+<h2 id="interleaved">Interleaved FRI-Binius</h2>
+<p>On May 16 the codebase gained an interleaved polynomial commitment over the binary tower field. Columns were encoded and committed together, compact FRI supplied low-degree testing, and mixed openings batched values across columns and points. The design matched the rest of the binary-field stack better than treating each column as an unrelated scalar polynomial.</p>
+<p>The first implementation was not the end of the security work. It later exposed the commit-to-A, open-from-A′ gap described in <a href="/research/binding-a-mixed-opening/">Binding a compact FRI opening back to its committed source</a>. The June 21 repair added query-level authentication from compact FRI to the encoded source commitment.</p>
+<div class="timeline">
+  <div class="timeline-item"><time>02 May 2026</time><h3>Ladder-batch FRI + VSHIFT</h3><p>One multipoint opening closes base and ladder claims; proof accounting identifies the dominant opening bytes.</p></div>
+  <div class="timeline-item"><time>16 May 2026</time><h3>Interleaved FRI-Binius</h3><p>Binary-field columns enter one interleaved commitment and compact opening path.</p></div>
+  <div class="timeline-item"><time>21 Jun 2026</time><h3>Source-binding repair</h3><p>Shared queries authenticate the round-zero oracle back to encoded committed columns.</p></div>
+  <div class="timeline-item"><time>05 Jul 2026</time><h3>In-trace BaseFold replay</h3><p>The verifier becomes a relation that a fixed recursive class can host.</p></div>
+</div>
+
+<h2 id="recursion">The verifier became the workload</h2>
+<p>For recursion, native verification speed is not the only metric. Every hash, fold, challenge and query authentication must be represented inside the outer relation. A commitment verifier with an awkward trace can be cheap natively and expensive recursively.</p>
+<p>The BaseFold work implemented the verifier replay in FieldR1cs: transcript absorption, sumcheck checks, fold layers, query authentication and terminal consistency. That enabled the same-class recursive fixed point described in <a href="/research/recursive-fixed-point/">Closing the recursive verifier at a real fixed point</a>.</p>
+
+<h2 id="boundaries">Three boundaries, three evaluation questions</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Stage</th><th>Primary question</th><th>Failure signal</th></tr></thead>
+  <tbody>
+    <tr><td>Ladder-batched FRI</td><td>Can many shifted AIR claims share one opening?</td><td>Multipoint FRI dominates bytes</td></tr>
+    <tr><td>Interleaved FRI-Binius</td><td>Can many binary-field columns share a compact commitment?</td><td>Source provenance gap in mixed opening</td></tr>
+    <tr><td>In-trace BaseFold replay</td><td>Can the verifier fit and close inside its own recursive class?</td><td>Trace shape and memory, not only native time</td></tr>
+  </tbody>
+</table></div>
+
+<h2 id="what-was-learned">What the trail changed</h2>
+<p>Four conclusions survived the implementation changes:</p>
+<ol>
+  <li>opening bytes have to be measured separately from the elegant algebra that produces the claims;</li>
+  <li>a mixed opening needs a visible source-binding path, not only a canonical transcript;</li>
+  <li>recursive cost is a property of the verifier trace, not a scalar native benchmark;</li>
+  <li>proof geometry has to be fixed early enough that matrices and release artifacts can be authenticated reproducibly.</li>
+</ol>
+
+<h2 id="preservation">Why preserve superseded implementations</h2>
+<p>The CarryRipple report and early FRI-Binius commits are not production recommendations. They are evidence. They show which cost dominated, which theorem was missing and which interface forced the next construction. A final architecture without that record makes the research look inevitable; it was not.</p>
+
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Research record</p><h2 id="evidence-title">Evidence and artifacts</h2><p>The links below preserve the implementation, measurement or derivation behind this article.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/63ac7af1"><span><small>Commit</small><strong>Ladder-batch FRI and VSHIFT</strong></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/5d92116b"><span><small>Commit</small><strong>FRI-Binius implementation</strong></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/fc328e70"><span><small>Commit</small><strong>BaseFold verifier replay</strong></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Adjacent research"><span></span><a href="/research/binding-a-mixed-opening/"><small>Later</small><strong>Source binding</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>O(1) Lab</strong><p>Protocol research behind ParanO(1)d.</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>Research</strong><a href="/research/">Archive</a><a href="/feed.xml">RSS feed</a><a href="/papers/FROST_GKR.pdf">FROST-GKR paper</a></div>
+      <div><strong>Project</strong><a href="https://parano1d.org">Website</a><a href="https://docs.parano1d.org">Documentation</a><a href="https://github.com/ignotusnemo/parano1d">Source</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>research.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js" defer></script>
+</body>
+</html>

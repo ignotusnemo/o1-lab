@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="One fixed proof layout, several runtime-selected execution backends, and a 5.4× Poseidon2b batch-hashing result on AVX2 with VPCLMULQDQ.">
+  <meta name="author" content="O(1) Lab">
+  <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, zero-knowledge proofs, proof systems, cryptography, recursive proofs, binary fields, polynomial commitments">
+  <link rel="canonical" href="https://research.parano1d.org/research/binary-field-kernels/">
+  <link rel="alternate" type="application/rss+xml" title="O(1) Lab Research" href="https://research.parano1d.org/feed.xml">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="O(1) Lab Research">
+  <meta property="og:url" content="https://research.parano1d.org/research/binary-field-kernels/">
+  <meta property="og:title" content="Binary-field kernels across PCLMUL, VPCLMUL, AVX-512 and PMULL · O(1) Lab">
+  <meta property="og:description" content="One fixed proof layout, several runtime-selected execution backends, and a 5.4× Poseidon2b batch-hashing result on AVX2 with VPCLMULQDQ.">
+  <meta property="og:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Binary-field kernels across PCLMUL, VPCLMUL, AVX-512 and PMULL · O(1) Lab">
+  <meta name="twitter:description" content="One fixed proof layout, several runtime-selected execution backends, and a 5.4× Poseidon2b batch-hashing result on AVX2 with VPCLMULQDQ.">
+  <meta name="twitter:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta property="article:published_time" content="2026-07-09T00:00:00Z">
+  <meta property="article:section" content="Binary fields">
+  <meta property="article:author" content="O(1) Lab">
+  <title>Binary-field kernels across PCLMUL, VPCLMUL, AVX-512 and PMULL · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Binary-field kernels across PCLMUL, VPCLMUL, AVX-512 and PMULL","description":"The proof stack works over GF(2^128), making carry-less multiplication the central arithmetic primitive. The implementation keeps witness and proof geometry independent of the host ISA while selecting x86-64 and ARM64 kernels at runtime. This note records the register-domain Poseidon2b work, its measured impact, and the portability rules that keep optimization outside consensus.","datePublished":"2026-07-09","dateModified":"2026-07-09","mainEntityOfPage":"https://research.parano1d.org/research/binary-field-kernels/","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://research.parano1d.org"},"image":"https://research.parano1d.org/assets/og-research.png","about":"Binary fields"}</script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/" aria-label="O(1) Lab home">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>O(1) Lab</strong><small>Research</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+      <a href="/#latest">Latest</a>
+      <a aria-current="page" href="/research/">All research</a>
+      <a href="/about/">About</a>
+      <span class="nav-rule" aria-hidden="true"></span>
+      <a href="https://docs.parano1d.org">Docs <span aria-hidden="true">↗</span></a>
+      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/research/">← All research</a><div class="article-meta"><span>Engineering study</span><span>Binary fields</span><time datetime="2026-07-09">Jul 09, 2026</time></div><h1>Binary-field kernels across PCLMUL, VPCLMUL, AVX-512 and PMULL</h1><p class="article-dek">One fixed proof layout, several runtime-selected execution backends, and a 5.4× Poseidon2b batch-hashing result on AVX2 with VPCLMULQDQ.</p><div class="article-byline"><span>By O(1) Lab</span><span>3 min read</span><span>Production implementation</span></div></div>
+      <div class="research-art art--kernel" aria-hidden="true">
+    <span class="art-grid"></span>
+    <span class="art-orbit art-orbit--a"></span>
+    <span class="art-orbit art-orbit--b"></span>
+    <span class="art-axis"></span>
+    <span class="art-node art-node--a"></span>
+    <span class="art-node art-node--b"></span>
+    <span class="art-node art-node--c"></span>
+    <span class="art-code">①</span>
+  </div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#why-binary">Why binary-field kernels dominate</a><a href="#dispatch">One layout, runtime dispatch</a><a href="#poseidon">Keeping Poseidon2b in registers</a><a href="#flat-basis">Flat basis at the right boundary</a><a href="#portability">Portability without a silent scalar mode</a><a href="#verification">How the backends are checked</a><a href="#lesson">The engineering lesson</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>The proof stack works over GF(2^128), making carry-less multiplication the central arithmetic primitive. The implementation keeps witness and proof geometry independent of the host ISA while selecting x86-64 and ARM64 kernels at runtime. This note records the register-domain Poseidon2b work, its measured impact, and the portability rules that keep optimization outside consensus.</p></div><h2 id="why-binary">Why binary-field kernels dominate</h2>
+<p>ParanO(1)d's proof machinery and Poseidon2b implementation work over GF(2<sup>128</sup>). Addition is XOR. Multiplication is carry-less polynomial multiplication followed by reduction. That makes hardware carry-less multiply—not ordinary integer multiply—the key primitive for prover throughput, verifier throughput and proof-of-work hashing.</p>
+<p>The architectural constraint was stricter than “make the fast machine faster.” Proof shapes, witness layout and transcript bytes had to remain identical across machines. An ISA backend may change execution, never the statement being proved.</p>
+
+<h2 id="dispatch">One layout, runtime dispatch</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Platform</th><th>Baseline</th><th>Wider path</th><th>Lane model</th></tr></thead>
+  <tbody>
+    <tr><td>x86-64</td><td>SSE4.1 + PCLMULQDQ</td><td>AVX2 + VPCLMULQDQ</td><td>Two packed field elements</td></tr>
+    <tr><td>x86-64</td><td>—</td><td>AVX-512 + VPCLMULQDQ</td><td>Four-lane arithmetic, wider batch chunks</td></tr>
+    <tr><td>ARM64</td><td>NEON + PMULL</td><td>Register-domain batch kernel</td><td>One field element per 128-bit vector</td></tr>
+  </tbody>
+</table></div>
+<p>The released binary detects the host at startup and selects the widest supported implementation. The logical packed type stays fixed. AVX-512 operates on adjacent logical packs rather than redefining their meaning, so enabling it cannot change proof or witness serialization.</p>
+
+<h2 id="poseidon">Keeping Poseidon2b in registers</h2>
+<p>A naïve vector implementation still loses time if every round crosses between scalar memory representation and vector registers. The register-domain kernel keeps the four-lane permutation state in vectors across the complete schedule. Squaring uses the specialized binary-field path; multiplications use VPCLMULQDQ or PMULL; round constants and linear layers are applied without leaving the selected domain.</p>
+<p>The July 9 AVX2+VPCLMULQDQ implementation produced two connected measurements on the development laptop:</p>
+<div class="metric-row">
+  <div class="metric"><strong>5.4×</strong><span>Poseidon2b batch-hashing speedup</span></div>
+  <div class="metric"><strong>34.9 s</strong><span>m24 prove before the kernel</span></div>
+  <div class="metric"><strong>18.9 s</strong><span>m24 prove after the kernel</span></div>
+</div>
+<p>The proof-time improvement is smaller than the isolated hashing speedup because the complete prover also performs assembly, PCS work and non-hash algebra. That difference is useful: it locates the next bottleneck instead of turning a microbenchmark into an end-to-end claim.</p>
+
+<h2 id="flat-basis">Flat basis at the right boundary</h2>
+<p>The code uses a flat, GCM-compatible representation where the hardware multiplication is natural. Tower-basis objects still exist where the protocol needs them, but repeatedly converting every scalar operation would erase the benefit of the instruction set. MLE evaluation and Poseidon2b batching therefore keep long hot loops in the flat basis and cross representation boundaries deliberately.</p>
+<div class="note">
+  <strong>Protocol rule</strong>
+  <p>The field element is the same mathematical element on every backend. Runtime dispatch chooses an implementation of multiplication and hashing; it does not choose consensus parameters.</p>
+</div>
+
+<h2 id="portability">Portability without a silent scalar mode</h2>
+<p>The production node requires hardware support that can sustain the proof workload. On x86-64 that means SSE4.1 and PCLMULQDQ; on ARM64 it means NEON and PMULL. Wider paths are optional accelerators. A scalar implementation remains useful as a reference and for differential tests, but silently running a production node on it would turn a compatibility feature into a liveness failure.</p>
+<p>This is especially relevant on virtual machines. A physical processor may support PCLMULQDQ while a hypervisor exposes a generic guest CPU without it. The node checks guest-visible features and reports the missing instruction rather than entering an unexpectedly slow mode.</p>
+
+<h2 id="verification">How the backends are checked</h2>
+<p>Each optimized path is compared against the canonical scalar semantics. Batch digests must match scalar digests for complete and partial chunks; field multiplication must match the reference reduction; runtime selection must never call a target-feature function before its gate has passed.</p>
+<p>The resulting design has three useful properties:</p>
+<ol>
+  <li>proof bytes are portable between machines;</li>
+  <li>validators do not trust a miner's optimized result—they recompute the canonical digest;</li>
+  <li>new ISA tiers can be added behind the same dispatch surface without adding protocol branches.</li>
+</ol>
+
+<h2 id="lesson">The engineering lesson</h2>
+<p>Binary fields are sometimes described as a cryptographic design choice and sometimes as a hardware optimization. In this system they are both. Frobenius operations simplify the algebra, while carry-less multiply instructions make the implementation viable. Treating the two layers together exposed end-to-end gains that neither a protocol-only analysis nor an isolated SIMD benchmark would have shown.</p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Research record</p><h2 id="evidence-title">Evidence and artifacts</h2><p>The links below preserve the implementation, measurement or derivation behind this article.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/6e29b73e"><span><small>Commit</small><strong>VPCLMUL kernel commit</strong></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_core/src/cpu.rs"><span><small>Code</small><strong>Runtime dispatch</strong></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_poseidon2b/src/batch.rs"><span><small>Code</small><strong>Poseidon2b batch implementation</strong></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Adjacent research"><a href="/research/single-global-walk/"><small>Earlier</small><strong>The 30 GB wall</strong><span>←</span></a><a href="/research/proof-carrying-state-sync/"><small>Later</small><strong>Proof-carrying State</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>O(1) Lab</strong><p>Protocol research behind ParanO(1)d.</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>Research</strong><a href="/research/">Archive</a><a href="/feed.xml">RSS feed</a><a href="/papers/FROST_GKR.pdf">FROST-GKR paper</a></div>
+      <div><strong>Project</strong><a href="https://parano1d.org">Website</a><a href="https://docs.parano1d.org">Documentation</a><a href="https://github.com/ignotusnemo/parano1d">Source</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>research.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js" defer></script>
+</body>
+</html>
