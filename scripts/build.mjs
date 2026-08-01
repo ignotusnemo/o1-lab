@@ -224,7 +224,7 @@ function shell({ locale, title, description, basePath, body, active = "", type =
   const pagePath = pathFor(locale, basePath);
   const canonical = absolute(pagePath);
   const fullTitle = title === "O(1) Lab" ? t.siteTitle : `${title} · O(1) Lab`;
-  const image = absolute("/assets/og-research.png");
+  const image = absolute("/assets/og-lab-hero.png");
   const alternates = locales.map((target) => `<link rel="alternate" hreflang="${target.hreflang}" href="${absolute(pathFor(target, basePath))}">`).join("\n  ");
   const ogAlternates = locales.filter((target) => target.code !== locale.code).map((target) => `<meta property="og:locale:alternate" content="${target.ogLocale}">`).join("\n  ");
   const articleMeta = article
@@ -420,7 +420,7 @@ function articlePage(item, index, locale, newestFirst) {
     inLanguage: locale.htmlLang,
     author: item.authors.map((name) => ({ "@type": name === "O(1) Lab" ? "Organization" : "Person", name })),
     publisher: { "@type": "Organization", name: "O(1) Lab", url: siteUrl },
-    image: absolute("/assets/og-research.png"),
+    image: absolute("/assets/og-lab-hero.png"),
     about: item.topic
   };
   const body = `<div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">

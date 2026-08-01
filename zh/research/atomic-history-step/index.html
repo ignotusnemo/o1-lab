@@ -25,20 +25,20 @@
   <meta property="og:url" content="https://lab.parano1d.org/zh/research/atomic-history-step/">
   <meta property="og:title" content="区块为何必须与递归证明一同接受 · O(1) Lab">
   <meta property="og:description" content="早期设计先接受区块，再在后台生成对应的递归证明。因此，规范链尖可能领先于已被 HistoryStep 覆盖的链尖，节点还必须持久化并恢复另一条任务队列。正式架构只在区块与其 HistoryStep 同时就绪时接受该区块：一个原子对象、一个规范高度，不存在滞后的证明积压。">
-  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-lab-hero.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="区块为何必须与递归证明一同接受 · O(1) Lab">
   <meta name="twitter:description" content="早期设计先接受区块，再在后台生成对应的递归证明。因此，规范链尖可能领先于已被 HistoryStep 覆盖的链尖，节点还必须持久化并恢复另一条任务队列。正式架构只在区块与其 HistoryStep 同时就绪时接受该区块：一个原子对象、一个规范高度，不存在滞后的证明积压。">
-  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-lab-hero.png">
   <meta property="article:published_time" content="2026-07-15T00:00:00Z">
   <meta property="article:section" content="共识">
   <meta property="article:author" content="O(1) Lab">
   <title>区块为何必须与递归证明一同接受 · O(1) Lab</title>
   <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"区块为何必须与递归证明一同接受","description":"本研究比较了两种完整实现的架构。第一种架构在递归证明完成前就把区块加入规范链，随后由三阶段后台流水线生成区块证明、将其接入递归历史，并推进另一条已证明链尖。第二种架构把区块、对应的 HistoryStep 终端、State 与索引作为同一个原子结果提交。它把证明准备纳入挖矿关键路径，却消除了持久任务队列、部分提升与含糊的重启状态：每个已接受高度上的区块与递归证明始终同时存在。","datePublished":"2026-07-15","dateModified":"2026-07-15","mainEntityOfPage":"https://lab.parano1d.org/zh/research/atomic-history-step/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-research.png","about":"共识"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"区块为何必须与递归证明一同接受","description":"本研究比较了两种完整实现的架构。第一种架构在递归证明完成前就把区块加入规范链，随后由三阶段后台流水线生成区块证明、将其接入递归历史，并推进另一条已证明链尖。第二种架构把区块、对应的 HistoryStep 终端、State 与索引作为同一个原子结果提交。它把证明准备纳入挖矿关键路径，却消除了持久任务队列、部分提升与含糊的重启状态：每个已接受高度上的区块与递归证明始终同时存在。","datePublished":"2026-07-15","dateModified":"2026-07-15","mainEntityOfPage":"https://lab.parano1d.org/zh/research/atomic-history-step/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-lab-hero.png","about":"共识"}</script>
 </head>
 <body class="locale-zh">
   <a class="skip-link" href="#content">跳到正文</a>

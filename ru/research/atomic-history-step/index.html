@@ -25,20 +25,20 @@
   <meta property="og:url" content="https://lab.parano1d.org/ru/research/atomic-history-step/">
   <meta property="og:title" content="Почему блок принимается только с рекурсивным доказательством · O(1) Lab">
   <meta property="og:description" content="Ранний вариант сначала принимал блок, а его рекурсивное доказательство строил позже в фоне. Поэтому каноническая цепь могла опережать вершину, уже подтверждённую HistoryStep, и узлу приходилось сохранять и восстанавливать отдельную очередь. В принятой архитектуре блок принимается только вместе со своим HistoryStep: один атомарный объект, одна каноническая высота и никаких отложенных доказательств.">
-  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-lab-hero.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Почему блок принимается только с рекурсивным доказательством · O(1) Lab">
   <meta name="twitter:description" content="Ранний вариант сначала принимал блок, а его рекурсивное доказательство строил позже в фоне. Поэтому каноническая цепь могла опережать вершину, уже подтверждённую HistoryStep, и узлу приходилось сохранять и восстанавливать отдельную очередь. В принятой архитектуре блок принимается только вместе со своим HistoryStep: один атомарный объект, одна каноническая высота и никаких отложенных доказательств.">
-  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-lab-hero.png">
   <meta property="article:published_time" content="2026-07-15T00:00:00Z">
   <meta property="article:section" content="Консенсус">
   <meta property="article:author" content="O(1) Lab">
   <title>Почему блок принимается только с рекурсивным доказательством · O(1) Lab</title>
   <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Почему блок принимается только с рекурсивным доказательством","description":"В исследовании сравниваются две полностью реализованные архитектуры. В первой блок входил в каноническую цепь до завершения рекурсивного доказательства, а трёхэтапный фоновый конвейер позднее строил доказательство блока, включал его в рекурсивную историю и продвигал отдельную доказанную вершину. Во второй блок, соответствующий терминал HistoryStep, State и индексы фиксируются как единый атомарный результат. Это переносит подготовку доказательства в критический путь майнинга, но устраняет сохраняемую очередь, частичное продвижение и неоднозначное восстановление: на каждой принятой высоте блок и его рекурсивное доказательство всегда существуют вместе.","datePublished":"2026-07-15","dateModified":"2026-07-15","mainEntityOfPage":"https://lab.parano1d.org/ru/research/atomic-history-step/","inLanguage":"ru","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-research.png","about":"Консенсус"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Почему блок принимается только с рекурсивным доказательством","description":"В исследовании сравниваются две полностью реализованные архитектуры. В первой блок входил в каноническую цепь до завершения рекурсивного доказательства, а трёхэтапный фоновый конвейер позднее строил доказательство блока, включал его в рекурсивную историю и продвигал отдельную доказанную вершину. Во второй блок, соответствующий терминал HistoryStep, State и индексы фиксируются как единый атомарный результат. Это переносит подготовку доказательства в критический путь майнинга, но устраняет сохраняемую очередь, частичное продвижение и неоднозначное восстановление: на каждой принятой высоте блок и его рекурсивное доказательство всегда существуют вместе.","datePublished":"2026-07-15","dateModified":"2026-07-15","mainEntityOfPage":"https://lab.parano1d.org/ru/research/atomic-history-step/","inLanguage":"ru","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-lab-hero.png","about":"Консенсус"}</script>
 </head>
 <body class="locale-ru">
   <a class="skip-link" href="#content">К содержанию</a>
