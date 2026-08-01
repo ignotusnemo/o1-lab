@@ -92,6 +92,18 @@ function buttonContent(href, label) {
   return `${isGithubUrl(href) ? githubIcon() : ""}<span>${esc(label)}</span>`;
 }
 
+function externalLinksInNewTabs(html) {
+  return html.replace(
+    /<a\b([^>]*\bhref="https?:\/\/[^\"]+"[^>]*)>/gi,
+    (_tag, attributes) => {
+      const normalized = attributes
+        .replace(/\s+target=("[^"]*"|'[^']*')/gi, "")
+        .replace(/\s+rel=("[^"]*"|'[^']*')/gi, "");
+      return `<a${normalized} target="_blank" rel="noopener noreferrer">`;
+    }
+  );
+}
+
 function renderMath(source, sourcePath) {
   const render = (tex, displayMode) => {
     try {
@@ -189,7 +201,7 @@ function header(active, locale, basePath) {
   return `<header class="site-header">
     <a class="brand" href="${pathFor(locale, "/")}" aria-label="${esc(t.brandHome)}">
       <span class="brand-mark" aria-hidden="true">①</span>
-      <span class="brand-copy"><strong>O(1) Lab</strong><small>${esc(t.brandSection)}</small></span>
+      <span class="brand-copy"><strong>ParanO(1)d Lab</strong><small>${esc(t.brandSection)}</small></span>
     </a>
     <div class="header-controls">
       <nav class="site-nav" id="site-nav" aria-label="${esc(t.navLabel)}">
@@ -211,13 +223,13 @@ function footer(locale) {
   return `<footer class="site-footer">
     <div class="footer-brand">
       <span class="brand-mark" aria-hidden="true">①</span>
-      <div><strong>O(1) Lab</strong><p>${esc(t.footerDescription)}</p></div>
+      <div><strong>ParanO(1)d Lab</strong><p>${esc(t.footerDescription)}</p></div>
     </div>
     <div class="footer-links">
       <div><strong>${esc(t.footerResearch)}</strong><a href="${pathFor(locale, "/research/")}">${esc(t.footerArchive)}</a><a href="${pathFor(locale, "/feed.xml")}">${esc(t.footerFeed)}</a></div>
       <div><strong>${esc(t.footerProject)}</strong><a href="https://parano1d.org">${esc(t.footerWebsite)}</a><a href="https://docs.parano1d.org">${esc(t.footerDocumentation)}</a><a href="https://github.com/ignotusnemo/parano1d">${esc(t.footerSource)}</a></div>
     </div>
-    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>lab.parano1d.org</span></div>
+    <div class="footer-bottom"><span>© 2026 ParanO(1)d Lab</span><span>lab.parano1d.org</span></div>
   </footer>`;
 }
 
@@ -229,7 +241,7 @@ function shell({ locale, title, description, basePath, body, active = "", type =
   const t = ui[locale.code];
   const pagePath = pathFor(locale, basePath);
   const canonical = absolute(pagePath);
-  const fullTitle = title === "O(1) Lab" ? t.siteTitle : `${title} · O(1) Lab`;
+  const fullTitle = title === "ParanO(1)d Lab" ? t.siteTitle : `${title} · ParanO(1)d Lab`;
   const image = absolute("/assets/og-lab-hero.png");
   const alternates = locales.map((target) => `<link rel="alternate" hreflang="${target.hreflang}" href="${absolute(pathFor(target, basePath))}">`).join("\n  ");
   const ogAlternates = locales.filter((target) => target.code !== locale.code).map((target) => `<meta property="og:locale:alternate" content="${target.ogLocale}">`).join("\n  ");
@@ -238,7 +250,7 @@ function shell({ locale, title, description, basePath, body, active = "", type =
   <meta property="article:section" content="${esc(article.topic)}">
   ${article.authors.map((author) => `<meta property="article:author" content="${esc(author)}">`).join("\n  ")}`
     : "";
-  return `<!doctype html>
+  return externalLinksInNewTabs(`<!doctype html>
 <html lang="${locale.htmlLang}">
 <head>
   <meta charset="utf-8">
@@ -246,7 +258,7 @@ function shell({ locale, title, description, basePath, body, active = "", type =
   <meta name="theme-color" content="#f3f2ed">
   <meta name="color-scheme" content="light">
   <meta name="description" content="${esc(description)}">
-  <meta name="author" content="O(1) Lab">
+  <meta name="author" content="ParanO(1)d Lab">
   <meta name="keywords" content="${esc(t.keywords)}">
   <link rel="canonical" href="${canonical}">
   ${alternates}
@@ -291,7 +303,7 @@ function shell({ locale, title, description, basePath, body, active = "", type =
   </div>
   <script src="/assets/site.js?v=${siteJsVersion}" defer></script>
 </body>
-</html>`;
+</html>`);
 }
 
 function articleCard(item, locale, { large = false } = {}) {
@@ -349,7 +361,7 @@ function homePage(locale, newestFirst) {
 
   </main>`;
   return shell({
-    title: "O(1) Lab",
+    title: "ParanO(1)d Lab",
     locale,
     description: t.siteDescription,
     basePath: "/",
@@ -358,7 +370,7 @@ function homePage(locale, newestFirst) {
     schema: {
       "@context": "https://schema.org",
       "@graph": [
-        { "@type": "Organization", "@id": `${siteUrl}/#organization`, name: "O(1) Lab", url: siteUrl, parentOrganization: { "@type": "Organization", name: "ParanO(1)d", url: "https://parano1d.org" } },
+        { "@type": "Organization", "@id": `${siteUrl}/#organization`, name: "ParanO(1)d Lab", url: siteUrl, parentOrganization: { "@type": "Organization", name: "ParanO(1)d", url: "https://parano1d.org" } },
         { "@type": "WebSite", "@id": `${siteUrl}/#website`, name: t.siteTitle, url: absolute(pathFor(locale, "/")), inLanguage: locale.htmlLang, publisher: { "@id": `${siteUrl}/#organization` } }
       ]
     }
@@ -424,8 +436,8 @@ function articlePage(item, index, locale, newestFirst) {
     dateModified: item.date,
     mainEntityOfPage: canonical,
     inLanguage: locale.htmlLang,
-    author: item.authors.map((name) => ({ "@type": name === "O(1) Lab" ? "Organization" : "Person", name })),
-    publisher: { "@type": "Organization", name: "O(1) Lab", url: siteUrl },
+    author: item.authors.map((name) => ({ "@type": name === "ParanO(1)d Lab" ? "Organization" : "Person", name })),
+    publisher: { "@type": "Organization", name: "ParanO(1)d Lab", url: siteUrl },
     image: absolute("/assets/og-lab-hero.png"),
     about: item.topic
   };
@@ -494,5 +506,5 @@ for (const locale of locales) {
 }
 await emit("sitemap.xml", sitemap());
 await emit("robots.txt", `User-agent: *\nAllow: /\nSitemap: ${siteUrl}/sitemap.xml\n`);
-await emit("manifest.webmanifest", JSON.stringify({ name: "O(1) Lab Research", short_name: "O(1) Lab", start_url: "/", display: "standalone", background_color: "#f3f2ed", theme_color: "#f3f2ed", icons: [{ src: "/assets/icon-192.png", sizes: "192x192", type: "image/png" }, { src: "/assets/icon-512.png", sizes: "512x512", type: "image/png" }] }, null, 2));
+await emit("manifest.webmanifest", JSON.stringify({ name: "ParanO(1)d Lab Research", short_name: "ParanO(1)d Lab", start_url: "/", display: "standalone", background_color: "#f3f2ed", theme_color: "#f3f2ed", icons: [{ src: "/assets/icon-192.png", sizes: "192x192", type: "image/png" }, { src: "/assets/icon-512.png", sizes: "512x512", type: "image/png" }] }, null, 2));
 console.log(`Built ${baseData.length} research articles in ${locales.length} languages for ${siteUrl}`);

@@ -1,4 +1,4 @@
-name: Deploy O(1) Lab
+name: Deploy ParanO(1)d Lab
 
 on:
   push:

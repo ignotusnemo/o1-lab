@@ -1,7 +1,7 @@
-# O(1) Lab Research
+# ParanO(1)d Lab Research
 
 Source for [lab.parano1d.org](https://lab.parano1d.org), the static
-research journal of O(1) Lab.
+research journal of ParanO(1)d Lab.
 
 ## Build
 
