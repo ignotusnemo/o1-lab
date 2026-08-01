@@ -981,7 +981,7 @@ img, svg { max-width: 100%; }
   .brand { min-width: 0; gap: 9px; }
   .brand-copy { min-width: 0; display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
   .brand-copy strong { flex: 0 0 auto; font-size: 15px; }
-  .brand-copy small { margin-top: 0; padding-left: 8px; border-left: 1px solid var(--line-dark); font-size: 8px; letter-spacing: .09em; white-space: nowrap; }
+  .brand-copy small { display: none; }
   .header-controls { display: flex; flex: 0 0 auto; align-items: center; gap: 7px; }
   .header-controls > .language-switcher { margin-left: 0; }
   .header-controls > .language-switcher summary { min-width: 54px; min-height: 40px; padding: 7px 9px; }
