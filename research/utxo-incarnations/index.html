@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="A monotone creation identifier inside the existing value lane invalidates stale slot openings without a second consensus root or reuse quarantine.">
+  <meta name="author" content="O(1) Lab">
+  <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, zero-knowledge proofs, proof systems, cryptography, recursive proofs, binary fields, polynomial commitments">
+  <link rel="canonical" href="https://lab.parano1d.org/research/utxo-incarnations/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/utxo-incarnations/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/utxo-incarnations/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/utxo-incarnations/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/utxo-incarnations/">
+  <link rel="alternate" type="application/rss+xml" title="O(1) Lab Research" href="https://lab.parano1d.org/feed.xml">
+  <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="O(1) Lab Research">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:url" content="https://lab.parano1d.org/research/utxo-incarnations/">
+  <meta property="og:title" content="Replacing a consensus quarantine with UTXO incarnations · O(1) Lab">
+  <meta property="og:description" content="A monotone creation identifier inside the existing value lane invalidates stale slot openings without a second consensus root or reuse quarantine.">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Replacing a consensus quarantine with UTXO incarnations · O(1) Lab">
+  <meta name="twitter:description" content="A monotone creation identifier inside the existing value lane invalidates stale slot openings without a second consensus root or reuse quarantine.">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="article:published_time" content="2026-07-10T00:00:00Z">
+  <meta property="article:section" content="Live State">
+  <meta property="article:author" content="O(1) Lab">
+  <title>Replacing a consensus quarantine with UTXO incarnations · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Replacing a consensus quarantine with UTXO incarnations","description":"A 256-bucket reuse guard and packed UTXO incarnations were implemented against the same stale-opening threat: one physical slot can later hold an output with the same visible value but a different identity. Incarnations distinguish successive outputs, permit same-block reuse, reject old openings and remove the second guard root and its proof families. The identifier remains branch-local and composes with canonical history.","datePublished":"2026-07-10","dateModified":"2026-07-10","mainEntityOfPage":"https://lab.parano1d.org/research/utxo-incarnations/","inLanguage":"en","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-research.png","about":"Live State"}</script>
+</head>
+<body class="locale-en">
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/" aria-label="O(1) Lab home">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>O(1) Lab</strong><small>Research</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+      <a href="/#latest">Latest</a>
+      <a aria-current="page" href="/research/">All research</a>
+      <span class="nav-rule" aria-hidden="true"></span>
+      <a href="https://docs.parano1d.org">Docs <span aria-hidden="true">↗</span></a>
+      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="ParanO(1)d on GitHub"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      <details class="language-switcher"><summary aria-label="Change language"><span>EN</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="Language"><a href="/research/utxo-incarnations/" lang="en" hreflang="en" aria-current="true"><span>EN</span><strong>English</strong></a><a href="/ru/research/utxo-incarnations/" lang="ru" hreflang="ru"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/utxo-incarnations/" lang="zh-Hans" hreflang="zh-Hans"><span>中文</span><strong>简体中文</strong></a></div></details>
+    </nav>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/research/">← All research</a><div class="article-meta"><span>Protocol study</span><span>Live State</span><time datetime="2026-07-10">10 Jul 2026</time></div><h1>Replacing a consensus quarantine with UTXO incarnations</h1><p class="article-dek">A monotone creation identifier inside the existing value lane invalidates stale slot openings without a second consensus root or reuse quarantine.</p><div class="article-byline"><span>By O(1) Lab</span><span>3 min read</span><span>Implemented comparison</span></div><div class="article-share" aria-label="Share this research"><span class="article-share-label">Share</span><button class="share-action" type="button" data-copy-link="https://lab.parano1d.org/research/utxo-incarnations/" data-copy-default="Copy link" data-copy-success="Copied" data-copy-failure="Copy failed" aria-label="Copy article link"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-copy-label aria-live="polite">Copy link</span></button><a class="share-action" href="https://x.com/intent/post?text=Replacing%20a%20consensus%20quarantine%20with%20UTXO%20incarnations&amp;url=https%3A%2F%2Flab.parano1d.org%2Fresearch%2Futxo-incarnations%2F" target="_blank" rel="noopener noreferrer" aria-label="Share this article on X"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Share on X</span></a></div></div>
+      <div class="research-art art--incarnation" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-incarnation" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-incarnation" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-incarnation" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-incarnation" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-incarnation" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-incarnation" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-incarnation)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-incarnation)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">ONE PHYSICAL SLOT · DISTINCT LOGICAL OUTPUTS</text>
+    <g class="diagram-panel diagram-panel--neutral" filter="url(#shadow-incarnation)"><rect x="38" y="78" width="230" height="246" rx="15"/><text class="diagram-micro" x="60" y="105">SLOT 148 · INCARNATION 41</text><text class="diagram-value diagram-value--compact" x="60" y="143">50 NOID</text><path class="diagram-divider" d="M60 161H246"/><text class="diagram-label" x="60" y="190">OWNER</text><text class="diagram-value diagram-value--compact" x="246" y="190" text-anchor="end">A7…2C</text><text class="diagram-label" x="60" y="224">CREATION</text><text class="diagram-number" x="246" y="226" text-anchor="end">41</text><g class="leaf-hash"><rect x="60" y="252" width="186" height="43" rx="8"/><text class="diagram-micro" x="74" y="269">LEAF IDENTITY</text><text class="diagram-value diagram-value--compact" x="74" y="289">H(slot ∥ 41 ∥ value)</text></g></g>
+  <g class="reuse-channel"><path d="M268 169H372" marker-end="url(#arrow-incarnation)"/><text class="diagram-micro" x="320" y="151" text-anchor="middle">SPEND → REUSE</text><path class="stale-cross" d="M301 232 339 270M339 232 301 270"/><text class="diagram-micro diagram-micro--coral" x="320" y="292" text-anchor="middle">STALE H₄₁</text></g>
+  <g class="diagram-panel diagram-panel--green" filter="url(#shadow-incarnation)"><rect x="372" y="78" width="230" height="246" rx="15"/><text class="diagram-micro" x="394" y="105">SLOT 148 · INCARNATION 42</text><text class="diagram-value diagram-value--compact" x="394" y="143">50 NOID</text><path class="diagram-divider" d="M394 161H580"/><text class="diagram-label" x="394" y="190">OWNER</text><text class="diagram-value diagram-value--compact" x="580" y="190" text-anchor="end">A7…2C</text><text class="diagram-label" x="394" y="224">CREATION</text><text class="diagram-number" x="580" y="226" text-anchor="end">42</text><g class="leaf-hash leaf-hash--new"><rect x="394" y="252" width="186" height="43" rx="8"/><text class="diagram-micro" x="408" y="269">NEW LEAF IDENTITY</text><text class="diagram-value diagram-value--compact" x="408" y="289">H(slot ∥ 42 ∥ value)</text></g></g>
+    <text class="diagram-caption" x="42" y="390">The incarnation travels with value, so reuse needs no quarantine root or delay</text>
+  </svg></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#problem">The slot-reuse problem</a><a href="#quarantine">Experiment 1. Consensus quarantine</a><a href="#incarnation">Experiment 2. Put identity in the value</a><a href="#tests">Adversarial and boundary tests</a><a href="#scope">Scope</a><a href="#result">Result</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>A 256-bucket reuse guard and packed UTXO incarnations were implemented against the same stale-opening threat: one physical slot can later hold an output with the same visible value but a different identity. Incarnations distinguish successive outputs, permit same-block reuse, reject old openings and remove the second guard root and its proof families. The identifier remains branch-local and composes with canonical history.</p></div><h2 id="problem">The slot-reuse problem</h2>
+<p>A UTXO is an unspent transaction output. ParanO(1)d stores current UTXOs in a bounded State whose <em>physical slots</em> are reusable indexes rather than permanent outpoint names. An exact-State opening is the Merkle proof that authenticates the complete leaf stored at one such slot. If the same slot later contains the same amount and owner, an old opening must not authenticate the new output. This is the classic A→B→A, or ABA, shape: the visible value returns to A while its logical identity has changed.</p>
+
+<h2 id="quarantine">Experiment 1. Consensus quarantine</h2>
+<p>The first construction used <code>ReuseGuard</code>, a second State structure that recorded when freed slots could become eligible again. It was organized as a 256-bucket ring. A freed slot remained quarantined for one block longer than the protocol's finality window; consensus carried a separate guard root, bucket paths and proof relations.</p>
+<p>The guard prevented immediate reuse, but imposed costs unrelated to the UTXO value itself:</p>
+<ul>
+  <li>an additional consensus State root and rollback domain;</li>
+  <li>three proof components for guard buckets and State-root binding;</li>
+  <li>no spend-then-mint reuse of one physical slot inside a block;</li>
+  <li>two transition paths that had to advance the guard identically.</li>
+</ul>
+<p>A prototype parity test deliberately exercised both transition paths and rejected a divergent guard-advance rule before design selection. The paths could be made identical, but maintaining that equivalence would remain a permanent proof obligation created by the second State machine.</p>
+
+<h2 id="incarnation">Experiment 2. Put identity in the value</h2>
+<p>The alternative packs the amount and a monotone creation identifier into the existing 128-bit value lane:</p>
+<div class="equation">packed_value = (creation_id &lt;&lt; 64) | amount</div>
+<p>Every minted output consumes the next branch-local <code>creation_id</code>. The exact-State leaf and input leaf therefore commit to logical incarnation as well as slot, owner and amount.</p>
+
+<h2 id="tests">Adversarial and boundary tests</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Case</th><th>Expected property</th><th>Result</th></tr></thead>
+  <tbody>
+    <tr><td>Same slot, owner and amount; new ID</td><td>Old exact opening must fail</td><td>Distinct State and input leaf hashes</td></tr>
+    <tr><td>Spend → mint in one block</td><td>New output uses the next ID</td><td>Unambiguous</td></tr>
+    <tr><td>Mint → spend in one block</td><td>Child input names the minted ID</td><td>Unambiguous</td></tr>
+    <tr><td>Gapped, repeated or reordered IDs</td><td>Reject</td><td>Rejected</td></tr>
+    <tr><td><code>u64::MAX</code> counter</td><td>No wraparound</td><td>Consensus-invalid</td></tr>
+  </tbody>
+</table></div>
+
+<p>The prototype also checked that <code>creation_id = 0</code> preserves the baseline hash schedules. Incarnation data fit into an existing field lane; no extra leaf, header root or proof family was required.</p>
+
+<h2 id="scope">Scope</h2>
+<p>The identifier is branch-local. Rollback restores the allocation counter with State, so competing branches may assign the same numeric identifier to different outputs. Branch and epoch binding remain the responsibility of canonical history. The construction solves stale exact-State openings within one canonical branch; it does not create a global outpoint namespace.</p>
+
+<h2 id="result">Result</h2>
+<p>The incarnation design replaced the quarantine ring and removed its guard proof relations. More generally, when a reusable physical location represents successive logical objects, committing a monotone incarnation directly into the object is simpler than maintaining a second consensus structure that remembers when the location may be reused.</p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Research record</p><h2 id="evidence-title">Evidence and artifacts</h2><p>The links below preserve the implementation, measurement or derivation behind this article.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/c7372ea1"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Commit</small><strong>ReuseGuard implementation</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/f30ffbe7"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Commit</small><strong>Incarnation adversarial prototype</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/e4a9061b"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Commit</small><strong>Direct exact-State integration</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Adjacent research"><a href="/research/binary-field-kernels/"><small>Earlier</small><strong>Binary-field kernels</strong><span>←</span></a><a href="/research/proof-carrying-state-sync/"><small>Later</small><strong>Proof-carrying State</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>O(1) Lab</strong><p>Protocol research behind ParanO(1)d.</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>Research</strong><a href="/research/">Archive</a><a href="/feed.xml">RSS feed</a></div>
+      <div><strong>Project</strong><a href="https://parano1d.org">Website</a><a href="https://docs.parano1d.org">Documentation</a><a href="https://github.com/ignotusnemo/parano1d">Source</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=4286a63d1931" defer></script>
+</body>
+</html>

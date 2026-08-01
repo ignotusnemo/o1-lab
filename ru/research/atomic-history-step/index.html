@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Ранний вариант сначала принимал блок, а его рекурсивное доказательство строил позже в фоне. Поэтому каноническая цепь могла опережать вершину, уже подтверждённую HistoryStep, и узлу приходилось сохранять и восстанавливать отдельную очередь. В принятой архитектуре блок принимается только вместе со своим HistoryStep: один атомарный объект, одна каноническая высота и никаких отложенных доказательств.">
+  <meta name="author" content="O(1) Lab">
+  <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, доказательства с нулевым разглашением, системы доказательств, криптография, рекурсивные доказательства, бинарные поля, полиномиальные обязательства">
+  <link rel="canonical" href="https://lab.parano1d.org/ru/research/atomic-history-step/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/atomic-history-step/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/atomic-history-step/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/atomic-history-step/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/atomic-history-step/">
+  <link rel="alternate" type="application/rss+xml" title="Исследования O(1) Lab" href="https://lab.parano1d.org/ru/feed.xml">
+  <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Исследования O(1) Lab">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:url" content="https://lab.parano1d.org/ru/research/atomic-history-step/">
+  <meta property="og:title" content="Почему блок принимается только с рекурсивным доказательством · O(1) Lab">
+  <meta property="og:description" content="Ранний вариант сначала принимал блок, а его рекурсивное доказательство строил позже в фоне. Поэтому каноническая цепь могла опережать вершину, уже подтверждённую HistoryStep, и узлу приходилось сохранять и восстанавливать отдельную очередь. В принятой архитектуре блок принимается только вместе со своим HistoryStep: один атомарный объект, одна каноническая высота и никаких отложенных доказательств.">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Почему блок принимается только с рекурсивным доказательством · O(1) Lab">
+  <meta name="twitter:description" content="Ранний вариант сначала принимал блок, а его рекурсивное доказательство строил позже в фоне. Поэтому каноническая цепь могла опережать вершину, уже подтверждённую HistoryStep, и узлу приходилось сохранять и восстанавливать отдельную очередь. В принятой архитектуре блок принимается только вместе со своим HistoryStep: один атомарный объект, одна каноническая высота и никаких отложенных доказательств.">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="article:published_time" content="2026-07-15T00:00:00Z">
+  <meta property="article:section" content="Консенсус">
+  <meta property="article:author" content="O(1) Lab">
+  <title>Почему блок принимается только с рекурсивным доказательством · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Почему блок принимается только с рекурсивным доказательством","description":"В исследовании сравниваются две полностью реализованные архитектуры. В первой блок входил в каноническую цепь до завершения рекурсивного доказательства, а трёхэтапный фоновый конвейер позднее строил доказательство блока, включал его в рекурсивную историю и продвигал отдельную доказанную вершину. Во второй блок, соответствующий терминал HistoryStep, State и индексы фиксируются как единый атомарный результат. Это переносит подготовку доказательства в критический путь майнинга, но устраняет сохраняемую очередь, частичное продвижение и неоднозначное восстановление: на каждой принятой высоте блок и его рекурсивное доказательство всегда существуют вместе.","datePublished":"2026-07-15","dateModified":"2026-07-15","mainEntityOfPage":"https://lab.parano1d.org/ru/research/atomic-history-step/","inLanguage":"ru","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-research.png","about":"Консенсус"}</script>
+</head>
+<body class="locale-ru">
+  <a class="skip-link" href="#content">К содержанию</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/ru/" aria-label="Главная O(1) Lab">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>O(1) Lab</strong><small>Исследования</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
+      <a href="/ru/#latest">Новое</a>
+      <a aria-current="page" href="/ru/research/">Все исследования</a>
+      <span class="nav-rule" aria-hidden="true"></span>
+      <a href="https://docs.parano1d.org">Документация <span aria-hidden="true">↗</span></a>
+      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="ParanO(1)d на GitHub"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      <details class="language-switcher"><summary aria-label="Выбрать язык"><span>RU</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="Язык"><a href="/research/atomic-history-step/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/atomic-history-step/" lang="ru" hreflang="ru" aria-current="true"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/atomic-history-step/" lang="zh-Hans" hreflang="zh-Hans"><span>中文</span><strong>简体中文</strong></a></div></details>
+    </nav>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/ru/research/">← Все исследования</a><div class="article-meta"><span>Исследование протокола</span><span>Консенсус</span><time datetime="2026-07-15">15 июл. 2026 г.</time></div><h1>Почему блок принимается только с рекурсивным доказательством</h1><p class="article-dek">Ранний вариант сначала принимал блок, а его рекурсивное доказательство строил позже в фоне. Поэтому каноническая цепь могла опережать вершину, уже подтверждённую HistoryStep, и узлу приходилось сохранять и восстанавливать отдельную очередь. В принятой архитектуре блок принимается только вместе со своим HistoryStep: один атомарный объект, одна каноническая высота и никаких отложенных доказательств.</p><div class="article-byline"><span>Автор O(1) Lab</span><span>3 мин чтения</span><span>Реализованное сравнение</span></div><div class="article-share" aria-label="Поделиться исследованием"><span class="article-share-label">Поделиться</span><button class="share-action" type="button" data-copy-link="https://lab.parano1d.org/ru/research/atomic-history-step/" data-copy-default="Копировать ссылку" data-copy-success="Скопировано" data-copy-failure="Не удалось скопировать" aria-label="Скопировать ссылку на статью"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-copy-label aria-live="polite">Копировать ссылку</span></button><a class="share-action" href="https://x.com/intent/post?text=%D0%9F%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20%D0%B1%D0%BB%D0%BE%D0%BA%20%D0%BF%D1%80%D0%B8%D0%BD%D0%B8%D0%BC%D0%B0%D0%B5%D1%82%D1%81%D1%8F%20%D1%82%D0%BE%D0%BB%D1%8C%D0%BA%D0%BE%20%D1%81%20%D1%80%D0%B5%D0%BA%D1%83%D1%80%D1%81%D0%B8%D0%B2%D0%BD%D1%8B%D0%BC%20%D0%B4%D0%BE%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D1%81%D1%82%D0%B2%D0%BE%D0%BC&amp;url=https%3A%2F%2Flab.parano1d.org%2Fru%2Fresearch%2Fatomic-history-step%2F" target="_blank" rel="noopener noreferrer" aria-label="Поделиться статьёй в X"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Поделиться в X</span></a></div></div>
+      <div class="research-art art--atomic" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-atomic" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-atomic" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-atomic" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-atomic" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-atomic" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-atomic" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-atomic)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-atomic)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">ONE HEIGHT MUST MEAN ONE COMPLETE OBJECT</text>
+    <g class="diagram-panel diagram-panel--coral" filter="url(#shadow-atomic)"><rect x="38" y="75" width="270" height="255" rx="15"/><text class="diagram-micro" x="60" y="103">BACKGROUND VALIDITY PIPELINE</text><text class="diagram-label" x="60" y="139">BLOCK TIP</text><text class="diagram-number" x="286" y="141" text-anchor="end">1042</text><text class="diagram-label" x="60" y="175">PROVEN TIP</text><text class="diagram-number diagram-number--coral" x="286" y="177" text-anchor="end">1039</text><path class="diagram-divider" d="M60 197H286"/>
+    <g class="pipeline-steps"><rect x="60" y="222" width="62" height="48" rx="8"/><rect x="142" y="222" width="62" height="48" rx="8"/><rect x="224" y="222" width="62" height="48" rx="8"/><text x="91" y="251" text-anchor="middle">BLOCK</text><text x="173" y="251" text-anchor="middle">LINK</text><text x="255" y="251" text-anchor="middle">PROMOTE</text><path d="M122 246H142M204 246H224" marker-end="url(#arrow-atomic)"/></g><text class="diagram-micro" x="60" y="302">TWO DURABLE CURSORS · BACKLOG RECOVERY</text></g>
+  <g class="comparison-mark"><path d="M320 186V220"/><circle cx="320" cy="203" r="16"/><text x="320" y="208" text-anchor="middle">→</text></g>
+  <g class="diagram-panel diagram-panel--green" filter="url(#shadow-atomic)"><rect x="332" y="75" width="270" height="255" rx="15"/><text class="diagram-micro" x="354" y="103">ATOMIC BLOCK BUNDLE</text><g class="bundle"><rect x="374" y="134" width="186" height="139" rx="13"/><rect x="396" y="157" width="142" height="39" rx="7"/><rect x="396" y="211" width="142" height="39" rx="7"/><text class="diagram-value diagram-value--compact" x="467" y="182" text-anchor="middle">BLOCK h</text><text class="diagram-value diagram-value--compact" x="467" y="236" text-anchor="middle">HistoryStep πₕ</text><path d="M467 196V211"/></g><g class="proof-seal"><circle cx="570" cy="297" r="15"/><path d="M562 297 568 303 578 289"/></g><text class="diagram-micro" x="354" y="304">ONE ACCEPTED HEIGHT · NO VALIDITY LAG</text></g>
+    <text class="diagram-caption" x="42" y="390">Atomicity removes the second progress cursor and every partial-promotion state</text>
+  </svg></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="В этой статье"><strong>В этой статье</strong><a href="#question">Когда блок можно считать принятым?</a><a href="#pipeline">Эксперимент 1. Фоновый конвейер доказательств</a><a href="#atomic">Эксперимент 2. Атомарные PoW и HistoryStep</a><a href="#comparison">Сравнение автоматов состояний</a><a href="#tradeoff">Компромисс</a><a href="#result">Результат</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>Аннотация</span><p>В исследовании сравниваются две полностью реализованные архитектуры. В первой блок входил в каноническую цепь до завершения рекурсивного доказательства, а трёхэтапный фоновый конвейер позднее строил доказательство блока, включал его в рекурсивную историю и продвигал отдельную доказанную вершину. Во второй блок, соответствующий терминал HistoryStep, State и индексы фиксируются как единый атомарный результат. Это переносит подготовку доказательства в критический путь майнинга, но устраняет сохраняемую очередь, частичное продвижение и неоднозначное восстановление: на каждой принятой высоте блок и его рекурсивное доказательство всегда существуют вместе.</p></div><h2 id="question">Когда блок можно считать принятым?</h2>
+<p><code>State</code> — аутентифицированный набор текущих непотраченных выходов и счётчиков консенсуса. <code>HistoryStep</code> — рекурсивный терминал, который доказывает точный переход одного блока от родительского State к дочернему и проверяет предыдущий терминал. Исследование отвечает на простой вопрос: может ли блок войти в каноническую цепь до готовности своего HistoryStep или оба объекта должны приниматься одновременно? Обе архитектуры были реализованы для сравнения автоматов состояний консенсуса, поведения после перезапуска и критического пути майнинга.</p>
+
+<h2 id="pipeline">Эксперимент 1. Фоновый конвейер доказательств</h2>
+<p>В эксперименте блоки распределялись по четырём фиксированным классам ёмкости доказательства: B8, B32, B64 и B255. Число в названии означало максимальное количество пользовательских транзакций, которое мог доказать этот класс. Для каждого класса одна криптографически аутентифицированная матрица системы ограничений задавала переход блока, а другая — включение доказательства блока в рекурсивную историю. Девятая матрица задавала начало цепи от генезиса.</p>
+<p><em>Рекурсивное отношение связи</em> — это система ограничений, которая проверяет доказательство одного блока вместе с предыдущим <code>HistoryStep</code> и создаёт следующее звено доказанной истории. Все четыре таких отношения использовали параметр <code>m = 22</code>. Здесь <code>m</code> — двоичный логарифм размера дополненной области свидетеля и ограничений: каждое отношение занимало <code>2^22</code> позиций поля. Затем работа проходила три этапа, промежуточное состояние которых сохранялось на диске:</p>
+<div class="protocol-flow" aria-label="Фоновый конвейер доказательств">
+  <div class="flow-step"><small>Этап 1</small><strong>Доказательство блока</strong><span>Доказать одну принятую высоту</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>Этап 2</small><strong>Рекурсивная связь</strong><span>Использовать предыдущий терминал</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>Этап 3</small><strong>Проверить и продвинуть</strong><span>Продвинуть вершину, охваченную рекурсивными доказательствами</span></div>
+</div>
+<p>Три меньших класса — для блоков не более чем с 64 пользовательскими транзакциями — позволяли одновременно обрабатывать до трёх высот. Максимальный класс B255, рассчитанный на 255 пользовательских транзакций, обрабатывал по одной высоте из-за большей потребности в памяти. Параллельная работа повышала пропускную способность, но в консенсусе появлялись две позиции: вершина канонической цепи и вершина, уже охваченная рекурсивными доказательствами. Сохраняемые задания, строго последовательное продвижение, восстановление после перезапуска и частичное состояние конвейера требовались только для согласования этих двух позиций.</p>
+
+<h2 id="atomic">Эксперимент 2. Атомарные PoW и HistoryStep</h2>
+<p>Альтернативная архитектура определяет одну принимаемую единицу:</p>
+<div class="equation">принятый блок = канонические байты блока + соответствующий терминал HistoryStep</div>
+<p>Кандидат не может изменить State, создать награду или быть объявлен сети, пока терминал не свяжет его точный семантический заголовок и переход State. Байты блока, терминал, State и индексы чеков фиксируются атомарно. Поэтому после перезапуска восстанавливается либо весь пакет, либо отсутствие блока на этой высоте.</p>
+
+<h2 id="comparison">Сравнение автоматов состояний</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Свойство</th><th>Фоновый конвейер</th><th>Атомарный HistoryStep</th></tr></thead>
+  <tbody>
+    <tr><td>Прогресс консенсуса</td><td>Вершина цепи и рекурсивно доказанная вершина</td><td>Одна принятая высота</td></tr>
+    <tr><td>Долговечные промежуточные задания</td><td>Состояния блока, связи и продвижения</td><td>Нет</td></tr>
+    <tr><td>Сценарии перезапуска</td><td>Восстановить и завершить частичный конвейер</td><td>Полный пакет либо отсутствующая высота</td></tr>
+    <tr><td>Задержка доказательства</td><td>Может отставать от производства блоков</td><td>Оплачивается до принятия</td></tr>
+    <tr><td>Сетевой объект</td><td>Блок и более позднее состояние покрытия</td><td>Один полный пакет</td></tr>
+  </tbody>
+</table></div>
+
+<h2 id="tradeoff">Компромисс</h2>
+<p>Атомарность не делает доказательство бесплатным. Детерминированная подготовка HistoryStep переходит в путь майнинга; её бюджет должен позволять поддерживаемому оборудованию выпускать кандидаты в темпе сети. Поиск nonce для proof of work остаётся вероятностным и зависит от сложности: это не фиксированная локальная задача на пятнадцать секунд. Измерения классов доказательств приведены отдельно в статье <a href="/ru/research/b64-b255-proof-classes/">«Почему HistoryStep использует два класса доказательств»</a>.</p>
+<p>Преимущество заключается не в чистой скорости, а в устранении целого автомата очереди, состояние которого влияло на консенсус.</p>
+
+<h2 id="result">Результат</h2>
+<div class="result">
+  <strong>Принятое правило</strong>
+  <p>Если рекурсивное доказательство определяет полную валидность блока, оно должно быть частью принимаемого объекта блока. Фоновое доказательство уместно для необязательных индексов и кэшей, но не для второго, видимого консенсусу состояния прогресса.</p>
+</div>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Материалы исследования</p><h2 id="evidence-title">Доказательства и артефакты</h2><p>Здесь сохранены реализации, измерения и выводы, на которых основана статья.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/53fdd75f"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Коммит</small><strong>Фоновый конвейер выбранной истории</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/e825372e"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Коммит</small><strong>Построение доказательства внутри майнинга</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/f3bdd9e4"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Коммит</small><strong>Реализация атомарного HistoryStep</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Соседние исследования"><a href="/ru/research/prove-once-search-nonces/"><small>Ранее</small><strong>Семантическая проекция заголовка</strong><span>←</span></a><a href="/ru/research/b64-b255-proof-classes/"><small>Позднее</small><strong>B64 / B255</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>O(1) Lab</strong><p>Исследования протокола ParanO(1)d.</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>Исследования</strong><a href="/ru/research/">Архив</a><a href="/ru/feed.xml">RSS-лента</a></div>
+      <div><strong>Проект</strong><a href="https://parano1d.org">Сайт</a><a href="https://docs.parano1d.org">Документация</a><a href="https://github.com/ignotusnemo/parano1d">Исходный код</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=4286a63d1931" defer></script>
+</body>
+</html>

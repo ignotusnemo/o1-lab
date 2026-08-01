@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="早期设计先接受区块，再在后台生成对应的递归证明。因此，规范链尖可能领先于已被 HistoryStep 覆盖的链尖，节点还必须持久化并恢复另一条任务队列。正式架构只在区块与其 HistoryStep 同时就绪时接受该区块：一个原子对象、一个规范高度，不存在滞后的证明积压。">
+  <meta name="author" content="O(1) Lab">
+  <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺">
+  <link rel="canonical" href="https://lab.parano1d.org/zh/research/atomic-history-step/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/atomic-history-step/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/atomic-history-step/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/atomic-history-step/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/atomic-history-step/">
+  <link rel="alternate" type="application/rss+xml" title="O(1) Lab 研究" href="https://lab.parano1d.org/zh/feed.xml">
+  <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="O(1) Lab 研究">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:url" content="https://lab.parano1d.org/zh/research/atomic-history-step/">
+  <meta property="og:title" content="区块为何必须与递归证明一同接受 · O(1) Lab">
+  <meta property="og:description" content="早期设计先接受区块，再在后台生成对应的递归证明。因此，规范链尖可能领先于已被 HistoryStep 覆盖的链尖，节点还必须持久化并恢复另一条任务队列。正式架构只在区块与其 HistoryStep 同时就绪时接受该区块：一个原子对象、一个规范高度，不存在滞后的证明积压。">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="区块为何必须与递归证明一同接受 · O(1) Lab">
+  <meta name="twitter:description" content="早期设计先接受区块，再在后台生成对应的递归证明。因此，规范链尖可能领先于已被 HistoryStep 覆盖的链尖，节点还必须持久化并恢复另一条任务队列。正式架构只在区块与其 HistoryStep 同时就绪时接受该区块：一个原子对象、一个规范高度，不存在滞后的证明积压。">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="article:published_time" content="2026-07-15T00:00:00Z">
+  <meta property="article:section" content="共识">
+  <meta property="article:author" content="O(1) Lab">
+  <title>区块为何必须与递归证明一同接受 · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"区块为何必须与递归证明一同接受","description":"本研究比较了两种完整实现的架构。第一种架构在递归证明完成前就把区块加入规范链，随后由三阶段后台流水线生成区块证明、将其接入递归历史，并推进另一条已证明链尖。第二种架构把区块、对应的 HistoryStep 终端、State 与索引作为同一个原子结果提交。它把证明准备纳入挖矿关键路径，却消除了持久任务队列、部分提升与含糊的重启状态：每个已接受高度上的区块与递归证明始终同时存在。","datePublished":"2026-07-15","dateModified":"2026-07-15","mainEntityOfPage":"https://lab.parano1d.org/zh/research/atomic-history-step/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-research.png","about":"共识"}</script>
+</head>
+<body class="locale-zh">
+  <a class="skip-link" href="#content">跳到正文</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/zh/" aria-label="O(1) Lab 首页">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>O(1) Lab</strong><small>研究</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航">
+      <a href="/zh/#latest">最新</a>
+      <a aria-current="page" href="/zh/research/">全部研究</a>
+      <span class="nav-rule" aria-hidden="true"></span>
+      <a href="https://docs.parano1d.org">文档 <span aria-hidden="true">↗</span></a>
+      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="GitHub 上的 ParanO(1)d"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      <details class="language-switcher"><summary aria-label="切换语言"><span>中文</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="语言"><a href="/research/atomic-history-step/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/atomic-history-step/" lang="ru" hreflang="ru"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/atomic-history-step/" lang="zh-Hans" hreflang="zh-Hans" aria-current="true"><span>中文</span><strong>简体中文</strong></a></div></details>
+    </nav>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>协议研究</span><span>共识</span><time datetime="2026-07-15">2026年7月15日</time></div><h1>区块为何必须与递归证明一同接受</h1><p class="article-dek">早期设计先接受区块，再在后台生成对应的递归证明。因此，规范链尖可能领先于已被 HistoryStep 覆盖的链尖，节点还必须持久化并恢复另一条任务队列。正式架构只在区块与其 HistoryStep 同时就绪时接受该区块：一个原子对象、一个规范高度，不存在滞后的证明积压。</p><div class="article-byline"><span>作者 O(1) Lab</span><span>3 分钟阅读</span><span>已实现的比较</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action" type="button" data-copy-link="https://lab.parano1d.org/zh/research/atomic-history-step/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=%E5%8C%BA%E5%9D%97%E4%B8%BA%E4%BD%95%E5%BF%85%E9%A1%BB%E4%B8%8E%E9%80%92%E5%BD%92%E8%AF%81%E6%98%8E%E4%B8%80%E5%90%8C%E6%8E%A5%E5%8F%97&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fatomic-history-step%2F" target="_blank" rel="noopener noreferrer" aria-label="将本文分享到 X"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
+      <div class="research-art art--atomic" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-atomic" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-atomic" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-atomic" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-atomic" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-atomic" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-atomic" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-atomic)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-atomic)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">ONE HEIGHT MUST MEAN ONE COMPLETE OBJECT</text>
+    <g class="diagram-panel diagram-panel--coral" filter="url(#shadow-atomic)"><rect x="38" y="75" width="270" height="255" rx="15"/><text class="diagram-micro" x="60" y="103">BACKGROUND VALIDITY PIPELINE</text><text class="diagram-label" x="60" y="139">BLOCK TIP</text><text class="diagram-number" x="286" y="141" text-anchor="end">1042</text><text class="diagram-label" x="60" y="175">PROVEN TIP</text><text class="diagram-number diagram-number--coral" x="286" y="177" text-anchor="end">1039</text><path class="diagram-divider" d="M60 197H286"/>
+    <g class="pipeline-steps"><rect x="60" y="222" width="62" height="48" rx="8"/><rect x="142" y="222" width="62" height="48" rx="8"/><rect x="224" y="222" width="62" height="48" rx="8"/><text x="91" y="251" text-anchor="middle">BLOCK</text><text x="173" y="251" text-anchor="middle">LINK</text><text x="255" y="251" text-anchor="middle">PROMOTE</text><path d="M122 246H142M204 246H224" marker-end="url(#arrow-atomic)"/></g><text class="diagram-micro" x="60" y="302">TWO DURABLE CURSORS · BACKLOG RECOVERY</text></g>
+  <g class="comparison-mark"><path d="M320 186V220"/><circle cx="320" cy="203" r="16"/><text x="320" y="208" text-anchor="middle">→</text></g>
+  <g class="diagram-panel diagram-panel--green" filter="url(#shadow-atomic)"><rect x="332" y="75" width="270" height="255" rx="15"/><text class="diagram-micro" x="354" y="103">ATOMIC BLOCK BUNDLE</text><g class="bundle"><rect x="374" y="134" width="186" height="139" rx="13"/><rect x="396" y="157" width="142" height="39" rx="7"/><rect x="396" y="211" width="142" height="39" rx="7"/><text class="diagram-value diagram-value--compact" x="467" y="182" text-anchor="middle">BLOCK h</text><text class="diagram-value diagram-value--compact" x="467" y="236" text-anchor="middle">HistoryStep πₕ</text><path d="M467 196V211"/></g><g class="proof-seal"><circle cx="570" cy="297" r="15"/><path d="M562 297 568 303 578 289"/></g><text class="diagram-micro" x="354" y="304">ONE ACCEPTED HEIGHT · NO VALIDITY LAG</text></g>
+    <text class="diagram-caption" x="42" y="390">Atomicity removes the second progress cursor and every partial-promotion state</text>
+  </svg></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#question">区块何时才算完整？</a><a href="#pipeline">实验一：后台证明流水线</a><a href="#atomic">实验二：原子化 PoW 与 HistoryStep</a><a href="#comparison">状态机对比</a><a href="#tradeoff">取舍</a><a href="#result">结果</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>摘要</span><p>本研究比较了两种完整实现的架构。第一种架构在递归证明完成前就把区块加入规范链，随后由三阶段后台流水线生成区块证明、将其接入递归历史，并推进另一条已证明链尖。第二种架构把区块、对应的 HistoryStep 终端、State 与索引作为同一个原子结果提交。它把证明准备纳入挖矿关键路径，却消除了持久任务队列、部分提升与含糊的重启状态：每个已接受高度上的区块与递归证明始终同时存在。</p></div><h2 id="question">区块何时才算完整？</h2>
+<p><code>State</code> 是由当前未花费输出与共识计数器组成的认证集合。<code>HistoryStep</code> 是递归终端证明：它证明一个区块从父 State 到子 State 的精确转换，并验证前一个终端证明。本研究要回答一个直接的问题：区块能否在自己的 HistoryStep 就绪前进入规范链，还是二者必须同时被接受？两种架构均已实现，以比较其共识状态机、重启行为与挖矿关键路径。</p>
+
+<h2 id="pipeline">实验一：后台证明流水线</h2>
+<p>实验按证明容量把区块分为四个固定类别：B8、B32、B64 和 B255。名称中的数字表示该类别最多能够证明的用户交易数。每个类别都有一份经过密码学认证的约束矩阵用于描述区块转换，另有一份矩阵用于把该区块证明接入递归历史；第九份矩阵用于锚定创世起点。</p>
+<p><em>递归链接关系</em>是一套约束系统：它同时验证一个区块证明和前一个 <code>HistoryStep</code>，并生成已证明历史中的下一个链接。四种此类关系都采用参数 <code>m = 22</code>。这里的 <code>m</code> 是填充后见证域与约束域大小的以二为底对数，因此每个关系占用 <code>2^22</code> 个域位置。随后，任务依次经过三个需要把中间状态持久化到磁盘的阶段：</p>
+<div class="protocol-flow" aria-label="后台证明流水线">
+  <div class="flow-step"><small>阶段 1</small><strong>区块证明</strong><span>证明一个已接受高度</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>阶段 2</small><strong>递归链接</strong><span>使用前一个终端证明</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>阶段 3</small><strong>验证并提升</strong><span>推进递归证明已经覆盖的链尖</span></div>
+</div>
+<p>三个较小类别覆盖最多 64 笔用户交易，允许最多三个区块高度并行处理。容量最大的 B255 可覆盖 255 笔用户交易，但因内存占用更高而一次只处理一个高度。并行处理提高了吞吐量，却让共识同时出现两个位置：规范链尖，以及已被递归证明覆盖的链尖。持久化证明任务、按顺序提升、重启恢复与部分流水线状态，全部只是为了使这两个位置保持一致。</p>
+
+<h2 id="atomic">实验二：原子化 PoW 与 HistoryStep</h2>
+<p>另一种设计只定义一个可接受单元：</p>
+<div class="equation">已接受区块 = 规范区块字节 + 对应的 HistoryStep 终端证明</div>
+<p>在终端证明绑定候选区块的精确语义区块头与 State 转换之前，候选区块不能修改 State、创建区块奖励或向网络公布。区块字节、终端证明、State 与收据索引被原子提交。重启后，节点要么恢复完整单元，要么该高度不存在区块。</p>
+
+<h2 id="comparison">状态机对比</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>属性</th><th>后台流水线</th><th>原子 HistoryStep</th></tr></thead>
+  <tbody>
+    <tr><td>共识进度</td><td>规范链尖加递归覆盖链尖</td><td>一个已接受高度</td></tr>
+    <tr><td>持久中间任务</td><td>区块、链接与提升状态</td><td>无</td></tr>
+    <tr><td>重启情况</td><td>恢复并完成部分流水线</td><td>完整原子包或缺失高度</td></tr>
+    <tr><td>证明延迟</td><td>可以落后于区块生成</td><td>接受前支付</td></tr>
+    <tr><td>网络对象</td><td>区块加稍后产生的覆盖状态</td><td>一个完整原子包</td></tr>
+  </tbody>
+</table></div>
+
+<h2 id="tradeoff">取舍</h2>
+<p>原子性并不会消除证明成本。确定性的 HistoryStep 准备被移到挖矿路径，其预算必须保证受支持硬件仍能按网络节奏持续生成候选。工作量证明的 nonce 搜索仍是概率过程，并且依赖网络难度；它不是一项固定在十五秒内完成的本地任务。证明类别的测量单独记录在<a href="/zh/research/b64-b255-proof-classes/">《HistoryStep 为何采用两种证明类别》</a>中。</p>
+<p>收益不是单纯提速，而是删除了一整套对共识可见的积压状态机。</p>
+
+<h2 id="result">结果</h2>
+<div class="result">
+  <strong>采用的规则</strong>
+  <p>如果递归证明决定区块是否完全有效，就应当把该证明纳入被接受的区块对象。后台证明适合可选索引与缓存，不应再引入第二套共识可见的进度状态。</p>
+</div>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">研究记录</p><h2 id="evidence-title">证据与产物</h2><p>以下链接保存了支撑本文的实现、测量或推导。</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/53fdd75f"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>后台已选历史流水线</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/e825372e"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>挖矿内证明生成</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/f3bdd9e4"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>原子 HistoryStep 实现</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="相邻研究"><a href="/zh/research/prove-once-search-nonces/"><small>较早</small><strong>语义区块头投影</strong><span>←</span></a><a href="/zh/research/b64-b255-proof-classes/"><small>较新</small><strong>B64 / B255</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>O(1) Lab</strong><p>ParanO(1)d 背后的协议研究。</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>研究</strong><a href="/zh/research/">归档</a><a href="/zh/feed.xml">RSS 订阅</a></div>
+      <div><strong>项目</strong><a href="https://parano1d.org">网站</a><a href="https://docs.parano1d.org">技术文档</a><a href="https://github.com/ignotusnemo/parano1d">源代码</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=4286a63d1931" defer></script>
+</body>
+</html>

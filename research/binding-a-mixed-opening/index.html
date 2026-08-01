@@ -5,35 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f3f2ed">
   <meta name="color-scheme" content="light">
-  <meta name="description" content="Transcript binding was not source binding. Query-level authentication closed a commit-to-A, open-from-A′ attack in the mixed-opening path.">
+  <meta name="description" content="An A/A′ adversarial test separates low-degree consistency from commitment provenance. A source root and shared queries close the edge.">
   <meta name="author" content="O(1) Lab">
   <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, zero-knowledge proofs, proof systems, cryptography, recursive proofs, binary fields, polynomial commitments">
-  <link rel="canonical" href="https://research.parano1d.org/research/binding-a-mixed-opening/">
-  <link rel="alternate" type="application/rss+xml" title="O(1) Lab Research" href="https://research.parano1d.org/feed.xml">
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="canonical" href="https://lab.parano1d.org/research/binding-a-mixed-opening/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/binding-a-mixed-opening/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/binding-a-mixed-opening/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/binding-a-mixed-opening/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/binding-a-mixed-opening/">
+  <link rel="alternate" type="application/rss+xml" title="O(1) Lab Research" href="https://lab.parano1d.org/feed.xml">
+  <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="O(1) Lab Research">
-  <meta property="og:url" content="https://research.parano1d.org/research/binding-a-mixed-opening/">
-  <meta property="og:title" content="Binding a compact FRI opening back to its committed source · O(1) Lab">
-  <meta property="og:description" content="Transcript binding was not source binding. Query-level authentication closed a commit-to-A, open-from-A′ attack in the mixed-opening path.">
-  <meta property="og:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:url" content="https://lab.parano1d.org/research/binding-a-mixed-opening/">
+  <meta property="og:title" content="Source binding for compact mixed openings · O(1) Lab">
+  <meta property="og:description" content="An A/A′ adversarial test separates low-degree consistency from commitment provenance. A source root and shared queries close the edge.">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Binding a compact FRI opening back to its committed source · O(1) Lab">
-  <meta name="twitter:description" content="Transcript binding was not source binding. Query-level authentication closed a commit-to-A, open-from-A′ attack in the mixed-opening path.">
-  <meta name="twitter:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta name="twitter:title" content="Source binding for compact mixed openings · O(1) Lab">
+  <meta name="twitter:description" content="An A/A′ adversarial test separates low-degree consistency from commitment provenance. A source root and shared queries close the edge.">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
   <meta property="article:published_time" content="2026-06-21T00:00:00Z">
   <meta property="article:section" content="Polynomial commitments">
   <meta property="article:author" content="O(1) Lab">
-  <title>Binding a compact FRI opening back to its committed source · O(1) Lab</title>
-  <link rel="stylesheet" href="/assets/site.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Binding a compact FRI opening back to its committed source","description":"An early mixed-opening verifier proved that a low-degree combination matched prover-supplied values, but did not authenticate the compact FRI round-zero oracle back to the original interleaved commitment. This note states the attack, explains why absorbing more roots cannot fix it, and records the source Merkle and shared-query repair.","datePublished":"2026-06-21","dateModified":"2026-06-21","mainEntityOfPage":"https://research.parano1d.org/research/binding-a-mixed-opening/","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://research.parano1d.org"},"image":"https://research.parano1d.org/assets/og-research.png","about":"Polynomial commitments"}</script>
+  <title>Source binding for compact mixed openings · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Source binding for compact mixed openings","description":"This study evaluates a candidate mixed-opening construction against a coherent A/A′ source-substitution test. Low-degree consistency alone does not authenticate the compact FRI round-zero oracle to the original interleaved commitment. The completed construction adds a source root and shared authentication queries, giving an explicit path from every sampled oracle symbol back to the committed columns.","datePublished":"2026-06-21","dateModified":"2026-06-21","mainEntityOfPage":"https://lab.parano1d.org/research/binding-a-mixed-opening/","inLanguage":"en","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-research.png","about":"Polynomial commitments"}</script>
 </head>
-<body>
+<body class="locale-en">
   <a class="skip-link" href="#content">Skip to content</a>
   <div class="page-shell">
     <header class="site-header">
@@ -45,49 +52,82 @@
     <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
       <a href="/#latest">Latest</a>
       <a aria-current="page" href="/research/">All research</a>
-      <a href="/about/">About</a>
       <span class="nav-rule" aria-hidden="true"></span>
       <a href="https://docs.parano1d.org">Docs <span aria-hidden="true">↗</span></a>
       <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="ParanO(1)d on GitHub"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      <details class="language-switcher"><summary aria-label="Change language"><span>EN</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="Language"><a href="/research/binding-a-mixed-opening/" lang="en" hreflang="en" aria-current="true"><span>EN</span><strong>English</strong></a><a href="/ru/research/binding-a-mixed-opening/" lang="ru" hreflang="ru"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/binding-a-mixed-opening/" lang="zh-Hans" hreflang="zh-Hans"><span>中文</span><strong>简体中文</strong></a></div></details>
     </nav>
   </header>
     <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
     <header class="article-hero">
-      <div class="article-hero-copy"><a class="back-link" href="/research/">← All research</a><div class="article-meta"><span>Security note</span><span>Polynomial commitments</span><time datetime="2026-06-21">Jun 21, 2026</time></div><h1>Binding a compact FRI opening back to its committed source</h1><p class="article-dek">Transcript binding was not source binding. Query-level authentication closed a commit-to-A, open-from-A′ attack in the mixed-opening path.</p><div class="article-byline"><span>By O(1) Lab</span><span>4 min read</span><span>Bug analysis and repair</span></div></div>
-      <div class="research-art art--binding" aria-hidden="true">
-    <span class="art-grid"></span>
-    <span class="art-orbit art-orbit--a"></span>
-    <span class="art-orbit art-orbit--b"></span>
-    <span class="art-axis"></span>
-    <span class="art-node art-node--a"></span>
-    <span class="art-node art-node--b"></span>
-    <span class="art-node art-node--c"></span>
-    <span class="art-code">①</span>
-  </div>
+      <div class="article-hero-copy"><a class="back-link" href="/research/">← All research</a><div class="article-meta"><span>Security study</span><span>Polynomial commitments</span><time datetime="2026-06-21">21 Jun 2026</time></div><h1>Source binding for compact mixed openings</h1><p class="article-dek">An A/A′ adversarial test separates low-degree consistency from commitment provenance. A source root and shared queries close the edge.</p><div class="article-byline"><span>By O(1) Lab</span><span>4 min read</span><span>Adversarially tested construction</span></div><div class="article-share" aria-label="Share this research"><span class="article-share-label">Share</span><button class="share-action" type="button" data-copy-link="https://lab.parano1d.org/research/binding-a-mixed-opening/" data-copy-default="Copy link" data-copy-success="Copied" data-copy-failure="Copy failed" aria-label="Copy article link"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-copy-label aria-live="polite">Copy link</span></button><a class="share-action" href="https://x.com/intent/post?text=Source%20binding%20for%20compact%20mixed%20openings&amp;url=https%3A%2F%2Flab.parano1d.org%2Fresearch%2Fbinding-a-mixed-opening%2F" target="_blank" rel="noopener noreferrer" aria-label="Share this article on X"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Share on X</span></a></div></div>
+      <div class="research-art art--binding" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-binding" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-binding" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-binding" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-binding" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-binding" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-binding" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-binding)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-binding)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">BINDING THE COMMITTED SOURCE TO THE FRI WORD</text>
+    <g class="diagram-panel diagram-panel--green" filter="url(#shadow-binding)"><rect x="42" y="77" width="206" height="242" rx="15"/><text class="diagram-micro" x="62" y="104">COMMITTED SOURCE A</text>
+    <g class="merkle-tree"><path d="M145 139 97 184M145 139 193 184M97 184 73 229M97 184 121 229M193 184 169 229M193 184 217 229"/><circle cx="145" cy="139" r="14"/><circle cx="97" cy="184" r="11"/><circle cx="193" cy="184" r="11"/><circle cx="73" cy="229" r="8"/><circle cx="121" cy="229" r="8"/><circle cx="169" cy="229" r="8"/><circle cx="217" cy="229" r="8"/><path class="merkle-open" d="M145 139 193 184 217 229"/></g>
+    <text class="diagram-label" x="62" y="276">CAP ROOT</text><text class="diagram-value diagram-value--compact" x="62" y="300">H(A)=7F…91</text>
+  </g>
+  <path class="diagram-arrow " d="M248 198H292" marker-end="url(#arrow-binding)"/>
+  <g class="query-gate" filter="url(#shadow-binding)"><rect x="292" y="132" width="116" height="132" rx="15"/><text class="diagram-micro" x="350" y="159" text-anchor="middle">SAME INDICES</text><text class="diagram-number" x="350" y="207" text-anchor="middle">q=64</text><path d="M319 229H381"/><circle cx="329" cy="229" r="4"/><circle cx="350" cy="229" r="4"/><circle cx="371" cy="229" r="4"/></g>
+  <path class="diagram-arrow " d="M408 198H452" marker-end="url(#arrow-binding)"/>
+  <g class="diagram-panel diagram-panel--blue" filter="url(#shadow-binding)"><rect x="452" y="77" width="146" height="242" rx="15"/><text class="diagram-micro" x="472" y="104">COMPACT FRI WORD</text><g class="fri-layers"><rect x="474" y="137" width="102" height="22" rx="4"/><rect x="486" y="174" width="78" height="22" rx="4"/><rect x="498" y="211" width="54" height="22" rx="4"/><rect x="510" y="248" width="30" height="22" rx="4"/><path d="M525 159V174M525 196V211M525 233V248"/></g><text class="diagram-label" x="525" y="296" text-anchor="middle">FOLD CONSISTENCY</text></g>
+  <g class="rejected-splice"><path d="M248 296C309 343 393 343 452 296"/><path d="M330 319 350 339M350 319 330 339"/><text class="diagram-micro" x="340" y="358" text-anchor="middle">A′ SPLICE REJECTED</text></g>
+    <text class="diagram-caption" x="42" y="390">Transcript binding is insufficient unless the opened FRI word is the committed source</text>
+  </svg></div>
     </header>
     <div class="article-layout">
-      <aside class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#gap">The gap between a low-degree proof and a commitment</a><a href="#attack">Commit to A, open from A′</a><a href="#source-root">Commit the encoded source</a><a href="#shared-queries">Use the same query indices</a><a href="#statement">The exact statement</a><a href="#tests">Tests that distinguish binding from satisfiability</a><a href="#cost">Cost and later composition</a><a href="#lesson">The general lesson</a></aside>
-      <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>An early mixed-opening verifier proved that a low-degree combination matched prover-supplied values, but did not authenticate the compact FRI round-zero oracle back to the original interleaved commitment. This note states the attack, explains why absorbing more roots cannot fix it, and records the source Merkle and shared-query repair.</p></div><h2 id="gap">The gap between a low-degree proof and a commitment</h2>
-<p>An interleaved mixed opening batches several committed columns with a Fiat–Shamir challenge <em>γ</em>. The compact FRI proof then establishes that a low-degree combination <em>C</em> has the claimed value at a primary point. The early implementation verified that algebraic statement, but missed one source edge.</p>
+      <aside class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#gap">Consistency is not source provenance</a><a href="#attack">Commit to A, open from A′</a><a href="#source-root">Commit the encoded source</a><a href="#shared-queries">Use the same query indices</a><a href="#statement">The exact statement</a><a href="#tests">Tests that distinguish binding from satisfiability</a><a href="#cost">Cost under recursive composition</a><a href="#lesson">The boundary the verifier must close</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>This study evaluates a candidate mixed-opening construction against a coherent A/A′ source-substitution test. Low-degree consistency alone does not authenticate the compact FRI round-zero oracle to the original interleaved commitment. The completed construction adds a source root and shared authentication queries, giving an explicit path from every sampled oracle symbol back to the committed columns.</p></div><h2 id="gap">Consistency is not source provenance</h2>
+<p>A polynomial commitment fixes one or more columns before their values are queried. An interleaved mixed opening uses a Fiat–Shamir challenge <em>γ</em>, derived from all preceding protocol messages, to answer for several such columns at once. Compact FRI—the low-degree test used here—establishes that a combined polynomial <em>C</em> has the claimed value at a primary point. Its <em>oracle</em> is the encoded table that the verifier samples instead of reading in full. The construction study deliberately separated that algebraic claim from a second requirement: this combined oracle must be derived from the columns named by the original commitment.</p>
 <p>It proved:</p>
 <div class="equation">∃ low-degree C such that C(r) = Σ γ<sup>i</sup> · v<sub>i</sub></div>
-<p>The production caller needed the stronger statement:</p>
+<p>The application needed the stronger statement:</p>
 <div class="equation">C(x) = Σ γ<sup>i</sup> · committed_col<sub>i</sub>(x)</div>
-<p>The values <em>v<sub>i</sub></em> were transcript-bound, but the compact FRI round-zero oracle was not authenticated back to the encoded source columns in the original interleaved commitment.</p>
+<p>A candidate with transcript-bound values but no source authentication proves the first statement, not the second. The <em>A/A′</em> test below was therefore an acceptance gate for the construction, not a post-deployment discovery.</p>
 
 <h2 id="attack">Commit to A, open from A′</h2>
-<p>The regression attack is compact:</p>
+<p>The adversarial test is compact:</p>
 <pre><code>commit A
 build all_openings and the compact FRI oracle from A′
 verify using Com(A)</code></pre>
 <p>If the opening protocol only checks the low-degree oracle and the combined claimed value, the verifier has no query-level evidence that the oracle was encoded from <em>A</em>. The dishonest source can be internally consistent and still be unrelated to the commitment supplied by the caller.</p>
 <div class="failure">
   <strong>Security result</strong>
-  <p>Absorbing more caps or roots into Fiat–Shamir does not repair this attack. Transcript binding fixes the challenge after the messages; it does not prove that one committed object was derived from another.</p>
+  <p>Absorbing more Merkle roots—or compact lists of such roots—into Fiat–Shamir does not repair this attack. Transcript binding fixes the challenge after the messages; it does not prove that one committed object was derived from another.</p>
 </div>
 
 <h2 id="source-root">Commit the encoded source</h2>
-<p>The repair extends the interleaved commitment with a source root over the encoded columns. At the historical implementation point, the source tree used a domain-separated, 128-bit Blake3-truncated Merkle root. Each source leaf held the high-pair positions for every committed column:</p>
+<p>The completed construction extends the interleaved commitment with a source root over the encoded columns. The experiment used a domain-separated, 128-bit Blake3-truncated Merkle root. For every committed column, each source leaf held the pair of codeword positions queried together at one FRI index:</p>
 <pre><code>leaf(log_rows, n_cols, index) =
   H(domain || shape || index ||
     col_0[pos0] || col_0[pos1] || ... || col_n[pos0] || col_n[pos1])</code></pre>
@@ -102,29 +142,28 @@ verify using Com(A)</code></pre>
   <div class="flow-arrow">→</div>
   <div class="flow-step"><small>One draw</small><strong>Shared query indices</strong><span>FRI and source paths checked together</span></div>
 </div>
-<p>At every sampled position, Merkle authentication opens the encoded source symbols. Tensor folding reconstructs the combination expected by compact FRI. Fold-layer roots and high-pair openings carry that relation through the FRI layers.</p>
+<p>At every sampled position, Merkle authentication opens the encoded source symbols. The protocol's tensor-folding rule combines those symbols into the value expected by compact FRI. Fold-layer roots and paired-position openings carry that relation through the FRI layers.</p>
 
 <h2 id="statement">The exact statement</h2>
-<p>For a production caller using the mixed-opening API as intended, acceptance implies—up to the declared soundness error—that every returned primary opening is the MLE value of the column fixed by the interleaved commitment.</p>
-<p>The scope matters. The standalone theorem is about the primary point. Secondary claims are shape-checked and transcript-bound inside the mixed opening, but their relation to other evaluation points comes from the caller's outer multipoint or slice reduction. Documentation that says the PCS alone proves arbitrary secondary openings would overstate the primitive.</p>
+<p>For a caller using the mixed-opening API as specified, acceptance implies—up to the declared soundness error—that every returned primary opening is the multilinear-extension (MLE) value of the column fixed by the interleaved commitment.</p>
+<p>The scope matters. The standalone theorem is about the primary point. Secondary claims are shape-checked and transcript-bound inside the mixed opening, but their relation to other evaluation points comes from the caller's outer multipoint or slice reduction. Documentation that says the polynomial commitment scheme (PCS) alone proves arbitrary secondary openings would overstate the primitive.</p>
 
 <h2 id="tests">Tests that distinguish binding from satisfiability</h2>
 <p>The decisive test commits to <em>A</em>, constructs the rest of the proof from <em>A′</em>, and requires rejection. Additional mutations change source symbols, folded symbols and Merkle paths. Several of those mutations leave a locally satisfiable algebraic trace; they fail only when the source opening is checked against the commitment.</p>
 <p>That testing style is reusable. A proof system should not only mutate a constraint and observe failure. It should mutate the object on the far side of a commitment boundary while keeping the inner computation coherent. Otherwise the test may never exercise the binding theorem.</p>
 
-<h2 id="cost">Cost and later composition</h2>
-<p>The repair adds a source root, encoded source retention and batched authentication paths. Later recursive work had to replay those paths inside HistoryStep, which contributed to the multi-family memory problem described in <a href="/research/single-global-walk/">The 30 GB wall and the single global walk</a>. The binding fix was therefore not free—but removing it to save proof bytes would have reopened the attack.</p>
+<h2 id="cost">Cost under recursive composition</h2>
+<p>The completed construction adds a source root, encoded source retention and batched authentication paths. Replaying those paths inside a recursive verifier contributes several Poseidon2b authentication families to the outer relation, producing the memory experiment described in <a href="/research/single-global-walk/">One global Poseidon walk replaces nine verifier walks</a>. Source provenance has a measurable cost, but omitting it changes the statement being proved.</p>
 
-<h2 id="lesson">The general lesson</h2>
+<h2 id="lesson">The boundary the verifier must close</h2>
 <blockquote><p>A transcript can bind a prover to its messages while the messages remain unbound to the commitment the application cares about.</p></blockquote>
 <p>Every polynomial-commitment composition needs an explicit path from terminal evaluation claims, through the queried oracle, back to the original committed source. If that path is missing, additional Fiat–Shamir absorption is evidence of consistency, not provenance.</p>
-
 </article>
     </div>
-    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Research record</p><h2 id="evidence-title">Evidence and artifacts</h2><p>The links below preserve the implementation, measurement or derivation behind this article.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/e5e4655a"><span><small>Commit</small><strong>Source-binding implementation</strong></span><span aria-hidden="true">↗</span></a>
-<a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_fri_binius/src/mixed_open.rs"><span><small>Code</small><strong>Mixed-opening verifier</strong></span><span aria-hidden="true">↗</span></a>
-<a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_fri_binius/src/interleaved_commit.rs"><span><small>Code</small><strong>Interleaved commitment</strong></span><span aria-hidden="true">↗</span></a></div></aside>
-    <nav class="article-next" aria-label="Adjacent research"><a href="/research/pcs-implementation-trail/"><small>Earlier</small><strong>PCS implementation trail</strong><span>←</span></a><a href="/research/owner-batched-authorization/"><small>Later</small><strong>Owner-batched authorization</strong><span>→</span></a></nav>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Research record</p><h2 id="evidence-title">Evidence and artifacts</h2><p>The links below preserve the implementation, measurement or derivation behind this article.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/e5e4655a"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Commit</small><strong>Source-binding implementation</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_fri_binius/src/mixed_open.rs"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Code</small><strong>Mixed-opening verifier</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_fri_binius/src/interleaved_commit.rs"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Code</small><strong>Interleaved commitment</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Adjacent research"><a href="/research/pcs-implementation-trail/"><small>Earlier</small><strong>Three commitment experiments</strong><span>←</span></a><a href="/research/owner-batched-authorization/"><small>Later</small><strong>Owner-batched authorization</strong><span>→</span></a></nav>
   </main>
     <footer class="site-footer">
     <div class="footer-brand">
@@ -132,12 +171,12 @@ verify using Com(A)</code></pre>
       <div><strong>O(1) Lab</strong><p>Protocol research behind ParanO(1)d.</p></div>
     </div>
     <div class="footer-links">
-      <div><strong>Research</strong><a href="/research/">Archive</a><a href="/feed.xml">RSS feed</a><a href="/papers/FROST_GKR.pdf">FROST-GKR paper</a></div>
+      <div><strong>Research</strong><a href="/research/">Archive</a><a href="/feed.xml">RSS feed</a></div>
       <div><strong>Project</strong><a href="https://parano1d.org">Website</a><a href="https://docs.parano1d.org">Documentation</a><a href="https://github.com/ignotusnemo/parano1d">Source</a></div>
     </div>
-    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>research.parano1d.org</span></div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>lab.parano1d.org</span></div>
   </footer>
   </div>
-  <script src="/assets/site.js" defer></script>
+  <script src="/assets/site.js?v=4286a63d1931" defer></script>
 </body>
 </html>

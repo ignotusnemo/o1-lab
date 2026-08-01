@@ -1,55 +1,54 @@
-<h2 id="clean-design">The clean design that did not fit</h2>
-<p>The recursive verifier had to replay several Poseidon2b-based authentication families: source-tree hashes, source-leaf hashes, high-pair leaves at multiple fold layers, Merkle paths and the relations that bind their openings. The first composition was structurally attractive. Give each family its own slot schedule, its own carry selection and its own sixty-six-layer deep-chain walk, then combine the terminal claims.</p>
-<p>Algebraically, every family remained easy to read. Operationally, memory scaled with the number of families because every independent walk materialized another large set of trace columns. On a 30 GB development machine the multi-family assembly ran out of memory before the protocol could be tested at its real shape.</p>
+<h2 id="clean-design">Reference composition and its scaling limit</h2>
+<p>Poseidon2b is the four-word cryptographic permutation used to hash and authenticate proof data. The recursive verifier had to replay several Poseidon2b-based <em>authentication families</em>. Each family is one repeated type of hash relation—such as source-tree nodes, source leaves, pairs of symbols opened together at a fold layer or Merkle-path nodes—together with the openings that bind it to committed data. The reference composition intentionally gave every family its own slot schedule, its own selection of the four state words passed between layers, and its own <em>deep-chain walk</em>: a constraint trace that replays all sixty-six Poseidon2b layers for every occupied slot. That direct construction provided a clear baseline for measuring the complete authentication graph.</p>
+<p>Algebraically, every family remained easy to inspect. Operationally, the full-graph benchmark showed memory growing with family count because every independent walk materialized another large set of trace columns. The complete nine-family shape exceeded a 30 GB machine, establishing that independent walks were not a viable composition topology.</p>
 <div class="failure">
-  <strong>Negative result</strong>
-  <p>“One walk per family” was not a tolerable implementation detail. It was an asymptotic architecture error at the recursive boundary.</p>
+  <strong>Composition result</strong>
+  <p>“One walk per family” is a useful reference construction, but its memory cost scales with the number of authentication families. Production composition therefore needed to share the expensive permutation walk.</p>
 </div>
 
 <h2 id="shared-object">Find the shared object</h2>
 <p>Every family was ultimately asking the same question: does this sequence of width-four states follow the Poseidon2b permutation? The family-specific difference was not the permutation. It was the source of the inputs, the fixed schedule and the relation that consumes the outputs.</p>
-<p>The replacement constructed one meta-domain with a fixed period <em>P</em>. Each family occupies a disjoint slot range inside that period. The committed carry columns <code>C0..C3</code>, the walk input and the Poseidon2b walk are shared. Only family input columns and fixed patterns differ.</p>
+<p>The union construction uses one shared slot domain with a fixed period <em>P</em>. Each family occupies a disjoint range inside that period. The four committed state-transfer columns <code>C0..C3</code> hold the four words of the Poseidon state passed from one layer to the next. Those columns, the walk input and the Poseidon2b walk are shared. Only family input columns and fixed patterns differ.</p>
 <div class="protocol-flow" aria-label="Single global walk architecture">
   <div class="flow-step"><small>Family A</small><strong>Source leaves</strong><span>Localized slots and patterns</span></div>
   <div class="flow-step"><small>Family B…N</small><strong>Merkle and fold families</strong><span>Localized slots and patterns</span></div>
   <div class="flow-arrow">→</div>
-  <div class="flow-step"><small>Shared</small><strong>One carry selection</strong><span>One C0…C3 column set</span></div>
+  <div class="flow-step"><small>Shared</small><strong>One state transfer</strong><span>One C0…C3 column set</span></div>
   <div class="flow-arrow">→</div>
   <div class="flow-step"><small>Shared</small><strong>One deep-chain walk</strong><span>Every occupied slot</span></div>
 </div>
 
 <h2 id="localization">Localizing family equations</h2>
-<p>Combining domains creates a subtle problem. A fixed pattern originally defined over a family's own stride repeats periodically. If copied directly into the meta-domain, its constants fire inside other families' slots. Ungated carry-forward equations may also read across a family boundary.</p>
-<p>The union primitive rebuilds every pattern as a table of length <em>P</em>, places the family's values only in its assigned range and writes zero elsewhere. A family term therefore vanishes outside its region. Terms that have no fixed factor receive an explicit region selector. Clean-start families are arranged so their first active node never reads a carry from the preceding region.</p>
+<p>Combining domains creates a subtle problem. A fixed pattern originally defined over a family's own stride repeats periodically. If copied directly into the shared domain, its constants fire inside other families' slots. Ungated state-transfer equations may also read across a family boundary.</p>
+<p>The union primitive rebuilds every pattern as a table of length <em>P</em>, places the family's values only in its assigned range and writes zero elsewhere. A family term therefore vanishes outside its region. Terms that have no fixed factor receive an explicit region selector. Clean-start families are arranged so their first active node never reads transferred state from the preceding region.</p>
 <div class="equation">Σ family_terms(w) = Σ<sub>e</sub> α<sup>e+1</sup> · s₀[e](w) &nbsp;&nbsp; over one shared slot domain</div>
 <p>At an A slot, only A terms are live. At a B slot, only B terms are live. The right-hand side is family-agnostic because it describes the same permutation input relation in both cases.</p>
 
-<h2 id="primitive">The two-family kill shot</h2>
-<p>The first end-to-end primitive combined two genuinely different deep-chain families: a source-leaf chain and a Merkle path. It drove one carry selection, one deep-chain walk and one unioned substitution through the real outer PCS and public I/O. The Merkle direction bits kept a separate booleanity sumcheck, but not a second permutation walk.</p>
+<h2 id="primitive">Two-family adversarial test</h2>
+<p>The minimal end-to-end experiment combined two genuinely different deep-chain families: a source-leaf chain and a Merkle path. It drove one state-transfer selection, one deep-chain walk and one combined polynomial identity—the sum of the localized family equations—through the outer polynomial commitment scheme (PCS) and public input/output boundary. The Merkle direction bits kept a separate booleanity sumcheck, but not a second permutation walk.</p>
 <p>The regression tests changed an input symbol or sibling while leaving a satisfiable trace. The altered committed column then failed at the opening boundary. This was important: the test demonstrated that the union was not merely capable of accepting its own assembled witness; it still bound each family back to its commitment.</p>
 
-<h2 id="nine-families">From two families to nine</h2>
-<p>The next assembly composed the actual source-binding graph. It included the source-tree family, source-leaf queries and one high-pair family for each fold layer—nine family types in the measured shape. All of them shared:</p>
+<h2 id="nine-families">Full nine-family composition</h2>
+<p>The full experiment composed the source-binding graph: the source-tree family, source-leaf queries and one family of paired-symbol openings for each fold layer—nine family types in the measured shape. All of them shared:</p>
 <ul>
   <li>one slot domain;</li>
-  <li>one carry selection;</li>
+  <li>one state-transfer selection;</li>
   <li>one Poseidon2b deep-chain walk;</li>
-  <li>one unioned substitution;</li>
-  <li>one real FRI-channel schedule.</li>
+  <li>one combined polynomial identity;</li>
+  <li>one real FRI low-degree-proof channel schedule.</li>
 </ul>
-<p>The channel was driven once from cap absorption through mixed-opening challenges, round roots, final codeword, source-binding roots and shared query indices. Those challenges fed both the algebra and the source-opening claims. Each family retained its own committed input columns, but did not instantiate its own verifier walk.</p>
+<p>The channel was driven once from absorption of the <em>Merkle cap</em>—the compact list of roots authenticating the commitment trees—through mixed-opening challenges, round roots, final codeword, source-binding roots and shared query indices. Those challenges fed both the algebra and the source-opening claims. Each family retained its own committed input columns, but did not instantiate its own verifier walk.</p>
 
-<h2 id="memory-work">The broader memory pass</h2>
-<p>The single global walk removed the dominant multiplicative factor. It also made later memory work worthwhile rather than cosmetic. The implementation moved constraint matrices to CSR, right-sized BaseFold ping-pong buffers, bounded lincheck transients, capped scratch by bytes and dictionary-encoded repeated matrix coefficients.</p>
+<h2 id="memory-work">Orthogonal memory controls</h2>
+<p>The single global walk removed the dominant multiplicative factor. Separate experiments moved constraint matrices to compressed sparse row (CSR) storage, right-sized the two alternating work buffers used by the BaseFold polynomial-commitment verifier, bounded temporary storage for linear-constraint checks (<em>lincheck</em>), capped scratch space by bytes and dictionary-encoded repeated matrix coefficients.</p>
 <p>Those changes solve different problems. CSR and dictionary encoding reduce static matrix representation. Bounded scratch controls transient allocation. The global walk changes the composition topology itself. Treating all three as “memory optimizations” would hide why the original approach failed.</p>
 
-<h2 id="result">What the result establishes</h2>
-<p>The research milestone did not claim a universal compiler for arbitrary verifier families. It established a concrete construction for heterogeneous Poseidon2b trace families that share a permutation relation and can be localized inside one fixed domain. The complete production relation continued to evolve after the primitive, but the topology survived: share the expensive walk and keep family-specific algebra at its boundary.</p>
+<h2 id="result">Scope of the construction</h2>
+<p>The construction applies to heterogeneous trace families that share Poseidon2b and can be localized inside one fixed domain. It is not a compiler for arbitrary verifier subcomputations. Its useful scope is specific: one expensive shared walk, with family-specific algebra at its input and output boundaries.</p>
 <div class="result">
   <strong>Reusable lesson</strong>
   <p>When many recursive checks contain the same expensive subcomputation, batch the subcomputation before optimizing its implementation. A faster copy of every walk would still have left memory proportional to the family count.</p>
 </div>
 
-<h2 id="why-publish">Why publish the failure</h2>
-<p>The 30 GB wall is useful because it is easy to reproduce conceptually and easy to miss in a small circuit. Per-family modularity looked safer, and every isolated test passed. The failure appeared only when the real family graph was assembled. Preserving that history makes the final single-walk construction intelligible instead of presenting it as an unexplained optimization.</p>
-
+<h2 id="why-publish">Why the full-graph benchmark matters</h2>
+<p>Single-family tests established local correctness and per-family cost. The full authentication graph measured the multiplicative topology that those local tests intentionally omit. The 30 GB boundary is therefore a composition measurement, not a defect in Poseidon2b or in any individual family. It explains why the selected design shares topology before applying lower-level memory controls.</p>

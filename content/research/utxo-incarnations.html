@@ -1,0 +1,38 @@
+<h2 id="problem">The slot-reuse problem</h2>
+<p>A UTXO is an unspent transaction output. ParanO(1)d stores current UTXOs in a bounded State whose <em>physical slots</em> are reusable indexes rather than permanent outpoint names. An exact-State opening is the Merkle proof that authenticates the complete leaf stored at one such slot. If the same slot later contains the same amount and owner, an old opening must not authenticate the new output. This is the classic A→B→A, or ABA, shape: the visible value returns to A while its logical identity has changed.</p>
+
+<h2 id="quarantine">Experiment 1. Consensus quarantine</h2>
+<p>The first construction used <code>ReuseGuard</code>, a second State structure that recorded when freed slots could become eligible again. It was organized as a 256-bucket ring. A freed slot remained quarantined for one block longer than the protocol's finality window; consensus carried a separate guard root, bucket paths and proof relations.</p>
+<p>The guard prevented immediate reuse, but imposed costs unrelated to the UTXO value itself:</p>
+<ul>
+  <li>an additional consensus State root and rollback domain;</li>
+  <li>three proof components for guard buckets and State-root binding;</li>
+  <li>no spend-then-mint reuse of one physical slot inside a block;</li>
+  <li>two transition paths that had to advance the guard identically.</li>
+</ul>
+<p>A prototype parity test deliberately exercised both transition paths and rejected a divergent guard-advance rule before design selection. The paths could be made identical, but maintaining that equivalence would remain a permanent proof obligation created by the second State machine.</p>
+
+<h2 id="incarnation">Experiment 2. Put identity in the value</h2>
+<p>The alternative packs the amount and a monotone creation identifier into the existing 128-bit value lane:</p>
+<div class="equation">packed_value = (creation_id &lt;&lt; 64) | amount</div>
+<p>Every minted output consumes the next branch-local <code>creation_id</code>. The exact-State leaf and input leaf therefore commit to logical incarnation as well as slot, owner and amount.</p>
+
+<h2 id="tests">Adversarial and boundary tests</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Case</th><th>Expected property</th><th>Result</th></tr></thead>
+  <tbody>
+    <tr><td>Same slot, owner and amount; new ID</td><td>Old exact opening must fail</td><td>Distinct State and input leaf hashes</td></tr>
+    <tr><td>Spend → mint in one block</td><td>New output uses the next ID</td><td>Unambiguous</td></tr>
+    <tr><td>Mint → spend in one block</td><td>Child input names the minted ID</td><td>Unambiguous</td></tr>
+    <tr><td>Gapped, repeated or reordered IDs</td><td>Reject</td><td>Rejected</td></tr>
+    <tr><td><code>u64::MAX</code> counter</td><td>No wraparound</td><td>Consensus-invalid</td></tr>
+  </tbody>
+</table></div>
+
+<p>The prototype also checked that <code>creation_id = 0</code> preserves the baseline hash schedules. Incarnation data fit into an existing field lane; no extra leaf, header root or proof family was required.</p>
+
+<h2 id="scope">Scope</h2>
+<p>The identifier is branch-local. Rollback restores the allocation counter with State, so competing branches may assign the same numeric identifier to different outputs. Branch and epoch binding remain the responsibility of canonical history. The construction solves stale exact-State openings within one canonical branch; it does not create a global outpoint namespace.</p>
+
+<h2 id="result">Result</h2>
+<p>The incarnation design replaced the quarantine ring and removed its guard proof relations. More generally, when a reusable physical location represents successive logical objects, committing a monotone incarnation directly into the object is simpler than maintaining a second consensus structure that remembers when the location may be reused.</p>

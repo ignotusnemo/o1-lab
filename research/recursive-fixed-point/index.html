@@ -5,35 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f3f2ed">
   <meta name="color-scheme" content="light">
-  <meta name="description" content="A link proof verifies a predecessor of its own class, with the complete verifier replay hosted at a 2^23 field shape.">
+  <meta name="description" content="A class with a 2^23-position constraint domain closes recursively: each proof verifies a predecessor with the same authenticated matrix and public layout.">
   <meta name="author" content="O(1) Lab">
   <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, zero-knowledge proofs, proof systems, cryptography, recursive proofs, binary fields, polynomial commitments">
-  <link rel="canonical" href="https://research.parano1d.org/research/recursive-fixed-point/">
-  <link rel="alternate" type="application/rss+xml" title="O(1) Lab Research" href="https://research.parano1d.org/feed.xml">
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="canonical" href="https://lab.parano1d.org/research/recursive-fixed-point/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/recursive-fixed-point/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/recursive-fixed-point/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/recursive-fixed-point/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/recursive-fixed-point/">
+  <link rel="alternate" type="application/rss+xml" title="O(1) Lab Research" href="https://lab.parano1d.org/feed.xml">
+  <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="O(1) Lab Research">
-  <meta property="og:url" content="https://research.parano1d.org/research/recursive-fixed-point/">
-  <meta property="og:title" content="Closing the recursive verifier at a real fixed point · O(1) Lab">
-  <meta property="og:description" content="A link proof verifies a predecessor of its own class, with the complete verifier replay hosted at a 2^23 field shape.">
-  <meta property="og:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:url" content="https://lab.parano1d.org/research/recursive-fixed-point/">
+  <meta property="og:title" content="The recursive verifier had to fit inside itself · O(1) Lab">
+  <meta property="og:description" content="A class with a 2^23-position constraint domain closes recursively: each proof verifies a predecessor with the same authenticated matrix and public layout.">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Closing the recursive verifier at a real fixed point · O(1) Lab">
-  <meta name="twitter:description" content="A link proof verifies a predecessor of its own class, with the complete verifier replay hosted at a 2^23 field shape.">
-  <meta name="twitter:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta name="twitter:title" content="The recursive verifier had to fit inside itself · O(1) Lab">
+  <meta name="twitter:description" content="A class with a 2^23-position constraint domain closes recursively: each proof verifies a predecessor with the same authenticated matrix and public layout.">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
   <meta property="article:published_time" content="2026-07-05T00:00:00Z">
   <meta property="article:section" content="Recursive proving">
   <meta property="article:author" content="O(1) Lab">
-  <title>Closing the recursive verifier at a real fixed point · O(1) Lab</title>
-  <link rel="stylesheet" href="/assets/site.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Closing the recursive verifier at a real fixed point","description":"Recursive proofs are easy to describe before the verifier itself has to fit inside the relation. This note follows the path from an in-trace BaseFold replay to a same-class link proof, explains why the fixed shape matters, and separates the original stub-link milestone from the later full accepted-block relation.","datePublished":"2026-07-05","dateModified":"2026-07-05","mainEntityOfPage":"https://research.parano1d.org/research/recursive-fixed-point/","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://research.parano1d.org"},"image":"https://research.parano1d.org/assets/og-research.png","about":"Recursive proving"}</script>
+  <title>The recursive verifier had to fit inside itself · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"The recursive verifier had to fit inside itself","description":"A recursive verifier must fit inside a successor proof of the same authenticated class. This study states the fixed-point acceptance test, closes a two-link chain in a 2^23-position class, records two implementation probes and separates recursion mechanics from application-level block semantics.","datePublished":"2026-07-05","dateModified":"2026-07-05","mainEntityOfPage":"https://lab.parano1d.org/research/recursive-fixed-point/","inLanguage":"en","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-research.png","about":"Recursive proving"}</script>
 </head>
-<body>
+<body class="locale-en">
   <a class="skip-link" href="#content">Skip to content</a>
   <div class="page-shell">
     <header class="site-header">
@@ -45,77 +52,110 @@
     <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
       <a href="/#latest">Latest</a>
       <a aria-current="page" href="/research/">All research</a>
-      <a href="/about/">About</a>
       <span class="nav-rule" aria-hidden="true"></span>
       <a href="https://docs.parano1d.org">Docs <span aria-hidden="true">↗</span></a>
       <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="ParanO(1)d on GitHub"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      <details class="language-switcher"><summary aria-label="Change language"><span>EN</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="Language"><a href="/research/recursive-fixed-point/" lang="en" hreflang="en" aria-current="true"><span>EN</span><strong>English</strong></a><a href="/ru/research/recursive-fixed-point/" lang="ru" hreflang="ru"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/recursive-fixed-point/" lang="zh-Hans" hreflang="zh-Hans"><span>中文</span><strong>简体中文</strong></a></div></details>
     </nav>
   </header>
     <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
     <header class="article-hero">
-      <div class="article-hero-copy"><a class="back-link" href="/research/">← All research</a><div class="article-meta"><span>Protocol note</span><span>Recursive proving</span><time datetime="2026-07-05">Jul 05, 2026</time></div><h1>Closing the recursive verifier at a real fixed point</h1><p class="article-dek">A link proof verifies a predecessor of its own class, with the complete verifier replay hosted at a 2^23 field shape.</p><div class="article-byline"><span>By O(1) Lab</span><span>4 min read</span><span>Implemented milestone</span></div></div>
-      <div class="research-art art--recursion" aria-hidden="true">
-    <span class="art-grid"></span>
-    <span class="art-orbit art-orbit--a"></span>
-    <span class="art-orbit art-orbit--b"></span>
-    <span class="art-axis"></span>
-    <span class="art-node art-node--a"></span>
-    <span class="art-node art-node--b"></span>
-    <span class="art-node art-node--c"></span>
-    <span class="art-code">①</span>
-  </div>
+      <div class="article-hero-copy"><a class="back-link" href="/research/">← All research</a><div class="article-meta"><span>Engineering study</span><span>Recursive proving</span><time datetime="2026-07-05">05 Jul 2026</time></div><h1>The recursive verifier had to fit inside itself</h1><p class="article-dek">A class with a 2^23-position constraint domain closes recursively: each proof verifies a predecessor with the same authenticated matrix and public layout.</p><div class="article-byline"><span>By O(1) Lab</span><span>3 min read</span><span>Verified prototype</span></div><div class="article-share" aria-label="Share this research"><span class="article-share-label">Share</span><button class="share-action" type="button" data-copy-link="https://lab.parano1d.org/research/recursive-fixed-point/" data-copy-default="Copy link" data-copy-success="Copied" data-copy-failure="Copy failed" aria-label="Copy article link"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-copy-label aria-live="polite">Copy link</span></button><a class="share-action" href="https://x.com/intent/post?text=The%20recursive%20verifier%20had%20to%20fit%20inside%20itself&amp;url=https%3A%2F%2Flab.parano1d.org%2Fresearch%2Frecursive-fixed-point%2F" target="_blank" rel="noopener noreferrer" aria-label="Share this article on X"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Share on X</span></a></div></div>
+      <div class="research-art art--recursion" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-recursion" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-recursion" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-recursion" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-recursion" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-recursion" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-recursion" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-recursion)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-recursion)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">RECURSIVE FIXED POINT · SAME PUBLIC I/O</text>
+    <g class="fixed-loop"><path d="M520 89C520 48 320 48 320 89" marker-end="url(#arrow-recursion)"/><text class="diagram-micro" x="420" y="63" text-anchor="middle">VERIFIER SHAPE CLOSES AT m23</text></g>
+  <g class="proof-step diagram-panel diagram-panel--neutral" filter="url(#shadow-recursion)"><rect x="44" y="104" width="160" height="220" rx="15"/><text class="diagram-micro" x="64" y="131">HEIGHT 0</text><text class="diagram-value" x="64" y="175">π₀</text><path class="diagram-divider" d="M64 193H184"/><text class="diagram-label" x="64" y="218">PUBLIC I/O</text><text class="diagram-micro" x="64" y="242">ROOT₀ · ACC₀</text><rect class="proof-core" x="64" y="266" width="120" height="36" rx="7"/><text x="124" y="289" text-anchor="middle">GENESIS</text></g>
+  <path class="diagram-arrow " d="M204 214H242" marker-end="url(#arrow-recursion)"/>
+  <g class="proof-step diagram-panel diagram-panel--green" filter="url(#shadow-recursion)"><rect x="242" y="104" width="160" height="220" rx="15"/><text class="diagram-micro" x="262" y="131">HEIGHT 1</text><text class="diagram-value" x="262" y="175">π₁</text><path class="diagram-divider" d="M262 193H382"/><text class="diagram-label" x="262" y="218">VERIFY INSIDE</text><rect class="proof-core" x="262" y="236" width="120" height="42" rx="7"/><text x="322" y="262" text-anchor="middle">V(π₀)=1</text><text class="diagram-micro" x="262" y="301">ROOT₁ · ACC₁</text></g>
+  <path class="diagram-arrow " d="M402 214H440" marker-end="url(#arrow-recursion)"/>
+  <g class="proof-step diagram-panel diagram-panel--blue" filter="url(#shadow-recursion)"><rect x="440" y="104" width="156" height="220" rx="15"/><text class="diagram-micro" x="460" y="131">HEIGHT 2</text><text class="diagram-value" x="460" y="175">π₂</text><path class="diagram-divider" d="M460 193H576"/><text class="diagram-label" x="460" y="218">VERIFY INSIDE</text><rect class="proof-core" x="460" y="236" width="116" height="42" rx="7"/><text x="518" y="262" text-anchor="middle">V(π₁)=1</text><text class="diagram-micro" x="460" y="301">ROOT₂ · ACC₂</text></g>
+    <text class="diagram-caption" x="42" y="390">The successor proves the same verifier without growing the matrix class</text>
+  </svg></div>
     </header>
     <div class="article-layout">
-      <aside class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#fixed-point">What “recursive” has to mean</a><a href="#basefold">Replaying the PCS verifier in trace</a><a href="#class">Closing the class</a><a href="#real-blocks">From stub links to real blocks</a><a href="#performance">Shape-level performance work</a><a href="#invariants">The invariants that survived</a><a href="#lesson">What this milestone is worth</a></aside>
-      <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>Recursive proofs are easy to describe before the verifier itself has to fit inside the relation. This note follows the path from an in-trace BaseFold replay to a same-class link proof, explains why the fixed shape matters, and separates the original stub-link milestone from the later full accepted-block relation.</p></div><h2 id="fixed-point">What “recursive” has to mean</h2>
-<p>A verifier embedded in a proof is not yet a recursive fixed point. The new relation must be able to host the verifier for a proof of its own class, and the public input/output layout must close under repeated application. Otherwise each recursion step silently grows a new circuit or relies on a native decision that cannot itself be continued.</p>
-<p>The milestone recorded on July 5 constructed a link class in which a link proof verifies a predecessor link proof of the same class. The test produced a short chain:</p>
-<div class="equation">π₀ (genesis) → π₁ → π₂ → native decision at the tip</div>
-<p>The smallest honest class that could host its own verifier used a field shape of 2<sup>23</sup>. The number was not selected as a security parameter; it was the capacity boundary at which the complete verifier replay, matrix relation and public I/O fit without changing class at the next step.</p>
+      <aside class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#question">The fixed-point test</a><a href="#verifier">Replaying BaseFold inside the relation</a><a href="#scope">Separate recursion mechanics from block semantics</a><a href="#performance">Two implementation probes</a><a href="#invariants">Accepted invariants</a><a href="#result">Result</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>A recursive verifier must fit inside a successor proof of the same authenticated class. This study states the fixed-point acceptance test, closes a two-link chain in a 2^23-position class, records two implementation probes and separates recursion mechanics from application-level block semantics.</p></div><h2 id="question">The fixed-point test</h2>
+<p>Embedding a verifier in a proof does not by itself establish recursion. The successor relation must host a verifier for the same authenticated class and expose the same public layout again. Otherwise the circuit grows at every step or terminates in a native decision that cannot be continued.</p>
+<p>Here a <em>relation</em> is the computation enforced by the proof constraints. A <em>proof class</em> fixes that relation's constraint matrix, public input/output layout and proof parameters. Recursion reaches a fixed point only when one instance of a class can verify a proof from the same class without changing any of those objects.</p>
+<p>The experiment used a direct acceptance criterion:</p>
+<div class="equation">π₀ (base) → π₁ (verify π₀) → π₂ (verify π₁)</div>
+<p>Both links had to use the same class, matrix identity and public input/output shape. The smallest measured class that closed under this test used a constraint domain with 2<sup>23</sup> field positions. This is a capacity result, not a security parameter.</p>
 
-<h2 id="basefold">Replaying the PCS verifier in trace</h2>
-<p>The path to that result ran through an in-trace BaseFold verifier. A native verifier consumes roots, round messages, query openings and Merkle authentication. The recursive relation has to reproduce the same transcript order, derive the same challenges, check the same folds and bind the terminal claims without trusting a host-computed boolean.</p>
-<p>The implementation separated three boundaries:</p>
+<h2 id="verifier">Replaying BaseFold inside the relation</h2>
+<p>BaseFold is the polynomial-commitment and opening system used by the recursive proof. Its native verifier consumes commitments, round messages, transcript challenges, query openings and Merkle authentication. The recursive relation reproduced each step in FieldR1cs—the binary-field constraint representation used to express native verifier operations inside a proof—instead of accepting a host-computed boolean.</p>
 <ol>
-  <li>the FieldR1cs relation expresses verifier arithmetic over GF(2<sup>128</sup>);</li>
-  <li>the transcript trace reproduces Fiat–Shamir absorption and challenge derivation;</li>
-  <li>public I/O pins predecessor and successor state so the recursive link cannot substitute a different claim.</li>
+  <li>verifier arithmetic is expressed over GF(2<sup>128</sup>);</li>
+  <li>the transcript trace absorbs the same messages and derives the same challenges;</li>
+  <li>public I/O binds predecessor and successor claims across adjacent links;</li>
+  <li>the matrix digest identifies the exact verifier class being replayed.</li>
 </ol>
 <div class="note">
-  <strong>Why “verify inside the circuit” is insufficient</strong>
-  <p>The recursive relation must bind the exact proof bytes, statement and transcript schedule that the native verifier accepts. A verifier-shaped computation with a different challenge order is a different protocol.</p>
+  <strong>Protocol identity</strong>
+  <p>A verifier-shaped computation with a different byte order, padding rule or challenge schedule is a different protocol. Recursive acceptance must bind the same proof bytes and statement accepted natively.</p>
 </div>
 
-<h2 id="class">Closing the class</h2>
-<p>The link envelope carries the class identity and fixed public layout. The predecessor proof is decoded as that same class, its matrix claim is folded, and the resulting state becomes the input to the next link. Genesis uses a separate base witness, but after the first link the recursive rule is stable.</p>
-<p>The fixed-point test was deliberately a stub link: it proved recursion mechanics before full block content was attached. That distinction is part of the result. The test answered “can this verifier class verify itself?” It did not yet answer “does the relation prove every rule of an accepted block?”</p>
+<h2 id="scope">Separate recursion mechanics from block semantics</h2>
+<p>The fixed-point experiment intentionally used a minimal link relation. It answered one question: can this verifier class verify itself indefinitely? Header rules, transaction roots, authorization and exact UTXO transition were outside that test and were composed only after the class boundary closed.</p>
+<p>This separation makes every result attributable to one boundary. Recursive closure can be evaluated without conflating it with block semantics, and application rules can be composed without silently changing the recursion class.</p>
 
-<h2 id="real-blocks">From stub links to real blocks</h2>
-<p>Later work attached accepted-block batches to the same skeleton: header semantics, chainwork continuity, transaction roots, authorization, exact UTXO transition, state roots and the chain accumulator. The recursive object became HistoryStep, but the fixed-point requirement did not change. Each step still authenticates its predecessor and exposes a successor state in the same public format.</p>
-<p>This sequencing avoided a common failure mode. Building the entire block relation first would have made it difficult to distinguish a recursion bug from an application-relation bug. Closing the verifier on a stub link isolated the recursive boundary before the relation became large.</p>
+<h2 id="performance">Two implementation probes</h2>
+<p>Closing the class also established implementation costs and transcript-boundary requirements that a native verifier benchmark would not show:</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Probe</th><th>Observed result</th><th>Interpretation</th></tr></thead>
+  <tbody>
+    <tr><td>Class-statement digest reuse</td><td>2<sup>24</sup>-position class: 206 s → 36 s</td><td>A class-fixed digest was being reconstructed as repeated witness work</td></tr>
+    <tr><td>Variable-length transcript finalization</td><td>A boundary mutation distinguished partial absorption from complete finalization</td><td>Partial rate blocks require explicit padding and finalization</td></tr>
+  </tbody>
+</table></div>
+<p>The first result is a performance optimization with unchanged statement semantics. The second is an adversarial acceptance test that fixes the required transcript rule: recursive security includes every byte schedule at the digest boundary, not only the outer proof equation.</p>
 
-<h2 id="performance">Shape-level performance work</h2>
-<p>Once the class closed, constants mattered. One later change seeded the class statement digest once per build rather than reconstructing it through repeated work. On the recorded m24 benchmark, prove time fell from 206 seconds to 36 seconds. This did not change the statement or fixed point; it removed duplicated computation around a class-fixed value.</p>
-<p>The same period exposed a variable-length transcript finalization bug. A half-filled rate block could leave the high half of a child UTXO root outside the exact-transition digest. Padding and finalizing the schedule fixed the binding. The incident is a reminder that recursive soundness is not determined by the outer proof alone: byte schedules at every digest boundary are part of the relation.</p>
-
-<h2 id="invariants">The invariants that survived</h2>
+<h2 id="invariants">Accepted invariants</h2>
 <ul>
   <li>A link verifies a predecessor of the same authenticated class.</li>
-  <li>Genesis is a base case, not a bypass around class identity.</li>
-  <li>Public start and end claims are equal across adjacent links.</li>
+  <li>The base case establishes the initial claim without bypassing class identity.</li>
+  <li>Adjacent links agree on exact public start and end claims.</li>
   <li>Transcript challenges are derived inside the verified trace.</li>
-  <li>The terminal native decision checks the same relation used recursively.</li>
+  <li>The native terminal checks the same relation replayed recursively.</li>
 </ul>
 
-<h2 id="lesson">What this milestone is worth</h2>
-<p>The fixed point turned recursion from a roadmap word into a measured capacity fact. It gave later optimization a stable target: reduce the cost of the same class, not keep inventing a larger verifier for the next level. It also made the HistoryStep architecture possible—a current state can carry one proof whose verifier cost does not grow with chain age.</p>
-
+<h2 id="result">Result</h2>
+<p>A 2<sup>23</sup> class closed under repeated verifier application. Once that fixed shape existed, block semantics could be added and optimized without making proof size or verifier geometry grow with chain age. The resulting design condition is general: establish the recursive fixed point before attaching the application's largest relation.</p>
 </article>
     </div>
-    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Research record</p><h2 id="evidence-title">Evidence and artifacts</h2><p>The links below preserve the implementation, measurement or derivation behind this article.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/fc328e70"><span><small>Commit</small><strong>In-trace BaseFold replay</strong></span><span aria-hidden="true">↗</span></a>
-<a href="https://github.com/ignotusnemo/parano1d/commit/519ee567"><span><small>Commit</small><strong>Fixed-point milestone</strong></span><span aria-hidden="true">↗</span></a>
-<a href="https://github.com/ignotusnemo/parano1d/tree/main/noid_recursive/src/acceptance"><span><small>Code</small><strong>Recursive acceptance code</strong></span><span aria-hidden="true">↗</span></a></div></aside>
-    <nav class="article-next" aria-label="Adjacent research"><a href="/research/owner-batched-authorization/"><small>Earlier</small><strong>Owner-batched authorization</strong><span>←</span></a><a href="/research/single-global-walk/"><small>Later</small><strong>The 30 GB wall</strong><span>→</span></a></nav>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Research record</p><h2 id="evidence-title">Evidence and artifacts</h2><p>The links below preserve the implementation, measurement or derivation behind this article.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/fc328e70"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Commit</small><strong>In-trace BaseFold replay</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/519ee567"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Commit</small><strong>Fixed-point milestone</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/tree/main/noid_recursive/src/acceptance"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Code</small><strong>Recursive acceptance code</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Adjacent research"><a href="/research/authstream-proof-compiler/"><small>Earlier</small><strong>AuthStream compiler</strong><span>←</span></a><a href="/research/single-global-walk/"><small>Later</small><strong>Single global walk</strong><span>→</span></a></nav>
   </main>
     <footer class="site-footer">
     <div class="footer-brand">
@@ -123,12 +163,12 @@
       <div><strong>O(1) Lab</strong><p>Protocol research behind ParanO(1)d.</p></div>
     </div>
     <div class="footer-links">
-      <div><strong>Research</strong><a href="/research/">Archive</a><a href="/feed.xml">RSS feed</a><a href="/papers/FROST_GKR.pdf">FROST-GKR paper</a></div>
+      <div><strong>Research</strong><a href="/research/">Archive</a><a href="/feed.xml">RSS feed</a></div>
       <div><strong>Project</strong><a href="https://parano1d.org">Website</a><a href="https://docs.parano1d.org">Documentation</a><a href="https://github.com/ignotusnemo/parano1d">Source</a></div>
     </div>
-    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>research.parano1d.org</span></div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>lab.parano1d.org</span></div>
   </footer>
   </div>
-  <script src="/assets/site.js" defer></script>
+  <script src="/assets/site.js?v=4286a63d1931" defer></script>
 </body>
 </html>

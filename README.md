@@ -1,12 +1,7 @@
 # O(1) Lab Research
 
-Source for [research.parano1d.org](https://research.parano1d.org), the static
+Source for [lab.parano1d.org](https://lab.parano1d.org), the static
 research journal of O(1) Lab.
-
-The site publishes papers, protocol notes, engineering studies and negative
-results produced while building ParanO(1)d. Every article is a standalone
-static page. There is no database, server-side runtime or client-side content
-API.
 
 ## Build
 
@@ -37,3 +32,18 @@ To add a publication, add its metadata and HTML fragment, then rebuild. Keep
 benchmark conditions next to benchmark numbers and distinguish production
 results from preserved experiments.
 
+## Mathematical notation
+
+Article sources use TeX inside explicit math elements:
+
+```html
+<math-inline>Q^2\varepsilon</math-inline>
+
+<math-block>
+\varepsilon_{\mathrm{FS}}(Q)
+\le Q^2\varepsilon_{\mathrm{IOP}} + \frac{Q^3}{2^\lambda}
+</math-block>
+```
+
+The build renders these elements to static KaTeX HTML and MathML and fails on
+invalid TeX. No browser-side math renderer or external CDN is required.

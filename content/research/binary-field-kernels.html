@@ -1,6 +1,6 @@
 <h2 id="why-binary">Why binary-field kernels dominate</h2>
-<p>ParanO(1)d's proof machinery and Poseidon2b implementation work over GF(2<sup>128</sup>). Addition is XOR. Multiplication is carry-less polynomial multiplication followed by reduction. That makes hardware carry-less multiply—not ordinary integer multiply—the key primitive for prover throughput, verifier throughput and proof-of-work hashing.</p>
-<p>The architectural constraint was stricter than “make the fast machine faster.” Proof shapes, witness layout and transcript bytes had to remain identical across machines. An ISA backend may change execution, never the statement being proved.</p>
+<p>ParanO(1)d's proof machinery works over the binary extension field GF(2<sup>128</sup>), which contains 2<sup>128</sup> elements. Poseidon2b—the cryptographic permutation used by the proof stack and proof-of-work hash—is implemented over the same field. Addition is XOR. Multiplication is carry-less polynomial multiplication followed by reduction. That makes hardware carry-less multiply—not ordinary integer multiply—the key primitive for prover throughput, verifier throughput and proof-of-work hashing.</p>
+<p>The architectural constraint was stricter than “make the fast machine faster.” Proof shapes, witness layout and transcript bytes had to remain identical across machines. A backend specialized for one instruction-set architecture (ISA) may change execution, never the statement being proved.</p>
 
 <h2 id="dispatch">One layout, runtime dispatch</h2>
 <div class="table-wrap"><table>
@@ -18,13 +18,13 @@
 <p>The July 9 AVX2+VPCLMULQDQ implementation produced two connected measurements on the development laptop:</p>
 <div class="metric-row">
   <div class="metric"><strong>5.4×</strong><span>Poseidon2b batch-hashing speedup</span></div>
-  <div class="metric"><strong>34.9 s</strong><span>m24 prove before the kernel</span></div>
-  <div class="metric"><strong>18.9 s</strong><span>m24 prove after the kernel</span></div>
+  <div class="metric"><strong>34.9 s</strong><span>2<sup>24</sup>-position proof before</span></div>
+  <div class="metric"><strong>18.9 s</strong><span>2<sup>24</sup>-position proof after</span></div>
 </div>
-<p>The proof-time improvement is smaller than the isolated hashing speedup because the complete prover also performs assembly, PCS work and non-hash algebra. That difference is useful: it locates the next bottleneck instead of turning a microbenchmark into an end-to-end claim.</p>
+<p>The proof-time improvement is smaller than the isolated hashing speedup because the complete prover also performs witness assembly, polynomial-commitment (PCS) work and non-hash algebra. That difference is useful: it locates the next bottleneck instead of turning a microbenchmark into an end-to-end claim.</p>
 
 <h2 id="flat-basis">Flat basis at the right boundary</h2>
-<p>The code uses a flat, GCM-compatible representation where the hardware multiplication is natural. Tower-basis objects still exist where the protocol needs them, but repeatedly converting every scalar operation would erase the benefit of the instruction set. MLE evaluation and Poseidon2b batching therefore keep long hot loops in the flat basis and cross representation boundaries deliberately.</p>
+<p>The code uses a flat 128-bit polynomial-basis representation compatible with the carry-less field multiplication used by Galois/Counter Mode (GCM). A tower basis represents the same field as a sequence of smaller nested extensions, which is convenient for parts of the proof algebra. Repeatedly converting every scalar operation between those two representations would erase the instruction-set advantage. Multilinear-extension (MLE) evaluation and Poseidon2b batching therefore keep long hot loops in the flat basis and cross representation boundaries only at explicit protocol edges.</p>
 <div class="note">
   <strong>Protocol rule</strong>
   <p>The field element is the same mathematical element on every backend. Runtime dispatch chooses an implementation of multiplication and hashing; it does not choose consensus parameters.</p>
@@ -43,5 +43,5 @@
   <li>new ISA tiers can be added behind the same dispatch surface without adding protocol branches.</li>
 </ol>
 
-<h2 id="lesson">The engineering lesson</h2>
-<p>Binary fields are sometimes described as a cryptographic design choice and sometimes as a hardware optimization. In this system they are both. Frobenius operations simplify the algebra, while carry-less multiply instructions make the implementation viable. Treating the two layers together exposed end-to-end gains that neither a protocol-only analysis nor an isolated SIMD benchmark would have shown.</p>
+<h2 id="lesson">Why the field choice survived implementation</h2>
+<p>Frobenius operations—the repeated-squaring maps that are linear in a binary field—simplify the proof algebra, while carry-less multiplication makes the same field practical on current CPUs. The 5.4× kernel result mattered only because the unchanged proof format also produced a measurable end-to-end improvement. Protocol arithmetic and machine arithmetic met at one stable representation.</p>

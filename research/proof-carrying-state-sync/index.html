@@ -5,35 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f3f2ed">
   <meta name="color-scheme" content="light">
-  <meta name="description" content="Permanent headers, one recursive boundary terminal and exact live State replace historical transaction execution during bootstrap.">
+  <meta name="description" content="A joining node validates headers, verifies one recursive transition proof at a finalized boundary, installs exact live State and applies no more than eighteen recent blocks.">
   <meta name="author" content="O(1) Lab">
   <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, zero-knowledge proofs, proof systems, cryptography, recursive proofs, binary fields, polynomial commitments">
-  <link rel="canonical" href="https://research.parano1d.org/research/proof-carrying-state-sync/">
-  <link rel="alternate" type="application/rss+xml" title="O(1) Lab Research" href="https://research.parano1d.org/feed.xml">
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="canonical" href="https://lab.parano1d.org/research/proof-carrying-state-sync/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/proof-carrying-state-sync/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/proof-carrying-state-sync/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/proof-carrying-state-sync/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/proof-carrying-state-sync/">
+  <link rel="alternate" type="application/rss+xml" title="O(1) Lab Research" href="https://lab.parano1d.org/feed.xml">
+  <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="O(1) Lab Research">
-  <meta property="og:url" content="https://research.parano1d.org/research/proof-carrying-state-sync/">
-  <meta property="og:title" content="Proof-carrying State: synchronization without execution replay · O(1) Lab">
-  <meta property="og:description" content="Permanent headers, one recursive boundary terminal and exact live State replace historical transaction execution during bootstrap.">
-  <meta property="og:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:url" content="https://lab.parano1d.org/research/proof-carrying-state-sync/">
+  <meta property="og:title" content="Bootstrapping from proof-carrying State · O(1) Lab">
+  <meta property="og:description" content="A joining node validates headers, verifies one recursive transition proof at a finalized boundary, installs exact live State and applies no more than eighteen recent blocks.">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Proof-carrying State: synchronization without execution replay · O(1) Lab">
-  <meta name="twitter:description" content="Permanent headers, one recursive boundary terminal and exact live State replace historical transaction execution during bootstrap.">
-  <meta name="twitter:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta name="twitter:title" content="Bootstrapping from proof-carrying State · O(1) Lab">
+  <meta name="twitter:description" content="A joining node validates headers, verifies one recursive transition proof at a finalized boundary, installs exact live State and applies no more than eighteen recent blocks.">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
   <meta property="article:published_time" content="2026-07-12T00:00:00Z">
   <meta property="article:section" content="Proof-carrying State">
   <meta property="article:author" content="O(1) Lab">
-  <title>Proof-carrying State: synchronization without execution replay · O(1) Lab</title>
-  <link rel="stylesheet" href="/assets/site.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Proof-carrying State: synchronization without execution replay","description":"A new node still validates proof of work and still downloads current State. What it no longer does is download every historical transaction body and execute the chain from genesis. This study records the authenticated snapshot boundary, disk-staged installation, retained suffix and the distinction between constant proof verification and costs that necessarily scale with headers or live State.","datePublished":"2026-07-12","dateModified":"2026-07-12","mainEntityOfPage":"https://research.parano1d.org/research/proof-carrying-state-sync/","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://research.parano1d.org"},"image":"https://research.parano1d.org/assets/og-research.png","about":"Proof-carrying State"}</script>
+  <title>Bootstrapping from proof-carrying State · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Bootstrapping from proof-carrying State","description":"A new node still validates proof of work and still downloads current State. What it no longer does is download every historical transaction body and execute the chain from genesis. This study records the authenticated snapshot boundary, disk-staged installation, retained suffix and the distinction between constant proof verification and costs that necessarily scale with headers or live State.","datePublished":"2026-07-12","dateModified":"2026-07-12","mainEntityOfPage":"https://lab.parano1d.org/research/proof-carrying-state-sync/","inLanguage":"en","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-research.png","about":"Proof-carrying State"}</script>
 </head>
-<body>
+<body class="locale-en">
   <a class="skip-link" href="#content">Skip to content</a>
   <div class="page-shell">
     <header class="site-header">
@@ -45,38 +52,86 @@
     <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
       <a href="/#latest">Latest</a>
       <a aria-current="page" href="/research/">All research</a>
-      <a href="/about/">About</a>
       <span class="nav-rule" aria-hidden="true"></span>
       <a href="https://docs.parano1d.org">Docs <span aria-hidden="true">↗</span></a>
       <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="ParanO(1)d on GitHub"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      <details class="language-switcher"><summary aria-label="Change language"><span>EN</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="Language"><a href="/research/proof-carrying-state-sync/" lang="en" hreflang="en" aria-current="true"><span>EN</span><strong>English</strong></a><a href="/ru/research/proof-carrying-state-sync/" lang="ru" hreflang="ru"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/proof-carrying-state-sync/" lang="zh-Hans" hreflang="zh-Hans"><span>中文</span><strong>简体中文</strong></a></div></details>
     </nav>
   </header>
     <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
     <header class="article-hero">
-      <div class="article-hero-copy"><a class="back-link" href="/research/">← All research</a><div class="article-meta"><span>Systems research</span><span>Proof-carrying State</span><time datetime="2026-07-12">Jul 12, 2026</time></div><h1>Proof-carrying State: synchronization without execution replay</h1><p class="article-dek">Permanent headers, one recursive boundary terminal and exact live State replace historical transaction execution during bootstrap.</p><div class="article-byline"><span>By O(1) Lab</span><span>4 min read</span><span>Production protocol</span></div></div>
-      <div class="research-art art--state" aria-hidden="true">
-    <span class="art-grid"></span>
-    <span class="art-orbit art-orbit--a"></span>
-    <span class="art-orbit art-orbit--b"></span>
-    <span class="art-axis"></span>
-    <span class="art-node art-node--a"></span>
-    <span class="art-node art-node--b"></span>
-    <span class="art-node art-node--c"></span>
-    <span class="art-code">①</span>
-  </div>
+      <div class="article-hero-copy"><a class="back-link" href="/research/">← All research</a><div class="article-meta"><span>Systems research</span><span>Proof-carrying State</span><time datetime="2026-07-12">12 Jul 2026</time></div><h1>Bootstrapping from proof-carrying State</h1><p class="article-dek">A joining node validates headers, verifies one recursive transition proof at a finalized boundary, installs exact live State and applies no more than eighteen recent blocks.</p><div class="article-byline"><span>By O(1) Lab</span><span>4 min read</span><span>Production protocol</span></div><div class="article-share" aria-label="Share this research"><span class="article-share-label">Share</span><button class="share-action" type="button" data-copy-link="https://lab.parano1d.org/research/proof-carrying-state-sync/" data-copy-default="Copy link" data-copy-success="Copied" data-copy-failure="Copy failed" aria-label="Copy article link"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-copy-label aria-live="polite">Copy link</span></button><a class="share-action" href="https://x.com/intent/post?text=Bootstrapping%20from%20proof-carrying%20State&amp;url=https%3A%2F%2Flab.parano1d.org%2Fresearch%2Fproof-carrying-state-sync%2F" target="_blank" rel="noopener noreferrer" aria-label="Share this article on X"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Share on X</span></a></div></div>
+      <div class="research-art art--state" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-state" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-state" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-state" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-state" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-state" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-state" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-state)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-state)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">PROOF-CARRYING SNAPSHOT INSTALL</text>
+    <g class="header-rail">
+    <text class="diagram-micro" x="44" y="82">PERMANENT HEADER CHAIN</text>
+    <path d="M44 112H596"/>
+    <g><rect x="44" y="96" width="70" height="32" rx="7"/><text x="79" y="117">GENESIS</text></g>
+    <g><rect x="126" y="96" width="42" height="32" rx="7"/><text x="147" y="117">…</text></g>
+    <g><rect x="180" y="96" width="78" height="32" rx="7"/><text x="219" y="117">h−18</text></g>
+    <g class="header-boundary"><rect x="276" y="88" width="118" height="48" rx="10"/><text class="diagram-micro" x="335" y="107">PROVED BOUNDARY</text><text class="diagram-value diagram-value--compact" x="335" y="127">ROOT Rₕ₋₁₈</text></g>
+    <g><rect x="412" y="96" width="42" height="32" rx="7"/><text x="433" y="117">+1</text></g>
+    <g><rect x="466" y="96" width="42" height="32" rx="7"/><text x="487" y="117">…</text></g>
+    <g><rect x="520" y="96" width="76" height="32" rx="7"/><text x="558" y="117">TIP</text></g>
+  </g>
+  <path class="diagram-arrow " d="M335 136V178" marker-end="url(#arrow-state)"/>
+  <g class="diagram-panel diagram-panel--green" filter="url(#shadow-state)"><rect x="44" y="180" width="250" height="148" rx="14"/>
+    <text class="diagram-micro" x="66" y="207">01 · AUTHENTICATE PRESENT</text><text class="diagram-value diagram-value--compact" x="66" y="239">VERIFY HistoryStep π</text>
+    <path class="diagram-divider" d="M66 256H272"/><text class="diagram-label" x="66" y="281">CONSTANT PROOF CHECK</text>
+    <g class="proof-seal"><circle cx="249" cy="292" r="17"/><path d="M240 292 247 299 259 284"/></g>
+  </g>
+  <path class="diagram-arrow " d="M294 254H346" marker-end="url(#arrow-state)"/>
+  <g class="diagram-panel diagram-panel--blue" filter="url(#shadow-state)"><rect x="346" y="180" width="250" height="148" rx="14"/>
+    <text class="diagram-micro" x="368" y="207">02 · INSTALL EXACT STATE</text><text class="diagram-value diagram-value--compact" x="368" y="239">SEGMENTS + 18-BLOCK TAIL</text>
+    <g class="state-segments"><rect x="368" y="263" width="48" height="39" rx="5"/><rect x="424" y="263" width="48" height="39" rx="5"/><rect x="480" y="263" width="48" height="39" rx="5"/><rect x="536" y="263" width="38" height="39" rx="5"/>
+      <path d="M376 275H408M376 284H402M432 275H464M432 284H456M488 275H520M488 284H514M544 275H566M544 284H561"/></g>
+  </g>
+    <text class="diagram-caption" x="42" y="390">Headers remain permanent · spent transaction bodies do not need historical replay</text>
+  </svg></div>
     </header>
     <div class="article-layout">
-      <aside class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#remove-replay">Remove replay, not verification</a><a href="#cost-model">The honest cost model</a><a href="#paths">Two synchronization paths</a><a href="#boundary">Bind every object to one boundary</a><a href="#staging">Disk staging as a consensus boundary</a><a href="#peer">The peer is a data source</a><a href="#finality">Recent reorganization and finality</a><a href="#research-result">The research result</a></aside>
+      <aside class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#remove-replay">Remove replay, not verification</a><a href="#cost-model">Costs that remain</a><a href="#paths">Two synchronization paths</a><a href="#boundary">Bind every object to one boundary</a><a href="#staging">Disk staging as a consensus boundary</a><a href="#peer">The peer is a data source</a><a href="#finality">Recent reorganization and finality</a><a href="#research-result">Four checks, no snapshot authority</a></aside>
       <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>A new node still validates proof of work and still downloads current State. What it no longer does is download every historical transaction body and execute the chain from genesis. This study records the authenticated snapshot boundary, disk-staged installation, retained suffix and the distinction between constant proof verification and costs that necessarily scale with headers or live State.</p></div><h2 id="remove-replay">Remove replay, not verification</h2>
-<p>Historical replay combines several different tasks and calls all of them “synchronization.” A node reads headers to compare proof of work. It downloads transaction bodies to reconstruct state. It executes every historical rule to decide whether the reconstructed state is valid. As the chain ages, the third task grows even when the present State stays the same size.</p>
+<p>Historical replay combines several different tasks and calls all of them “synchronization.” A node reads headers to compare proof of work. It downloads transaction bodies to reconstruct State—the authenticated set of current unspent outputs and consensus counters. It executes every historical rule to decide whether the reconstructed State is valid. As the chain ages, the third task grows even when the present State stays the same size.</p>
 <p>ParanO(1)d replaces historical execution replay with a recursive HistoryStep. Each accepted block proves the exact transition from its authenticated parent State to its child State. The current boundary therefore carries a proof of the transition chain that produced it.</p>
+<p>A <em>finalized boundary</em> is a block old enough to lie outside the protocol's permitted reorganization window. The <em>recent suffix</em> is the sequence of no more than eighteen complete blocks between that boundary and the current tip.</p>
 <div class="result">
   <strong>What disappears</strong>
   <p>A joining node does not download and execute every historical transaction body. It verifies one recursive terminal at a finalized boundary, reconstructs the exact committed live State, then applies a bounded recent suffix.</p>
 </div>
 
-<h2 id="cost-model">The honest cost model</h2>
-<p>“O(1) synchronization” is easy to overstate. The proof-verification work at the boundary is constant in chain age. Header work and State transfer are not.</p>
+<h2 id="cost-model">Costs that remain</h2>
+<p>Only boundary proof verification is constant in chain age. Header validation and live State transfer still scale with the data a full node must possess.</p>
 <div class="table-wrap"><table>
   <thead><tr><th>Phase</th><th>Scales with</th><th>Why it remains</th></tr></thead>
   <tbody>
@@ -90,7 +145,7 @@
 
 <h2 id="paths">Two synchronization paths</h2>
 <h3>A short gap</h3>
-<p>Every full node retains the latest eighteen complete accepted blocks. A peer within that window requests atomic bundles containing the semantic block and matching HistoryStep terminal. It checks header continuity, exact difficulty and timestamp rules, Poseidon2b proof of work, transaction and State commitments, recursive validity, fork choice and finality before materializing writes.</p>
+<p>Every full node retains the latest eighteen complete accepted blocks. A peer within that window requests atomic bundles containing the semantic block and matching HistoryStep terminal. It checks header continuity, exact difficulty and timestamp rules, the Poseidon2b-based proof-of-work hash, transaction and State commitments, recursive validity, fork choice and finality before materializing writes.</p>
 
 <h3>A deep gap</h3>
 <p>A peer farther behind selects a finalized snapshot boundary:</p>
@@ -106,7 +161,7 @@
 
 <h2 id="boundary">Bind every object to one boundary</h2>
 <p>A valid proof for height <em>h</em> must not authenticate a manifest from <em>h − 1</em> or a segment set from another branch. The snapshot manifest therefore binds the boundary height, State root, slot geometry, active count, allocation counter, segment identifiers, segment roots and lengths. The recursive terminal, canonical header and manifest must name the same boundary.</p>
-<p>Several July 12 implementation passes focused specifically on typestate around that boundary: header staging, selected proof sessions, durable proof jobs and exact boundary binding. These are not network cosmetics. They prevent a peer from combining individually valid objects into an invalid snapshot package.</p>
+<p>The implementation uses distinct types for header staging, the selected proof session, durable proof work and exact boundary binding. These are not network cosmetics. They prevent a peer from combining individually valid objects into an invalid snapshot package.</p>
 
 <h2 id="staging">Disk staging as a consensus boundary</h2>
 <p>Segments arrive into an isolated scratch environment. The active database is not updated page by page. Only after every segment, counter, root, boundary header and terminal agrees does the node atomically replace the installed State.</p>
@@ -124,21 +179,21 @@
 <p>The finalized boundary cannot be reorganized. Fork choice considers only candidates that preserve it, and the accepted rollback depth is less than eighteen blocks. Recent complete blocks and undo data cover the suffix. A deeper competing branch is rejected rather than “repaired” by installing a different snapshot.</p>
 <p>This rule keeps the snapshot authority aligned with recursive validity. Without a hard boundary, a node could authenticate one present and then be asked to reconstruct a deep alternative history whose bodies it intentionally did not retain.</p>
 
-<h2 id="research-result">The research result</h2>
-<p>The important result is not a fast file-transfer protocol. It is the division of verification work:</p>
+<h2 id="research-result">Four checks, no snapshot authority</h2>
+<p>Bootstrap separates four kinds of evidence:</p>
 <ul>
   <li>headers establish the greatest-work eligible chain;</li>
   <li>HistoryStep establishes validity at the boundary;</li>
   <li>the manifest and segment roots establish the exact current State;</li>
   <li>the retained suffix establishes freshness to the live tip.</li>
 </ul>
-<p>Once those roles are separate, synchronization can be optimized without turning a cache, checkpoint publisher or convenient peer into a hidden source of consensus authority.</p>
+<p>A peer supplies bytes for all four stages but controls none of their acceptance rules. Transfer and staging can change without turning a cache, seed or snapshot mirror into a checkpoint authority.</p>
 </article>
     </div>
-    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Research record</p><h2 id="evidence-title">Evidence and artifacts</h2><p>The links below preserve the implementation, measurement or derivation behind this article.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/9fffd832"><span><small>Commit</small><strong>O(1) synchronization design</strong></span><span aria-hidden="true">↗</span></a>
-<a href="https://github.com/ignotusnemo/parano1d/commit/3dd2c3bf"><span><small>Commit</small><strong>Exact boundary binding</strong></span><span aria-hidden="true">↗</span></a>
-<a href="https://github.com/ignotusnemo/parano1d/commit/63d47e7a"><span><small>Commit</small><strong>Bounded State installation</strong></span><span aria-hidden="true">↗</span></a></div></aside>
-    <nav class="article-next" aria-label="Adjacent research"><a href="/research/binary-field-kernels/"><small>Earlier</small><strong>Binary-field kernels</strong><span>←</span></a><a href="/research/executable-soundness-ledger/"><small>Later</small><strong>Executable soundness</strong><span>→</span></a></nav>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Research record</p><h2 id="evidence-title">Evidence and artifacts</h2><p>The links below preserve the implementation, measurement or derivation behind this article.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/9fffd832"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Commit</small><strong>O(1) synchronization design</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/3dd2c3bf"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Commit</small><strong>Exact boundary binding</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/63d47e7a"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Commit</small><strong>Bounded State installation</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Adjacent research"><a href="/research/utxo-incarnations/"><small>Earlier</small><strong>UTXO incarnations</strong><span>←</span></a><a href="/research/prove-once-search-nonces/"><small>Later</small><strong>Semantic header projection</strong><span>→</span></a></nav>
   </main>
     <footer class="site-footer">
     <div class="footer-brand">
@@ -146,12 +201,12 @@
       <div><strong>O(1) Lab</strong><p>Protocol research behind ParanO(1)d.</p></div>
     </div>
     <div class="footer-links">
-      <div><strong>Research</strong><a href="/research/">Archive</a><a href="/feed.xml">RSS feed</a><a href="/papers/FROST_GKR.pdf">FROST-GKR paper</a></div>
+      <div><strong>Research</strong><a href="/research/">Archive</a><a href="/feed.xml">RSS feed</a></div>
       <div><strong>Project</strong><a href="https://parano1d.org">Website</a><a href="https://docs.parano1d.org">Documentation</a><a href="https://github.com/ignotusnemo/parano1d">Source</a></div>
     </div>
-    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>research.parano1d.org</span></div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>lab.parano1d.org</span></div>
   </footer>
   </div>
-  <script src="/assets/site.js" defer></script>
+  <script src="/assets/site.js?v=4286a63d1931" defer></script>
 </body>
 </html>

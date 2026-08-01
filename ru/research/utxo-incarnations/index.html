@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Монотонный идентификатор создания в существующем поле значения делает устаревшие открытия слотов недействительными без второго корня консенсуса и карантина повторного использования.">
+  <meta name="author" content="O(1) Lab">
+  <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, доказательства с нулевым разглашением, системы доказательств, криптография, рекурсивные доказательства, бинарные поля, полиномиальные обязательства">
+  <link rel="canonical" href="https://lab.parano1d.org/ru/research/utxo-incarnations/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/utxo-incarnations/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/utxo-incarnations/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/utxo-incarnations/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/utxo-incarnations/">
+  <link rel="alternate" type="application/rss+xml" title="Исследования O(1) Lab" href="https://lab.parano1d.org/ru/feed.xml">
+  <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Исследования O(1) Lab">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:url" content="https://lab.parano1d.org/ru/research/utxo-incarnations/">
+  <meta property="og:title" content="Идентификаторы поколений UTXO вместо карантина консенсуса · O(1) Lab">
+  <meta property="og:description" content="Монотонный идентификатор создания в существующем поле значения делает устаревшие открытия слотов недействительными без второго корня консенсуса и карантина повторного использования.">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Идентификаторы поколений UTXO вместо карантина консенсуса · O(1) Lab">
+  <meta name="twitter:description" content="Монотонный идентификатор создания в существующем поле значения делает устаревшие открытия слотов недействительными без второго корня консенсуса и карантина повторного использования.">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="article:published_time" content="2026-07-10T00:00:00Z">
+  <meta property="article:section" content="Live State">
+  <meta property="article:author" content="O(1) Lab">
+  <title>Идентификаторы поколений UTXO вместо карантина консенсуса · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Идентификаторы поколений UTXO вместо карантина консенсуса","description":"Карантин повторного использования на 256 корзин и упакованные идентификаторы поколений UTXO были реализованы против одной угрозы: физический слот может позднее содержать выход с тем же видимым значением, но уже другой идентичностью. Идентификаторы различают последовательные выходы, разрешают повторное использование в том же блоке, отклоняют старые открытия и устраняют второй корень State вместе с соответствующими семействами доказательств. Идентификатор остаётся локальным для ветви и однозначно связывается с канонической историей.","datePublished":"2026-07-10","dateModified":"2026-07-10","mainEntityOfPage":"https://lab.parano1d.org/ru/research/utxo-incarnations/","inLanguage":"ru","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-research.png","about":"Live State"}</script>
+</head>
+<body class="locale-ru">
+  <a class="skip-link" href="#content">К содержанию</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/ru/" aria-label="Главная O(1) Lab">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>O(1) Lab</strong><small>Исследования</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
+      <a href="/ru/#latest">Новое</a>
+      <a aria-current="page" href="/ru/research/">Все исследования</a>
+      <span class="nav-rule" aria-hidden="true"></span>
+      <a href="https://docs.parano1d.org">Документация <span aria-hidden="true">↗</span></a>
+      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="ParanO(1)d на GitHub"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      <details class="language-switcher"><summary aria-label="Выбрать язык"><span>RU</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="Язык"><a href="/research/utxo-incarnations/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/utxo-incarnations/" lang="ru" hreflang="ru" aria-current="true"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/utxo-incarnations/" lang="zh-Hans" hreflang="zh-Hans"><span>中文</span><strong>简体中文</strong></a></div></details>
+    </nav>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/ru/research/">← Все исследования</a><div class="article-meta"><span>Исследование протокола</span><span>Live State</span><time datetime="2026-07-10">10 июл. 2026 г.</time></div><h1>Идентификаторы поколений UTXO вместо карантина консенсуса</h1><p class="article-dek">Монотонный идентификатор создания в существующем поле значения делает устаревшие открытия слотов недействительными без второго корня консенсуса и карантина повторного использования.</p><div class="article-byline"><span>Автор O(1) Lab</span><span>3 мин чтения</span><span>Реализованное сравнение</span></div><div class="article-share" aria-label="Поделиться исследованием"><span class="article-share-label">Поделиться</span><button class="share-action" type="button" data-copy-link="https://lab.parano1d.org/ru/research/utxo-incarnations/" data-copy-default="Копировать ссылку" data-copy-success="Скопировано" data-copy-failure="Не удалось скопировать" aria-label="Скопировать ссылку на статью"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-copy-label aria-live="polite">Копировать ссылку</span></button><a class="share-action" href="https://x.com/intent/post?text=%D0%98%D0%B4%D0%B5%D0%BD%D1%82%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%82%D0%BE%D1%80%D1%8B%20%D0%BF%D0%BE%D0%BA%D0%BE%D0%BB%D0%B5%D0%BD%D0%B8%D0%B9%20UTXO%20%D0%B2%D0%BC%D0%B5%D1%81%D1%82%D0%BE%20%D0%BA%D0%B0%D1%80%D0%B0%D0%BD%D1%82%D0%B8%D0%BD%D0%B0%20%D0%BA%D0%BE%D0%BD%D1%81%D0%B5%D0%BD%D1%81%D1%83%D1%81%D0%B0&amp;url=https%3A%2F%2Flab.parano1d.org%2Fru%2Fresearch%2Futxo-incarnations%2F" target="_blank" rel="noopener noreferrer" aria-label="Поделиться статьёй в X"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Поделиться в X</span></a></div></div>
+      <div class="research-art art--incarnation" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-incarnation" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-incarnation" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-incarnation" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-incarnation" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-incarnation" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-incarnation" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-incarnation)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-incarnation)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">ONE PHYSICAL SLOT · DISTINCT LOGICAL OUTPUTS</text>
+    <g class="diagram-panel diagram-panel--neutral" filter="url(#shadow-incarnation)"><rect x="38" y="78" width="230" height="246" rx="15"/><text class="diagram-micro" x="60" y="105">SLOT 148 · INCARNATION 41</text><text class="diagram-value diagram-value--compact" x="60" y="143">50 NOID</text><path class="diagram-divider" d="M60 161H246"/><text class="diagram-label" x="60" y="190">OWNER</text><text class="diagram-value diagram-value--compact" x="246" y="190" text-anchor="end">A7…2C</text><text class="diagram-label" x="60" y="224">CREATION</text><text class="diagram-number" x="246" y="226" text-anchor="end">41</text><g class="leaf-hash"><rect x="60" y="252" width="186" height="43" rx="8"/><text class="diagram-micro" x="74" y="269">LEAF IDENTITY</text><text class="diagram-value diagram-value--compact" x="74" y="289">H(slot ∥ 41 ∥ value)</text></g></g>
+  <g class="reuse-channel"><path d="M268 169H372" marker-end="url(#arrow-incarnation)"/><text class="diagram-micro" x="320" y="151" text-anchor="middle">SPEND → REUSE</text><path class="stale-cross" d="M301 232 339 270M339 232 301 270"/><text class="diagram-micro diagram-micro--coral" x="320" y="292" text-anchor="middle">STALE H₄₁</text></g>
+  <g class="diagram-panel diagram-panel--green" filter="url(#shadow-incarnation)"><rect x="372" y="78" width="230" height="246" rx="15"/><text class="diagram-micro" x="394" y="105">SLOT 148 · INCARNATION 42</text><text class="diagram-value diagram-value--compact" x="394" y="143">50 NOID</text><path class="diagram-divider" d="M394 161H580"/><text class="diagram-label" x="394" y="190">OWNER</text><text class="diagram-value diagram-value--compact" x="580" y="190" text-anchor="end">A7…2C</text><text class="diagram-label" x="394" y="224">CREATION</text><text class="diagram-number" x="580" y="226" text-anchor="end">42</text><g class="leaf-hash leaf-hash--new"><rect x="394" y="252" width="186" height="43" rx="8"/><text class="diagram-micro" x="408" y="269">NEW LEAF IDENTITY</text><text class="diagram-value diagram-value--compact" x="408" y="289">H(slot ∥ 42 ∥ value)</text></g></g>
+    <text class="diagram-caption" x="42" y="390">The incarnation travels with value, so reuse needs no quarantine root or delay</text>
+  </svg></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="В этой статье"><strong>В этой статье</strong><a href="#problem">Проблема повторного использования слота</a><a href="#quarantine">Эксперимент 1. Карантин консенсуса</a><a href="#incarnation">Эксперимент 2. Поместить идентичность в значение</a><a href="#tests">Негативные и граничные тесты</a><a href="#scope">Границы конструкции</a><a href="#result">Результат</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>Аннотация</span><p>Карантин повторного использования на 256 корзин и упакованные идентификаторы поколений UTXO были реализованы против одной угрозы: физический слот может позднее содержать выход с тем же видимым значением, но уже другой идентичностью. Идентификаторы различают последовательные выходы, разрешают повторное использование в том же блоке, отклоняют старые открытия и устраняют второй корень State вместе с соответствующими семействами доказательств. Идентификатор остаётся локальным для ветви и однозначно связывается с канонической историей.</p></div><h2 id="problem">Проблема повторного использования слота</h2>
+<p>UTXO — непотраченный выход транзакции. ParanO(1)d хранит текущие UTXO в ограниченном State, где <em>физический слот</em> служит повторно используемым индексом, а не постоянным именем выхода. Точное открытие State — доказательство Merkle, аутентифицирующее полное содержимое листа в таком слоте. Если позднее тот же слот снова содержит ту же сумму и того же владельца, старое открытие не должно подтверждать новый выход. Это классическая последовательность A→B→A, или проблема ABA: видимое значение вернулось к A, хотя логический объект уже другой.</p>
+
+<h2 id="quarantine">Эксперимент 1. Карантин консенсуса</h2>
+<p>Первая конструкция использовала <code>ReuseGuard</code> — вторую структуру State, определявшую момент, когда освобождённый слот снова разрешалось занять. Она была организована как кольцо из 256 корзин. Слот оставался в карантине на один блок дольше окна финальности протокола; консенсус нёс отдельный корень этой структуры, пути корзин и отношения доказательств.</p>
+<p><code>ReuseGuard</code> предотвращал немедленное повторное использование, но создавал расходы, не связанные с самим значением UTXO:</p>
+<ul>
+  <li>дополнительный корень State в консенсусе и отдельный домен отката;</li>
+  <li>три компонента доказательства для корзин <code>ReuseGuard</code> и привязки корня State;</li>
+  <li>невозможность потратить и снова создать выход в одном физическом слоте внутри блока;</li>
+  <li>два пути перехода, обязанные одинаково обновлять <code>ReuseGuard</code>.</li>
+</ul>
+<p>Тест эквивалентности прототипа намеренно запускал оба пути перехода и отклонял расхождения в правиле обновления <code>ReuseGuard</code>. Пути можно было сделать идентичными, но эквивалентность пришлось бы доказывать постоянно из-за второго автомата State.</p>
+
+<h2 id="incarnation">Эксперимент 2. Поместить идентичность в значение</h2>
+<p>Альтернатива упаковывает сумму и монотонный идентификатор создания в существующую 128-битную координату значения:</p>
+<div class="equation">packed_value = (creation_id &lt;&lt; 64) | amount</div>
+<p>Каждый созданный выход получает следующий локальный для ветви <code>creation_id</code>. Поэтому лист точного State и входной лист фиксируют криптографическим обязательством логическое поколение выхода вместе со слотом, владельцем и суммой.</p>
+
+<h2 id="tests">Негативные и граничные тесты</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Сценарий</th><th>Ожидаемое свойство</th><th>Результат</th></tr></thead>
+  <tbody>
+    <tr><td>Тот же слот, владелец и сумма; новый ID</td><td>Старое точное открытие должно завершиться ошибкой</td><td>Разные хеши State и входного листа</td></tr>
+    <tr><td>Расходование → создание в одном блоке</td><td>Новый выход использует следующий ID</td><td>Однозначно</td></tr>
+    <tr><td>Создание → расходование в одном блоке</td><td>Дочерний вход указывает созданный ID</td><td>Однозначно</td></tr>
+    <tr><td>Пропущенные, повторные или переставленные ID</td><td>Отклонить</td><td>Отклонено</td></tr>
+    <tr><td>Счётчик <code>u64::MAX</code></td><td>Не допустить переполнения</td><td>Отклонено по правилам консенсуса</td></tr>
+  </tbody>
+</table></div>
+
+<p>Прототип также проверил, что <code>creation_id = 0</code> сохраняет базовые последовательности хеширования. Идентификатор поколения поместился в существующей координате поля: дополнительный лист, корень заголовка или семейство доказательств не понадобились.</p>
+
+<h2 id="scope">Границы конструкции</h2>
+<p>Идентификатор локален для ветви. Откат восстанавливает счётчик распределения вместе со State, поэтому конкурирующие ветви могут назначить одинаковый числовой идентификатор разным выходам. Привязка к ветви и эпохе остаётся обязанностью канонической истории. Конструкция решает проблему устаревших открытий точного State внутри одной канонической ветви, но не создаёт глобальное пространство имён выходов транзакций.</p>
+
+<h2 id="result">Результат</h2>
+<p>Идентификаторы поколений заменили карантинное кольцо и позволили удалить отношения доказательств <code>ReuseGuard</code>. В общем случае, когда повторно используемое физическое место представляет последовательные логические объекты, проще включить монотонный идентификатор поколения непосредственно в криптографическое обязательство к объекту, чем поддерживать вторую структуру консенсуса, запоминающую момент разрешённого повторного использования.</p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Материалы исследования</p><h2 id="evidence-title">Доказательства и артефакты</h2><p>Здесь сохранены реализации, измерения и выводы, на которых основана статья.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/c7372ea1"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Коммит</small><strong>Реализация ReuseGuard</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/f30ffbe7"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Коммит</small><strong>Прототип поколений с тестами подмены</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/e4a9061b"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Коммит</small><strong>Прямая интеграция с точным State</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Соседние исследования"><a href="/ru/research/binary-field-kernels/"><small>Ранее</small><strong>Ядра бинарного поля</strong><span>←</span></a><a href="/ru/research/proof-carrying-state-sync/"><small>Позднее</small><strong>Proof-carrying State</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>O(1) Lab</strong><p>Исследования протокола ParanO(1)d.</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>Исследования</strong><a href="/ru/research/">Архив</a><a href="/ru/feed.xml">RSS-лента</a></div>
+      <div><strong>Проект</strong><a href="https://parano1d.org">Сайт</a><a href="https://docs.parano1d.org">Документация</a><a href="https://github.com/ignotusnemo/parano1d">Исходный код</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=4286a63d1931" defer></script>
+</body>
+</html>

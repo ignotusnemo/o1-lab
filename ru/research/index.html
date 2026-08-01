@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Полный архив O(1) Lab: статьи, заметки о протоколах, инженерные исследования и результаты разработки ParanO(1)d.">
+  <meta name="author" content="O(1) Lab">
+  <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, доказательства с нулевым разглашением, системы доказательств, криптография, рекурсивные доказательства, бинарные поля, полиномиальные обязательства">
+  <link rel="canonical" href="https://lab.parano1d.org/ru/research/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/">
+  <link rel="alternate" type="application/rss+xml" title="Исследования O(1) Lab" href="https://lab.parano1d.org/ru/feed.xml">
+  <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Исследования O(1) Lab">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:url" content="https://lab.parano1d.org/ru/research/">
+  <meta property="og:title" content="Все исследования · O(1) Lab">
+  <meta property="og:description" content="Полный архив O(1) Lab: статьи, заметки о протоколах, инженерные исследования и результаты разработки ParanO(1)d.">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Все исследования · O(1) Lab">
+  <meta name="twitter:description" content="Полный архив O(1) Lab: статьи, заметки о протоколах, инженерные исследования и результаты разработки ParanO(1)d.">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
+  
+  <title>Все исследования · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Исследования O(1) Lab","url":"https://lab.parano1d.org/ru/research/","description":"Полный архив O(1) Lab: статьи, заметки о протоколах, инженерные исследования и результаты разработки ParanO(1)d.","inLanguage":"ru"}</script>
+</head>
+<body class="locale-ru">
+  <a class="skip-link" href="#content">К содержанию</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/ru/" aria-label="Главная O(1) Lab">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>O(1) Lab</strong><small>Исследования</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
+      <a href="/ru/#latest">Новое</a>
+      <a aria-current="page" href="/ru/research/">Все исследования</a>
+      <span class="nav-rule" aria-hidden="true"></span>
+      <a href="https://docs.parano1d.org">Документация <span aria-hidden="true">↗</span></a>
+      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="ParanO(1)d на GitHub"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      <details class="language-switcher"><summary aria-label="Выбрать язык"><span>RU</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="Язык"><a href="/research/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/" lang="ru" hreflang="ru" aria-current="true"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/" lang="zh-Hans" hreflang="zh-Hans"><span>中文</span><strong>简体中文</strong></a></div></details>
+    </nav>
+  </header>
+    <main id="content" class="archive-page">
+    <section class="archive-hero"><p class="eyebrow">Архив исследований</p><h1>Все исследования</h1><p>Статьи, заметки о протоколах, инженерные исследования и полученные результаты. Материалы упорядочены по дате фиксации результата.</p></section>
+    <section class="archive-section">
+      <div class="filter-bar" role="group" aria-label="Фильтр по теме"><button class="filter-chip is-active" type="button" data-filter="all">Все <span>15</span></button><button class="filter-chip" type="button" data-filter="Live State">Live State</button><button class="filter-chip" type="button" data-filter="Proof-carrying State">Proof-carrying State</button><button class="filter-chip" type="button" data-filter="Авторизация кошелька">Авторизация кошелька</button><button class="filter-chip" type="button" data-filter="Бинарные поля">Бинарные поля</button><button class="filter-chip" type="button" data-filter="Инженерия доказательств">Инженерия доказательств</button><button class="filter-chip" type="button" data-filter="Консенсус">Консенсус</button><button class="filter-chip" type="button" data-filter="Корректность доказательств">Корректность доказательств</button><button class="filter-chip" type="button" data-filter="Майнинг">Майнинг</button><button class="filter-chip" type="button" data-filter="Полиномиальные обязательства">Полиномиальные обязательства</button><button class="filter-chip" type="button" data-filter="Рекурсивное доказательство">Рекурсивное доказательство</button><button class="filter-chip" type="button" data-filter="Системы доказательств">Системы доказательств</button></div>
+      <div class="archive-list"><article class="archive-row" data-topic="Корректность доказательств">
+        <a class="archive-index" href="/ru/research/parano1d-soundness-industry-metrics/">01</a>
+        <div class="archive-copy"><div class="card-meta"><span>Анализ безопасности</span><time datetime="2026-07-31">31 июл. 2026 г.</time></div><h2><a href="/ru/research/parano1d-soundness-industry-metrics/">Корректность ParanO(1)d в отраслевых метриках</a></h2><p>Параметры рабочей реализации оценены по метрикам Plonky2, RISC Zero и ethSTARK; гипотетические оценки отделены от конечных границ, опирающихся на теоремы.</p><div class="archive-tags"><span>Корректность доказательств</span><span>Воспроизводимый расчёт с привязкой к исходному коду</span><span>14 мин</span></div></div>
+        <a class="archive-arrow" href="/ru/research/parano1d-soundness-industry-metrics/" aria-label="Читать: Корректность ParanO(1)d в отраслевых метриках">↗</a>
+      </article>
+<article class="archive-row" data-topic="Системы доказательств">
+        <a class="archive-index" href="/ru/research/frost-gkr-global-trace-protocol/">02</a>
+        <div class="archive-copy"><div class="card-meta"><span>Статья</span><time datetime="2026-07-31">31 июл. 2026 г.</time></div><h2><a href="/ru/research/frost-gkr-global-trace-protocol/">FROST-GKR: протокол глобальной трассы для пакетного Poseidon2b</a></h2><p>Трасса из трёх столбцов, зафиксированных обязательствами, сводит весь пакет вычислений Poseidon2b к двум проверкам sumcheck.</p><div class="archive-tags"><span>Системы доказательств</span><span>Статья и воспроизводимая реализация</span><span>5 мин</span></div></div>
+        <a class="archive-arrow" href="/ru/research/frost-gkr-global-trace-protocol/" aria-label="Читать: FROST-GKR: протокол глобальной трассы для пакетного Poseidon2b">↗</a>
+      </article>
+<article class="archive-row" data-topic="Рекурсивное доказательство">
+        <a class="archive-index" href="/ru/research/b64-b255-proof-classes/">03</a>
+        <div class="archive-copy"><div class="card-meta"><span>Инженерное исследование</span><time datetime="2026-07-17">17 июл. 2026 г.</time></div><h2><a href="/ru/research/b64-b255-proof-classes/">Почему HistoryStep использует два класса доказательств</a></h2><p>HistoryStep — рекурсивное доказательство перехода состояния блока. B64 обрабатывает до 64 пользовательских страниц транзакций и укладывается в бюджет подготовки на эталонном ноутбуке; B255 расширяет то же отношение до предельных 255 страниц блока. Измерения не выявили полезного диапазона для третьего класса.</p><div class="archive-tags"><span>Рекурсивное доказательство</span><span>Воспроизводимое измерение</span><span>4 мин</span></div></div>
+        <a class="archive-arrow" href="/ru/research/b64-b255-proof-classes/" aria-label="Читать: Почему HistoryStep использует два класса доказательств">↗</a>
+      </article>
+<article class="archive-row" data-topic="Консенсус">
+        <a class="archive-index" href="/ru/research/atomic-history-step/">04</a>
+        <div class="archive-copy"><div class="card-meta"><span>Исследование протокола</span><time datetime="2026-07-15">15 июл. 2026 г.</time></div><h2><a href="/ru/research/atomic-history-step/">Почему блок принимается только с рекурсивным доказательством</a></h2><p>Ранний вариант сначала принимал блок, а его рекурсивное доказательство строил позже в фоне. Поэтому каноническая цепь могла опережать вершину, уже подтверждённую HistoryStep, и узлу приходилось сохранять и восстанавливать отдельную очередь. В принятой архитектуре блок принимается только вместе со своим HistoryStep: один атомарный объект, одна каноническая высота и никаких отложенных доказательств.</p><div class="archive-tags"><span>Консенсус</span><span>Реализованное сравнение</span><span>3 мин</span></div></div>
+        <a class="archive-arrow" href="/ru/research/atomic-history-step/" aria-label="Читать: Почему блок принимается только с рекурсивным доказательством">↗</a>
+      </article>
+<article class="archive-row" data-topic="Майнинг">
+        <a class="archive-index" href="/ru/research/prove-once-search-nonces/">05</a>
+        <div class="archive-copy"><div class="card-meta"><span>Исследование протокола</span><time datetime="2026-07-15">15 июл. 2026 г.</time></div><h2><a href="/ru/research/prove-once-search-nonces/">Один раз доказать блок, затем искать nonce</a></h2><p>HistoryStep связывает все семантические поля заголовка в области без nonce. PoW может изменять nonce, не перестраивая доказательство перехода.</p><div class="archive-tags"><span>Майнинг</span><span>Рабочая конструкция</span><span>2 мин</span></div></div>
+        <a class="archive-arrow" href="/ru/research/prove-once-search-nonces/" aria-label="Читать: Один раз доказать блок, затем искать nonce">↗</a>
+      </article>
+<article class="archive-row" data-topic="Proof-carrying State">
+        <a class="archive-index" href="/ru/research/proof-carrying-state-sync/">06</a>
+        <div class="archive-copy"><div class="card-meta"><span>Системное исследование</span><time datetime="2026-07-12">12 июл. 2026 г.</time></div><h2><a href="/ru/research/proof-carrying-state-sync/">Начальная синхронизация из proof-carrying State</a></h2><p>Подключающийся узел проверяет заголовки и одно рекурсивное доказательство переходов на финализированной границе, устанавливает точный Live State и применяет не более восемнадцати последних блоков.</p><div class="archive-tags"><span>Proof-carrying State</span><span>Рабочий протокол</span><span>4 мин</span></div></div>
+        <a class="archive-arrow" href="/ru/research/proof-carrying-state-sync/" aria-label="Читать: Начальная синхронизация из proof-carrying State">↗</a>
+      </article>
+<article class="archive-row" data-topic="Live State">
+        <a class="archive-index" href="/ru/research/utxo-incarnations/">07</a>
+        <div class="archive-copy"><div class="card-meta"><span>Исследование протокола</span><time datetime="2026-07-10">10 июл. 2026 г.</time></div><h2><a href="/ru/research/utxo-incarnations/">Идентификаторы поколений UTXO вместо карантина консенсуса</a></h2><p>Монотонный идентификатор создания в существующем поле значения делает устаревшие открытия слотов недействительными без второго корня консенсуса и карантина повторного использования.</p><div class="archive-tags"><span>Live State</span><span>Реализованное сравнение</span><span>3 мин</span></div></div>
+        <a class="archive-arrow" href="/ru/research/utxo-incarnations/" aria-label="Читать: Идентификаторы поколений UTXO вместо карантина консенсуса">↗</a>
+      </article>
+<article class="archive-row" data-topic="Бинарные поля">
+        <a class="archive-index" href="/ru/research/binary-field-kernels/">08</a>
+        <div class="archive-copy"><div class="card-meta"><span>Инженерное исследование</span><time datetime="2026-07-09">09 июл. 2026 г.</time></div><h2><a href="/ru/research/binary-field-kernels/">Один формат доказательства для четырёх аппаратных путей</a></h2><p>PCLMUL, VPCLMUL, AVX-512 и PMULL выполняют одну и ту же арифметику GF(2¹²⁸), не меняя представление свидетеля или байты доказательства.</p><div class="archive-tags"><span>Бинарные поля</span><span>Рабочая реализация</span><span>4 мин</span></div></div>
+        <a class="archive-arrow" href="/ru/research/binary-field-kernels/" aria-label="Читать: Один формат доказательства для четырёх аппаратных путей">↗</a>
+      </article>
+<article class="archive-row" data-topic="Рекурсивное доказательство">
+        <a class="archive-index" href="/ru/research/single-global-walk/">09</a>
+        <div class="archive-copy"><div class="card-meta"><span>Инженерное исследование</span><time datetime="2026-07-06">06 июл. 2026 г.</time></div><h2><a href="/ru/research/single-global-walk/">Один глобальный проход Poseidon вместо девяти проходов проверяющей стороны</a></h2><p>Измерение полной композиции показало, что независимые проходы проверяющей стороны увеличивали потребление памяти свыше 30 ГБ. Общая область устранила этот множитель.</p><div class="archive-tags"><span>Рекурсивное доказательство</span><span>Реализованный редизайн композиции</span><span>5 мин</span></div></div>
+        <a class="archive-arrow" href="/ru/research/single-global-walk/" aria-label="Читать: Один глобальный проход Poseidon вместо девяти проходов проверяющей стороны">↗</a>
+      </article>
+<article class="archive-row" data-topic="Рекурсивное доказательство">
+        <a class="archive-index" href="/ru/research/recursive-fixed-point/">10</a>
+        <div class="archive-copy"><div class="card-meta"><span>Инженерное исследование</span><time datetime="2026-07-05">05 июл. 2026 г.</time></div><h2><a href="/ru/research/recursive-fixed-point/">Рекурсивная проверяющая схема должна была поместиться внутрь самой себя</a></h2><p>Класс с областью ограничений из 2^23 позиций рекурсивно замыкается: каждое доказательство проверяет предшественника с той же аутентифицированной матрицей и той же формой публичных данных.</p><div class="archive-tags"><span>Рекурсивное доказательство</span><span>Проверенный прототип</span><span>3 мин</span></div></div>
+        <a class="archive-arrow" href="/ru/research/recursive-fixed-point/" aria-label="Читать: Рекурсивная проверяющая схема должна была поместиться внутрь самой себя">↗</a>
+      </article>
+<article class="archive-row" data-topic="Инженерия доказательств">
+        <a class="archive-index" href="/ru/research/authstream-proof-compiler/">11</a>
+        <div class="archive-copy"><div class="card-meta"><span>Инженерное исследование</span><time datetime="2026-06-28">28 июн. 2026 г.</time></div><h2><a href="/ru/research/authstream-proof-compiler/">AuthStream: ограничение нагрузки авторизации на весь блок</a></h2><p>Потоковая компиляция обработала 14–16 МиБ приватных данных авторизации с ограниченным потреблением памяти и накладными расходами 4,7%. Исследованное итоговое доказательство не уложилось в допустимую задержку рабочей сети.</p><div class="archive-tags"><span>Инженерия доказательств</span><span>Измеренное исследование осуществимости</span><span>3 мин</span></div></div>
+        <a class="archive-arrow" href="/ru/research/authstream-proof-compiler/" aria-label="Читать: AuthStream: ограничение нагрузки авторизации на весь блок">↗</a>
+      </article>
+<article class="archive-row" data-topic="Инженерия доказательств">
+        <a class="archive-index" href="/ru/research/merkle-fusion-negative-result/">12</a>
+        <div class="archive-copy"><div class="card-meta"><span>Отрицательный результат</span><time datetime="2026-06-25">25 июн. 2026 г.</time></div><h2><a href="/ru/research/merkle-fusion-negative-result/">Доказательство стало на 20% меньше и на 68% медленнее</a></h2><p>Объединение двух отношений Merkle сэкономило 5,94 КБ, но увеличило общую многолинейную трассу и убрало параллелизм. Время доказательства выросло с 2,68 до 4,50 секунды.</p><div class="archive-tags"><span>Инженерия доказательств</span><span>Измерено и отклонено</span><span>2 мин</span></div></div>
+        <a class="archive-arrow" href="/ru/research/merkle-fusion-negative-result/" aria-label="Читать: Доказательство стало на 20% меньше и на 68% медленнее">↗</a>
+      </article>
+<article class="archive-row" data-topic="Авторизация кошелька">
+        <a class="archive-index" href="/ru/research/owner-batched-authorization/">13</a>
+        <div class="archive-copy"><div class="card-meta"><span>Исследование протокола</span><time datetime="2026-06-24">24 июн. 2026 г.</time></div><h2><a href="/ru/research/owner-batched-authorization/">Один владелец — одно доказательство авторизации</a></h2><p>Публичная арифметика транзакции относится к отношению блока. Кошелёк доказывает один закрытый факт — владение средствами — даже если расходование содержит 1 020 входов.</p><div class="archive-tags"><span>Авторизация кошелька</span><span>Измеренное исследование протокола</span><span>3 мин</span></div></div>
+        <a class="archive-arrow" href="/ru/research/owner-batched-authorization/" aria-label="Читать: Один владелец — одно доказательство авторизации">↗</a>
+      </article>
+<article class="archive-row" data-topic="Полиномиальные обязательства">
+        <a class="archive-index" href="/ru/research/binding-a-mixed-opening/">14</a>
+        <div class="archive-copy"><div class="card-meta"><span>Исследование безопасности</span><time datetime="2026-06-21">21 июн. 2026 г.</time></div><h2><a href="/ru/research/binding-a-mixed-opening/">Привязка компактного смешанного открытия к исходному обязательству</a></h2><p>Тест с подменой A/A′ отделяет низкостепенную согласованность от связи с исходным обязательством. Корень источника и общие запросы восстанавливают эту связь.</p><div class="archive-tags"><span>Полиномиальные обязательства</span><span>Конструкция, проверенная тестами с намеренной подменой</span><span>4 мин</span></div></div>
+        <a class="archive-arrow" href="/ru/research/binding-a-mixed-opening/" aria-label="Читать: Привязка компактного смешанного открытия к исходному обязательству">↗</a>
+      </article>
+<article class="archive-row" data-topic="Полиномиальные обязательства">
+        <a class="archive-index" href="/ru/research/pcs-implementation-trail/">15</a>
+        <div class="archive-copy"><div class="card-meta"><span>Сравнительное исследование</span><time datetime="2026-06-21">21 июн. 2026 г.</time></div><h2><a href="/ru/research/pcs-implementation-trail/">Три эксперимента с полиномиальными обязательствами и обнаруженные ими узкие места</a></h2><p>Ladder FRI выявил стоимость доказательства в байтах, FRI-Binius — проблему привязки к исходному обязательству, а BaseFold — стоимость включения проверяющей схемы в следующее доказательство.</p><div class="archive-tags"><span>Полиномиальные обязательства</span><span>Измеренные прототипы</span><span>4 мин</span></div></div>
+        <a class="archive-arrow" href="/ru/research/pcs-implementation-trail/" aria-label="Читать: Три эксперимента с полиномиальными обязательствами и обнаруженные ими узкие места">↗</a>
+      </article></div>
+      <p class="filter-empty" hidden>По выбранной теме исследований нет.</p>
+    </section>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>O(1) Lab</strong><p>Исследования протокола ParanO(1)d.</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>Исследования</strong><a href="/ru/research/">Архив</a><a href="/ru/feed.xml">RSS-лента</a></div>
+      <div><strong>Проект</strong><a href="https://parano1d.org">Сайт</a><a href="https://docs.parano1d.org">Документация</a><a href="https://github.com/ignotusnemo/parano1d">Исходный код</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=4286a63d1931" defer></script>
+</body>
+</html>

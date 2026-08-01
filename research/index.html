@@ -5,33 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f3f2ed">
   <meta name="color-scheme" content="light">
-  <meta name="description" content="The complete O(1) Lab archive: papers, protocol notes, engineering studies and negative results from the development of ParanO(1)d.">
+  <meta name="description" content="The complete O(1) Lab archive: papers, protocol notes, engineering studies and results from the development of ParanO(1)d.">
   <meta name="author" content="O(1) Lab">
   <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, zero-knowledge proofs, proof systems, cryptography, recursive proofs, binary fields, polynomial commitments">
-  <link rel="canonical" href="https://research.parano1d.org/research/">
-  <link rel="alternate" type="application/rss+xml" title="O(1) Lab Research" href="https://research.parano1d.org/feed.xml">
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="canonical" href="https://lab.parano1d.org/research/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/">
+  <link rel="alternate" type="application/rss+xml" title="O(1) Lab Research" href="https://lab.parano1d.org/feed.xml">
+  <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="O(1) Lab Research">
-  <meta property="og:url" content="https://research.parano1d.org/research/">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:url" content="https://lab.parano1d.org/research/">
   <meta property="og:title" content="All research · O(1) Lab">
-  <meta property="og:description" content="The complete O(1) Lab archive: papers, protocol notes, engineering studies and negative results from the development of ParanO(1)d.">
-  <meta property="og:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta property="og:description" content="The complete O(1) Lab archive: papers, protocol notes, engineering studies and results from the development of ParanO(1)d.">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="All research · O(1) Lab">
-  <meta name="twitter:description" content="The complete O(1) Lab archive: papers, protocol notes, engineering studies and negative results from the development of ParanO(1)d.">
-  <meta name="twitter:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta name="twitter:description" content="The complete O(1) Lab archive: papers, protocol notes, engineering studies and results from the development of ParanO(1)d.">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
   
   <title>All research · O(1) Lab</title>
-  <link rel="stylesheet" href="/assets/site.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"O(1) Lab Research","url":"https://research.parano1d.org","description":"The complete O(1) Lab archive: papers, protocol notes, engineering studies and negative results from the development of ParanO(1)d."}</script>
+  <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"O(1) Lab Research","url":"https://lab.parano1d.org/research/","description":"The complete O(1) Lab archive: papers, protocol notes, engineering studies and results from the development of ParanO(1)d.","inLanguage":"en"}</script>
 </head>
-<body>
+<body class="locale-en">
   <a class="skip-link" href="#content">Skip to content</a>
   <div class="page-shell">
     <header class="site-header">
@@ -43,65 +50,91 @@
     <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
       <a href="/#latest">Latest</a>
       <a aria-current="page" href="/research/">All research</a>
-      <a href="/about/">About</a>
       <span class="nav-rule" aria-hidden="true"></span>
       <a href="https://docs.parano1d.org">Docs <span aria-hidden="true">↗</span></a>
       <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="ParanO(1)d on GitHub"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      <details class="language-switcher"><summary aria-label="Change language"><span>EN</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="Language"><a href="/research/" lang="en" hreflang="en" aria-current="true"><span>EN</span><strong>English</strong></a><a href="/ru/research/" lang="ru" hreflang="ru"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/" lang="zh-Hans" hreflang="zh-Hans"><span>中文</span><strong>简体中文</strong></a></div></details>
     </nav>
   </header>
     <main id="content" class="archive-page">
-    <section class="archive-hero"><p class="eyebrow">Research archive</p><h1>All research</h1><p>Papers, protocol notes, engineering studies and preserved negative results. Ordered by the date of the recorded research milestone.</p></section>
+    <section class="archive-hero"><p class="eyebrow">Research archive</p><h1>All research</h1><p>Papers, protocol notes, engineering studies and their results. Ordered by the date each research result was recorded.</p></section>
     <section class="archive-section">
-      <div class="filter-bar" role="group" aria-label="Filter by topic"><button class="filter-chip is-active" type="button" data-filter="all">All <span>10</span></button><button class="filter-chip" type="button" data-filter="Binary fields">Binary fields</button><button class="filter-chip" type="button" data-filter="Polynomial commitments">Polynomial commitments</button><button class="filter-chip" type="button" data-filter="Proof systems">Proof systems</button><button class="filter-chip" type="button" data-filter="Proof-carrying State">Proof-carrying State</button><button class="filter-chip" type="button" data-filter="Recursive proving">Recursive proving</button><button class="filter-chip" type="button" data-filter="Soundness">Soundness</button><button class="filter-chip" type="button" data-filter="Wallet authorization">Wallet authorization</button></div>
-      <div class="archive-list"><article class="archive-row" data-topic="Proof systems">
-        <a class="archive-index" href="/research/frost-gkr-global-trace-protocol/">01</a>
-        <div class="archive-copy"><div class="card-meta"><span>Paper</span><time datetime="2026-07-31">Jul 31, 2026</time></div><h2><a href="/research/frost-gkr-global-trace-protocol/">FROST-GKR: a global trace protocol for batched Poseidon2b</a></h2><p>A three-column committed trace reduces an entire batch of Poseidon2b executions with two constraint sumchecks.</p><div class="archive-tags"><span>Proof systems</span><span>Paper and artifact</span><span>5 min</span></div></div>
-        <a class="archive-arrow" href="/research/frost-gkr-global-trace-protocol/" aria-label="Read FROST-GKR: a global trace protocol for batched Poseidon2b">↗</a>
+      <div class="filter-bar" role="group" aria-label="Filter by topic"><button class="filter-chip is-active" type="button" data-filter="all">All <span>15</span></button><button class="filter-chip" type="button" data-filter="Binary fields">Binary fields</button><button class="filter-chip" type="button" data-filter="Consensus">Consensus</button><button class="filter-chip" type="button" data-filter="Live State">Live State</button><button class="filter-chip" type="button" data-filter="Mining">Mining</button><button class="filter-chip" type="button" data-filter="Polynomial commitments">Polynomial commitments</button><button class="filter-chip" type="button" data-filter="Proof engineering">Proof engineering</button><button class="filter-chip" type="button" data-filter="Proof systems">Proof systems</button><button class="filter-chip" type="button" data-filter="Proof-carrying State">Proof-carrying State</button><button class="filter-chip" type="button" data-filter="Recursive proving">Recursive proving</button><button class="filter-chip" type="button" data-filter="Soundness">Soundness</button><button class="filter-chip" type="button" data-filter="Wallet authorization">Wallet authorization</button></div>
+      <div class="archive-list"><article class="archive-row" data-topic="Soundness">
+        <a class="archive-index" href="/research/parano1d-soundness-industry-metrics/">01</a>
+        <div class="archive-copy"><div class="card-meta"><span>Security analysis</span><time datetime="2026-07-31">31 Jul 2026</time></div><h2><a href="/research/parano1d-soundness-industry-metrics/">ParanO(1)d soundness under industry metrics</a></h2><p>Committed production parameters evaluated under the metrics published by Plonky2, RISC Zero and ethSTARK, with conjectured scores separated from finite theorem-backed bounds.</p><div class="archive-tags"><span>Soundness</span><span>Executable and source-pinned</span><span>14 min</span></div></div>
+        <a class="archive-arrow" href="/research/parano1d-soundness-industry-metrics/" aria-label="Read: ParanO(1)d soundness under industry metrics">↗</a>
+      </article>
+<article class="archive-row" data-topic="Proof systems">
+        <a class="archive-index" href="/research/frost-gkr-global-trace-protocol/">02</a>
+        <div class="archive-copy"><div class="card-meta"><span>Paper</span><time datetime="2026-07-31">31 Jul 2026</time></div><h2><a href="/research/frost-gkr-global-trace-protocol/">FROST-GKR: a global trace protocol for batched Poseidon2b</a></h2><p>A three-column committed trace reduces an entire batch of Poseidon2b executions with two constraint sumchecks.</p><div class="archive-tags"><span>Proof systems</span><span>Paper and artifact</span><span>6 min</span></div></div>
+        <a class="archive-arrow" href="/research/frost-gkr-global-trace-protocol/" aria-label="Read: FROST-GKR: a global trace protocol for batched Poseidon2b">↗</a>
       </article>
 <article class="archive-row" data-topic="Recursive proving">
-        <a class="archive-index" href="/research/b64-b255-proof-classes/">02</a>
-        <div class="archive-copy"><div class="card-meta"><span>Engineering study</span><time datetime="2026-07-17">Jul 17, 2026</time></div><h2><a href="/research/b64-b255-proof-classes/">B64 and B255: choosing proof classes from measured cadence</a></h2><p>Why two authenticated matrix classes were enough, and why a third class was rejected after measurement rather than intuition.</p><div class="archive-tags"><span>Recursive proving</span><span>Reproducible benchmark</span><span>4 min</span></div></div>
-        <a class="archive-arrow" href="/research/b64-b255-proof-classes/" aria-label="Read B64 and B255: choosing proof classes from measured cadence">↗</a>
+        <a class="archive-index" href="/research/b64-b255-proof-classes/">03</a>
+        <div class="archive-copy"><div class="card-meta"><span>Engineering study</span><time datetime="2026-07-17">17 Jul 2026</time></div><h2><a href="/research/b64-b255-proof-classes/">Why HistoryStep uses two proof classes</a></h2><p>HistoryStep is the recursive proof of a block&#039;s state transition. B64 handles up to 64 user transaction pages and meets the preparation budget on the reference laptop; B255 extends the same relation to the 255-page block limit. Measurements found no useful operating range for a third class.</p><div class="archive-tags"><span>Recursive proving</span><span>Reproducible benchmark</span><span>4 min</span></div></div>
+        <a class="archive-arrow" href="/research/b64-b255-proof-classes/" aria-label="Read: Why HistoryStep uses two proof classes">↗</a>
       </article>
-<article class="archive-row" data-topic="Soundness">
-        <a class="archive-index" href="/research/executable-soundness-ledger/">03</a>
-        <div class="archive-copy"><div class="card-meta"><span>Security engineering</span><time datetime="2026-07-14">Jul 14, 2026</time></div><h2><a href="/research/executable-soundness-ledger/">Treating soundness as executable protocol data</a></h2><p>A security floor should move when the protocol moves. The ledger turns batching, Fiat–Shamir and QROM terms into checked inputs rather than prose copied between documents.</p><div class="archive-tags"><span>Soundness</span><span>Executable ledger</span><span>4 min</span></div></div>
-        <a class="archive-arrow" href="/research/executable-soundness-ledger/" aria-label="Read Treating soundness as executable protocol data">↗</a>
+<article class="archive-row" data-topic="Consensus">
+        <a class="archive-index" href="/research/atomic-history-step/">04</a>
+        <div class="archive-copy"><div class="card-meta"><span>Protocol study</span><time datetime="2026-07-15">15 Jul 2026</time></div><h2><a href="/research/atomic-history-step/">Why a block is accepted only with its recursive proof</a></h2><p>An early design accepted a block first and produced its recursive proof later in the background. The canonical chain could therefore move ahead of the HistoryStep-proven tip, forcing nodes to persist and recover a second queue. The production design accepts the block and its matching HistoryStep together: one atomic object, one canonical height and no deferred proof backlog.</p><div class="archive-tags"><span>Consensus</span><span>Implemented comparison</span><span>3 min</span></div></div>
+        <a class="archive-arrow" href="/research/atomic-history-step/" aria-label="Read: Why a block is accepted only with its recursive proof">↗</a>
+      </article>
+<article class="archive-row" data-topic="Mining">
+        <a class="archive-index" href="/research/prove-once-search-nonces/">05</a>
+        <div class="archive-copy"><div class="card-meta"><span>Protocol study</span><time datetime="2026-07-15">15 Jul 2026</time></div><h2><a href="/research/prove-once-search-nonces/">Prove the block once, then search the nonce</a></h2><p>HistoryStep binds every semantic header field under a nonce-free domain. PoW can vary the nonce without rebuilding the transition proof.</p><div class="archive-tags"><span>Mining</span><span>Production construction</span><span>2 min</span></div></div>
+        <a class="archive-arrow" href="/research/prove-once-search-nonces/" aria-label="Read: Prove the block once, then search the nonce">↗</a>
       </article>
 <article class="archive-row" data-topic="Proof-carrying State">
-        <a class="archive-index" href="/research/proof-carrying-state-sync/">04</a>
-        <div class="archive-copy"><div class="card-meta"><span>Systems research</span><time datetime="2026-07-12">Jul 12, 2026</time></div><h2><a href="/research/proof-carrying-state-sync/">Proof-carrying State: synchronization without execution replay</a></h2><p>Permanent headers, one recursive boundary terminal and exact live State replace historical transaction execution during bootstrap.</p><div class="archive-tags"><span>Proof-carrying State</span><span>Production protocol</span><span>4 min</span></div></div>
-        <a class="archive-arrow" href="/research/proof-carrying-state-sync/" aria-label="Read Proof-carrying State: synchronization without execution replay">↗</a>
+        <a class="archive-index" href="/research/proof-carrying-state-sync/">06</a>
+        <div class="archive-copy"><div class="card-meta"><span>Systems research</span><time datetime="2026-07-12">12 Jul 2026</time></div><h2><a href="/research/proof-carrying-state-sync/">Bootstrapping from proof-carrying State</a></h2><p>A joining node validates headers, verifies one recursive transition proof at a finalized boundary, installs exact live State and applies no more than eighteen recent blocks.</p><div class="archive-tags"><span>Proof-carrying State</span><span>Production protocol</span><span>4 min</span></div></div>
+        <a class="archive-arrow" href="/research/proof-carrying-state-sync/" aria-label="Read: Bootstrapping from proof-carrying State">↗</a>
+      </article>
+<article class="archive-row" data-topic="Live State">
+        <a class="archive-index" href="/research/utxo-incarnations/">07</a>
+        <div class="archive-copy"><div class="card-meta"><span>Protocol study</span><time datetime="2026-07-10">10 Jul 2026</time></div><h2><a href="/research/utxo-incarnations/">Replacing a consensus quarantine with UTXO incarnations</a></h2><p>A monotone creation identifier inside the existing value lane invalidates stale slot openings without a second consensus root or reuse quarantine.</p><div class="archive-tags"><span>Live State</span><span>Implemented comparison</span><span>3 min</span></div></div>
+        <a class="archive-arrow" href="/research/utxo-incarnations/" aria-label="Read: Replacing a consensus quarantine with UTXO incarnations">↗</a>
       </article>
 <article class="archive-row" data-topic="Binary fields">
-        <a class="archive-index" href="/research/binary-field-kernels/">05</a>
-        <div class="archive-copy"><div class="card-meta"><span>Engineering study</span><time datetime="2026-07-09">Jul 09, 2026</time></div><h2><a href="/research/binary-field-kernels/">Binary-field kernels across PCLMUL, VPCLMUL, AVX-512 and PMULL</a></h2><p>One fixed proof layout, several runtime-selected execution backends, and a 5.4× Poseidon2b batch-hashing result on AVX2 with VPCLMULQDQ.</p><div class="archive-tags"><span>Binary fields</span><span>Production implementation</span><span>3 min</span></div></div>
-        <a class="archive-arrow" href="/research/binary-field-kernels/" aria-label="Read Binary-field kernels across PCLMUL, VPCLMUL, AVX-512 and PMULL">↗</a>
+        <a class="archive-index" href="/research/binary-field-kernels/">08</a>
+        <div class="archive-copy"><div class="card-meta"><span>Engineering study</span><time datetime="2026-07-09">09 Jul 2026</time></div><h2><a href="/research/binary-field-kernels/">One proof format across four hardware paths</a></h2><p>PCLMUL, VPCLMUL, AVX-512 and PMULL execute the same GF(2¹²⁸) arithmetic without changing witness layout or proof bytes.</p><div class="archive-tags"><span>Binary fields</span><span>Production implementation</span><span>4 min</span></div></div>
+        <a class="archive-arrow" href="/research/binary-field-kernels/" aria-label="Read: One proof format across four hardware paths">↗</a>
       </article>
 <article class="archive-row" data-topic="Recursive proving">
-        <a class="archive-index" href="/research/single-global-walk/">06</a>
-        <div class="archive-copy"><div class="card-meta"><span>Negative result</span><time datetime="2026-07-06">Jul 06, 2026</time></div><h2><a href="/research/single-global-walk/">The 30 GB wall and the single global walk</a></h2><p>Per-family recursive replay was algebraically clean and operationally impossible. A heterogeneous union reduced nine family types to one walk and one channel schedule.</p><div class="archive-tags"><span>Recursive proving</span><span>Failure analysis and replacement</span><span>4 min</span></div></div>
-        <a class="archive-arrow" href="/research/single-global-walk/" aria-label="Read The 30 GB wall and the single global walk">↗</a>
+        <a class="archive-index" href="/research/single-global-walk/">09</a>
+        <div class="archive-copy"><div class="card-meta"><span>Engineering study</span><time datetime="2026-07-06">06 Jul 2026</time></div><h2><a href="/research/single-global-walk/">One global Poseidon walk replaces nine verifier walks</a></h2><p>A full-composition benchmark showed that independent verifier walks multiplied memory beyond 30 GB. One shared domain removed that factor.</p><div class="archive-tags"><span>Recursive proving</span><span>Implemented composition redesign</span><span>5 min</span></div></div>
+        <a class="archive-arrow" href="/research/single-global-walk/" aria-label="Read: One global Poseidon walk replaces nine verifier walks">↗</a>
       </article>
 <article class="archive-row" data-topic="Recursive proving">
-        <a class="archive-index" href="/research/recursive-fixed-point/">07</a>
-        <div class="archive-copy"><div class="card-meta"><span>Protocol note</span><time datetime="2026-07-05">Jul 05, 2026</time></div><h2><a href="/research/recursive-fixed-point/">Closing the recursive verifier at a real fixed point</a></h2><p>A link proof verifies a predecessor of its own class, with the complete verifier replay hosted at a 2^23 field shape.</p><div class="archive-tags"><span>Recursive proving</span><span>Implemented milestone</span><span>4 min</span></div></div>
-        <a class="archive-arrow" href="/research/recursive-fixed-point/" aria-label="Read Closing the recursive verifier at a real fixed point">↗</a>
+        <a class="archive-index" href="/research/recursive-fixed-point/">10</a>
+        <div class="archive-copy"><div class="card-meta"><span>Engineering study</span><time datetime="2026-07-05">05 Jul 2026</time></div><h2><a href="/research/recursive-fixed-point/">The recursive verifier had to fit inside itself</a></h2><p>A class with a 2^23-position constraint domain closes recursively: each proof verifies a predecessor with the same authenticated matrix and public layout.</p><div class="archive-tags"><span>Recursive proving</span><span>Verified prototype</span><span>3 min</span></div></div>
+        <a class="archive-arrow" href="/research/recursive-fixed-point/" aria-label="Read: The recursive verifier had to fit inside itself">↗</a>
+      </article>
+<article class="archive-row" data-topic="Proof engineering">
+        <a class="archive-index" href="/research/authstream-proof-compiler/">11</a>
+        <div class="archive-copy"><div class="card-meta"><span>Engineering study</span><time datetime="2026-06-28">28 Jun 2026</time></div><h2><a href="/research/authstream-proof-compiler/">AuthStream: bounding a block-wide authorization workload</a></h2><p>Streaming compilation bounded 14–16 MiB of private authorization data with 4.7% overhead. The evaluated terminal proof did not meet the production latency budget.</p><div class="archive-tags"><span>Proof engineering</span><span>Measured feasibility study</span><span>3 min</span></div></div>
+        <a class="archive-arrow" href="/research/authstream-proof-compiler/" aria-label="Read: AuthStream: bounding a block-wide authorization workload">↗</a>
+      </article>
+<article class="archive-row" data-topic="Proof engineering">
+        <a class="archive-index" href="/research/merkle-fusion-negative-result/">12</a>
+        <div class="archive-copy"><div class="card-meta"><span>Negative result</span><time datetime="2026-06-25">25 Jun 2026</time></div><h2><a href="/research/merkle-fusion-negative-result/">The proof got 20% smaller and 68% slower</a></h2><p>Fusing two Merkle relations saved 5.94 KB but enlarged the combined multilinear trace and removed parallelism. Proving regressed from 2.68 to 4.50 seconds.</p><div class="archive-tags"><span>Proof engineering</span><span>Measured and rejected</span><span>2 min</span></div></div>
+        <a class="archive-arrow" href="/research/merkle-fusion-negative-result/" aria-label="Read: The proof got 20% smaller and 68% slower">↗</a>
       </article>
 <article class="archive-row" data-topic="Wallet authorization">
-        <a class="archive-index" href="/research/owner-batched-authorization/">08</a>
-        <div class="archive-copy"><div class="card-meta"><span>Protocol study</span><time datetime="2026-06-24">Jun 24, 2026</time></div><h2><a href="/research/owner-batched-authorization/">From duplicated wallet proofs to owner-batched authorization</a></h2><p>Public transaction logic moved out of the wallet proof; many inputs owned by one secret became one witness-hiding authorization capsule.</p><div class="archive-tags"><span>Wallet authorization</span><span>Production design trail</span><span>4 min</span></div></div>
-        <a class="archive-arrow" href="/research/owner-batched-authorization/" aria-label="Read From duplicated wallet proofs to owner-batched authorization">↗</a>
+        <a class="archive-index" href="/research/owner-batched-authorization/">13</a>
+        <div class="archive-copy"><div class="card-meta"><span>Protocol study</span><time datetime="2026-06-24">24 Jun 2026</time></div><h2><a href="/research/owner-batched-authorization/">One owner, one authorization proof</a></h2><p>Public transaction arithmetic belongs to the block relation. The wallet proves one private fact—ownership—even when a spend contains 1,020 inputs.</p><div class="archive-tags"><span>Wallet authorization</span><span>Measured protocol study</span><span>4 min</span></div></div>
+        <a class="archive-arrow" href="/research/owner-batched-authorization/" aria-label="Read: One owner, one authorization proof">↗</a>
       </article>
 <article class="archive-row" data-topic="Polynomial commitments">
-        <a class="archive-index" href="/research/binding-a-mixed-opening/">09</a>
-        <div class="archive-copy"><div class="card-meta"><span>Security note</span><time datetime="2026-06-21">Jun 21, 2026</time></div><h2><a href="/research/binding-a-mixed-opening/">Binding a compact FRI opening back to its committed source</a></h2><p>Transcript binding was not source binding. Query-level authentication closed a commit-to-A, open-from-A′ attack in the mixed-opening path.</p><div class="archive-tags"><span>Polynomial commitments</span><span>Bug analysis and repair</span><span>4 min</span></div></div>
-        <a class="archive-arrow" href="/research/binding-a-mixed-opening/" aria-label="Read Binding a compact FRI opening back to its committed source">↗</a>
+        <a class="archive-index" href="/research/binding-a-mixed-opening/">14</a>
+        <div class="archive-copy"><div class="card-meta"><span>Security study</span><time datetime="2026-06-21">21 Jun 2026</time></div><h2><a href="/research/binding-a-mixed-opening/">Source binding for compact mixed openings</a></h2><p>An A/A′ adversarial test separates low-degree consistency from commitment provenance. A source root and shared queries close the edge.</p><div class="archive-tags"><span>Polynomial commitments</span><span>Adversarially tested construction</span><span>4 min</span></div></div>
+        <a class="archive-arrow" href="/research/binding-a-mixed-opening/" aria-label="Read: Source binding for compact mixed openings">↗</a>
       </article>
 <article class="archive-row" data-topic="Polynomial commitments">
-        <a class="archive-index" href="/research/pcs-implementation-trail/">10</a>
-        <div class="archive-copy"><div class="card-meta"><span>Research retrospective</span><time datetime="2026-06-21">Jun 21, 2026</time></div><h2><a href="/research/pcs-implementation-trail/">A PCS implementation trail through a binary proof stack</a></h2><p>Ladder-batched FRI, interleaved FRI-Binius and in-trace BaseFold were not interchangeable upgrades; each solved a different boundary.</p><div class="archive-tags"><span>Polynomial commitments</span><span>Implementation record</span><span>3 min</span></div></div>
-        <a class="archive-arrow" href="/research/pcs-implementation-trail/" aria-label="Read A PCS implementation trail through a binary proof stack">↗</a>
+        <a class="archive-index" href="/research/pcs-implementation-trail/">15</a>
+        <div class="archive-copy"><div class="card-meta"><span>Comparative study</span><time datetime="2026-06-21">21 Jun 2026</time></div><h2><a href="/research/pcs-implementation-trail/">Three polynomial-commitment experiments and the bottlenecks they exposed</a></h2><p>Ladder FRI exposed proof-byte cost, FRI-Binius exposed source binding, and BaseFold exposed the cost of putting a verifier inside its successor.</p><div class="archive-tags"><span>Polynomial commitments</span><span>Measured prototypes</span><span>4 min</span></div></div>
+        <a class="archive-arrow" href="/research/pcs-implementation-trail/" aria-label="Read: Three polynomial-commitment experiments and the bottlenecks they exposed">↗</a>
       </article></div>
       <p class="filter-empty" hidden>No research matches this filter.</p>
     </section>
@@ -112,12 +145,12 @@
       <div><strong>O(1) Lab</strong><p>Protocol research behind ParanO(1)d.</p></div>
     </div>
     <div class="footer-links">
-      <div><strong>Research</strong><a href="/research/">Archive</a><a href="/feed.xml">RSS feed</a><a href="/papers/FROST_GKR.pdf">FROST-GKR paper</a></div>
+      <div><strong>Research</strong><a href="/research/">Archive</a><a href="/feed.xml">RSS feed</a></div>
       <div><strong>Project</strong><a href="https://parano1d.org">Website</a><a href="https://docs.parano1d.org">Documentation</a><a href="https://github.com/ignotusnemo/parano1d">Source</a></div>
     </div>
-    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>research.parano1d.org</span></div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>lab.parano1d.org</span></div>
   </footer>
   </div>
-  <script src="/assets/site.js" defer></script>
+  <script src="/assets/site.js?v=4286a63d1931" defer></script>
 </body>
 </html>

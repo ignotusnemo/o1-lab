@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="HistoryStep 在不含 nonce 的语义域中绑定区块头的全部语义字段；PoW 可以改变 nonce，而无需重建 State 转换证明。">
+  <meta name="author" content="O(1) Lab">
+  <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺">
+  <link rel="canonical" href="https://lab.parano1d.org/zh/research/prove-once-search-nonces/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/prove-once-search-nonces/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/prove-once-search-nonces/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/prove-once-search-nonces/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/prove-once-search-nonces/">
+  <link rel="alternate" type="application/rss+xml" title="O(1) Lab 研究" href="https://lab.parano1d.org/zh/feed.xml">
+  <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="O(1) Lab 研究">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:url" content="https://lab.parano1d.org/zh/research/prove-once-search-nonces/">
+  <meta property="og:title" content="区块只证明一次，随后搜索 nonce · O(1) Lab">
+  <meta property="og:description" content="HistoryStep 在不含 nonce 的语义域中绑定区块头的全部语义字段；PoW 可以改变 nonce，而无需重建 State 转换证明。">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="区块只证明一次，随后搜索 nonce · O(1) Lab">
+  <meta name="twitter:description" content="HistoryStep 在不含 nonce 的语义域中绑定区块头的全部语义字段；PoW 可以改变 nonce，而无需重建 State 转换证明。">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="article:published_time" content="2026-07-15T00:00:00Z">
+  <meta property="article:section" content="挖矿">
+  <meta property="article:author" content="O(1) Lab">
+  <title>区块只证明一次，随后搜索 nonce · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"区块只证明一次，随后搜索 nonce","description":"经过域分离的语义区块头 ID 承诺除 nonce 之外的所有共识字段，而规范区块 ID 则包含 nonce。矿工先证明一次完整 State 转换，再搜索大量采用不同 nonce 的区块头，最后通过原生 PoW 检查与精确边界检查，将找到有效 nonce 的区块头重新绑定到该证明。","datePublished":"2026-07-15","dateModified":"2026-07-15","mainEntityOfPage":"https://lab.parano1d.org/zh/research/prove-once-search-nonces/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-research.png","about":"挖矿"}</script>
+</head>
+<body class="locale-zh">
+  <a class="skip-link" href="#content">跳到正文</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/zh/" aria-label="O(1) Lab 首页">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>O(1) Lab</strong><small>研究</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航">
+      <a href="/zh/#latest">最新</a>
+      <a aria-current="page" href="/zh/research/">全部研究</a>
+      <span class="nav-rule" aria-hidden="true"></span>
+      <a href="https://docs.parano1d.org">文档 <span aria-hidden="true">↗</span></a>
+      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="GitHub 上的 ParanO(1)d"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      <details class="language-switcher"><summary aria-label="切换语言"><span>中文</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="语言"><a href="/research/prove-once-search-nonces/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/prove-once-search-nonces/" lang="ru" hreflang="ru"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/prove-once-search-nonces/" lang="zh-Hans" hreflang="zh-Hans" aria-current="true"><span>中文</span><strong>简体中文</strong></a></div></details>
+    </nav>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>协议研究</span><span>挖矿</span><time datetime="2026-07-15">2026年7月15日</time></div><h1>区块只证明一次，随后搜索 nonce</h1><p class="article-dek">HistoryStep 在不含 nonce 的语义域中绑定区块头的全部语义字段；PoW 可以改变 nonce，而无需重建 State 转换证明。</p><div class="article-byline"><span>作者 O(1) Lab</span><span>2 分钟阅读</span><span>正式构造</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action" type="button" data-copy-link="https://lab.parano1d.org/zh/research/prove-once-search-nonces/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=%E5%8C%BA%E5%9D%97%E5%8F%AA%E8%AF%81%E6%98%8E%E4%B8%80%E6%AC%A1%EF%BC%8C%E9%9A%8F%E5%90%8E%E6%90%9C%E7%B4%A2%20nonce&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fprove-once-search-nonces%2F" target="_blank" rel="noopener noreferrer" aria-label="将本文分享到 X"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
+      <div class="research-art art--nonce" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-nonce" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-nonce" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-nonce" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-nonce" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-nonce" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-nonce" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-nonce)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-nonce)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">PROVE THE TEMPLATE ONCE · SEARCH THE NONCE</text>
+    <g class="diagram-panel diagram-panel--neutral" filter="url(#shadow-nonce)"><rect x="38" y="83" width="184" height="238" rx="15"/><text class="diagram-micro" x="60" y="111">FIXED BLOCK TEMPLATE</text><text class="diagram-value diagram-value--compact" x="60" y="145">SEMHDR__</text><g class="template-fields"><rect x="60" y="174" width="140" height="28" rx="6"/><rect x="60" y="211" width="140" height="28" rx="6"/><rect x="60" y="248" width="140" height="28" rx="6"/><text x="72" y="193">STATE ROOT</text><text x="72" y="230">TX COMMITMENT</text><text x="72" y="267">DIFFICULTY</text></g><text class="diagram-micro" x="60" y="301">NONCE EXCLUDED</text></g>
+  <path class="diagram-arrow " d="M222 202H268" marker-end="url(#arrow-nonce)"/>
+  <g class="diagram-panel diagram-panel--green" filter="url(#shadow-nonce)"><rect x="268" y="133" width="120" height="138" rx="15"/><text class="diagram-micro" x="328" y="160" text-anchor="middle">HISTORYSTEP</text><text class="diagram-number" x="328" y="207" text-anchor="middle">π</text><text class="diagram-label" x="328" y="237" text-anchor="middle">ONE PROOF</text></g>
+  <g class="nonce-bus"><path d="M388 202H423M423 113V299"/><circle cx="423" cy="113" r="4"/><circle cx="423" cy="175" r="4"/><circle cx="423" cy="237" r="4"/><circle cx="423" cy="299" r="4"/></g>
+  <g class="nonce-list">
+    <g><rect x="444" y="84" width="154" height="49" rx="9"/><text x="460" y="105">NONCE 0017</text><text class="diagram-micro" x="460" y="122">HASH 9A…E2</text></g>
+    <g><rect x="444" y="146" width="154" height="49" rx="9"/><text x="460" y="167">NONCE A84C</text><text class="diagram-micro" x="460" y="184">HASH 41…90</text></g>
+    <g><rect x="444" y="208" width="154" height="49" rx="9"/><text x="460" y="229">NONCE D331</text><text class="diagram-micro" x="460" y="246">HASH 07…B4</text></g>
+    <g class="winner"><rect x="444" y="270" width="154" height="58" rx="9"/><text x="460" y="292">NONCE F102</text><text class="diagram-micro" x="460" y="310">0000…A7 · WINNER</text><circle cx="576" cy="299" r="9"/><path d="M571 299 575 303 582 294"/></g>
+  </g>
+    <text class="diagram-caption" x="42" y="390">The winning PoW nonce is reconnected to the already-proved immutable template</text>
+  </svg></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#question">Nonce 应当在哪一步进入证明？</a><a href="#projection">不含 nonce 的语义区块头</a><a href="#mining">证明一次，搜索多次</a><a href="#security">这种拆分为何没有放开其他字段</a><a href="#result">结果</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>摘要</span><p>经过域分离的语义区块头 ID 承诺除 nonce 之外的所有共识字段，而规范区块 ID 则包含 nonce。矿工先证明一次完整 State 转换，再搜索大量采用不同 nonce 的区块头，最后通过原生 PoW 检查与精确边界检查，将找到有效 nonce 的区块头重新绑定到该证明。</p></div><h2 id="question">Nonce 应当在哪一步进入证明？</h2>
+<p>State 是由当前未花费输出与共识计数器组成的认证集合。HistoryStep 是区块从父 State 到子 State 精确转换的递归证明。它认证计算成本较高的语义工作，而工作量证明（PoW）只改变一个 128 位 nonce，也就是矿工在搜索过程中反复尝试的区块头字段。如果 nonce 被纳入递归断言，每个候选值都会改变断言，昂贵的证明便无法预先生成。</p>
+
+<h2 id="projection">不含 nonce 的语义区块头</h2>
+<p>该构造定义两个经过域分离的标识符：</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>标识符</th><th>域</th><th>字段</th><th>作用</th></tr></thead>
+  <tbody>
+    <tr><td>语义区块头 ID</td><td><code>SEMHDR__</code></td><td>除 nonce 外的全部共识区块头字段</td><td>HistoryStep 断言</td></tr>
+    <tr><td>区块 ID</td><td><code>BLOCKHDR</code></td><td>包括 nonce 在内的全部区块头字段</td><td>PoW、父链接与规范身份</td></tr>
+  </tbody>
+</table></div>
+<p>语义投影保持区块头字段的精确顺序，只跳过 nonce。变异测试会独立修改每个字段：修改 nonce 必须保持语义 ID 不变；修改任何其他字段都必须改变该 ID。</p>
+
+<h2 id="mining">证明一次，搜索多次</h2>
+<div class="protocol-flow" aria-label="Nonce 搜索前的证明">
+  <div class="flow-step"><small>模板</small><strong>固定语义字段</strong><span>交易、State、目标值、区块奖励</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>证明</small><strong>构造 HistoryStep π</strong><span>只绑定一次 SEMHDR__ 投影</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>PoW</small><strong>搜索 nonce</strong><span>反复哈希 BLOCKHDR</span></div>
+</div>
+<p>当某个 nonce 满足目标值时，节点执行一次原生 PoW 检查，并验证该区块头指向的父 State 与子 State 边界同语义模板所证明的边界完全一致。随后，完整区块与终端证明被原子提交。</p>
+
+<h2 id="security">这种拆分为何没有放开其他字段</h2>
+<p>递归证明省略的是 nonce，而不是挖矿目标值或任何语义 State 转换字段。原生接受规则要求终端证明中的语义 ID 与候选区块头的所有非 nonce 字段完全一致。包含 nonce 的区块 ID 仍然是链上链接使用的身份标识。</p>
+<p>域分离防止同一 absorb 调度被交替解释为语义 ID 与规范区块 ID。</p>
+
+<h2 id="result">结果</h2>
+<div class="result">
+  <strong>挖矿边界</strong>
+  <p>证明生成只对固定区块模板执行一次；随后进行的 nonce 搜索只改变被明确排除在证明断言之外的字段。</p>
+</div>
+<p>只要昂贵证明认证的是确定性对象，而独立搜索只改变一个明确的非语义字段，就可以采用这一模式。接受规则必须把胜出的搜索结果重新连接到证明所固定的全部字段。</p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">研究记录</p><h2 id="evidence-title">证据与产物</h2><p>以下链接保存了支撑本文的实现、测量或推导。</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/0e69409c"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>语义区块头投影</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/06cf2083"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>HistoryStep 语义绑定</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/757a5ed0"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>PoW 前证明生成</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="相邻研究"><a href="/zh/research/proof-carrying-state-sync/"><small>较早</small><strong>携带证明的 State</strong><span>←</span></a><a href="/zh/research/atomic-history-step/"><small>较新</small><strong>原子 HistoryStep</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>O(1) Lab</strong><p>ParanO(1)d 背后的协议研究。</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>研究</strong><a href="/zh/research/">归档</a><a href="/zh/feed.xml">RSS 订阅</a></div>
+      <div><strong>项目</strong><a href="https://parano1d.org">网站</a><a href="https://docs.parano1d.org">技术文档</a><a href="https://github.com/ignotusnemo/parano1d">源代码</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=4286a63d1931" defer></script>
+</body>
+</html>

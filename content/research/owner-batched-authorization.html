@@ -1,40 +1,40 @@
-<h2 id="duplication">The duplicated wallet proof</h2>
-<p>The early wallet wire format carried two proof objects. A public-logic STARK proved balances, counts and output arithmetic. An AuthGKR proof established knowledge of the spending secret. When the transaction entered a block, the miner rebuilt the public transaction relation from the transaction body and proved it again inside the canonical block relation.</p>
-<p>The wallet STARK was therefore not the authority for the accepted transition. It duplicated public work that every mempool and block already had enough data to check.</p>
-<div class="protocol-flow" aria-label="Authorization data flow before and after">
-  <div class="flow-step"><small>Before</small><strong>Tx body + logic STARK + AuthGKR</strong><span>Public arithmetic proved twice</span></div>
+<h2 id="question">What must the wallet prove?</h2>
+<p>A transparent transaction body already exposes balances, counts, slots and output arithmetic to native validation. The private witness contributes one fact that the body cannot reveal: knowledge of the secret controlling the selected inputs.</p>
+<p>The experiment tested whether separating those responsibilities could remove a wallet-side public-logic proof without weakening the accepted-block transition.</p>
+<p>In the earlier baseline, the wallet supplied two proofs. A scalable transparent argument of knowledge (STARK) proved the public transaction arithmetic. A separate authorization proof based on the Goldwasser–Kalai–Rothblum (GKR) protocol, called <em>AuthGKR</em>, proved knowledge of the owner secret. The block proof later reconstructed the same public arithmetic, so that part was being proved twice.</p>
+<p>The separated design carries that private ownership proof in an <em>authorization capsule</em>: a randomized proof object bound to the transaction and its selected inputs.</p>
+
+<div class="protocol-flow" aria-label="Compared wallet authorization designs">
+  <div class="flow-step"><small>Combined baseline</small><strong>Transaction body + logic STARK + AuthGKR</strong><span>Public arithmetic proved by the wallet and again by the block</span></div>
   <div class="flow-arrow">→</div>
-  <div class="flow-step"><small>After</small><strong>Tx body + authorization capsule</strong><span>Public logic checked natively, then proved canonically in the block</span></div>
+  <div class="flow-step"><small>Separated design</small><strong>Transaction body + authorization capsule</strong><span>Native public checks; one canonical block proof</span></div>
 </div>
 
-<h2 id="separation">Separate public validity from ownership</h2>
-<p>The auth-only transition made the boundaries explicit:</p>
+<h2 id="construction">The separated construction</h2>
+<p><code>State</code> is the authenticated set of current unspent outputs and consensus counters. <code>HistoryStep</code> is the recursive proof carried by an accepted block; it verifies the block's exact transition from its parent State to its child State.</p>
 <ul>
-  <li>the mempool derives and checks the exact public predicate from the transaction body;</li>
-  <li>the wallet proves only the private fact—knowledge of the secret controlling the selected inputs;</li>
-  <li>the block witness rebuilds public transaction logic from canonical transaction order;</li>
-  <li>the accepted-block proof establishes the final state transition.</li>
+  <li>mempool admission derives and checks the public predicate from the transaction body;</li>
+  <li>the wallet proves knowledge of the owner secret for the selected authenticated inputs;</li>
+  <li>the authorization statement is verifier-derived and cannot be replaced by a wallet-selected variant;</li>
+  <li>HistoryStep reconstructs the public logic in order and proves the resulting State transition.</li>
 </ul>
-<p>The authorization statement is verifier-derived. The wallet cannot choose a more convenient statement and attach it to the same body. Strict decoding rejects trailing bytes, unknown variants and a proof built for the wrong transaction shape. Mutation tests changed owners, bodies, proof fields and secret sets and required rejection.</p>
+<p>Strict decoding rejects trailing bytes, unknown variants and a proof for a different transaction shape. Mutation tests changed the body, owner, secret set and proof fields independently and required rejection.</p>
 
-<h2 id="first-result">The first auth-only result</h2>
-<p>The June 23 benchmark measured the transition before later PagedSpend work. Standard one-to-eight-input transactions produced authorization proofs in roughly 76–79 ms, while the twenty-five-input sweep shape took roughly 250–270 ms. The old wallet STARK contribution was zero bytes after the change.</p>
+<h2 id="auth-only">Experiment 1. Remove the duplicated public proof</h2>
+<p>The first benchmark used one-to-eight-input standard transactions and a twenty-five-input consolidation shape. Timings cover the authorization proof; the wallet-side public STARK contribution is zero in the separated design.</p>
 <div class="table-wrap"><table>
   <thead><tr><th>Scenario</th><th>Prove median</th><th>Verify median</th><th>Wallet bundle</th></tr></thead>
   <tbody>
     <tr><td>Standard 1 input / 2 outputs</td><td>76.02 ms</td><td>15.93 ms</td><td>117.75 KiB</td></tr>
     <tr><td>Standard 4 inputs / 8 outputs</td><td>78.90 ms</td><td>13.84 ms</td><td>120.85 KiB</td></tr>
-    <tr><td>Sweep 25 inputs / 2 outputs</td><td>269.69 ms</td><td>40.27 ms</td><td>165.47 KiB</td></tr>
+    <tr><td>Consolidation 25 inputs / 2 outputs</td><td>269.69 ms</td><td>40.27 ms</td><td>165.47 KiB</td></tr>
   </tbody>
 </table></div>
-<p>These figures belong to the historical auth-only milestone, not the current wire format. Their value is comparative: removing the public proof did not remove public validation, and the wallet boundary became smaller and easier to state.</p>
+<p>This benchmark belongs to the tested auth-only geometry rather than PagedSpend, the final wire format that splits a large transaction into fixed-capacity physical pages. Its useful result is comparative: deleting the redundant proof did not delete public validation; it moved authority to the native admission rule and canonical block proof.</p>
 
-<h2 id="owner-batching">One owner, one statement</h2>
-<p>The next step replaced shape-specific per-transaction authorization with a canonical owner-batched statement. Inputs controlled by the same master secret are grouped under one logical authorization claim. The verifier derives the owner and selected input set from the transaction body and authenticated parent state.</p>
-<p>This is particularly important in a bounded-slot UTXO system. A wallet may hold many small outputs. Consolidating or spending them should increase public hashing and intent size, not multiply zero-knowledge proofs by the number of pages.</p>
-
-<h2 id="paged-spend">PagedSpend at maximum fan-in</h2>
-<p>PagedSpend represents one atomic intent across physical pages. The production boundary allows up to 128 logical pages and 1,020 inputs in one group. The wallet builds exactly one witness-hiding capsule for that group.</p>
+<h2 id="owner-batching">Experiment 2. Scale by owners, not pages</h2>
+<p>Inputs derived from one master secret are grouped under one logical authorization statement. PagedSpend can represent 1–128 physical pages, up to 1,020 inputs and 256 outputs, while the wallet constructs one freshly randomized authorization capsule: the proof object showing that the owner's secret controls all selected inputs.</p>
+<p>The table reports the median (<code>p50</code>) and the 95th percentile (<code>p95</code>) across the measured runs.</p>
 <div class="table-wrap"><table>
   <thead><tr><th>Inputs</th><th>Pages</th><th>Capsule p50 / p95</th><th>Complete local path p50 / p95</th></tr></thead>
   <tbody>
@@ -43,11 +43,14 @@
     <tr><td>1,020</td><td>128</td><td>199.98 / 250.82 ms</td><td>233.06 / 285.81 ms</td></tr>
   </tbody>
 </table></div>
-<p>Page construction and admission grow at 1,020 inputs, as expected. Capsule time remains within normal sample variance because the zero-knowledge statement is owner-batched rather than page-batched. The intent grows from roughly 56.81 KiB to 96.50 KiB; the proof itself stays around 56 KiB in this laboratory.</p>
+<p>Intent bytes grow from roughly 56.81 KiB to 96.50 KiB because public fan-in grows. Capsule size remains around 56 KiB and capsule time stays within the measured sample variance. Proof cost follows distinct owners rather than physical transaction pages.</p>
 
-<h2 id="privacy">What zero knowledge hides</h2>
-<p>The capsule hides the spending secret and freshly randomizes the proof. It does not turn ParanO(1)d into a confidential-transaction system. Owners, values, slots and transaction structure remain public while the transaction body is available. The private witness answers a narrow question: did the sender know the secret that derives the authenticated owner?</p>
-<p>That narrow boundary is a strength. Public arithmetic does not need zero knowledge, and hiding it would make validation more expensive without changing ownership security.</p>
+<h2 id="privacy">Security and privacy boundary</h2>
+<p>The capsule hides the spending secret and randomizes each proof. It is not a confidential-transaction proof: owners, values, slots and transaction structure remain public while the body is available. Public arithmetic remains transparent because hiding it would add proof cost without changing ownership security.</p>
 
-<h2 id="lesson">The design consequence</h2>
-<p>Removing a proof can improve a proof-native system when the removed proof duplicated a relation that is authoritatively established elsewhere. The decisive step was not an optimization trick; it was identifying which proof speaks for which boundary. Once public validity, private authorization and canonical state transition were separated, owner batching followed naturally.</p>
+<h2 id="result">Result</h2>
+<div class="result">
+  <strong>Accepted design rule</strong>
+  <p>Prove private knowledge once per owner. Check transparent transaction logic natively at admission and prove it once in the canonical block transition.</p>
+</div>
+<p>The same separation applies beyond this wallet: zero knowledge should cover the secret-dependent relation, not duplicate deterministic checks that the final proof authority must reconstruct anyway.</p>

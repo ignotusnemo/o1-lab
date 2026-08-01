@@ -1,0 +1,41 @@
+<h2 id="question">区块何时才算完整？</h2>
+<p><code>State</code> 是由当前未花费输出与共识计数器组成的认证集合。<code>HistoryStep</code> 是递归终端证明：它证明一个区块从父 State 到子 State 的精确转换，并验证前一个终端证明。本研究要回答一个直接的问题：区块能否在自己的 HistoryStep 就绪前进入规范链，还是二者必须同时被接受？两种架构均已实现，以比较其共识状态机、重启行为与挖矿关键路径。</p>
+
+<h2 id="pipeline">实验一：后台证明流水线</h2>
+<p>实验按证明容量把区块分为四个固定类别：B8、B32、B64 和 B255。名称中的数字表示该类别最多能够证明的用户交易数。每个类别都有一份经过密码学认证的约束矩阵用于描述区块转换，另有一份矩阵用于把该区块证明接入递归历史；第九份矩阵用于锚定创世起点。</p>
+<p><em>递归链接关系</em>是一套约束系统：它同时验证一个区块证明和前一个 <code>HistoryStep</code>，并生成已证明历史中的下一个链接。四种此类关系都采用参数 <code>m = 22</code>。这里的 <code>m</code> 是填充后见证域与约束域大小的以二为底对数，因此每个关系占用 <code>2^22</code> 个域位置。随后，任务依次经过三个需要把中间状态持久化到磁盘的阶段：</p>
+<div class="protocol-flow" aria-label="后台证明流水线">
+  <div class="flow-step"><small>阶段 1</small><strong>区块证明</strong><span>证明一个已接受高度</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>阶段 2</small><strong>递归链接</strong><span>使用前一个终端证明</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>阶段 3</small><strong>验证并提升</strong><span>推进递归证明已经覆盖的链尖</span></div>
+</div>
+<p>三个较小类别覆盖最多 64 笔用户交易，允许最多三个区块高度并行处理。容量最大的 B255 可覆盖 255 笔用户交易，但因内存占用更高而一次只处理一个高度。并行处理提高了吞吐量，却让共识同时出现两个位置：规范链尖，以及已被递归证明覆盖的链尖。持久化证明任务、按顺序提升、重启恢复与部分流水线状态，全部只是为了使这两个位置保持一致。</p>
+
+<h2 id="atomic">实验二：原子化 PoW 与 HistoryStep</h2>
+<p>另一种设计只定义一个可接受单元：</p>
+<div class="equation">已接受区块 = 规范区块字节 + 对应的 HistoryStep 终端证明</div>
+<p>在终端证明绑定候选区块的精确语义区块头与 State 转换之前，候选区块不能修改 State、创建区块奖励或向网络公布。区块字节、终端证明、State 与收据索引被原子提交。重启后，节点要么恢复完整单元，要么该高度不存在区块。</p>
+
+<h2 id="comparison">状态机对比</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>属性</th><th>后台流水线</th><th>原子 HistoryStep</th></tr></thead>
+  <tbody>
+    <tr><td>共识进度</td><td>规范链尖加递归覆盖链尖</td><td>一个已接受高度</td></tr>
+    <tr><td>持久中间任务</td><td>区块、链接与提升状态</td><td>无</td></tr>
+    <tr><td>重启情况</td><td>恢复并完成部分流水线</td><td>完整原子包或缺失高度</td></tr>
+    <tr><td>证明延迟</td><td>可以落后于区块生成</td><td>接受前支付</td></tr>
+    <tr><td>网络对象</td><td>区块加稍后产生的覆盖状态</td><td>一个完整原子包</td></tr>
+  </tbody>
+</table></div>
+
+<h2 id="tradeoff">取舍</h2>
+<p>原子性并不会消除证明成本。确定性的 HistoryStep 准备被移到挖矿路径，其预算必须保证受支持硬件仍能按网络节奏持续生成候选。工作量证明的 nonce 搜索仍是概率过程，并且依赖网络难度；它不是一项固定在十五秒内完成的本地任务。证明类别的测量单独记录在<a href="/zh/research/b64-b255-proof-classes/">《HistoryStep 为何采用两种证明类别》</a>中。</p>
+<p>收益不是单纯提速，而是删除了一整套对共识可见的积压状态机。</p>
+
+<h2 id="result">结果</h2>
+<div class="result">
+  <strong>采用的规则</strong>
+  <p>如果递归证明决定区块是否完全有效，就应当把该证明纳入被接受的区块对象。后台证明适合可选索引与缓存，不应再引入第二套共识可见的进度状态。</p>
+</div>

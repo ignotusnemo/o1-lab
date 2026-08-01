@@ -1,0 +1,43 @@
+<h2 id="question">Can block-scale authorization proving be streamed?</h2>
+<p>A wallet-authorization <em>sidecar</em> is the private proof input attached to a transaction but omitted from its public body. A maximum block can carry roughly 14–16 MiB of this data. Materializing the complete workload as one dense circuit would make peak memory grow with the whole block. AuthStream tested a different front end: extract the secret-dependent field elements once, compile them into bounded sparse segments, then give those segments to the proof system. The <em>complete relation</em> means all constraints connecting every segment to one public authorization statement; no segment may remain outside the final proof.</p>
+
+<div class="protocol-flow" aria-label="AuthStream feasibility pipeline">
+  <div class="flow-step"><small>Private input</small><strong>Authorization sidecars</strong><span>14–16 MiB at maximum fan-in</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>Compiler</small><strong>Typed bounded segments</strong><span>Extraction, coverage and witness layout</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>Required closure</small><strong>Terminal proof</strong><span>All rows and coverage bound cryptographically</span></div>
+</div>
+
+<p>The terminal proof was a requirement from the start. The study separated its feasibility question into two measurements: first establish whether witness production can be streamed with bounded resources; then determine whether a cryptographic backend can close the resulting relation inside the production latency budget.</p>
+
+<h2 id="compiler">The streaming compiler</h2>
+<p>The implemented compiler covered typed stream extraction, a canonical work plan, backend program, sparse constraint plan, witness layout, segment columns, constraints for the Poseidon2b hash permutation and Merkle authentication paths, split-backend coverage and a terminal plan. Every plan was digest-bound so independently implemented producer and backend stages could agree on the same workload.</p>
+<p>Those digests were internal compiler contracts, not public proof authority. Their purpose was to make segmentation reproducible and tamper-evident between stages before paying the cost of a terminal proof.</p>
+
+<h2 id="measurements">Measured workload and resource bounds</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Probe</th><th>Measured result</th><th>Established property</th></tr></thead>
+  <tbody>
+    <tr><td>255 standard authorizations</td><td>2.66 s claim construction vs 2.55 s direct verification</td><td>4.7% streaming-compiler overhead</td></tr>
+    <tr><td>100 standard authorizations</td><td>863,530 operations; 4,695,640 witness reads</td><td>Concrete backend workload</td></tr>
+    <tr><td>Largest sparse segment</td><td>2<sup>17</sup> rows; estimated 432 MiB peak working set</td><td>Bounded segment memory</td></tr>
+    <tr><td>Core accumulator</td><td>113 B; 59.03 ms produce; 54.05 ms check</td><td>Compact internal handoff state</td></tr>
+  </tbody>
+</table></div>
+<p>The front end met its objective: private data could be consumed as a deterministic stream, the largest allocation was bounded by one segment rather than the full block, and the internal accumulator remained compact.</p>
+
+<h2 id="terminal">Evaluating terminal closure</h2>
+<p>The 113-byte accumulator summarized the compiler execution for the next stage; it was never a substitute for that stage. Consensus adoption still required one proof binding the sparse row relations, the hash and authentication-path constraints, segment ordering and complete coverage equation to the public authorization statement.</p>
+<p>A dense terminal wrapper supplied that cryptographic authority for a measured unit. Its proof was 57.81 KiB, but the maximum 255-authorization workload projected to roughly eleven minutes. The construction closed the relation at a cost incompatible with the block-production path.</p>
+<div class="failure">
+  <strong>Measured boundary</strong>
+  <p>Streaming compilation passed its workload and memory gates. The evaluated terminal construction did not pass the production latency gate.</p>
+</div>
+
+<h2 id="decision">Protocol decision</h2>
+<p>AuthStream was not selected as the consensus authorization path. The reason was not uncertainty about what the compiler proved: the architecture explicitly required terminal closure. The reason was that the tested closure converted a viable streaming workload into an impractical end-to-end prover.</p>
+<p>No compiler digest or core accumulator became a consensus acceptance object. The experiment ended at its decision gate and the production design pursued a different authorization composition.</p>
+
+<h2 id="conclusion">Reusable result</h2>
+<p>For large private workloads, witness compilation and proof closure are separate engineering budgets. Typed streaming can bound extraction cost, memory and scheduling without determining whether the complete argument is deployable. Evaluate the terminal proof against the maximum workload before treating front-end compression as an end-to-end proof-system result.</p>

@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="新接入节点验证区块头与最终性边界上的一份递归转换证明，安装精确 Live State，并应用不超过十八个近期区块。">
+  <meta name="author" content="O(1) Lab">
+  <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺">
+  <link rel="canonical" href="https://lab.parano1d.org/zh/research/proof-carrying-state-sync/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/proof-carrying-state-sync/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/proof-carrying-state-sync/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/proof-carrying-state-sync/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/proof-carrying-state-sync/">
+  <link rel="alternate" type="application/rss+xml" title="O(1) Lab 研究" href="https://lab.parano1d.org/zh/feed.xml">
+  <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="O(1) Lab 研究">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:url" content="https://lab.parano1d.org/zh/research/proof-carrying-state-sync/">
+  <meta property="og:title" content="从携带证明的 State 启动同步 · O(1) Lab">
+  <meta property="og:description" content="新接入节点验证区块头与最终性边界上的一份递归转换证明，安装精确 Live State，并应用不超过十八个近期区块。">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="从携带证明的 State 启动同步 · O(1) Lab">
+  <meta name="twitter:description" content="新接入节点验证区块头与最终性边界上的一份递归转换证明，安装精确 Live State，并应用不超过十八个近期区块。">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="article:published_time" content="2026-07-12T00:00:00Z">
+  <meta property="article:section" content="Proof-carrying State">
+  <meta property="article:author" content="O(1) Lab">
+  <title>从携带证明的 State 启动同步 · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"从携带证明的 State 启动同步","description":"新节点仍然验证工作量证明，也仍然下载当前 State；它不再需要下载全部历史交易体并从创世区块重放整条链。本文记录经过认证的快照边界、基于磁盘临时区的安装流程、保留后缀，以及常数级证明验证与必然随区块头数量或 Live State 大小增长的成本之间的区别。","datePublished":"2026-07-12","dateModified":"2026-07-12","mainEntityOfPage":"https://lab.parano1d.org/zh/research/proof-carrying-state-sync/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-research.png","about":"Proof-carrying State"}</script>
+</head>
+<body class="locale-zh">
+  <a class="skip-link" href="#content">跳到正文</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/zh/" aria-label="O(1) Lab 首页">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>O(1) Lab</strong><small>研究</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航">
+      <a href="/zh/#latest">最新</a>
+      <a aria-current="page" href="/zh/research/">全部研究</a>
+      <span class="nav-rule" aria-hidden="true"></span>
+      <a href="https://docs.parano1d.org">文档 <span aria-hidden="true">↗</span></a>
+      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="GitHub 上的 ParanO(1)d"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      <details class="language-switcher"><summary aria-label="切换语言"><span>中文</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="语言"><a href="/research/proof-carrying-state-sync/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/proof-carrying-state-sync/" lang="ru" hreflang="ru"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/proof-carrying-state-sync/" lang="zh-Hans" hreflang="zh-Hans" aria-current="true"><span>中文</span><strong>简体中文</strong></a></div></details>
+    </nav>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>系统研究</span><span>Proof-carrying State</span><time datetime="2026-07-12">2026年7月12日</time></div><h1>从携带证明的 State 启动同步</h1><p class="article-dek">新接入节点验证区块头与最终性边界上的一份递归转换证明，安装精确 Live State，并应用不超过十八个近期区块。</p><div class="article-byline"><span>作者 O(1) Lab</span><span>4 分钟阅读</span><span>正式协议</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action" type="button" data-copy-link="https://lab.parano1d.org/zh/research/proof-carrying-state-sync/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=%E4%BB%8E%E6%90%BA%E5%B8%A6%E8%AF%81%E6%98%8E%E7%9A%84%20State%20%E5%90%AF%E5%8A%A8%E5%90%8C%E6%AD%A5&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fproof-carrying-state-sync%2F" target="_blank" rel="noopener noreferrer" aria-label="将本文分享到 X"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
+      <div class="research-art art--state" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-state" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-state" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-state" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-state" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-state" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-state" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-state)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-state)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">PROOF-CARRYING SNAPSHOT INSTALL</text>
+    <g class="header-rail">
+    <text class="diagram-micro" x="44" y="82">PERMANENT HEADER CHAIN</text>
+    <path d="M44 112H596"/>
+    <g><rect x="44" y="96" width="70" height="32" rx="7"/><text x="79" y="117">GENESIS</text></g>
+    <g><rect x="126" y="96" width="42" height="32" rx="7"/><text x="147" y="117">…</text></g>
+    <g><rect x="180" y="96" width="78" height="32" rx="7"/><text x="219" y="117">h−18</text></g>
+    <g class="header-boundary"><rect x="276" y="88" width="118" height="48" rx="10"/><text class="diagram-micro" x="335" y="107">PROVED BOUNDARY</text><text class="diagram-value diagram-value--compact" x="335" y="127">ROOT Rₕ₋₁₈</text></g>
+    <g><rect x="412" y="96" width="42" height="32" rx="7"/><text x="433" y="117">+1</text></g>
+    <g><rect x="466" y="96" width="42" height="32" rx="7"/><text x="487" y="117">…</text></g>
+    <g><rect x="520" y="96" width="76" height="32" rx="7"/><text x="558" y="117">TIP</text></g>
+  </g>
+  <path class="diagram-arrow " d="M335 136V178" marker-end="url(#arrow-state)"/>
+  <g class="diagram-panel diagram-panel--green" filter="url(#shadow-state)"><rect x="44" y="180" width="250" height="148" rx="14"/>
+    <text class="diagram-micro" x="66" y="207">01 · AUTHENTICATE PRESENT</text><text class="diagram-value diagram-value--compact" x="66" y="239">VERIFY HistoryStep π</text>
+    <path class="diagram-divider" d="M66 256H272"/><text class="diagram-label" x="66" y="281">CONSTANT PROOF CHECK</text>
+    <g class="proof-seal"><circle cx="249" cy="292" r="17"/><path d="M240 292 247 299 259 284"/></g>
+  </g>
+  <path class="diagram-arrow " d="M294 254H346" marker-end="url(#arrow-state)"/>
+  <g class="diagram-panel diagram-panel--blue" filter="url(#shadow-state)"><rect x="346" y="180" width="250" height="148" rx="14"/>
+    <text class="diagram-micro" x="368" y="207">02 · INSTALL EXACT STATE</text><text class="diagram-value diagram-value--compact" x="368" y="239">SEGMENTS + 18-BLOCK TAIL</text>
+    <g class="state-segments"><rect x="368" y="263" width="48" height="39" rx="5"/><rect x="424" y="263" width="48" height="39" rx="5"/><rect x="480" y="263" width="48" height="39" rx="5"/><rect x="536" y="263" width="38" height="39" rx="5"/>
+      <path d="M376 275H408M376 284H402M432 275H464M432 284H456M488 275H520M488 284H514M544 275H566M544 284H561"/></g>
+  </g>
+    <text class="diagram-caption" x="42" y="390">Headers remain permanent · spent transaction bodies do not need historical replay</text>
+  </svg></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#remove-replay">移除重放，而不是移除验证</a><a href="#cost-model">仍然存在的成本</a><a href="#paths">两条同步路径</a><a href="#boundary">将每个对象绑定到同一边界</a><a href="#staging">以磁盘暂存形成共识边界</a><a href="#peer">对等节点只是数据源</a><a href="#finality">近期重组与最终性</a><a href="#research-result">四项检查，不引入快照权威</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>摘要</span><p>新节点仍然验证工作量证明，也仍然下载当前 State；它不再需要下载全部历史交易体并从创世区块重放整条链。本文记录经过认证的快照边界、基于磁盘临时区的安装流程、保留后缀，以及常数级证明验证与必然随区块头数量或 Live State 大小增长的成本之间的区别。</p></div><h2 id="remove-replay">移除重放，而不是移除验证</h2>
+<p>历史重放把几项不同任务混在一起，统称为“同步”。节点读取区块头以比较工作量证明；下载交易体以重建 State，即由当前未花费输出与共识计数器组成的认证集合；再执行历来的每条规则，判断重建出的 State 是否有效。随着链龄增长，即使当前 State 大小不变，第三项任务仍会不断变重。</p>
+<p>ParanO(1)d 用递归 HistoryStep 取代历史执行重放。每个已接受区块都证明从认证父 State 到子 State 的精确转换。因此，当前边界携带了产生它的整条转换链证明。</p>
+<p><em>最终性边界</em>是已经处在协议允许的重组窗口之外的区块。<em>近期后缀</em>则是从该边界到当前链尖之间不超过十八个完整区块的序列。</p>
+<div class="result">
+  <strong>消失的工作</strong>
+  <p>新加入的节点不必下载并执行每一笔历史交易体。它在最终性边界验证一个递归终端证明，重建被精确承诺的当前 State，再应用一段有界的近期后缀。</p>
+</div>
+
+<h2 id="cost-model">仍然存在的成本</h2>
+<p>只有边界证明的验证成本不随链龄变化。区块头验证与当前 State 传输仍会随完整节点必须持有的数据量扩展。</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>阶段</th><th>扩展依据</th><th>为何仍然需要</th></tr></thead>
+  <tbody>
+    <tr><td>区块头验证</td><td>链高</td><td>必须比较工作量证明与累计工作量</td></tr>
+    <tr><td>HistoryStep 终端证明</td><td>常量级证明验证</td><td>验证所选边界的递归有效性</td></tr>
+    <tr><td>State 传输</td><td>当前 State</td><td>节点必须取得自己将要服务的数据</td></tr>
+    <tr><td>近期后缀</td><td>最多 18 个完整区块</td><td>把最终性边界连接到当前链尖</td></tr>
+  </tbody>
+</table></div>
+<p>该架构移除了随链龄增长的执行日志。它并不声称可以不读取区块头就比较工作量证明，也不声称可以在不传输数 GB 数据的情况下安装一个数 GB 的当前 State。</p>
+
+<h2 id="paths">两条同步路径</h2>
+<h3>短距离落后</h3>
+<p>每个完整节点保留最近十八个已经完整接纳的区块。仍处于该窗口内的落后对等节点会请求原子包，其中包含语义区块及匹配的 HistoryStep 终端证明。在具体化并写入之前，节点会检查区块头连续性、精确难度与时间戳规则、基于 Poseidon2b 的工作量证明哈希、交易与 State 承诺、递归有效性、分叉选择以及最终性。</p>
+
+<h3>深度落后</h3>
+<p>落后更远的对等节点会选择一个已达最终性的快照边界：</p>
+<ol>
+  <li>下载并验证永久区块头；</li>
+  <li>选择规范的最终性边界；</li>
+  <li>取得并验证匹配的 HistoryStep 终端；</li>
+  <li>下载 State 清单及其引用的分段；</li>
+  <li>重建精确的全局 State 根与计数器；</li>
+  <li>以事务方式安装暂存 State；</li>
+  <li>验证并应用保留的完整后缀。</li>
+</ol>
+
+<h2 id="boundary">将每个对象绑定到同一边界</h2>
+<p>高度 <em>h</em> 的有效证明，不能认证来自 <em>h − 1</em> 的清单，也不能认证来自另一分支的分段集。因此，快照清单绑定边界高度、State 根、槽位几何、活动数量、分配计数器、分段标识、分段根及长度。递归终端证明、规范区块头与清单必须指向同一个边界。</p>
+<p>实现为区块头暂存、选定的证明会话、持久化证明任务和精确边界绑定使用不同类型。这并非网络层装饰；它防止对等节点把各自有效的对象拼接成无效的快照包。</p>
+
+<h2 id="staging">以磁盘暂存形成共识边界</h2>
+<p>分段进入隔离的临时环境。活动数据库不会逐页更新。只有在每个分段、计数器、根、边界区块头与终端证明全部一致之后，节点才会原子替换已安装的 State。</p>
+<p>如果进程退出，下一次启动会删除未完成的暂存环境，并从最后一份规范数据库继续。这样便不会出现一种恢复模式：共识代码需要判断对等节点提供的快照中究竟哪一部分已经具有权威性。</p>
+<div class="note">
+  <strong>有界内存</strong>
+  <p>区块头暂存与 State 安装均以磁盘为后盾，并限制内存分配。对等节点可以控制载荷字节，却不能操纵解码器进行无界分配，也不能强迫完整候选 State 全部进入内存。</p>
+</div>
+
+<h2 id="peer">对等节点只是数据源</h2>
+<p>种子节点或提供快照的对等节点不会为 State 签名，也不会成为检查点权威。它只提供区块头、终端证明、清单与分段字节。新加入节点依据工作量证明自行确定规范链，并自行验证递归承诺与 State 承诺。</p>
+<p>这正是便利性快照与无信任快照的核心区别：对于后者，更换分发方不会改变验证者所接受的 State。</p>
+
+<h2 id="finality">近期重组与最终性</h2>
+<p>最终性边界不可重组。分叉选择只考虑保留该边界的候选分支，可接受的回滚深度小于十八个区块。近期完整区块与撤销数据覆盖这段后缀。更深的竞争分支会被拒绝，而不是通过安装另一个快照来“修复”。</p>
+<p>这条规则让快照的认证依据与递归有效性保持一致。若没有硬边界，节点可能先认证一个当前 State，随后又被要求重建一条深层替代历史，而它本来就有意不保留那些交易体。</p>
+
+<h2 id="research-result">四项检查，不引入快照权威</h2>
+<p>引导同步把证据分成四类：</p>
+<ul>
+  <li>区块头确立累计工作量最大的合格链；</li>
+  <li>HistoryStep 确立边界处的有效性；</li>
+  <li>清单与分段根确立精确的当前 State；</li>
+  <li>保留后缀确立从边界到当前链尖的时效性。</li>
+</ul>
+<p>对等节点为四个阶段提供字节，却不控制任何验收规则。传输与暂存机制可以改变，而不会把缓存、种子节点或快照镜像变成检查点权威。</p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">研究记录</p><h2 id="evidence-title">证据与产物</h2><p>以下链接保存了支撑本文的实现、测量或推导。</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/9fffd832"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>O(1) 同步设计</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/3dd2c3bf"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>精确边界绑定</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/63d47e7a"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>有界 State 安装</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="相邻研究"><a href="/zh/research/utxo-incarnations/"><small>较早</small><strong>UTXO 代次标识</strong><span>←</span></a><a href="/zh/research/prove-once-search-nonces/"><small>较新</small><strong>语义区块头投影</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>O(1) Lab</strong><p>ParanO(1)d 背后的协议研究。</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>研究</strong><a href="/zh/research/">归档</a><a href="/zh/feed.xml">RSS 订阅</a></div>
+      <div><strong>项目</strong><a href="https://parano1d.org">网站</a><a href="https://docs.parano1d.org">技术文档</a><a href="https://github.com/ignotusnemo/parano1d">源代码</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=4286a63d1931" defer></script>
+</body>
+</html>

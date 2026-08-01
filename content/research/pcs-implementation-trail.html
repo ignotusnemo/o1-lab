@@ -1,9 +1,10 @@
-<h2 id="not-a-ranking">This is not a PCS ranking</h2>
-<p>The repository does not contain one linear contest where a succession of polynomial commitments were benchmarked under identical conditions and the fastest won. It contains a sequence of implementation boundaries. Early work needed a practical batched opening for AIR traces. Interleaved binary-field work needed to bind many columns efficiently. Recursive HistoryStep later needed to replay the verifier inside a fixed field relation.</p>
-<p>Each construction solved a different problem. This retrospective records the implemented trail without pretending that measurements from one stage are a fair benchmark of another.</p>
+<h2 id="question">The evaluation question</h2>
+<p>A polynomial commitment can look efficient at the algebraic layer and still fail the system that has to use it. Three prototypes were evaluated against three different boundaries: proof bytes for shifted traces, provenance of mixed openings, and the cost of replaying the verifier inside recursion.</p>
+<p>A polynomial commitment scheme (PCS) fixes a polynomial—or the execution column represented by it—and later proves claimed evaluations without revealing the entire column. FRI is a family of low-degree tests and opening protocols. An algebraic intermediate representation (AIR) describes an execution trace by polynomial constraints between its rows. These are the three terms used throughout the experiments below.</p>
+<p>The workloads are not directly comparable. Each experiment isolates a different system boundary.</p>
 
-<h2 id="ladder">Ladder-batched FRI and VSHIFT</h2>
-<p>The May 2 implementation added a ladder-batched FRI opening and a VSHIFT gadget. A CarryRippleAir benchmark exercised a 64-bit ripple-carry adder with one shifted column. Per-slot ladder reductions were followed by one multipoint FRI opening rather than one FRI proof per slot.</p>
+<h2 id="ladder">Experiment 1. Ladder-batched FRI</h2>
+<p>The CarryRipple benchmark encoded a 64-bit ripple-carry adder as an AIR trace: each row carries one bit position and the carry passed to the next row. One column was therefore read at a one-row shift. A <em>ladder reduction</em> is the algebraic step that converts such shifted-row claims into evaluation claims for the original committed column. The per-slot reductions were batched into one multipoint FRI opening instead of generating one FRI proof per slot.</p>
 <div class="table-wrap"><table>
   <thead><tr><th>Workload</th><th>Rows</th><th>Adders</th><th>Prove</th><th>Verify</th><th>Proof</th></tr></thead>
   <tbody>
@@ -12,41 +13,41 @@
     <tr><td>Production-shaped</td><td>2<sup>16</sup></td><td>1,024</td><td>2.05 s</td><td>65.06 ms</td><td>385.17 KB</td></tr>
   </tbody>
 </table></div>
-<p>The bucket accounting was more useful than the top-line time. At the largest shape, commitment consumed about 70% of prover time. The multipoint FRI object consumed 381.62 KB—99.1% of proof bytes—while the ladder block was only 1.53 KB. The algebraic batching worked; the opening dominated the artifact.</p>
-
-<h2 id="interleaved">Interleaved FRI-Binius</h2>
-<p>On May 16 the codebase gained an interleaved polynomial commitment over the binary tower field. Columns were encoded and committed together, compact FRI supplied low-degree testing, and mixed openings batched values across columns and points. The design matched the rest of the binary-field stack better than treating each column as an unrelated scalar polynomial.</p>
-<p>The first implementation was not the end of the security work. It later exposed the commit-to-A, open-from-A′ gap described in <a href="/research/binding-a-mixed-opening/">Binding a compact FRI opening back to its committed source</a>. The June 21 repair added query-level authentication from compact FRI to the encoded source commitment.</p>
-<div class="timeline">
-  <div class="timeline-item"><time>02 May 2026</time><h3>Ladder-batch FRI + VSHIFT</h3><p>One multipoint opening closes base and ladder claims; proof accounting identifies the dominant opening bytes.</p></div>
-  <div class="timeline-item"><time>16 May 2026</time><h3>Interleaved FRI-Binius</h3><p>Binary-field columns enter one interleaved commitment and compact opening path.</p></div>
-  <div class="timeline-item"><time>21 Jun 2026</time><h3>Source-binding repair</h3><p>Shared queries authenticate the round-zero oracle back to encoded committed columns.</p></div>
-  <div class="timeline-item"><time>05 Jul 2026</time><h3>In-trace BaseFold replay</h3><p>The verifier becomes a relation that a fixed recursive class can host.</p></div>
+<p>At 2<sup>16</sup> rows, commitment consumed about 70% of prover time. The multipoint FRI object consumed 381.62 KB—99.1% of proof bytes—while the ladder reduction itself used 1.53 KB.</p>
+<div class="result">
+  <strong>Result</strong>
+  <p>The algebraic batching succeeded, but did not solve the dominant byte cost. Optimizing the ladder would have targeted the 0.4% component instead of the multipoint opening.</p>
 </div>
 
-<h2 id="recursion">The verifier became the workload</h2>
-<p>For recursion, native verification speed is not the only metric. Every hash, fold, challenge and query authentication must be represented inside the outer relation. A commitment verifier with an awkward trace can be cheap natively and expensive recursively.</p>
-<p>The BaseFold work implemented the verifier replay in FieldR1cs: transcript absorption, sumcheck checks, fold layers, query authentication and terminal consistency. That enabled the same-class recursive fixed point described in <a href="/research/recursive-fixed-point/">Closing the recursive verifier at a real fixed point</a>.</p>
+<h2 id="interleaved">Experiment 2. Interleaved FRI-Binius</h2>
+<p>The second prototype encoded binary-field columns together, committed to the interleaved source and used compact FRI for low-degree testing. Mixed openings combined columns and evaluation claims through one Fiat–Shamir challenge.</p>
+<p>A commit-to-<em>A</em>, open-from-<em>A′</em> adversarial test evaluated whether the compact round-zero oracle was authenticated back to the encoded columns named by the original commitment. A consistency-only candidate did not provide that provenance edge, and additional transcript absorption could not substitute for it.</p>
+<p>The selected construction added a source root and required compact FRI and source authentication to consume the same query indices. The complete construction and its adversarial test are recorded in <a href="/research/binding-a-mixed-opening/">Source binding for compact mixed openings</a>.</p>
+<div class="result">
+  <strong>Result</strong>
+  <p>Compact mixed openings require an explicit path from each sampled oracle value to the committed source. Fiat–Shamir binds message order; it does not prove provenance between two committed objects.</p>
+</div>
 
-<h2 id="boundaries">Three boundaries, three evaluation questions</h2>
+<h2 id="recursion">Experiment 3. BaseFold verifier replay</h2>
+<p>Native verification time is not a sufficient PCS metric for a recursive system. Transcript absorption, sumcheck checks, folds, Merkle paths and terminal consistency all become witness and constraints in the successor proof.</p>
+<p>BaseFold is the polynomial-commitment and opening system selected for the recursive proof. Its verifier was expressed in FieldR1cs, the binary-field constraint representation used to replay native verifier operations inside a proof, and closed inside a fixed recursive class. This experiment measured a different property from the first two: whether the verifier trace, public input/output layout and authenticated matrix shape could verify a predecessor without increasing the next proof class.</p>
+<p>The resulting same-class construction is described in <a href="/research/recursive-fixed-point/">The recursive verifier had to fit inside itself</a>.</p>
+
+<h2 id="comparison">Results across the three boundaries</h2>
 <div class="table-wrap"><table>
-  <thead><tr><th>Stage</th><th>Primary question</th><th>Failure signal</th></tr></thead>
+  <thead><tr><th>Prototype</th><th>Property tested</th><th>Observed boundary</th><th>Decision</th></tr></thead>
   <tbody>
-    <tr><td>Ladder-batched FRI</td><td>Can many shifted AIR claims share one opening?</td><td>Multipoint FRI dominates bytes</td></tr>
-    <tr><td>Interleaved FRI-Binius</td><td>Can many binary-field columns share a compact commitment?</td><td>Source provenance gap in mixed opening</td></tr>
-    <tr><td>In-trace BaseFold replay</td><td>Can the verifier fit and close inside its own recursive class?</td><td>Trace shape and memory, not only native time</td></tr>
+    <tr><td>Ladder-batched FRI</td><td>Shared opening for shifted AIR claims</td><td>Multipoint opening used 99.1% of bytes</td><td>Do not optimize the 1.53 KB ladder first</td></tr>
+    <tr><td>Interleaved FRI-Binius</td><td>Compact openings over many binary-field columns</td><td>Round-zero oracle lacked source provenance</td><td>Add shared-query source authentication</td></tr>
+    <tr><td>In-trace BaseFold</td><td>PCS verification inside a successor proof</td><td>Verifier trace and memory dominate native timing</td><td>Evaluate recursive shape as a first-class cost</td></tr>
   </tbody>
 </table></div>
 
-<h2 id="what-was-learned">What the trail changed</h2>
-<p>Four conclusions survived the implementation changes:</p>
+<h2 id="conclusions">Reusable conclusions</h2>
 <ol>
-  <li>opening bytes have to be measured separately from the elegant algebra that produces the claims;</li>
-  <li>a mixed opening needs a visible source-binding path, not only a canonical transcript;</li>
-  <li>recursive cost is a property of the verifier trace, not a scalar native benchmark;</li>
-  <li>proof geometry has to be fixed early enough that matrices and release artifacts can be authenticated reproducibly.</li>
+  <li>Account for opening bytes separately from the algebra that produces opening claims.</li>
+  <li>Test commitment provenance with a coherent <em>A/A′</em> attack, not only random proof mutations.</li>
+  <li>For recursion, benchmark the verifier trace and memory footprint—not only native verification time.</li>
+  <li>Authenticate fixed proof geometry reproducibly once it becomes part of consensus.</li>
 </ol>
-
-<h2 id="preservation">Why preserve superseded implementations</h2>
-<p>The CarryRipple report and early FRI-Binius commits are not production recommendations. They are evidence. They show which cost dominated, which theorem was missing and which interface forced the next construction. A final architecture without that record makes the research look inevitable; it was not.</p>
-
+<p>The linked artifacts preserve the implementations, measurements and negative tests. They are experimental evidence for these conclusions, not claims that all three prototypes are interchangeable production PCS choices.</p>

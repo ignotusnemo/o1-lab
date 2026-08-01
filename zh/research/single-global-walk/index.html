@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="完整组合基准表明，独立验证器遍历会把内存推高到 30 GB 以上；共享域消除了这一倍增因素。">
+  <meta name="author" content="O(1) Lab">
+  <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺">
+  <link rel="canonical" href="https://lab.parano1d.org/zh/research/single-global-walk/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/single-global-walk/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/single-global-walk/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/single-global-walk/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/single-global-walk/">
+  <link rel="alternate" type="application/rss+xml" title="O(1) Lab 研究" href="https://lab.parano1d.org/zh/feed.xml">
+  <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="O(1) Lab 研究">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:url" content="https://lab.parano1d.org/zh/research/single-global-walk/">
+  <meta property="og:title" content="一次全局 Poseidon 遍历取代九次验证器遍历 · O(1) Lab">
+  <meta property="og:description" content="完整组合基准表明，独立验证器遍历会把内存推高到 30 GB 以上；共享域消除了这一倍增因素。">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="一次全局 Poseidon 遍历取代九次验证器遍历 · O(1) Lab">
+  <meta name="twitter:description" content="完整组合基准表明，独立验证器遍历会把内存推高到 30 GB 以上；共享域消除了这一倍增因素。">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="article:published_time" content="2026-07-06T00:00:00Z">
+  <meta property="article:section" content="递归证明">
+  <meta property="article:author" content="O(1) Lab">
+  <title>一次全局 Poseidon 遍历取代九次验证器遍历 · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"一次全局 Poseidon 遍历取代九次验证器遍历","description":"参考递归组合为每个认证族分配一条 66 层 Poseidon2b 遍历，以直接测量完整图的成本。内存随认证族数量增长，并超过一台 30 GB 机器的容量。最终实现把各族模式局部化到同一个共享槽域内，通过一次全局遍历、一次共享状态传递和一个合并后的多项式恒等式处理全部九个认证族。","datePublished":"2026-07-06","dateModified":"2026-07-06","mainEntityOfPage":"https://lab.parano1d.org/zh/research/single-global-walk/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-research.png","about":"递归证明"}</script>
+</head>
+<body class="locale-zh">
+  <a class="skip-link" href="#content">跳到正文</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/zh/" aria-label="O(1) Lab 首页">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>O(1) Lab</strong><small>研究</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航">
+      <a href="/zh/#latest">最新</a>
+      <a aria-current="page" href="/zh/research/">全部研究</a>
+      <span class="nav-rule" aria-hidden="true"></span>
+      <a href="https://docs.parano1d.org">文档 <span aria-hidden="true">↗</span></a>
+      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="GitHub 上的 ParanO(1)d"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      <details class="language-switcher"><summary aria-label="切换语言"><span>中文</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="语言"><a href="/research/single-global-walk/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/single-global-walk/" lang="ru" hreflang="ru"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/single-global-walk/" lang="zh-Hans" hreflang="zh-Hans" aria-current="true"><span>中文</span><strong>简体中文</strong></a></div></details>
+    </nav>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>工程研究</span><span>递归证明</span><time datetime="2026-07-06">2026年7月06日</time></div><h1>一次全局 Poseidon 遍历取代九次验证器遍历</h1><p class="article-dek">完整组合基准表明，独立验证器遍历会把内存推高到 30 GB 以上；共享域消除了这一倍增因素。</p><div class="article-byline"><span>作者 O(1) Lab</span><span>5 分钟阅读</span><span>已实现的组合重构</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action" type="button" data-copy-link="https://lab.parano1d.org/zh/research/single-global-walk/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=%E4%B8%80%E6%AC%A1%E5%85%A8%E5%B1%80%20Poseidon%20%E9%81%8D%E5%8E%86%E5%8F%96%E4%BB%A3%E4%B9%9D%E6%AC%A1%E9%AA%8C%E8%AF%81%E5%99%A8%E9%81%8D%E5%8E%86&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fsingle-global-walk%2F" target="_blank" rel="noopener noreferrer" aria-label="将本文分享到 X"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
+      <div class="research-art art--walk" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-walk" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-walk" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-walk" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-walk" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-walk" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-walk" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-walk)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-walk)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">NINE AUTHENTICATION FAMILIES · ONE WALK</text>
+    <g class="walk-sources">
+    <text class="diagram-micro" x="44" y="81">RELATION FAMILIES</text>
+    <g class="family-lines">
+      <rect x="44" y="96" width="188" height="16" rx="4"/><rect x="44" y="121" width="164" height="16" rx="4"/><rect x="44" y="146" width="202" height="16" rx="4"/>
+      <rect x="44" y="171" width="176" height="16" rx="4"/><rect x="44" y="196" width="214" height="16" rx="4"/><rect x="44" y="221" width="158" height="16" rx="4"/>
+      <rect x="44" y="246" width="194" height="16" rx="4"/><rect x="44" y="271" width="170" height="16" rx="4"/><rect x="44" y="296" width="206" height="16" rx="4"/>
+    </g>
+    <text class="diagram-label" x="264" y="107">OWNER</text><text class="diagram-label" x="264" y="157">STATE</text><text class="diagram-label" x="264" y="207">MERKLE</text><text class="diagram-label" x="264" y="257">CHANNEL</text><text class="diagram-label" x="264" y="307">BOUNDARY</text>
+  </g>
+  <g class="walk-merge"><path d="M258 104C304 104 290 188 336 188M258 129C300 129 298 198 336 198M258 154C300 154 300 208 336 208M258 179C300 179 306 218 336 218M258 204H336M258 229C300 229 306 230 336 230M258 254C300 254 300 240 336 240M258 279C300 279 298 250 336 250M258 304C304 304 290 260 336 260"/></g>
+  <g class="diagram-panel diagram-panel--green" filter="url(#shadow-walk)"><rect x="336" y="157" width="112" height="130" rx="15"/><text class="diagram-micro" x="392" y="184" text-anchor="middle">SHARED CARRY</text><text class="diagram-number" x="392" y="224" text-anchor="middle">C0…C3</text><text class="diagram-label" x="392" y="252" text-anchor="middle">one accumulator</text></g>
+  <path class="diagram-arrow " d="M448 222H482" marker-end="url(#arrow-walk)"/>
+  <g class="round-column"><rect x="482" y="82" width="114" height="270" rx="15"/><text class="diagram-micro" x="539" y="108" text-anchor="middle">POSEIDON2b</text><text class="diagram-number" x="539" y="150" text-anchor="middle">66</text><text class="diagram-label" x="539" y="170" text-anchor="middle">ROUNDS</text>
+    <path d="M539 190V322"/><circle cx="539" cy="201" r="5"/><circle cx="539" cy="225" r="5"/><circle cx="539" cy="249" r="5"/><circle cx="539" cy="273" r="5"/><circle cx="539" cy="297" r="5"/><circle cx="539" cy="321" r="5"/>
+    <text class="diagram-micro" x="522" y="205" text-anchor="end">ABSORB</text><text class="diagram-micro" x="522" y="253" text-anchor="end">MIX</text><text class="diagram-micro" x="522" y="301" text-anchor="end">CLOSE</text>
+  </g>
+    <text class="diagram-caption" x="42" y="390">A direct recursive composition replaced nine duplicated Poseidon2b walks</text>
+  </svg></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#clean-design">参考组合及其扩展极限</a><a href="#shared-object">找出共享对象</a><a href="#localization">局部化各族等式</a><a href="#primitive">双认证族对抗性测试</a><a href="#nine-families">完整九族组合</a><a href="#memory-work">相互独立的内存控制</a><a href="#result">构造的适用范围</a><a href="#why-publish">为何完整图基准至关重要</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>摘要</span><p>参考递归组合为每个认证族分配一条 66 层 Poseidon2b 遍历，以直接测量完整图的成本。内存随认证族数量增长，并超过一台 30 GB 机器的容量。最终实现把各族模式局部化到同一个共享槽域内，通过一次全局遍历、一次共享状态传递和一个合并后的多项式恒等式处理全部九个认证族。</p></div><h2 id="clean-design">参考组合及其扩展极限</h2>
+<p>Poseidon2b 是一种四字状态密码学置换，用于对证明数据进行哈希与认证。递归验证器必须重放多组基于 Poseidon2b 的<em>认证族</em>。每个认证族由一种重复出现的哈希关系及其承诺绑定组成，例如来源树节点、来源叶节点、在某一折叠层共同打开的一对符号，或 Merkle 路径节点。参考组合有意为每个认证族分配独立的槽位调度、独立选择层与层之间传递的四个状态字，并建立独立的<em>深链遍历</em>；后者是一条约束轨迹，会为每个已占用槽位重放全部六十六层 Poseidon2b。这种直接构造为测量完整认证图提供了清晰基线。</p>
+<p>在代数层面，每个认证族都容易单独检查；在运行层面，完整图基准却显示内存随认证族数量增长，因为每次独立遍历都会具化另一大组轨迹列。完整的九族形状超出一台 30 GB 内存机器的容量，由此确认独立遍历不是可行的组合拓扑。</p>
+<div class="failure">
+  <strong>组合结论</strong>
+  <p>“每个认证族一次遍历”是一种有用的参考构造，但其内存成本随认证族数量扩展。正式组合必须共享计算成本高昂的置换遍历。</p>
+</div>
+
+<h2 id="shared-object">找出共享对象</h2>
+<p>每个认证族最终都在问同一个问题：这组宽度为四的状态序列是否遵循 Poseidon2b 置换？各族的区别不在置换，而在输入来源、固定调度以及消费输出的关系。</p>
+<p>联合构造使用一个固定周期为 <em>P</em> 的共享槽位域。每个认证族占据周期内互不重叠的区间。四个已承诺的状态传递列 <code>C0..C3</code> 保存从一层传入下一层的四个 Poseidon 状态字。这些列、遍历输入和 Poseidon2b 遍历由所有认证族共享；只有各族的输入列和固定模式不同。</p>
+<div class="protocol-flow" aria-label="单次全局遍历架构">
+  <div class="flow-step"><small>认证族 A</small><strong>源叶</strong><span>局部化槽位与模式</span></div>
+  <div class="flow-step"><small>认证族 B…N</small><strong>Merkle 与折叠族</strong><span>局部化槽位与模式</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>共享</small><strong>一次状态传递</strong><span>一组 C0…C3 列</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>共享</small><strong>一次深链遍历</strong><span>覆盖所有已占用槽位</span></div>
+</div>
+
+<h2 id="localization">局部化各族等式</h2>
+<p>合并域会产生一个细微问题。原本定义在某个认证族自身步长上的固定模式会周期重复。若直接复制到共享域，其常数会在其他认证族的槽位内触发。未受选择器控制的状态传递等式也可能越过认证族边界读取数据。</p>
+<p>联合原语把每个模式重建为长度 <em>P</em> 的表，只在分配给该族的区间写入其值，其余位置全部写零。因此，某个族的项会在自身区域之外消失。没有固定因子的项会得到显式区域选择器。需要从空状态开始的认证族经过排列，使第一个活动节点永远不会读取前一区域传来的状态。</p>
+<div class="equation">Σ family_terms(w) = Σ<sub>e</sub> α<sup>e+1</sup> · s₀[e](w) &nbsp;&nbsp; over one shared slot domain</div>
+<p>在 A 槽位，只有 A 项生效；在 B 槽位，只有 B 项生效。右侧与认证族无关，因为两种情况下描述的都是同一置换输入关系。</p>
+
+<h2 id="primitive">双认证族对抗性测试</h2>
+<p>最小端到端实验组合了两个真正不同的深链认证族：来源叶节点链与 Merkle 路径。一次状态传递选择、一次深链遍历和一个合并后的多项式恒等式——即各族局部化等式之和——贯穿外层多项式承诺方案（PCS）与公共输入输出边界。Merkle 方向位保留单独的布尔性 sumcheck，但不再建立第二次置换遍历。</p>
+<p>回归测试修改一个输入符号或同级节点，同时让轨迹保持可满足。被修改的承诺列随后在打开证明边界失败。这一点很重要：测试不仅说明联合构造能够接受自己组装的见证数据，还证明每个认证族仍然绑定回各自的承诺。</p>
+
+<h2 id="nine-families">完整九族组合</h2>
+<p>完整实验组合了源绑定图：源树族、源叶查询，以及每个折叠层对应的一组配对符号打开——在实测形状中共九种认证族。它们共同使用：</p>
+<ul>
+  <li>一个槽位域；</li>
+  <li>一次状态传递选择；</li>
+  <li>一次 Poseidon2b 深链遍历；</li>
+  <li>一个合并后的多项式恒等式；</li>
+  <li>一份真实的 FRI 低次数证明通道调度。</li>
+</ul>
+<p>Fiat–Shamir 交互记录只执行一次：先吸收 <em>Merkle cap</em>——用于认证各承诺树根的紧凑根列表——再依次经过混合打开协议的挑战值、轮根、最终码字与来源绑定根，最后导出共享查询索引。这些挑战值同时进入代数断言和来源打开断言。每个认证族仍保留自己的承诺输入列，却不再实例化独立的验证器遍历。</p>
+
+<h2 id="memory-work">相互独立的内存控制</h2>
+<p>单次全局遍历消除了主要的乘法因子。其他实验分别把约束矩阵改为压缩稀疏行（CSR）存储、精确调整 BaseFold 多项式承诺验证器使用的两个交替工作缓冲区、限制线性约束检查（<em>lincheck</em>）的临时数据、按字节约束暂存空间，并对重复矩阵系数进行字典编码。</p>
+<p>这些改变解决不同问题。CSR 与字典编码缩小静态矩阵表示；有界暂存空间控制临时分配；全局遍历则改变组合拓扑本身。若把三者都笼统称作“内存优化”，就会掩盖原始方案失败的原因。</p>
+
+<h2 id="result">构造的适用范围</h2>
+<p>该构造适用于共享 Poseidon2b、且能局部化进同一固定域的异构轨迹族。它不是任意验证器子计算的编译器。其有效范围非常具体：一次昂贵的共享遍历，配合各族在输入和输出边界上的专属代数。</p>
+<div class="result">
+  <strong>可复用的经验</strong>
+  <p>当多项递归检查包含同一个昂贵子计算时，应先批处理该子计算，再优化其实现。即使把每次遍历都做得更快，内存仍会与认证族数量成正比。</p>
+</div>
+
+<h2 id="why-publish">为何完整图基准至关重要</h2>
+<p>单族测试确立局部正确性与每族成本；完整认证图则测量这些局部测试有意省略的乘法拓扑。因此，30 GB 边界是一项组合测量，并非 Poseidon2b 或某个认证族的缺陷。它解释了为何选定设计先共享拓扑，再施加底层内存控制。</p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">研究记录</p><h2 id="evidence-title">证据与产物</h2><p>以下链接保存了支撑本文的实现、测量或推导。</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/6d0cfaf0"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>双族合并原语</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/commit/4bdd7b5a"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>九族装配核心</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_recursive/src/acceptance/trace/region_source_binding.rs"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>代码</small><strong>当前区域源绑定</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="相邻研究"><a href="/zh/research/recursive-fixed-point/"><small>较早</small><strong>递归不动点</strong><span>←</span></a><a href="/zh/research/binary-field-kernels/"><small>较新</small><strong>二进制域内核</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>O(1) Lab</strong><p>ParanO(1)d 背后的协议研究。</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>研究</strong><a href="/zh/research/">归档</a><a href="/zh/feed.xml">RSS 订阅</a></div>
+      <div><strong>项目</strong><a href="https://parano1d.org">网站</a><a href="https://docs.parano1d.org">技术文档</a><a href="https://github.com/ignotusnemo/parano1d">源代码</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=4286a63d1931" defer></script>
+</body>
+</html>

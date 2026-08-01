@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="HistoryStep 是区块状态转换的递归证明。B64 可处理最多 64 个用户交易页面，并能在参考笔记本上满足准备时间预算；B255 将同一证明关系扩展到每区块 255 页的上限。测量没有发现第三种类别可以覆盖的有用运行区间。">
+  <meta name="author" content="O(1) Lab">
+  <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺">
+  <link rel="canonical" href="https://lab.parano1d.org/zh/research/b64-b255-proof-classes/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/b64-b255-proof-classes/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/b64-b255-proof-classes/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/b64-b255-proof-classes/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/b64-b255-proof-classes/">
+  <link rel="alternate" type="application/rss+xml" title="O(1) Lab 研究" href="https://lab.parano1d.org/zh/feed.xml">
+  <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="O(1) Lab 研究">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:url" content="https://lab.parano1d.org/zh/research/b64-b255-proof-classes/">
+  <meta property="og:title" content="HistoryStep 为何采用两种证明类别 · O(1) Lab">
+  <meta property="og:description" content="HistoryStep 是区块状态转换的递归证明。B64 可处理最多 64 个用户交易页面，并能在参考笔记本上满足准备时间预算；B255 将同一证明关系扩展到每区块 255 页的上限。测量没有发现第三种类别可以覆盖的有用运行区间。">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="HistoryStep 为何采用两种证明类别 · O(1) Lab">
+  <meta name="twitter:description" content="HistoryStep 是区块状态转换的递归证明。B64 可处理最多 64 个用户交易页面，并能在参考笔记本上满足准备时间预算；B255 将同一证明关系扩展到每区块 255 页的上限。测量没有发现第三种类别可以覆盖的有用运行区间。">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="article:published_time" content="2026-07-17T00:00:00Z">
+  <meta property="article:section" content="递归证明">
+  <meta property="article:author" content="O(1) Lab">
+  <title>HistoryStep 为何采用两种证明类别 · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"HistoryStep 为何采用两种证明类别","description":"本研究考察递归区块证明是否需要一种介于两种正式类别之间的几何。B64 覆盖最多 64 个物理用户页面的区块；B255 在不改变所证明关系的前提下覆盖 65 至 255 页。测试包含实际部署的完整证明路径、经过认证的矩阵，以及最高 1,020 个输入的钱包聚合。中间几何曾被实现，随后被移除：它会在共识中增加一条选择规则和一个验证分支，却没有改善任何已证实的工作负载。","datePublished":"2026-07-17","dateModified":"2026-07-17","mainEntityOfPage":"https://lab.parano1d.org/zh/research/b64-b255-proof-classes/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-research.png","about":"递归证明"}</script>
+</head>
+<body class="locale-zh">
+  <a class="skip-link" href="#content">跳到正文</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/zh/" aria-label="O(1) Lab 首页">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>O(1) Lab</strong><small>研究</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航">
+      <a href="/zh/#latest">最新</a>
+      <a aria-current="page" href="/zh/research/">全部研究</a>
+      <span class="nav-rule" aria-hidden="true"></span>
+      <a href="https://docs.parano1d.org">文档 <span aria-hidden="true">↗</span></a>
+      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="GitHub 上的 ParanO(1)d"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      <details class="language-switcher"><summary aria-label="切换语言"><span>中文</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="语言"><a href="/research/b64-b255-proof-classes/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/b64-b255-proof-classes/" lang="ru" hreflang="ru"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/b64-b255-proof-classes/" lang="zh-Hans" hreflang="zh-Hans" aria-current="true"><span>中文</span><strong>简体中文</strong></a></div></details>
+    </nav>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>工程研究</span><span>递归证明</span><time datetime="2026-07-17">2026年7月17日</time></div><h1>HistoryStep 为何采用两种证明类别</h1><p class="article-dek">HistoryStep 是区块状态转换的递归证明。B64 可处理最多 64 个用户交易页面，并能在参考笔记本上满足准备时间预算；B255 将同一证明关系扩展到每区块 255 页的上限。测量没有发现第三种类别可以覆盖的有用运行区间。</p><div class="article-byline"><span>作者 O(1) Lab</span><span>5 分钟阅读</span><span>可复现基准测试</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action" type="button" data-copy-link="https://lab.parano1d.org/zh/research/b64-b255-proof-classes/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=HistoryStep%20%E4%B8%BA%E4%BD%95%E9%87%87%E7%94%A8%E4%B8%A4%E7%A7%8D%E8%AF%81%E6%98%8E%E7%B1%BB%E5%88%AB&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fb64-b255-proof-classes%2F" target="_blank" rel="noopener noreferrer" aria-label="将本文分享到 X"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
+      <div class="research-art art--classes" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-classes" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-classes" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-classes" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-classes" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-classes" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-classes" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-classes)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-classes)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">TWO AUTHENTICATED HISTORYSTEP CLASSES</text>
+    <g class="diagram-panel diagram-panel--green" filter="url(#shadow-classes)">
+    <rect x="42" y="76" width="258" height="230" rx="15"/>
+    <text class="diagram-micro" x="64" y="102">CLASS 00 · REFERENCE PREP</text>
+    <text class="diagram-number" x="64" y="145">B64</text><text class="diagram-value diagram-value--compact" x="235" y="141" text-anchor="end">m23</text>
+    <path class="diagram-divider" d="M64 164H278"/>
+    <text class="diagram-label" x="64" y="190">PHYSICAL PAGES</text><text class="diagram-value diagram-value--compact" x="278" y="190" text-anchor="end">0—64</text>
+    <text class="diagram-label" x="64" y="219">BASEFOLD QUERIES</text><text class="diagram-value diagram-value--compact" x="278" y="219" text-anchor="end">148</text>
+    <text class="diagram-label" x="64" y="248">PREPARE P95</text><text class="diagram-value diagram-value--compact" x="278" y="248" text-anchor="end">14.387 s</text>
+    <g class="cadence-ruler"><path d="M64 278H278"/><path d="M64 272V284M117 274V282M171 272V284M224 274V282M278 272V284"/><circle cx="269" cy="278" r="5"/></g>
+  </g>
+  <g class="diagram-panel diagram-panel--blue" filter="url(#shadow-classes)">
+    <rect x="340" y="76" width="258" height="230" rx="15"/>
+    <text class="diagram-micro" x="362" y="102">CLASS 01 · EXPANDED STATE</text>
+    <text class="diagram-number diagram-number--blue" x="362" y="145">B255</text><text class="diagram-value diagram-value--compact" x="576" y="141" text-anchor="end">m24</text>
+    <path class="diagram-divider" d="M362 164H576"/>
+    <text class="diagram-label" x="362" y="190">PHYSICAL PAGES</text><text class="diagram-value diagram-value--compact" x="576" y="190" text-anchor="end">65—255</text>
+    <text class="diagram-label" x="362" y="219">BASEFOLD QUERIES</text><text class="diagram-value diagram-value--compact" x="576" y="219" text-anchor="end">148</text>
+    <text class="diagram-label" x="362" y="248">PREPARE P95</text><text class="diagram-value diagram-value--compact" x="576" y="248" text-anchor="end">29.755 s</text>
+    <g class="cadence-ruler cadence-ruler--blue"><path d="M362 278H576"/><path d="M362 272V284M415 274V282M469 272V284M522 274V282M576 272V284"/><circle cx="568" cy="278" r="5"/></g>
+  </g>
+  <g class="class-bridge"><path d="M300 191H340"/><circle cx="320" cy="191" r="6"/><text class="diagram-micro" x="320" y="178" text-anchor="middle">TIER SELECT</text></g>
+  <g class="diagram-tag diagram-tag--yellow"><rect x="230" y="326" width="180" height="31" rx="8"/><text x="320" y="346">15 s PREPARE REFERENCE</text></g>
+    <text class="diagram-caption" x="42" y="390">Fixed matrices · authenticated class identity · no speculative middle geometry</text>
+  </svg></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#classes">B64 与 B255 分别表示什么</a><a href="#question">为何类别数量属于共识决策</a><a href="#history-step">实测参考主机</a><a href="#geometry">两个类别覆盖的范围</a><a href="#wallet">1,020 个输入共享一份授权证明</a><a href="#lto">发行配置对比</a><a href="#pack">复现认证矩阵包</a><a href="#decision">记录的决策</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>摘要</span><p>本研究考察递归区块证明是否需要一种介于两种正式类别之间的几何。B64 覆盖最多 64 个物理用户页面的区块；B255 在不改变所证明关系的前提下覆盖 65 至 255 页。测试包含实际部署的完整证明路径、经过认证的矩阵，以及最高 1,020 个输入的钱包聚合。中间几何曾被实现，随后被移除：它会在共识中增加一条选择规则和一个验证分支，却没有改善任何已证实的工作负载。</p></div><h2 id="classes">B64 与 B255 分别表示什么</h2>
+<p><code>State</code> 是由当前未花费输出与共识计数器组成的认证集合。<code>HistoryStep</code> 是把区块的精确 State 转换与前一个 <code>HistoryStep</code> 连接起来的递归证明，由此形成一条已证明状态链。B64 与 B255 是同一证明关系的两种固定容量。物理用户页是 PagedSpend 交易格式中的一个定长部分；一笔逻辑支出可以占用多页。B64 覆盖最多 64 个此类页面，B255 覆盖 65 页至共识上限 255 页。两者执行相同的有效性规则；较大的类别只是为证明提供更多容量。</p>
+<p>本研究要回答的是：增加一种介于二者之间的几何，能否显著提高区块生成速度或效率，从而足以抵消它给协议带来的复杂度。</p>
+
+<h2 id="question">为何类别数量属于共识决策</h2>
+<p>每增加一个 <code>HistoryStep</code> 类别，就要向<em>矩阵包</em>中加入一份新的认证约束矩阵，并增加一条选择规则和一个验证器分支。这里的矩阵包是随发行版提供的矩阵集合，其摘要由验证器固定。只有当中间类别覆盖现有类别无法覆盖的工作区间时，它才有存在价值。</p>
+<p>研究使用正式实现中的组装器、证明者、终端编解码器与验证器、冻结矩阵包，以及完整的本地钱包路径来测试 B64 和 B255。HistoryStep 准备时间依据十五秒参考门槛实测，而不是根据行数推断。这是确定性的证明生成预算，并不意味着单个矿工必须在十五秒内找到满足工作量证明的 nonce。</p>
+
+<h2 id="history-step">实测参考主机</h2>
+<p>下表中的 <code>m</code> 是填充后见证域与约束域大小的以二为底对数：m23 包含 <code>2^23</code> 个域位置，m24 包含 <code>2^24</code> 个。p50 是二十次保留运行的中位数，p95 是按最近秩法得到的第 95 百分位数。</p>
+<p>样本运行使用 Intel Core i7-1365U：10 核、12 线程、AVX2 与 VPCLMULQDQ、无 AVX-512、启用轻量链接时优化（Thin LTO）、使用一个代码生成单元，并设置 <code>target-cpu=native</code>。桌面处于活动状态，机器也已经热机。父证明构造、钱包授权、工作量证明搜索和持久化区块提交均不在计时区间内。</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>类别</th><th>有效行</th><th>准备 p50 / p95</th><th>验证 p50 / p95</th><th>终端</th></tr></thead>
+  <tbody>
+    <tr><td>B64 / m=23</td><td>5,705,307</td><td>11.472 / 14.387 秒</td><td>0.666 / 0.720 秒</td><td>766,549 B</td></tr>
+    <tr><td>B255 / m24</td><td>15,368,233</td><td>24.189 / 29.755 秒</td><td>0.770 / 1.012 秒</td><td>807,189 B</td></tr>
+  </tbody>
+</table></div>
+<p>B64 以 613 毫秒余量通过采用最近秩法计算的 p95 准备门槛。保留的二十个样本中，有一个达到 15.333 秒。B255 在同一主机上仍超出门槛：要达到十五秒，其 p95 准备吞吐量需要提高到当前的 1.984 倍。</p>
+<p>网络的十五秒区块目标是工作量证明的期望间隔。nonce 搜索具有概率性，取决于难度和矿工在全网哈希率中的份额，因此被有意排除在证明类别基准之外。该结果只适用于一台实测笔记本与一个发行配置：主机满足 B64 的准备门槛，但不满足 B255。</p>
+
+<h2 id="geometry">两个类别覆盖的范围</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>类别</th><th>求值域</th><th>物理用户页面</th><th>观测角色</th></tr></thead>
+  <tbody>
+    <tr><td>B64</td><td>m = 23</td><td>0–64</td><td>参考笔记本准备类别</td></tr>
+    <tr><td>B255</td><td>m = 24</td><td>65–255</td><td>最大区块页面类别</td></tr>
+  </tbody>
+</table></div>
+<p>一笔逻辑 PagedSpend 可以包含 128 个页面、1,020 个输入和 256 个输出。一个区块可以包含 255 个物理用户页面、1,020 个输入和 510 个输出。固定的父证明表示可同时覆盖 m=23 与 m=24；这些交易上限不需要第三种递归几何。</p>
+
+<h2 id="wallet">1,020 个输入共享一份授权证明</h2>
+<p>钱包测试测量页面构造、逻辑哈希，以及一份随机化的<em>授权证明封装</em>；该证明对象表明同一个所有者秘密控制全部所选输入。测试还包括<em>原子交易意图</em>的编解码与本地准入；原子交易意图是所有物理页面共同组成的单笔逻辑交易封装。网络延迟和 HistoryStep 证明不计入其中。</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>场景</th><th>页面</th><th>总计 p50</th><th>总计 p95</th><th>证明 / intent</th></tr></thead>
+  <tbody>
+    <tr><td>1 个输入</td><td>1</td><td>228.30 毫秒</td><td>352.47 毫秒</td><td>56.49 / 56.81 KiB</td></tr>
+    <tr><td>100 个输入</td><td>13</td><td>217.32 毫秒</td><td>255.46 毫秒</td><td>56.58 / 60.69 KiB</td></tr>
+    <tr><td>1,020 个输入</td><td>128</td><td>233.06 毫秒</td><td>285.81 毫秒</td><td>56.11 / 96.50 KiB</td></tr>
+  </tbody>
+</table></div>
+<p>交易意图数据的字节数随输入聚合规模增长。授权证明封装的大小与证明时间基本不变，因为授权按所有者分组，而不是按物理页面分组。</p>
+
+<h2 id="lto">发行配置对比</h2>
+<p>基线的二十次样本使用默认发行构建配置，并保持关系、见证数据、矩阵包和基准流程完全相同。Thin LTO 与单个代码生成单元只改变机器码：</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>类别</th><th>默认准备 p50 / p95</th><th>Thin-LTO p50 / p95</th></tr></thead>
+  <tbody>
+    <tr><td>B64</td><td>12.174 / 15.182 秒</td><td>11.472 / 14.387 秒</td></tr>
+    <tr><td>B255</td><td>26.203 / 32.009 秒</td><td>24.189 / 29.755 秒</td></tr>
+  </tbody>
+</table></div>
+<p>性能分析显示，证明时间几乎全部用于多项式承诺方案（PCS）和提交承诺之后的递归阶段。配置变化改善了这些跨 crate 路径，而没有改变共识数据或矩阵几何。</p>
+
+<h2 id="pack">复现认证矩阵包</h2>
+<p>完整的双叶矩阵包从空输出根重新生成，并与发行版固定摘要逐字节比较：</p>
+<ul>
+  <li>生成时间：5,596.2 秒；</li>
+  <li>B64 压缩叶：4,584,391 字节；</li>
+  <li>B255 压缩叶：11,912,603 字节；</li>
+  <li>运行时元数据：1,732,922 字节；</li>
+  <li>完整固定矩阵包：18,229,916 字节。</li>
+</ul>
+<p>重新生成的元数据与两个叶均匹配各自记录的摘要。</p>
+
+<h2 id="decision">记录的决策</h2>
+<p>B64 与 B255 覆盖了两个已经验证的工作区间。研究期间还实现了一个 128 页中间类别、另一种授权证明封装布局，以及把认证分散到多棵 Merkle 树的设计。测量没有发现需要这些额外认证几何的工作负载，因此它们在类别库冻结之前被移除。</p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">研究记录</p><h2 id="evidence-title">证据与产物</h2><p>以下链接保存了支撑本文的实现、测量或推导。</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/tree/main/research/two_class"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>代码</small><strong>双类别实验环境</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/blob/main/research/two_class/results/2026-07-17-history-step-lto-20-sample.md"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>数据</small><strong>HistoryStep 测量结果</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/blob/main/research/two_class/results/2026-07-17-history-step-pack-reproduction.md"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>研究产物</small><strong>可复现矩阵包</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="相邻研究"><a href="/zh/research/atomic-history-step/"><small>较早</small><strong>原子 HistoryStep</strong><span>←</span></a><a href="/zh/research/frost-gkr-global-trace-protocol/"><small>较新</small><strong>FROST-GKR</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>O(1) Lab</strong><p>ParanO(1)d 背后的协议研究。</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>研究</strong><a href="/zh/research/">归档</a><a href="/zh/feed.xml">RSS 订阅</a></div>
+      <div><strong>项目</strong><a href="https://parano1d.org">网站</a><a href="https://docs.parano1d.org">技术文档</a><a href="https://github.com/ignotusnemo/parano1d">源代码</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=4286a63d1931" defer></script>
+</body>
+</html>

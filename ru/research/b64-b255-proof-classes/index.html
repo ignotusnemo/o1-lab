@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="HistoryStep — рекурсивное доказательство перехода состояния блока. B64 обрабатывает до 64 пользовательских страниц транзакций и укладывается в бюджет подготовки на эталонном ноутбуке; B255 расширяет то же отношение до предельных 255 страниц блока. Измерения не выявили полезного диапазона для третьего класса.">
+  <meta name="author" content="O(1) Lab">
+  <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, доказательства с нулевым разглашением, системы доказательств, криптография, рекурсивные доказательства, бинарные поля, полиномиальные обязательства">
+  <link rel="canonical" href="https://lab.parano1d.org/ru/research/b64-b255-proof-classes/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/b64-b255-proof-classes/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/b64-b255-proof-classes/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/b64-b255-proof-classes/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/b64-b255-proof-classes/">
+  <link rel="alternate" type="application/rss+xml" title="Исследования O(1) Lab" href="https://lab.parano1d.org/ru/feed.xml">
+  <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Исследования O(1) Lab">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:url" content="https://lab.parano1d.org/ru/research/b64-b255-proof-classes/">
+  <meta property="og:title" content="Почему HistoryStep использует два класса доказательств · O(1) Lab">
+  <meta property="og:description" content="HistoryStep — рекурсивное доказательство перехода состояния блока. B64 обрабатывает до 64 пользовательских страниц транзакций и укладывается в бюджет подготовки на эталонном ноутбуке; B255 расширяет то же отношение до предельных 255 страниц блока. Измерения не выявили полезного диапазона для третьего класса.">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Почему HistoryStep использует два класса доказательств · O(1) Lab">
+  <meta name="twitter:description" content="HistoryStep — рекурсивное доказательство перехода состояния блока. B64 обрабатывает до 64 пользовательских страниц транзакций и укладывается в бюджет подготовки на эталонном ноутбуке; B255 расширяет то же отношение до предельных 255 страниц блока. Измерения не выявили полезного диапазона для третьего класса.">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="article:published_time" content="2026-07-17T00:00:00Z">
+  <meta property="article:section" content="Рекурсивное доказательство">
+  <meta property="article:author" content="O(1) Lab">
+  <title>Почему HistoryStep использует два класса доказательств · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Почему HistoryStep использует два класса доказательств","description":"В исследовании проверяется, нужна ли рекурсивному доказательству блока промежуточная геометрия между двумя рабочими классами. B64 покрывает блоки, содержащие до 64 физических пользовательских страниц, B255 — диапазон от 65 до 255, не меняя доказываемое отношение. Были измерены штатный путь построения доказательства, аутентифицированные матрицы и авторизация кошелька вплоть до 1 020 входов. Промежуточную геометрию реализовали, но затем удалили: она добавляла в консенсус ещё одно правило выбора и ветвь проверки, не улучшая ни одну подтверждённую нагрузку.","datePublished":"2026-07-17","dateModified":"2026-07-17","mainEntityOfPage":"https://lab.parano1d.org/ru/research/b64-b255-proof-classes/","inLanguage":"ru","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-research.png","about":"Рекурсивное доказательство"}</script>
+</head>
+<body class="locale-ru">
+  <a class="skip-link" href="#content">К содержанию</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/ru/" aria-label="Главная O(1) Lab">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>O(1) Lab</strong><small>Исследования</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
+      <a href="/ru/#latest">Новое</a>
+      <a aria-current="page" href="/ru/research/">Все исследования</a>
+      <span class="nav-rule" aria-hidden="true"></span>
+      <a href="https://docs.parano1d.org">Документация <span aria-hidden="true">↗</span></a>
+      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="ParanO(1)d на GitHub"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      <details class="language-switcher"><summary aria-label="Выбрать язык"><span>RU</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="Язык"><a href="/research/b64-b255-proof-classes/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/b64-b255-proof-classes/" lang="ru" hreflang="ru" aria-current="true"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/b64-b255-proof-classes/" lang="zh-Hans" hreflang="zh-Hans"><span>中文</span><strong>简体中文</strong></a></div></details>
+    </nav>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/ru/research/">← Все исследования</a><div class="article-meta"><span>Инженерное исследование</span><span>Рекурсивное доказательство</span><time datetime="2026-07-17">17 июл. 2026 г.</time></div><h1>Почему HistoryStep использует два класса доказательств</h1><p class="article-dek">HistoryStep — рекурсивное доказательство перехода состояния блока. B64 обрабатывает до 64 пользовательских страниц транзакций и укладывается в бюджет подготовки на эталонном ноутбуке; B255 расширяет то же отношение до предельных 255 страниц блока. Измерения не выявили полезного диапазона для третьего класса.</p><div class="article-byline"><span>Автор O(1) Lab</span><span>4 мин чтения</span><span>Воспроизводимое измерение</span></div><div class="article-share" aria-label="Поделиться исследованием"><span class="article-share-label">Поделиться</span><button class="share-action" type="button" data-copy-link="https://lab.parano1d.org/ru/research/b64-b255-proof-classes/" data-copy-default="Копировать ссылку" data-copy-success="Скопировано" data-copy-failure="Не удалось скопировать" aria-label="Скопировать ссылку на статью"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-copy-label aria-live="polite">Копировать ссылку</span></button><a class="share-action" href="https://x.com/intent/post?text=%D0%9F%D0%BE%D1%87%D0%B5%D0%BC%D1%83%20HistoryStep%20%D0%B8%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D1%83%D0%B5%D1%82%20%D0%B4%D0%B2%D0%B0%20%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%B0%20%D0%B4%D0%BE%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D1%81%D1%82%D0%B2&amp;url=https%3A%2F%2Flab.parano1d.org%2Fru%2Fresearch%2Fb64-b255-proof-classes%2F" target="_blank" rel="noopener noreferrer" aria-label="Поделиться статьёй в X"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Поделиться в X</span></a></div></div>
+      <div class="research-art art--classes" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-classes" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-classes" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-classes" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-classes" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-classes" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-classes" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-classes)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-classes)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">TWO AUTHENTICATED HISTORYSTEP CLASSES</text>
+    <g class="diagram-panel diagram-panel--green" filter="url(#shadow-classes)">
+    <rect x="42" y="76" width="258" height="230" rx="15"/>
+    <text class="diagram-micro" x="64" y="102">CLASS 00 · REFERENCE PREP</text>
+    <text class="diagram-number" x="64" y="145">B64</text><text class="diagram-value diagram-value--compact" x="235" y="141" text-anchor="end">m23</text>
+    <path class="diagram-divider" d="M64 164H278"/>
+    <text class="diagram-label" x="64" y="190">PHYSICAL PAGES</text><text class="diagram-value diagram-value--compact" x="278" y="190" text-anchor="end">0—64</text>
+    <text class="diagram-label" x="64" y="219">BASEFOLD QUERIES</text><text class="diagram-value diagram-value--compact" x="278" y="219" text-anchor="end">148</text>
+    <text class="diagram-label" x="64" y="248">PREPARE P95</text><text class="diagram-value diagram-value--compact" x="278" y="248" text-anchor="end">14.387 s</text>
+    <g class="cadence-ruler"><path d="M64 278H278"/><path d="M64 272V284M117 274V282M171 272V284M224 274V282M278 272V284"/><circle cx="269" cy="278" r="5"/></g>
+  </g>
+  <g class="diagram-panel diagram-panel--blue" filter="url(#shadow-classes)">
+    <rect x="340" y="76" width="258" height="230" rx="15"/>
+    <text class="diagram-micro" x="362" y="102">CLASS 01 · EXPANDED STATE</text>
+    <text class="diagram-number diagram-number--blue" x="362" y="145">B255</text><text class="diagram-value diagram-value--compact" x="576" y="141" text-anchor="end">m24</text>
+    <path class="diagram-divider" d="M362 164H576"/>
+    <text class="diagram-label" x="362" y="190">PHYSICAL PAGES</text><text class="diagram-value diagram-value--compact" x="576" y="190" text-anchor="end">65—255</text>
+    <text class="diagram-label" x="362" y="219">BASEFOLD QUERIES</text><text class="diagram-value diagram-value--compact" x="576" y="219" text-anchor="end">148</text>
+    <text class="diagram-label" x="362" y="248">PREPARE P95</text><text class="diagram-value diagram-value--compact" x="576" y="248" text-anchor="end">29.755 s</text>
+    <g class="cadence-ruler cadence-ruler--blue"><path d="M362 278H576"/><path d="M362 272V284M415 274V282M469 272V284M522 274V282M576 272V284"/><circle cx="568" cy="278" r="5"/></g>
+  </g>
+  <g class="class-bridge"><path d="M300 191H340"/><circle cx="320" cy="191" r="6"/><text class="diagram-micro" x="320" y="178" text-anchor="middle">TIER SELECT</text></g>
+  <g class="diagram-tag diagram-tag--yellow"><rect x="230" y="326" width="180" height="31" rx="8"/><text x="320" y="346">15 s PREPARE REFERENCE</text></g>
+    <text class="diagram-caption" x="42" y="390">Fixed matrices · authenticated class identity · no speculative middle geometry</text>
+  </svg></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="В этой статье"><strong>В этой статье</strong><a href="#classes">Что означают B64 и B255</a><a href="#question">Почему число классов — решение консенсуса</a><a href="#history-step">Измеренный эталонный хост</a><a href="#geometry">Что покрывают два класса</a><a href="#wallet">Одна капсула авторизации для 1 020 входов</a><a href="#lto">Сравнение профилей релиза</a><a href="#pack">Воспроизведение аутентифицированного пакета</a><a href="#decision">Зафиксированное решение</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>Аннотация</span><p>В исследовании проверяется, нужна ли рекурсивному доказательству блока промежуточная геометрия между двумя рабочими классами. B64 покрывает блоки, содержащие до 64 физических пользовательских страниц, B255 — диапазон от 65 до 255, не меняя доказываемое отношение. Были измерены штатный путь построения доказательства, аутентифицированные матрицы и авторизация кошелька вплоть до 1 020 входов. Промежуточную геометрию реализовали, но затем удалили: она добавляла в консенсус ещё одно правило выбора и ветвь проверки, не улучшая ни одну подтверждённую нагрузку.</p></div><h2 id="classes">Что означают B64 и B255</h2>
+<p><code>State</code> — аутентифицированный набор текущих непотраченных выходов и счётчиков консенсуса. <code>HistoryStep</code> — рекурсивное доказательство, которое связывает точный переход State блока с предыдущим <code>HistoryStep</code>, образуя цепочку доказанных состояний. B64 и B255 — два фиксированных класса ёмкости одного и того же отношения. Физическая пользовательская страница — фиксированная часть формата транзакции PagedSpend; одна логическая операция расходования может занимать несколько страниц. B64 покрывает блоки не более чем с 64 такими страницами, B255 — диапазон от 65 до консенсусного предела в 255. Правила корректности у них одинаковы: больший класс лишь предоставляет доказательству больше места.</p>
+<p>Исследование отвечает на вопрос, принесёт ли третья промежуточная геометрия заметный выигрыш в скорости или эффективности производства блоков, оправдывающий усложнение протокола.</p>
+
+<h2 id="question">Почему число классов — решение консенсуса</h2>
+<p>Каждый класс <code>HistoryStep</code> добавляет новую аутентифицированную матрицу ограничений в <em>пакет матриц</em> — поставляемый с релизом набор, дайджесты которого закреплены в проверяющей схеме, — а также правило выбора и отдельную ветвь проверки. Промежуточный класс полезен только тогда, когда покрывает рабочий диапазон, недоступный существующим классам.</p>
+<p>B64 и B255 проверялись штатным сборщиком, доказывающей и проверяющей сторонами, кодеком терминала, зафиксированным пакетом матриц и полным локальным путём кошелька. Подготовка <code>HistoryStep</code> измерялась относительно эталонной границы в пятнадцать секунд, а не выводилась из числа строк. Это детерминированный бюджет построения доказательства, а не утверждение о том, что один майнер обязан найти proof of work за пятнадцать секунд.</p>
+
+<h2 id="history-step">Измеренный эталонный хост</h2>
+<p>В таблице ниже <code>m</code> — двоичный логарифм размера дополненной области свидетеля и ограничений: m23 содержит <code>2^23</code> позиций поля, m24 — <code>2^24</code>. Значение p50 — медиана двадцати сохранённых запусков, p95 — их 95-й процентиль по методу ближайшего ранга.</p>
+<p>Серия измерений выполнялась на Intel Core i7-1365U: 10 ядер, 12 потоков, AVX2 с VPCLMULQDQ, без AVX-512, тонкая межмодульная оптимизация при компоновке (Thin LTO), одна единица кодогенерации и <code>target-cpu=native</code>. Рабочий стол оставался активным, система была предварительно прогрета. Построение родительского доказательства, авторизация кошелька, поиск proof of work и надёжная фиксация блока не входили в измеряемый интервал.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Класс</th><th>Полезные строки</th><th>Подготовка p50 / p95</th><th>Проверка p50 / p95</th><th>Терминал</th></tr></thead>
+  <tbody>
+    <tr><td>B64 / m23</td><td>5 705 307</td><td>11,472 / 14,387 с</td><td>0,666 / 0,720 с</td><td>766 549 Б</td></tr>
+    <tr><td>B255 / m24</td><td>15 368 233</td><td>24,189 / 29,755 с</td><td>0,770 / 1,012 с</td><td>807 189 Б</td></tr>
+  </tbody>
+</table></div>
+<p>B64 уложился в ближайшую границу p95 с запасом 613 мс. Один из двадцати сохранённых результатов достиг 15,333 секунды. B255 на той же машине остался за границей: чтобы уложиться в пятнадцать секунд, требовалось увеличить пропускную способность подготовки p95 в 1,984 раза.</p>
+<p>Пятнадцатисекундная цель блока в сети — ожидаемый интервал proof of work. Поиск nonce вероятностен и зависит от сложности и доли майнера в сетевом хешрейте; поэтому он намеренно исключён из измерения класса доказательства. Результат относится к одному ноутбуку и одному профилю релизной сборки: эта машина проходит границу подготовки B64, но не B255.</p>
+
+<h2 id="geometry">Что покрывают два класса</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Класс</th><th>Область вычисления</th><th>Физические пользовательские страницы</th><th>Наблюдаемая роль</th></tr></thead>
+  <tbody>
+    <tr><td>B64</td><td>m = 23</td><td>0–64</td><td>Класс подготовки на эталонном ноутбуке</td></tr>
+    <tr><td>B255</td><td>m = 24</td><td>65–255</td><td>Класс максимального числа страниц блока</td></tr>
+  </tbody>
+</table></div>
+<p>Логический PagedSpend может содержать 128 страниц, 1 020 входов и 256 выходов. Блок — 255 физических пользовательских страниц, 1 020 входов и 510 выходов. Фиксированное родительское представление покрывает m23 и m24; эти пределы транзакций не требуют третьей рекурсивной геометрии.</p>
+
+<h2 id="wallet">Одна капсула авторизации для 1 020 входов</h2>
+<p>Измерение кошелька охватывало построение страниц, логическое хеширование, одну рандомизированную <em>капсулу авторизации</em> — объект доказательства того, что один секрет владельца управляет всеми выбранными входами, — кодирование и декодирование <em>атомарного объекта транзакции</em> (<code>intent</code>) — единой логической транзакции, общей для всех её физических страниц, — и локальный допуск. Сетевая задержка и построение HistoryStep были исключены.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Случай</th><th>Страницы</th><th>Итого p50</th><th>Итого p95</th><th>Доказательство / объект транзакции</th></tr></thead>
+  <tbody>
+    <tr><td>1 вход</td><td>1</td><td>228,30 мс</td><td>352,47 мс</td><td>56,49 / 56,81 КиБ</td></tr>
+    <tr><td>100 входов</td><td>13</td><td>217,32 мс</td><td>255,46 мс</td><td>56,58 / 60,69 КиБ</td></tr>
+    <tr><td>1 020 входов</td><td>128</td><td>233,06 мс</td><td>285,81 мс</td><td>56,11 / 96,50 КиБ</td></tr>
+  </tbody>
+</table></div>
+<p>Размер объекта транзакции растёт вместе с числом входов. Размер капсулы и время построения доказательства остаются почти неизменными, поскольку авторизация группируется по владельцу, а не по физической странице.</p>
+
+<h2 id="lto">Сравнение профилей релиза</h2>
+<p>Исходная серия из двадцати измерений использовала стандартный профиль кодогенерации релизной сборки с теми же отношением, свидетелем, пакетом матриц и методикой измерения. Thin LTO и одна единица кодогенерации изменили только машинный код:</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Класс</th><th>Стандартная подготовка p50 / p95</th><th>Thin-LTO p50 / p95</th></tr></thead>
+  <tbody>
+    <tr><td>B64</td><td>12,174 / 15,182 с</td><td>11,472 / 14,387 с</td></tr>
+    <tr><td>B255</td><td>26,203 / 32,009 с</td><td>24,189 / 29,755 с</td></tr>
+  </tbody>
+</table></div>
+<p>Профилирование показало, что почти всё время построения доказательства уходит на схему полиномиальных обязательств (PCS) и рекурсивную фазу после фиксации столбцов. Изменение профиля ускорило эти межкрейтовые пути, не затронув данные консенсуса или геометрию матрицы.</p>
+
+<h2 id="pack">Воспроизведение аутентифицированного пакета</h2>
+<p>Полный пакет из двух листов был заново создан из пустого выходного корня и побайтно сопоставлен с дайджестами, закреплёнными для релиза:</p>
+<ul>
+  <li>время генерации: 5 596,2 секунды;</li>
+  <li>сжатый лист B64: 4 584 391 байт;</li>
+  <li>сжатый лист B255: 11 912 603 байта;</li>
+  <li>метаданные времени выполнения: 1 732 922 байта;</li>
+  <li>полный закреплённый пакет: 18 229 916 байт.</li>
+</ul>
+<p>Восстановленные метаданные и оба листа совпали с записанными дайджестами.</p>
+
+<h2 id="decision">Зафиксированное решение</h2>
+<p>B64 и B255 покрыли два подтверждённых измерениями рабочих диапазона. В ходе исследования также были реализованы промежуточный класс на 128 страниц, альтернативная компоновка капсулы авторизации и вариант, распределявший аутентификацию между несколькими деревьями Merkle. Измерения не выявили нагрузки, которой требовалась бы какая-либо из этих дополнительных геометрий, поэтому варианты были удалены до фиксации набора классов.</p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Материалы исследования</p><h2 id="evidence-title">Доказательства и артефакты</h2><p>Здесь сохранены реализации, измерения и выводы, на которых основана статья.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/tree/main/research/two_class"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Код</small><strong>Лаборатория двух классов</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/blob/main/research/two_class/results/2026-07-17-history-step-lto-20-sample.md"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Данные</small><strong>Измерения HistoryStep</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/blob/main/research/two_class/results/2026-07-17-history-step-pack-reproduction.md"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Артефакт</small><strong>Воспроизводимый пакет матриц</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Соседние исследования"><a href="/ru/research/atomic-history-step/"><small>Ранее</small><strong>Атомарный HistoryStep</strong><span>←</span></a><a href="/ru/research/frost-gkr-global-trace-protocol/"><small>Позднее</small><strong>FROST-GKR</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>O(1) Lab</strong><p>Исследования протокола ParanO(1)d.</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>Исследования</strong><a href="/ru/research/">Архив</a><a href="/ru/feed.xml">RSS-лента</a></div>
+      <div><strong>Проект</strong><a href="https://parano1d.org">Сайт</a><a href="https://docs.parano1d.org">Документация</a><a href="https://github.com/ignotusnemo/parano1d">Исходный код</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=4286a63d1931" defer></script>
+</body>
+</html>

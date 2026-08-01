@@ -1,0 +1,23 @@
+<h2 id="question">Can two Merkle relations share one proof?</h2>
+<p><code>State</code> is the authenticated set of current unspent transaction outputs (UTXOs) and consensus counters. A UTXO path authenticates one such output in the main State tree. A reuse-guard path authenticates a second tree that, in the tested design, prevented a recently freed physical slot from being assigned again too early. Both were fixed-depth binary Merkle paths, and both were checked while proving the exact transition from one State root to the next. A tagged mixed-domain construction fused them into one larger multilinear trace.</p>
+<p>The hypothesis was straightforward: shared algebra and one proof envelope should reduce proof bytes without materially changing proving cost.</p>
+
+<h2 id="experiment">Measured comparison</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Construction</th><th>Proof</th><th>Prove</th><th>Verify</th></tr></thead>
+  <tbody>
+    <tr><td>Two domain-specific proofs</td><td>29.69 KB</td><td>2.68 s</td><td>450.82 ms</td></tr>
+    <tr><td>One fused tagged proof</td><td>23.75 KB</td><td>4.50 s</td><td>612.96 ms</td></tr>
+  </tbody>
+</table></div>
+<p>Fusion reduced bytes by 20.0%, but proving became 67.9% slower and verification 36.0% slower.</p>
+
+<h2 id="cause">Why the smaller proof was slower</h2>
+<p>The fused construction created one larger multilinear extension (MLE): a polynomial representation of the combined trace over a Boolean domain. Sumcheck work grew with the enlarged domain, while the two independent proofs had executed in parallel. The byte saving came from sharing the proof envelope; the time regression came from losing domain separation and parallelism.</p>
+<div class="failure">
+  <strong>Decision</strong>
+  <p>The fused relation was removed after measurement. Exact-State proving kept two domain-specific Merkle proofs.</p>
+</div>
+
+<h2 id="conclusion">Reusable conclusion</h2>
+<p>Proof size is not a reliable proxy for proof-system cost. Before fusing relations, measure the larger multilinear extension, sumcheck degree and lost scheduling parallelism. A 20% smaller serialized proof was a poor exchange for 68% more prover time on this workload.</p>

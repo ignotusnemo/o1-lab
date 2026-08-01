@@ -1,0 +1,34 @@
+<h2 id="question">Nonce 应当在哪一步进入证明？</h2>
+<p>State 是由当前未花费输出与共识计数器组成的认证集合。HistoryStep 是区块从父 State 到子 State 精确转换的递归证明。它认证计算成本较高的语义工作，而工作量证明（PoW）只改变一个 128 位 nonce，也就是矿工在搜索过程中反复尝试的区块头字段。如果 nonce 被纳入递归断言，每个候选值都会改变断言，昂贵的证明便无法预先生成。</p>
+
+<h2 id="projection">不含 nonce 的语义区块头</h2>
+<p>该构造定义两个经过域分离的标识符：</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>标识符</th><th>域</th><th>字段</th><th>作用</th></tr></thead>
+  <tbody>
+    <tr><td>语义区块头 ID</td><td><code>SEMHDR__</code></td><td>除 nonce 外的全部共识区块头字段</td><td>HistoryStep 断言</td></tr>
+    <tr><td>区块 ID</td><td><code>BLOCKHDR</code></td><td>包括 nonce 在内的全部区块头字段</td><td>PoW、父链接与规范身份</td></tr>
+  </tbody>
+</table></div>
+<p>语义投影保持区块头字段的精确顺序，只跳过 nonce。变异测试会独立修改每个字段：修改 nonce 必须保持语义 ID 不变；修改任何其他字段都必须改变该 ID。</p>
+
+<h2 id="mining">证明一次，搜索多次</h2>
+<div class="protocol-flow" aria-label="Nonce 搜索前的证明">
+  <div class="flow-step"><small>模板</small><strong>固定语义字段</strong><span>交易、State、目标值、区块奖励</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>证明</small><strong>构造 HistoryStep π</strong><span>只绑定一次 SEMHDR__ 投影</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>PoW</small><strong>搜索 nonce</strong><span>反复哈希 BLOCKHDR</span></div>
+</div>
+<p>当某个 nonce 满足目标值时，节点执行一次原生 PoW 检查，并验证该区块头指向的父 State 与子 State 边界同语义模板所证明的边界完全一致。随后，完整区块与终端证明被原子提交。</p>
+
+<h2 id="security">这种拆分为何没有放开其他字段</h2>
+<p>递归证明省略的是 nonce，而不是挖矿目标值或任何语义 State 转换字段。原生接受规则要求终端证明中的语义 ID 与候选区块头的所有非 nonce 字段完全一致。包含 nonce 的区块 ID 仍然是链上链接使用的身份标识。</p>
+<p>域分离防止同一 absorb 调度被交替解释为语义 ID 与规范区块 ID。</p>
+
+<h2 id="result">结果</h2>
+<div class="result">
+  <strong>挖矿边界</strong>
+  <p>证明生成只对固定区块模板执行一次；随后进行的 nonce 搜索只改变被明确排除在证明断言之外的字段。</p>
+</div>
+<p>只要昂贵证明认证的是确定性对象，而独立搜索只改变一个明确的非语义字段，就可以采用这一模式。接受规则必须把胜出的搜索结果重新连接到证明所固定的全部字段。</p>

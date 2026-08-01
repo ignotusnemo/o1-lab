@@ -5,33 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f3f2ed">
   <meta name="color-scheme" content="light">
-  <meta name="description" content="Papers, protocol work, engineering studies and negative results from O(1) Lab, the research group behind ParanO(1)d.">
+  <meta name="description" content="Papers, protocol work, reproducible engineering studies and results from O(1) Lab, the research group behind ParanO(1)d.">
   <meta name="author" content="O(1) Lab">
   <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, zero-knowledge proofs, proof systems, cryptography, recursive proofs, binary fields, polynomial commitments">
-  <link rel="canonical" href="https://research.parano1d.org/">
-  <link rel="alternate" type="application/rss+xml" title="O(1) Lab Research" href="https://research.parano1d.org/feed.xml">
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="canonical" href="https://lab.parano1d.org/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/">
+  <link rel="alternate" type="application/rss+xml" title="O(1) Lab Research" href="https://lab.parano1d.org/feed.xml">
+  <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="O(1) Lab Research">
-  <meta property="og:url" content="https://research.parano1d.org/">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:url" content="https://lab.parano1d.org/">
   <meta property="og:title" content="O(1) Lab Research">
-  <meta property="og:description" content="Papers, protocol work, engineering studies and negative results from O(1) Lab, the research group behind ParanO(1)d.">
-  <meta property="og:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta property="og:description" content="Papers, protocol work, reproducible engineering studies and results from O(1) Lab, the research group behind ParanO(1)d.">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="O(1) Lab Research">
-  <meta name="twitter:description" content="Papers, protocol work, engineering studies and negative results from O(1) Lab, the research group behind ParanO(1)d.">
-  <meta name="twitter:image" content="https://research.parano1d.org/assets/og-research.png">
+  <meta name="twitter:description" content="Papers, protocol work, reproducible engineering studies and results from O(1) Lab, the research group behind ParanO(1)d.">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
   
   <title>O(1) Lab Research</title>
-  <link rel="stylesheet" href="/assets/site.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://research.parano1d.org/#organization","name":"O(1) Lab","url":"https://research.parano1d.org","parentOrganization":{"@type":"Organization","name":"ParanO(1)d","url":"https://parano1d.org"}},{"@type":"WebSite","@id":"https://research.parano1d.org/#website","name":"O(1) Lab Research","url":"https://research.parano1d.org","publisher":{"@id":"https://research.parano1d.org/#organization"}}]}</script>
+  <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://lab.parano1d.org/#organization","name":"O(1) Lab","url":"https://lab.parano1d.org","parentOrganization":{"@type":"Organization","name":"ParanO(1)d","url":"https://parano1d.org"}},{"@type":"WebSite","@id":"https://lab.parano1d.org/#website","name":"O(1) Lab Research","url":"https://lab.parano1d.org/","inLanguage":"en","publisher":{"@id":"https://lab.parano1d.org/#organization"}}]}</script>
 </head>
-<body>
+<body class="locale-en">
   <a class="skip-link" href="#content">Skip to content</a>
   <div class="page-shell">
     <header class="site-header">
@@ -43,19 +50,20 @@
     <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
       <a aria-current="page" href="/#latest">Latest</a>
       <a href="/research/">All research</a>
-      <a href="/about/">About</a>
       <span class="nav-rule" aria-hidden="true"></span>
       <a href="https://docs.parano1d.org">Docs <span aria-hidden="true">↗</span></a>
       <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="ParanO(1)d on GitHub"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      <details class="language-switcher"><summary aria-label="Change language"><span>EN</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="Language"><a href="/" lang="en" hreflang="en" aria-current="true"><span>EN</span><strong>English</strong></a><a href="/ru/" lang="ru" hreflang="ru"><span>RU</span><strong>Русский</strong></a><a href="/zh/" lang="zh-Hans" hreflang="zh-Hans"><span>中文</span><strong>简体中文</strong></a></div></details>
     </nav>
   </header>
     <main id="content">
     <section class="home-hero">
       <div class="hero-copy">
         <p class="eyebrow">O(1) Lab · Technical research</p>
-        <h1>Research for proof-native systems.</h1>
-        <p class="hero-lead">Papers, protocol work, implementation studies and negative results produced while building ParanO(1)d.</p>
-        <div class="hero-actions"><a class="button button--primary" href="#latest">Latest research</a><a class="button button--quiet" href="/research/">Open the archive</a></div>
+        <h1>Research for proof-native systems</h1>
+        <p class="hero-lead">Cryptographic protocols, verifiable-state architectures and research results produced during the development of ParanO(1)d.</p>
+        <div class="hero-actions"><a class="button button--primary" href="#latest">Latest research</a><a class="button button--quiet" href="/research/">Archive</a></div>
       </div>
       <div class="hero-field" aria-hidden="true">
         <div class="field-label field-label--a">commit</div><div class="field-label field-label--b">reduce</div><div class="field-label field-label--c">verify</div>
@@ -67,145 +75,461 @@
     <section class="latest-section section" id="latest">
       <div class="section-heading"><div><p class="section-index">01 · Latest</p><h2>Latest research</h2></div><a class="text-link" href="/research/">All research <span aria-hidden="true">↗</span></a></div>
       <article class="lead-story">
-        <div class="lead-story-art"><div class="research-art art--frost" aria-hidden="true">
-    <span class="art-grid"></span>
-    <span class="art-orbit art-orbit--a"></span>
-    <span class="art-orbit art-orbit--b"></span>
-    <span class="art-axis"></span>
-    <span class="art-node art-node--a"></span>
-    <span class="art-node art-node--b"></span>
-    <span class="art-node art-node--c"></span>
-    <span class="art-code">①</span>
-  </div></div>
+        <div class="lead-story-art"><div class="research-art art--soundness" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-soundness" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-soundness" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-soundness" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-soundness" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-soundness" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-soundness" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-soundness)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-soundness)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">SOUNDNESS METROLOGY · ONE PARAMETER SET, THREE GAMES</text>
+    <g class="sound-bench">
+    <path class="sound-bench-rail" d="M38 210H602M320 68V350"/>
+    <path class="sound-bench-rail sound-bench-rail--minor" d="M105 84 535 336M105 336 535 84"/>
+    <circle cx="320" cy="210" r="130"/>
+    <circle cx="320" cy="210" r="116"/>
+  </g>
+
+  <g class="sound-calibration" filter="url(#shadow-soundness)">
+    <circle class="sound-calibration-bed" cx="320" cy="210" r="104"/>
+    <circle class="sound-calibration-bezel" cx="320" cy="210" r="91"/>
+    <path class="sound-calibration-tick sound-calibration-tick--major" d="M320.00 135.00L320.00 122.00"/><path class="sound-calibration-tick" d="M330.31 131.68L331.49 122.75"/><path class="sound-calibration-tick" d="M340.45 133.69L342.78 125.00"/><path class="sound-calibration-tick" d="M350.23 137.01L353.68 128.70"/><path class="sound-calibration-tick sound-calibration-tick--major" d="M357.50 145.05L364.00 133.79"/><path class="sound-calibration-tick" d="M368.09 147.33L373.57 140.18"/><path class="sound-calibration-tick" d="M375.86 154.14L382.23 147.77"/><path class="sound-calibration-tick" d="M382.67 161.91L389.82 156.43"/><path class="sound-calibration-tick sound-calibration-tick--major" d="M384.95 172.50L396.21 166.00"/><path class="sound-calibration-tick" d="M392.99 179.77L401.30 176.32"/><path class="sound-calibration-tick" d="M396.31 189.55L405.00 187.22"/><path class="sound-calibration-tick" d="M398.32 199.69L407.25 198.51"/><path class="sound-calibration-tick sound-calibration-tick--major" d="M395.00 210.00L408.00 210.00"/><path class="sound-calibration-tick" d="M398.32 220.31L407.25 221.49"/><path class="sound-calibration-tick" d="M396.31 230.45L405.00 232.78"/><path class="sound-calibration-tick" d="M392.99 240.23L401.30 243.68"/><path class="sound-calibration-tick sound-calibration-tick--major" d="M384.95 247.50L396.21 254.00"/><path class="sound-calibration-tick" d="M382.67 258.09L389.82 263.57"/><path class="sound-calibration-tick" d="M375.86 265.86L382.23 272.23"/><path class="sound-calibration-tick" d="M368.09 272.67L373.57 279.82"/><path class="sound-calibration-tick sound-calibration-tick--major" d="M357.50 274.95L364.00 286.21"/><path class="sound-calibration-tick" d="M350.23 282.99L353.68 291.30"/><path class="sound-calibration-tick" d="M340.45 286.31L342.78 295.00"/><path class="sound-calibration-tick" d="M330.31 288.32L331.49 297.25"/><path class="sound-calibration-tick sound-calibration-tick--major" d="M320.00 285.00L320.00 298.00"/><path class="sound-calibration-tick" d="M309.69 288.32L308.51 297.25"/><path class="sound-calibration-tick" d="M299.55 286.31L297.22 295.00"/><path class="sound-calibration-tick" d="M289.77 282.99L286.32 291.30"/><path class="sound-calibration-tick sound-calibration-tick--major" d="M282.50 274.95L276.00 286.21"/><path class="sound-calibration-tick" d="M271.91 272.67L266.43 279.82"/><path class="sound-calibration-tick" d="M264.14 265.86L257.77 272.23"/><path class="sound-calibration-tick" d="M257.33 258.09L250.18 263.57"/><path class="sound-calibration-tick sound-calibration-tick--major" d="M255.05 247.50L243.79 254.00"/><path class="sound-calibration-tick" d="M247.01 240.23L238.70 243.68"/><path class="sound-calibration-tick" d="M243.69 230.45L235.00 232.78"/><path class="sound-calibration-tick" d="M241.68 220.31L232.75 221.49"/><path class="sound-calibration-tick sound-calibration-tick--major" d="M245.00 210.00L232.00 210.00"/><path class="sound-calibration-tick" d="M241.68 199.69L232.75 198.51"/><path class="sound-calibration-tick" d="M243.69 189.55L235.00 187.22"/><path class="sound-calibration-tick" d="M247.01 179.77L238.70 176.32"/><path class="sound-calibration-tick sound-calibration-tick--major" d="M255.05 172.50L243.79 166.00"/><path class="sound-calibration-tick" d="M257.33 161.91L250.18 156.43"/><path class="sound-calibration-tick" d="M264.14 154.14L257.77 147.77"/><path class="sound-calibration-tick" d="M271.91 147.33L266.43 140.18"/><path class="sound-calibration-tick sound-calibration-tick--major" d="M282.50 145.05L276.00 133.79"/><path class="sound-calibration-tick" d="M289.77 137.01L286.32 128.70"/><path class="sound-calibration-tick" d="M299.55 133.69L297.22 125.00"/><path class="sound-calibration-tick" d="M309.69 131.68L308.51 122.75"/>
+    <path class="sound-calibration-arc sound-calibration-arc--blue" d="M263 149A83 83 0 0 1 375 147"/>
+    <path class="sound-calibration-arc sound-calibration-arc--violet" d="M394 178A83 83 0 0 1 376 273"/>
+    <path class="sound-calibration-arc sound-calibration-arc--green" d="M347 288A83 83 0 0 1 252 258"/>
+    <circle class="sound-calibration-glass" cx="320" cy="210" r="57"/>
+    <circle class="sound-calibration-inner" cx="320" cy="210" r="43"/>
+    <path class="sound-calibration-needle" d="M320 210 356 174"/>
+    <circle class="sound-calibration-pin" cx="320" cy="210" r="7"/>
+  </g>
+
+  <g class="sound-feed">
+    <path d="M188 210H213C226 210 228 224 240 224H251"/>
+    <circle cx="213" cy="210" r="3"/><circle cx="240" cy="224" r="3"/>
+  </g>
+  <g class="sound-readout sound-readout--input" filter="url(#shadow-soundness)">
+    <rect x="42" y="169" width="146" height="82" rx="13"/>
+    <text class="sound-readout-kind" x="59" y="191">COMMITTED INPUT</text>
+    <text class="sound-readout-name" x="59" y="216">PRODUCTION SET</text>
+    <text class="sound-readout-detail" x="59" y="237">SOURCE PIN · 93B025</text>
+    <path d="M162 184H174V196"/>
+  </g>
+
+  <g class="sound-output sound-output--blue">
+    <path d="M365 129C382 109 397 105 420 105H438"/>
+    <circle cx="365" cy="129" r="3.4"/><circle cx="420" cy="105" r="3"/>
+  </g>
+  <g class="sound-readout sound-readout--blue" filter="url(#shadow-soundness)">
+    <rect x="438" y="70" width="160" height="76" rx="13"/>
+    <text class="sound-readout-kind" x="455" y="92">CONJECTURED SCORE</text>
+    <text class="sound-readout-name" x="455" y="113">TOY PROBLEM</text>
+    <text class="sound-readout-value" x="579" y="136" text-anchor="end">128</text>
+    <path d="M455 123H531"/>
+  </g>
+
+  <g class="sound-output sound-output--violet">
+    <path d="M410 210H438"/>
+    <circle cx="410" cy="210" r="3.4"/>
+  </g>
+  <g class="sound-readout sound-readout--violet" filter="url(#shadow-soundness)">
+    <rect x="438" y="172" width="160" height="76" rx="13"/>
+    <text class="sound-readout-kind" x="455" y="194">FINITE SOUNDNESS</text>
+    <text class="sound-readout-name" x="455" y="215">ACCEPTING PATH</text>
+    <text class="sound-readout-value" x="579" y="238" text-anchor="end">84.757</text>
+    <path d="M455 225H520"/>
+  </g>
+
+  <g class="sound-output sound-output--green">
+    <path d="M366 290C382 311 398 315 420 315H438"/>
+    <circle cx="366" cy="290" r="3.4"/><circle cx="420" cy="315" r="3"/>
+  </g>
+  <g class="sound-readout sound-readout--green" filter="url(#shadow-soundness)">
+    <rect x="438" y="274" width="160" height="76" rx="13"/>
+    <text class="sound-readout-kind" x="455" y="296">KNOWLEDGE BOUND</text>
+    <text class="sound-readout-name" x="455" y="317">GENERALIZED RBR</text>
+    <text class="sound-readout-value" x="579" y="340" text-anchor="end">96.047</text>
+    <path d="M455 327H520"/>
+  </g>
+
+  <g class="sound-game-key">
+    <circle class="sound-game-key--blue" cx="65" cy="285" r="3"/><text x="76" y="289">SCORE</text>
+    <circle class="sound-game-key--violet" cx="119" cy="285" r="3"/><text x="130" y="289">SOUNDNESS</text>
+    <circle class="sound-game-key--green" cx="65" cy="306" r="3"/><text x="76" y="310">KNOWLEDGE</text>
+    <path d="M65 325H188"/><text x="65" y="344">VALUES ARE NOT COLLAPSED</text>
+  </g>
+    <text class="diagram-caption" x="42" y="390">One source-pinned parameter set · three explicit games · every value keeps its definition</text>
+  </svg></div></div>
         <div class="lead-story-copy">
-          <div class="story-meta"><span>Paper</span><time datetime="2026-07-31">Jul 31, 2026</time></div>
-          <h3><a href="/research/frost-gkr-global-trace-protocol/">FROST-GKR: a global trace protocol for batched Poseidon2b</a></h3>
-          <p>FROST-GKR represents every permutation slot, round and lane on one Boolean product domain. One degree-nine zero-check enforces the full round relation; one degree-two reduction returns shifted evaluations to the original committed columns. For the evaluated 59-permutation workload, the reduction cuts 472 per-permutation constraint sumchecks to two.</p>
-          <div class="story-actions"><a class="button button--primary" href="/research/frost-gkr-global-trace-protocol/">Read the research</a><a class="button button--quiet" href="/papers/FROST_GKR.pdf">Read the paper</a></div>
+          <div class="story-meta"><span>Security analysis</span><time datetime="2026-07-31">31 Jul 2026</time></div>
+          <h3><a href="/research/parano1d-soundness-industry-metrics/">ParanO(1)d soundness under industry metrics</a></h3>
+          <p>This analysis evaluates committed ParanO(1)d production parameters under the classical conventions published by Plonky2, RISC Zero and ethSTARK. It separates conjectured scores from finite theorem-backed bounds and pins every reported value in executable Rust calculations. Each value is compared only within its named metric.</p>
+          <div class="story-actions"><a class="button button--primary" href="/research/parano1d-soundness-industry-metrics/">Read the research</a><a class="button button--quiet" href="https://github.com/ignotusnemo/parano1d-soundness"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>ParanO(1)d soundness</span></a></div>
         </div>
       </article>
-      <div class="research-grid"><article class="research-card" data-topic="Recursive proving">
-    <a class="card-art-link" href="/research/b64-b255-proof-classes/" tabindex="-1" aria-hidden="true"><div class="research-art art--classes research-art--compact" aria-hidden="true">
-    <span class="art-grid"></span>
-    <span class="art-orbit art-orbit--a"></span>
-    <span class="art-orbit art-orbit--b"></span>
-    <span class="art-axis"></span>
-    <span class="art-node art-node--a"></span>
-    <span class="art-node art-node--b"></span>
-    <span class="art-node art-node--c"></span>
-    <span class="art-code">①</span>
-  </div></a>
+      <div class="research-grid"><article class="research-card" data-topic="Proof systems">
+    <a class="card-art-link" href="/research/frost-gkr-global-trace-protocol/" tabindex="-1" aria-hidden="true"><div class="research-art art--frost research-art--compact" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-frost" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-frost" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-frost" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-frost" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-frost" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-frost" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-frost)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-frost)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">GLOBAL SLOT × ROUND × LANE TRACE</text>
+    <g class="trace-axis">
+    <path d="M74 310H232M74 310V126M74 310 140 350"/>
+    <text x="239" y="315">SLOT</text><text x="48" y="118">ROUND</text><text x="145" y="361">LANE</text>
+  </g>
+  <g class="trace-volume" filter="url(#shadow-frost)">
+    <path class="trace-plane trace-plane--back" d="M126 152 319 65 543 145 348 235Z"/>
+    <path class="trace-plane trace-plane--mid" d="M126 202 319 115 543 195 348 285Z"/>
+    <path class="trace-plane trace-plane--front" d="M126 252 319 165 543 245 348 335Z"/>
+    <path class="trace-edge" d="M126 152V252M319 65V165M543 145V245M348 235V335"/>
+    <path class="trace-column" d="M192 173V273M270 138V238M355 104V204M425 128V228M487 151V251"/>
+  </g>
+  <g class="trace-points">
+    <circle cx="192" cy="173" r="5"/><circle cx="270" cy="138" r="5"/><circle cx="355" cy="104" r="5"/>
+    <circle cx="425" cy="128" r="5"/><circle cx="487" cy="151" r="5"/><circle cx="231" cy="231" r="5"/>
+    <circle cx="350" cy="185" r="5"/><circle cx="455" cy="224" r="5"/><circle cx="296" cy="271" r="5"/>
+  </g>
+  <g class="trace-callout">
+    <path d="M455 276 494 312"/><rect x="470" y="307" width="126" height="44" rx="9"/>
+    <text class="diagram-micro" x="486" y="326">TWO REDUCTIONS</text>
+    <text class="diagram-value diagram-value--compact" x="486" y="344">Σd9  +  Σd2</text>
+  </g>
+  <g class="diagram-tag"><rect x="108" y="80" width="118" height="29" rx="7"/><text x="167" y="99">3 COLUMNS</text></g>
+  <g class="diagram-tag diagram-tag--blue"><rect x="238" y="80" width="124" height="29" rx="7"/><text x="300" y="99">59 PERMUTATIONS</text></g>
+    <text class="diagram-caption" x="42" y="390">One product domain · committed columns · two global sumchecks</text>
+  </svg></div></a>
     <div class="card-body">
-      <div class="card-meta"><span>Engineering study</span><time datetime="2026-07-17">Jul 17, 2026</time></div>
-      <h3><a href="/research/b64-b255-proof-classes/">B64 and B255: choosing proof classes from measured cadence</a></h3>
-      <p>Why two authenticated matrix classes were enough, and why a third class was rejected after measurement rather than intuition.</p>
+      <div class="card-meta"><span>Paper</span><time datetime="2026-07-31">31 Jul 2026</time></div>
+      <h3><a href="/research/frost-gkr-global-trace-protocol/">FROST-GKR: a global trace protocol for batched Poseidon2b</a></h3>
+      <p>A three-column committed trace reduces an entire batch of Poseidon2b executions with two constraint sumchecks.</p>
+      <div class="card-foot"><span>6 min read</span><a class="text-link" href="/research/frost-gkr-global-trace-protocol/">Read <span aria-hidden="true">↗</span></a></div>
+    </div>
+  </article>
+<article class="research-card" data-topic="Recursive proving">
+    <a class="card-art-link" href="/research/b64-b255-proof-classes/" tabindex="-1" aria-hidden="true"><div class="research-art art--classes research-art--compact" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-classes" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-classes" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-classes" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-classes" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-classes" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-classes" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-classes)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-classes)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">TWO AUTHENTICATED HISTORYSTEP CLASSES</text>
+    <g class="diagram-panel diagram-panel--green" filter="url(#shadow-classes)">
+    <rect x="42" y="76" width="258" height="230" rx="15"/>
+    <text class="diagram-micro" x="64" y="102">CLASS 00 · REFERENCE PREP</text>
+    <text class="diagram-number" x="64" y="145">B64</text><text class="diagram-value diagram-value--compact" x="235" y="141" text-anchor="end">m23</text>
+    <path class="diagram-divider" d="M64 164H278"/>
+    <text class="diagram-label" x="64" y="190">PHYSICAL PAGES</text><text class="diagram-value diagram-value--compact" x="278" y="190" text-anchor="end">0—64</text>
+    <text class="diagram-label" x="64" y="219">BASEFOLD QUERIES</text><text class="diagram-value diagram-value--compact" x="278" y="219" text-anchor="end">148</text>
+    <text class="diagram-label" x="64" y="248">PREPARE P95</text><text class="diagram-value diagram-value--compact" x="278" y="248" text-anchor="end">14.387 s</text>
+    <g class="cadence-ruler"><path d="M64 278H278"/><path d="M64 272V284M117 274V282M171 272V284M224 274V282M278 272V284"/><circle cx="269" cy="278" r="5"/></g>
+  </g>
+  <g class="diagram-panel diagram-panel--blue" filter="url(#shadow-classes)">
+    <rect x="340" y="76" width="258" height="230" rx="15"/>
+    <text class="diagram-micro" x="362" y="102">CLASS 01 · EXPANDED STATE</text>
+    <text class="diagram-number diagram-number--blue" x="362" y="145">B255</text><text class="diagram-value diagram-value--compact" x="576" y="141" text-anchor="end">m24</text>
+    <path class="diagram-divider" d="M362 164H576"/>
+    <text class="diagram-label" x="362" y="190">PHYSICAL PAGES</text><text class="diagram-value diagram-value--compact" x="576" y="190" text-anchor="end">65—255</text>
+    <text class="diagram-label" x="362" y="219">BASEFOLD QUERIES</text><text class="diagram-value diagram-value--compact" x="576" y="219" text-anchor="end">148</text>
+    <text class="diagram-label" x="362" y="248">PREPARE P95</text><text class="diagram-value diagram-value--compact" x="576" y="248" text-anchor="end">29.755 s</text>
+    <g class="cadence-ruler cadence-ruler--blue"><path d="M362 278H576"/><path d="M362 272V284M415 274V282M469 272V284M522 274V282M576 272V284"/><circle cx="568" cy="278" r="5"/></g>
+  </g>
+  <g class="class-bridge"><path d="M300 191H340"/><circle cx="320" cy="191" r="6"/><text class="diagram-micro" x="320" y="178" text-anchor="middle">TIER SELECT</text></g>
+  <g class="diagram-tag diagram-tag--yellow"><rect x="230" y="326" width="180" height="31" rx="8"/><text x="320" y="346">15 s PREPARE REFERENCE</text></g>
+    <text class="diagram-caption" x="42" y="390">Fixed matrices · authenticated class identity · no speculative middle geometry</text>
+  </svg></div></a>
+    <div class="card-body">
+      <div class="card-meta"><span>Engineering study</span><time datetime="2026-07-17">17 Jul 2026</time></div>
+      <h3><a href="/research/b64-b255-proof-classes/">Why HistoryStep uses two proof classes</a></h3>
+      <p>HistoryStep is the recursive proof of a block&#039;s state transition. B64 handles up to 64 user transaction pages and meets the preparation budget on the reference laptop; B255 extends the same relation to the 255-page block limit. Measurements found no useful operating range for a third class.</p>
       <div class="card-foot"><span>4 min read</span><a class="text-link" href="/research/b64-b255-proof-classes/">Read <span aria-hidden="true">↗</span></a></div>
     </div>
   </article>
-<article class="research-card" data-topic="Soundness">
-    <a class="card-art-link" href="/research/executable-soundness-ledger/" tabindex="-1" aria-hidden="true"><div class="research-art art--soundness research-art--compact" aria-hidden="true">
-    <span class="art-grid"></span>
-    <span class="art-orbit art-orbit--a"></span>
-    <span class="art-orbit art-orbit--b"></span>
-    <span class="art-axis"></span>
-    <span class="art-node art-node--a"></span>
-    <span class="art-node art-node--b"></span>
-    <span class="art-node art-node--c"></span>
-    <span class="art-code">①</span>
-  </div></a>
+<article class="research-card" data-topic="Consensus">
+    <a class="card-art-link" href="/research/atomic-history-step/" tabindex="-1" aria-hidden="true"><div class="research-art art--atomic research-art--compact" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-atomic" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-atomic" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-atomic" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-atomic" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-atomic" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-atomic" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-atomic)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-atomic)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">ONE HEIGHT MUST MEAN ONE COMPLETE OBJECT</text>
+    <g class="diagram-panel diagram-panel--coral" filter="url(#shadow-atomic)"><rect x="38" y="75" width="270" height="255" rx="15"/><text class="diagram-micro" x="60" y="103">BACKGROUND VALIDITY PIPELINE</text><text class="diagram-label" x="60" y="139">BLOCK TIP</text><text class="diagram-number" x="286" y="141" text-anchor="end">1042</text><text class="diagram-label" x="60" y="175">PROVEN TIP</text><text class="diagram-number diagram-number--coral" x="286" y="177" text-anchor="end">1039</text><path class="diagram-divider" d="M60 197H286"/>
+    <g class="pipeline-steps"><rect x="60" y="222" width="62" height="48" rx="8"/><rect x="142" y="222" width="62" height="48" rx="8"/><rect x="224" y="222" width="62" height="48" rx="8"/><text x="91" y="251" text-anchor="middle">BLOCK</text><text x="173" y="251" text-anchor="middle">LINK</text><text x="255" y="251" text-anchor="middle">PROMOTE</text><path d="M122 246H142M204 246H224" marker-end="url(#arrow-atomic)"/></g><text class="diagram-micro" x="60" y="302">TWO DURABLE CURSORS · BACKLOG RECOVERY</text></g>
+  <g class="comparison-mark"><path d="M320 186V220"/><circle cx="320" cy="203" r="16"/><text x="320" y="208" text-anchor="middle">→</text></g>
+  <g class="diagram-panel diagram-panel--green" filter="url(#shadow-atomic)"><rect x="332" y="75" width="270" height="255" rx="15"/><text class="diagram-micro" x="354" y="103">ATOMIC BLOCK BUNDLE</text><g class="bundle"><rect x="374" y="134" width="186" height="139" rx="13"/><rect x="396" y="157" width="142" height="39" rx="7"/><rect x="396" y="211" width="142" height="39" rx="7"/><text class="diagram-value diagram-value--compact" x="467" y="182" text-anchor="middle">BLOCK h</text><text class="diagram-value diagram-value--compact" x="467" y="236" text-anchor="middle">HistoryStep πₕ</text><path d="M467 196V211"/></g><g class="proof-seal"><circle cx="570" cy="297" r="15"/><path d="M562 297 568 303 578 289"/></g><text class="diagram-micro" x="354" y="304">ONE ACCEPTED HEIGHT · NO VALIDITY LAG</text></g>
+    <text class="diagram-caption" x="42" y="390">Atomicity removes the second progress cursor and every partial-promotion state</text>
+  </svg></div></a>
     <div class="card-body">
-      <div class="card-meta"><span>Security engineering</span><time datetime="2026-07-14">Jul 14, 2026</time></div>
-      <h3><a href="/research/executable-soundness-ledger/">Treating soundness as executable protocol data</a></h3>
-      <p>A security floor should move when the protocol moves. The ledger turns batching, Fiat–Shamir and QROM terms into checked inputs rather than prose copied between documents.</p>
-      <div class="card-foot"><span>4 min read</span><a class="text-link" href="/research/executable-soundness-ledger/">Read <span aria-hidden="true">↗</span></a></div>
+      <div class="card-meta"><span>Protocol study</span><time datetime="2026-07-15">15 Jul 2026</time></div>
+      <h3><a href="/research/atomic-history-step/">Why a block is accepted only with its recursive proof</a></h3>
+      <p>An early design accepted a block first and produced its recursive proof later in the background. The canonical chain could therefore move ahead of the HistoryStep-proven tip, forcing nodes to persist and recover a second queue. The production design accepts the block and its matching HistoryStep together: one atomic object, one canonical height and no deferred proof backlog.</p>
+      <div class="card-foot"><span>3 min read</span><a class="text-link" href="/research/atomic-history-step/">Read <span aria-hidden="true">↗</span></a></div>
+    </div>
+  </article>
+<article class="research-card" data-topic="Mining">
+    <a class="card-art-link" href="/research/prove-once-search-nonces/" tabindex="-1" aria-hidden="true"><div class="research-art art--nonce research-art--compact" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-nonce" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-nonce" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-nonce" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-nonce" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-nonce" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-nonce" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-nonce)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-nonce)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">PROVE THE TEMPLATE ONCE · SEARCH THE NONCE</text>
+    <g class="diagram-panel diagram-panel--neutral" filter="url(#shadow-nonce)"><rect x="38" y="83" width="184" height="238" rx="15"/><text class="diagram-micro" x="60" y="111">FIXED BLOCK TEMPLATE</text><text class="diagram-value diagram-value--compact" x="60" y="145">SEMHDR__</text><g class="template-fields"><rect x="60" y="174" width="140" height="28" rx="6"/><rect x="60" y="211" width="140" height="28" rx="6"/><rect x="60" y="248" width="140" height="28" rx="6"/><text x="72" y="193">STATE ROOT</text><text x="72" y="230">TX COMMITMENT</text><text x="72" y="267">DIFFICULTY</text></g><text class="diagram-micro" x="60" y="301">NONCE EXCLUDED</text></g>
+  <path class="diagram-arrow " d="M222 202H268" marker-end="url(#arrow-nonce)"/>
+  <g class="diagram-panel diagram-panel--green" filter="url(#shadow-nonce)"><rect x="268" y="133" width="120" height="138" rx="15"/><text class="diagram-micro" x="328" y="160" text-anchor="middle">HISTORYSTEP</text><text class="diagram-number" x="328" y="207" text-anchor="middle">π</text><text class="diagram-label" x="328" y="237" text-anchor="middle">ONE PROOF</text></g>
+  <g class="nonce-bus"><path d="M388 202H423M423 113V299"/><circle cx="423" cy="113" r="4"/><circle cx="423" cy="175" r="4"/><circle cx="423" cy="237" r="4"/><circle cx="423" cy="299" r="4"/></g>
+  <g class="nonce-list">
+    <g><rect x="444" y="84" width="154" height="49" rx="9"/><text x="460" y="105">NONCE 0017</text><text class="diagram-micro" x="460" y="122">HASH 9A…E2</text></g>
+    <g><rect x="444" y="146" width="154" height="49" rx="9"/><text x="460" y="167">NONCE A84C</text><text class="diagram-micro" x="460" y="184">HASH 41…90</text></g>
+    <g><rect x="444" y="208" width="154" height="49" rx="9"/><text x="460" y="229">NONCE D331</text><text class="diagram-micro" x="460" y="246">HASH 07…B4</text></g>
+    <g class="winner"><rect x="444" y="270" width="154" height="58" rx="9"/><text x="460" y="292">NONCE F102</text><text class="diagram-micro" x="460" y="310">0000…A7 · WINNER</text><circle cx="576" cy="299" r="9"/><path d="M571 299 575 303 582 294"/></g>
+  </g>
+    <text class="diagram-caption" x="42" y="390">The winning PoW nonce is reconnected to the already-proved immutable template</text>
+  </svg></div></a>
+    <div class="card-body">
+      <div class="card-meta"><span>Protocol study</span><time datetime="2026-07-15">15 Jul 2026</time></div>
+      <h3><a href="/research/prove-once-search-nonces/">Prove the block once, then search the nonce</a></h3>
+      <p>HistoryStep binds every semantic header field under a nonce-free domain. PoW can vary the nonce without rebuilding the transition proof.</p>
+      <div class="card-foot"><span>2 min read</span><a class="text-link" href="/research/prove-once-search-nonces/">Read <span aria-hidden="true">↗</span></a></div>
     </div>
   </article>
 <article class="research-card" data-topic="Proof-carrying State">
-    <a class="card-art-link" href="/research/proof-carrying-state-sync/" tabindex="-1" aria-hidden="true"><div class="research-art art--state research-art--compact" aria-hidden="true">
-    <span class="art-grid"></span>
-    <span class="art-orbit art-orbit--a"></span>
-    <span class="art-orbit art-orbit--b"></span>
-    <span class="art-axis"></span>
-    <span class="art-node art-node--a"></span>
-    <span class="art-node art-node--b"></span>
-    <span class="art-node art-node--c"></span>
-    <span class="art-code">①</span>
-  </div></a>
+    <a class="card-art-link" href="/research/proof-carrying-state-sync/" tabindex="-1" aria-hidden="true"><div class="research-art art--state research-art--compact" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-state" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-state" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-state" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-state" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-state" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-state" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-state)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-state)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">PROOF-CARRYING SNAPSHOT INSTALL</text>
+    <g class="header-rail">
+    <text class="diagram-micro" x="44" y="82">PERMANENT HEADER CHAIN</text>
+    <path d="M44 112H596"/>
+    <g><rect x="44" y="96" width="70" height="32" rx="7"/><text x="79" y="117">GENESIS</text></g>
+    <g><rect x="126" y="96" width="42" height="32" rx="7"/><text x="147" y="117">…</text></g>
+    <g><rect x="180" y="96" width="78" height="32" rx="7"/><text x="219" y="117">h−18</text></g>
+    <g class="header-boundary"><rect x="276" y="88" width="118" height="48" rx="10"/><text class="diagram-micro" x="335" y="107">PROVED BOUNDARY</text><text class="diagram-value diagram-value--compact" x="335" y="127">ROOT Rₕ₋₁₈</text></g>
+    <g><rect x="412" y="96" width="42" height="32" rx="7"/><text x="433" y="117">+1</text></g>
+    <g><rect x="466" y="96" width="42" height="32" rx="7"/><text x="487" y="117">…</text></g>
+    <g><rect x="520" y="96" width="76" height="32" rx="7"/><text x="558" y="117">TIP</text></g>
+  </g>
+  <path class="diagram-arrow " d="M335 136V178" marker-end="url(#arrow-state)"/>
+  <g class="diagram-panel diagram-panel--green" filter="url(#shadow-state)"><rect x="44" y="180" width="250" height="148" rx="14"/>
+    <text class="diagram-micro" x="66" y="207">01 · AUTHENTICATE PRESENT</text><text class="diagram-value diagram-value--compact" x="66" y="239">VERIFY HistoryStep π</text>
+    <path class="diagram-divider" d="M66 256H272"/><text class="diagram-label" x="66" y="281">CONSTANT PROOF CHECK</text>
+    <g class="proof-seal"><circle cx="249" cy="292" r="17"/><path d="M240 292 247 299 259 284"/></g>
+  </g>
+  <path class="diagram-arrow " d="M294 254H346" marker-end="url(#arrow-state)"/>
+  <g class="diagram-panel diagram-panel--blue" filter="url(#shadow-state)"><rect x="346" y="180" width="250" height="148" rx="14"/>
+    <text class="diagram-micro" x="368" y="207">02 · INSTALL EXACT STATE</text><text class="diagram-value diagram-value--compact" x="368" y="239">SEGMENTS + 18-BLOCK TAIL</text>
+    <g class="state-segments"><rect x="368" y="263" width="48" height="39" rx="5"/><rect x="424" y="263" width="48" height="39" rx="5"/><rect x="480" y="263" width="48" height="39" rx="5"/><rect x="536" y="263" width="38" height="39" rx="5"/>
+      <path d="M376 275H408M376 284H402M432 275H464M432 284H456M488 275H520M488 284H514M544 275H566M544 284H561"/></g>
+  </g>
+    <text class="diagram-caption" x="42" y="390">Headers remain permanent · spent transaction bodies do not need historical replay</text>
+  </svg></div></a>
     <div class="card-body">
-      <div class="card-meta"><span>Systems research</span><time datetime="2026-07-12">Jul 12, 2026</time></div>
-      <h3><a href="/research/proof-carrying-state-sync/">Proof-carrying State: synchronization without execution replay</a></h3>
-      <p>Permanent headers, one recursive boundary terminal and exact live State replace historical transaction execution during bootstrap.</p>
+      <div class="card-meta"><span>Systems research</span><time datetime="2026-07-12">12 Jul 2026</time></div>
+      <h3><a href="/research/proof-carrying-state-sync/">Bootstrapping from proof-carrying State</a></h3>
+      <p>A joining node validates headers, verifies one recursive transition proof at a finalized boundary, installs exact live State and applies no more than eighteen recent blocks.</p>
       <div class="card-foot"><span>4 min read</span><a class="text-link" href="/research/proof-carrying-state-sync/">Read <span aria-hidden="true">↗</span></a></div>
     </div>
   </article>
-<article class="research-card" data-topic="Binary fields">
-    <a class="card-art-link" href="/research/binary-field-kernels/" tabindex="-1" aria-hidden="true"><div class="research-art art--kernel research-art--compact" aria-hidden="true">
-    <span class="art-grid"></span>
-    <span class="art-orbit art-orbit--a"></span>
-    <span class="art-orbit art-orbit--b"></span>
-    <span class="art-axis"></span>
-    <span class="art-node art-node--a"></span>
-    <span class="art-node art-node--b"></span>
-    <span class="art-node art-node--c"></span>
-    <span class="art-code">①</span>
-  </div></a>
+<article class="research-card" data-topic="Live State">
+    <a class="card-art-link" href="/research/utxo-incarnations/" tabindex="-1" aria-hidden="true"><div class="research-art art--incarnation research-art--compact" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-incarnation" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-incarnation" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-incarnation" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-incarnation" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-incarnation" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-incarnation" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-incarnation)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-incarnation)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">ONE PHYSICAL SLOT · DISTINCT LOGICAL OUTPUTS</text>
+    <g class="diagram-panel diagram-panel--neutral" filter="url(#shadow-incarnation)"><rect x="38" y="78" width="230" height="246" rx="15"/><text class="diagram-micro" x="60" y="105">SLOT 148 · INCARNATION 41</text><text class="diagram-value diagram-value--compact" x="60" y="143">50 NOID</text><path class="diagram-divider" d="M60 161H246"/><text class="diagram-label" x="60" y="190">OWNER</text><text class="diagram-value diagram-value--compact" x="246" y="190" text-anchor="end">A7…2C</text><text class="diagram-label" x="60" y="224">CREATION</text><text class="diagram-number" x="246" y="226" text-anchor="end">41</text><g class="leaf-hash"><rect x="60" y="252" width="186" height="43" rx="8"/><text class="diagram-micro" x="74" y="269">LEAF IDENTITY</text><text class="diagram-value diagram-value--compact" x="74" y="289">H(slot ∥ 41 ∥ value)</text></g></g>
+  <g class="reuse-channel"><path d="M268 169H372" marker-end="url(#arrow-incarnation)"/><text class="diagram-micro" x="320" y="151" text-anchor="middle">SPEND → REUSE</text><path class="stale-cross" d="M301 232 339 270M339 232 301 270"/><text class="diagram-micro diagram-micro--coral" x="320" y="292" text-anchor="middle">STALE H₄₁</text></g>
+  <g class="diagram-panel diagram-panel--green" filter="url(#shadow-incarnation)"><rect x="372" y="78" width="230" height="246" rx="15"/><text class="diagram-micro" x="394" y="105">SLOT 148 · INCARNATION 42</text><text class="diagram-value diagram-value--compact" x="394" y="143">50 NOID</text><path class="diagram-divider" d="M394 161H580"/><text class="diagram-label" x="394" y="190">OWNER</text><text class="diagram-value diagram-value--compact" x="580" y="190" text-anchor="end">A7…2C</text><text class="diagram-label" x="394" y="224">CREATION</text><text class="diagram-number" x="580" y="226" text-anchor="end">42</text><g class="leaf-hash leaf-hash--new"><rect x="394" y="252" width="186" height="43" rx="8"/><text class="diagram-micro" x="408" y="269">NEW LEAF IDENTITY</text><text class="diagram-value diagram-value--compact" x="408" y="289">H(slot ∥ 42 ∥ value)</text></g></g>
+    <text class="diagram-caption" x="42" y="390">The incarnation travels with value, so reuse needs no quarantine root or delay</text>
+  </svg></div></a>
     <div class="card-body">
-      <div class="card-meta"><span>Engineering study</span><time datetime="2026-07-09">Jul 09, 2026</time></div>
-      <h3><a href="/research/binary-field-kernels/">Binary-field kernels across PCLMUL, VPCLMUL, AVX-512 and PMULL</a></h3>
-      <p>One fixed proof layout, several runtime-selected execution backends, and a 5.4× Poseidon2b batch-hashing result on AVX2 with VPCLMULQDQ.</p>
-      <div class="card-foot"><span>3 min read</span><a class="text-link" href="/research/binary-field-kernels/">Read <span aria-hidden="true">↗</span></a></div>
-    </div>
-  </article>
-<article class="research-card" data-topic="Recursive proving">
-    <a class="card-art-link" href="/research/single-global-walk/" tabindex="-1" aria-hidden="true"><div class="research-art art--walk research-art--compact" aria-hidden="true">
-    <span class="art-grid"></span>
-    <span class="art-orbit art-orbit--a"></span>
-    <span class="art-orbit art-orbit--b"></span>
-    <span class="art-axis"></span>
-    <span class="art-node art-node--a"></span>
-    <span class="art-node art-node--b"></span>
-    <span class="art-node art-node--c"></span>
-    <span class="art-code">①</span>
-  </div></a>
-    <div class="card-body">
-      <div class="card-meta"><span>Negative result</span><time datetime="2026-07-06">Jul 06, 2026</time></div>
-      <h3><a href="/research/single-global-walk/">The 30 GB wall and the single global walk</a></h3>
-      <p>Per-family recursive replay was algebraically clean and operationally impossible. A heterogeneous union reduced nine family types to one walk and one channel schedule.</p>
-      <div class="card-foot"><span>4 min read</span><a class="text-link" href="/research/single-global-walk/">Read <span aria-hidden="true">↗</span></a></div>
-    </div>
-  </article>
-<article class="research-card" data-topic="Recursive proving">
-    <a class="card-art-link" href="/research/recursive-fixed-point/" tabindex="-1" aria-hidden="true"><div class="research-art art--recursion research-art--compact" aria-hidden="true">
-    <span class="art-grid"></span>
-    <span class="art-orbit art-orbit--a"></span>
-    <span class="art-orbit art-orbit--b"></span>
-    <span class="art-axis"></span>
-    <span class="art-node art-node--a"></span>
-    <span class="art-node art-node--b"></span>
-    <span class="art-node art-node--c"></span>
-    <span class="art-code">①</span>
-  </div></a>
-    <div class="card-body">
-      <div class="card-meta"><span>Protocol note</span><time datetime="2026-07-05">Jul 05, 2026</time></div>
-      <h3><a href="/research/recursive-fixed-point/">Closing the recursive verifier at a real fixed point</a></h3>
-      <p>A link proof verifies a predecessor of its own class, with the complete verifier replay hosted at a 2^23 field shape.</p>
-      <div class="card-foot"><span>4 min read</span><a class="text-link" href="/research/recursive-fixed-point/">Read <span aria-hidden="true">↗</span></a></div>
+      <div class="card-meta"><span>Protocol study</span><time datetime="2026-07-10">10 Jul 2026</time></div>
+      <h3><a href="/research/utxo-incarnations/">Replacing a consensus quarantine with UTXO incarnations</a></h3>
+      <p>A monotone creation identifier inside the existing value lane invalidates stale slot openings without a second consensus root or reuse quarantine.</p>
+      <div class="card-foot"><span>3 min read</span><a class="text-link" href="/research/utxo-incarnations/">Read <span aria-hidden="true">↗</span></a></div>
     </div>
   </article></div>
     </section>
 
     <section class="focus-section section">
       <div class="section-heading"><div><p class="section-index">02 · Selected work</p><h2>Current research record</h2></div></div>
-      <div class="focus-list"><a href="/research/frost-gkr-global-trace-protocol/"><span class="focus-number">01</span><span><small>Proof systems</small><strong>FROST-GKR</strong></span><span class="focus-arrow">↗</span></a>
-<a href="/research/b64-b255-proof-classes/"><span class="focus-number">02</span><span><small>Recursive proving</small><strong>B64 / B255</strong></span><span class="focus-arrow">↗</span></a>
-<a href="/research/proof-carrying-state-sync/"><span class="focus-number">03</span><span><small>Proof-carrying State</small><strong>Proof-carrying State</strong></span><span class="focus-arrow">↗</span></a>
-<a href="/research/binary-field-kernels/"><span class="focus-number">04</span><span><small>Binary fields</small><strong>Binary-field kernels</strong></span><span class="focus-arrow">↗</span></a></div>
+      <div class="focus-list"><a href="/research/parano1d-soundness-industry-metrics/"><span class="focus-number">01</span><span><small>Soundness</small><strong>Soundness under industry metrics</strong></span><span class="focus-arrow">↗</span></a>
+<a href="/research/frost-gkr-global-trace-protocol/"><span class="focus-number">02</span><span><small>Proof systems</small><strong>FROST-GKR</strong></span><span class="focus-arrow">↗</span></a>
+<a href="/research/b64-b255-proof-classes/"><span class="focus-number">03</span><span><small>Recursive proving</small><strong>B64 / B255</strong></span><span class="focus-arrow">↗</span></a>
+<a href="/research/atomic-history-step/"><span class="focus-number">04</span><span><small>Consensus</small><strong>Atomic HistoryStep</strong></span><span class="focus-arrow">↗</span></a></div>
     </section>
 
-    <section class="method-section section">
-      <div><p class="section-index">03 · Method</p><h2>Evidence before narrative.</h2></div>
-      <div class="method-copy"><p>O(1) Lab publishes completed constructions, reproducible engineering studies and useful failures. A benchmark is paired with its machine and workload. A protocol claim is paired with the code, test or derivation that supports it.</p><a class="text-link" href="/about/">How the journal is maintained <span aria-hidden="true">↗</span></a></div>
-    </section>
   </main>
     <footer class="site-footer">
     <div class="footer-brand">
@@ -213,12 +537,12 @@
       <div><strong>O(1) Lab</strong><p>Protocol research behind ParanO(1)d.</p></div>
     </div>
     <div class="footer-links">
-      <div><strong>Research</strong><a href="/research/">Archive</a><a href="/feed.xml">RSS feed</a><a href="/papers/FROST_GKR.pdf">FROST-GKR paper</a></div>
+      <div><strong>Research</strong><a href="/research/">Archive</a><a href="/feed.xml">RSS feed</a></div>
       <div><strong>Project</strong><a href="https://parano1d.org">Website</a><a href="https://docs.parano1d.org">Documentation</a><a href="https://github.com/ignotusnemo/parano1d">Source</a></div>
     </div>
-    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>research.parano1d.org</span></div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>lab.parano1d.org</span></div>
   </footer>
   </div>
-  <script src="/assets/site.js" defer></script>
+  <script src="/assets/site.js?v=4286a63d1931" defer></script>
 </body>
 </html>

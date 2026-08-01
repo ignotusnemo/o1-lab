@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="PCLMUL, VPCLMUL, AVX-512 и PMULL выполняют одну и ту же арифметику GF(2¹²⁸), не меняя представление свидетеля или байты доказательства.">
+  <meta name="author" content="O(1) Lab">
+  <meta name="keywords" content="Parano1d, ParanO(1)d, O(1) Lab, доказательства с нулевым разглашением, системы доказательств, криптография, рекурсивные доказательства, бинарные поля, полиномиальные обязательства">
+  <link rel="canonical" href="https://lab.parano1d.org/ru/research/binary-field-kernels/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/binary-field-kernels/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/binary-field-kernels/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/binary-field-kernels/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/binary-field-kernels/">
+  <link rel="alternate" type="application/rss+xml" title="Исследования O(1) Lab" href="https://lab.parano1d.org/ru/feed.xml">
+  <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Исследования O(1) Lab">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:url" content="https://lab.parano1d.org/ru/research/binary-field-kernels/">
+  <meta property="og:title" content="Один формат доказательства для четырёх аппаратных путей · O(1) Lab">
+  <meta property="og:description" content="PCLMUL, VPCLMUL, AVX-512 и PMULL выполняют одну и ту же арифметику GF(2¹²⁸), не меняя представление свидетеля или байты доказательства.">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Один формат доказательства для четырёх аппаратных путей · O(1) Lab">
+  <meta name="twitter:description" content="PCLMUL, VPCLMUL, AVX-512 и PMULL выполняют одну и ту же арифметику GF(2¹²⁸), не меняя представление свидетеля или байты доказательства.">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-research.png">
+  <meta property="article:published_time" content="2026-07-09T00:00:00Z">
+  <meta property="article:section" content="Бинарные поля">
+  <meta property="article:author" content="O(1) Lab">
+  <title>Один формат доказательства для четырёх аппаратных путей · O(1) Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Один формат доказательства для четырёх аппаратных путей","description":"Умножение без переносов — основная вычислительная операция в стеке доказательств над бинарным полем. При запуске узел выбирает реализацию для x86-64 или ARM64, при этом представление поля, структура свидетеля и сериализованное доказательство остаются неизменными. На эталонном ноутбуке реализация AVX2+VPCLMUL ускорила пакетное хеширование Poseidon2b в 5,4 раза и сократила время измеренного доказательства с областью из 2^24 позиций с 34,9 до 18,9 секунды.","datePublished":"2026-07-09","dateModified":"2026-07-09","mainEntityOfPage":"https://lab.parano1d.org/ru/research/binary-field-kernels/","inLanguage":"ru","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-research.png","about":"Бинарные поля"}</script>
+</head>
+<body class="locale-ru">
+  <a class="skip-link" href="#content">К содержанию</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/ru/" aria-label="Главная O(1) Lab">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>O(1) Lab</strong><small>Исследования</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
+      <a href="/ru/#latest">Новое</a>
+      <a aria-current="page" href="/ru/research/">Все исследования</a>
+      <span class="nav-rule" aria-hidden="true"></span>
+      <a href="https://docs.parano1d.org">Документация <span aria-hidden="true">↗</span></a>
+      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="ParanO(1)d на GitHub"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      <details class="language-switcher"><summary aria-label="Выбрать язык"><span>RU</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="Язык"><a href="/research/binary-field-kernels/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/binary-field-kernels/" lang="ru" hreflang="ru" aria-current="true"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/binary-field-kernels/" lang="zh-Hans" hreflang="zh-Hans"><span>中文</span><strong>简体中文</strong></a></div></details>
+    </nav>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/ru/research/">← Все исследования</a><div class="article-meta"><span>Инженерное исследование</span><span>Бинарные поля</span><time datetime="2026-07-09">09 июл. 2026 г.</time></div><h1>Один формат доказательства для четырёх аппаратных путей</h1><p class="article-dek">PCLMUL, VPCLMUL, AVX-512 и PMULL выполняют одну и ту же арифметику GF(2¹²⁸), не меняя представление свидетеля или байты доказательства.</p><div class="article-byline"><span>Автор O(1) Lab</span><span>4 мин чтения</span><span>Рабочая реализация</span></div><div class="article-share" aria-label="Поделиться исследованием"><span class="article-share-label">Поделиться</span><button class="share-action" type="button" data-copy-link="https://lab.parano1d.org/ru/research/binary-field-kernels/" data-copy-default="Копировать ссылку" data-copy-success="Скопировано" data-copy-failure="Не удалось скопировать" aria-label="Скопировать ссылку на статью"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-copy-label aria-live="polite">Копировать ссылку</span></button><a class="share-action" href="https://x.com/intent/post?text=%D0%9E%D0%B4%D0%B8%D0%BD%20%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%82%20%D0%B4%D0%BE%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D1%81%D1%82%D0%B2%D0%B0%20%D0%B4%D0%BB%D1%8F%20%D1%87%D0%B5%D1%82%D1%8B%D1%80%D1%91%D1%85%20%D0%B0%D0%BF%D0%BF%D0%B0%D1%80%D0%B0%D1%82%D0%BD%D1%8B%D1%85%20%D0%BF%D1%83%D1%82%D0%B5%D0%B9&amp;url=https%3A%2F%2Flab.parano1d.org%2Fru%2Fresearch%2Fbinary-field-kernels%2F" target="_blank" rel="noopener noreferrer" aria-label="Поделиться статьёй в X"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Поделиться в X</span></a></div></div>
+      <div class="research-art art--kernel" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-kernel" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-kernel" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-kernel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-kernel" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-kernel" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-kernel" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-kernel)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-kernel)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">ONE CANONICAL GF(2¹²⁸) REPRESENTATION</text>
+    <g class="kernel-register">
+    <text class="diagram-micro" x="50" y="83">FIELD ELEMENT · 128 BITS</text>
+    <rect x="50" y="98" width="360" height="54" rx="11"/>
+    <path d="M140 98V152M230 98V152M320 98V152"/>
+    <text x="95" y="131">31…0</text><text x="185" y="131">63…32</text><text x="275" y="131">95…64</text><text x="365" y="131">127…96</text>
+  </g>
+  <path class="diagram-arrow " d="M410 125H462" marker-end="url(#arrow-kernel)"/>
+  <g class="kernel-digest"><rect x="462" y="88" width="128" height="76" rx="13"/><text class="diagram-micro" x="526" y="112" text-anchor="middle">SAME BYTES</text><text class="diagram-value diagram-value--compact" x="526" y="140" text-anchor="middle">STATE / PROOF</text></g>
+  <g class="kernel-paths">
+    <g class="diagram-panel diagram-panel--neutral"><rect x="50" y="192" width="540" height="45" rx="10"/><text class="diagram-value diagram-value--compact" x="68" y="220">x86 BASE</text><text class="diagram-label" x="193" y="220">SSE4.1 + PCLMULQDQ</text><g class="lane-cells"><circle class="diagram-dot diagram-dot--accent" cx="454" cy="214" r="3.2"/><circle class="diagram-dot" cx="469" cy="214" r="3.2"/><circle class="diagram-dot" cx="484" cy="214" r="3.2"/><circle class="diagram-dot" cx="499" cy="214" r="3.2"/><circle class="diagram-dot diagram-dot--accent" cx="514" cy="214" r="3.2"/><circle class="diagram-dot" cx="529" cy="214" r="3.2"/><circle class="diagram-dot" cx="544" cy="214" r="3.2"/><circle class="diagram-dot" cx="559" cy="214" r="3.2"/></g></g>
+    <g class="diagram-panel diagram-panel--green"><rect x="50" y="247" width="540" height="45" rx="10"/><text class="diagram-value diagram-value--compact" x="68" y="275">x86 WIDE</text><text class="diagram-label" x="193" y="275">AVX2 + VPCLMULQDQ</text><g class="lane-cells"><circle class="diagram-dot diagram-dot--accent" cx="424" cy="269" r="3.2"/><circle class="diagram-dot" cx="439" cy="269" r="3.2"/><circle class="diagram-dot" cx="454" cy="269" r="3.2"/><circle class="diagram-dot diagram-dot--accent" cx="469" cy="269" r="3.2"/><circle class="diagram-dot" cx="484" cy="269" r="3.2"/><circle class="diagram-dot" cx="499" cy="269" r="3.2"/><circle class="diagram-dot diagram-dot--accent" cx="514" cy="269" r="3.2"/><circle class="diagram-dot" cx="529" cy="269" r="3.2"/><circle class="diagram-dot" cx="544" cy="269" r="3.2"/><circle class="diagram-dot diagram-dot--accent" cx="559" cy="269" r="3.2"/></g></g>
+    <g class="diagram-panel diagram-panel--blue"><rect x="50" y="302" width="540" height="45" rx="10"/><text class="diagram-value diagram-value--compact" x="68" y="330">ARM64</text><text class="diagram-label" x="193" y="330">NEON + PMULL</text><g class="lane-cells"><circle class="diagram-dot diagram-dot--accent" cx="454" cy="324" r="3.2"/><circle class="diagram-dot" cx="469" cy="324" r="3.2"/><circle class="diagram-dot" cx="484" cy="324" r="3.2"/><circle class="diagram-dot" cx="499" cy="324" r="3.2"/><circle class="diagram-dot diagram-dot--accent" cx="514" cy="324" r="3.2"/><circle class="diagram-dot" cx="529" cy="324" r="3.2"/><circle class="diagram-dot" cx="544" cy="324" r="3.2"/><circle class="diagram-dot" cx="559" cy="324" r="3.2"/></g></g>
+  </g>
+  <g class="diagram-tag"><rect x="456" y="51" width="134" height="28" rx="7"/><text x="523" y="70">UP TO 5.4×</text></g>
+    <text class="diagram-caption" x="42" y="390">Backend dispatch changes throughput, never arithmetic layout or proof bytes</text>
+  </svg></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="В этой статье"><strong>В этой статье</strong><a href="#why-binary">Почему ядра двоичного поля определяют производительность</a><a href="#dispatch">Одна раскладка, выбор реализации во время запуска</a><a href="#poseidon">Poseidon2b остаётся в регистрах</a><a href="#flat-basis">Плоский базис на правильной границе</a><a href="#portability">Переносимость без скрытого скалярного режима</a><a href="#verification">Как проверяются вычислительные реализации</a><a href="#lesson">Почему выбор поля выдержал реализацию</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>Аннотация</span><p>Умножение без переносов — основная вычислительная операция в стеке доказательств над бинарным полем. При запуске узел выбирает реализацию для x86-64 или ARM64, при этом представление поля, структура свидетеля и сериализованное доказательство остаются неизменными. На эталонном ноутбуке реализация AVX2+VPCLMUL ускорила пакетное хеширование Poseidon2b в 5,4 раза и сократила время измеренного доказательства с областью из 2^24 позиций с 34,9 до 18,9 секунды.</p></div><h2 id="why-binary">Почему ядра двоичного поля определяют производительность</h2>
+<p>Механизм доказательств ParanO(1)d работает над бинарным полем расширения GF(2<sup>128</sup>), содержащим 2<sup>128</sup> элементов. Poseidon2b — криптографическая перестановка, используемая стеком доказательств и хешем proof of work, — реализована над тем же полем. Сложение в этом поле — операция XOR, а умножение — полиномиальное умножение без переносов с последующей редукцией. Поэтому основным примитивом, определяющим пропускную способность доказывающей и проверяющей сторон, а также хеширования proof of work, становится аппаратное умножение без переносов, а не обычное целочисленное умножение.</p>
+<p>Архитектурное требование было строже простого ускорения на производительной машине. Форма доказательств, раскладка свидетеля и байты транскрипта должны оставаться одинаковыми на всех платформах. Реализация для конкретной архитектуры набора команд (ISA) вправе менять способ вычисления, но не доказываемое утверждение.</p>
+
+<h2 id="dispatch">Одна раскладка, выбор реализации во время запуска</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Платформа</th><th>Базовый уровень</th><th>Векторная реализация</th><th>Параллелизм</th></tr></thead>
+  <tbody>
+    <tr><td>x86-64</td><td>SSE4.1 + PCLMULQDQ</td><td>AVX2 + VPCLMULQDQ</td><td>Два упакованных элемента поля</td></tr>
+    <tr><td>x86-64</td><td>—</td><td>AVX-512 + VPCLMULQDQ</td><td>Четыре параллельных канала арифметики и более широкие пакеты</td></tr>
+    <tr><td>ARM64</td><td>NEON + PMULL</td><td>Пакетное ядро в регистровом представлении</td><td>Один элемент поля на 128-битный вектор</td></tr>
+  </tbody>
+</table></div>
+<p>Релизный исполняемый файл при запуске определяет возможности процессора и выбирает наиболее широкую из поддерживаемых реализаций. Логический упакованный тип при этом остаётся неизменным. AVX-512 обрабатывает соседние логические пакеты, а не переопределяет их смысл, поэтому его включение не может изменить сериализацию доказательства или свидетеля.</p>
+
+<h2 id="poseidon">Poseidon2b остаётся в регистрах</h2>
+<p>Даже наивная векторная реализация теряет время, если каждый раунд перемещает данные между скалярным представлением в памяти и векторными регистрами. Ядро в регистровом представлении удерживает четырёхкомпонентное состояние перестановки в векторах на всём расписании. Возведение в квадрат использует специализированный путь двоичного поля, умножение — VPCLMULQDQ или PMULL, а константы раундов и линейные слои применяются без выхода из выбранного представления.</p>
+<p>Реализация AVX2+VPCLMULQDQ от 9 июля дала на ноутбуке разработчика два связанных результата:</p>
+<div class="metric-row">
+  <div class="metric"><strong>5,4×</strong><span>ускорение пакетного хеширования Poseidon2b</span></div>
+  <div class="metric"><strong>34,9 с</strong><span>доказательство на 2<sup>24</sup> позиций до</span></div>
+  <div class="metric"><strong>18,9 с</strong><span>доказательство на 2<sup>24</sup> позиций после</span></div>
+</div>
+<p>Полное построение доказательства ускорилось меньше, чем изолированное хеширование: доказывающая сторона также собирает свидетель, выполняет операции схемы полиномиальных обязательств (PCS) и алгебраические вычисления вне хеш-функции. Это различие указывает на следующее узкое место и не позволяет выдать результат изолированного микроизмерения за сквозное ускорение.</p>
+
+<h2 id="flat-basis">Плоский базис на правильной границе</h2>
+<p>Код использует плоское 128-битное представление в полиномиальном базисе, совместимое с операциями умножения поля в режиме Galois/Counter Mode (GCM). Башенный базис представляет то же поле как последовательность меньших вложенных расширений; такая форма удобна для отдельных частей алгебры доказательства. Если преобразовывать каждую скалярную операцию между этими двумя представлениями, преимущество инструкций исчезнет. Поэтому вычисление многолинейных продолжений (MLE) и пакетная обработка Poseidon2b удерживают длинные горячие циклы в плоском базисе и переходят между представлениями только на явно заданных границах протокола.</p>
+<div class="note">
+  <strong>Правило протокола</strong>
+  <p>При любой аппаратной реализации элемент поля остаётся тем же математическим объектом. Динамический выбор при запуске определяет реализацию умножения и хеширования, но не параметры консенсуса.</p>
+</div>
+
+<h2 id="portability">Переносимость без скрытого скалярного режима</h2>
+<p>Штатному узлу необходима аппаратная поддержка, достаточная для построения и проверки доказательств. Для x86-64 это SSE4.1 и PCLMULQDQ; для ARM64 — NEON и PMULL. Более широкие векторные реализации служат необязательными ускорителями. Скалярная реализация полезна как эталон для дифференциального тестирования, но её неявное включение в штатном узле превратило бы формальную совместимость в риск для прогресса сети.</p>
+<p>Особенно это важно для виртуальных машин. Физический процессор может поддерживать PCLMULQDQ, тогда как гипервизор предоставляет гостевой системе обобщённую модель CPU без этой инструкции. Узел проверяет видимые гостевой системе возможности и сообщает об отсутствующей инструкции, а не переходит незаметно в непредсказуемо медленный режим.</p>
+
+<h2 id="verification">Как проверяются вычислительные реализации</h2>
+<p>Каждая оптимизированная реализация сравнивается с канонической скалярной семантикой. Пакетные дайджесты должны совпадать со скалярными для полных и неполных фрагментов, а умножение в поле — с эталонной редукцией. Динамический выбор реализации не должен вызывать функцию с атрибутом <code>target_feature</code> до проверки соответствующей возможности процессора.</p>
+<p>Полученная конструкция обладает тремя полезными свойствами:</p>
+<ol>
+  <li>байты доказательства переносимы между машинами;</li>
+  <li>валидаторы не доверяют оптимизированному результату майнера, а пересчитывают канонический дайджест;</li>
+  <li>новые уровни ISA можно добавлять через тот же интерфейс динамического выбора, не создавая ветвей протокола.</li>
+</ol>
+
+<h2 id="lesson">Почему выбор поля выдержал реализацию</h2>
+<p>Операции Фробениуса — повторные возведения в квадрат, являющиеся линейными отображениями в бинарном поле, — упрощают алгебру доказательства, а умножение без переносов делает то же поле практичным на современных CPU. Ускорение ядра в 5,4 раза имело значение именно потому, что при неизменном формате доказательства оно дало измеримое ускорение полного построения. Арифметика протокола и машинная арифметика сошлись в одном стабильном представлении.</p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Материалы исследования</p><h2 id="evidence-title">Доказательства и артефакты</h2><p>Здесь сохранены реализации, измерения и выводы, на которых основана статья.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/6e29b73e"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Коммит</small><strong>Коммит ядра VPCLMUL</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_core/src/cpu.rs"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Код</small><strong>Выбор реализации во время запуска</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_poseidon2b/src/batch.rs"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Код</small><strong>Пакетная реализация Poseidon2b</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Соседние исследования"><a href="/ru/research/single-global-walk/"><small>Ранее</small><strong>Единый глобальный проход</strong><span>←</span></a><a href="/ru/research/utxo-incarnations/"><small>Позднее</small><strong>Поколения UTXO</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>O(1) Lab</strong><p>Исследования протокола ParanO(1)d.</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>Исследования</strong><a href="/ru/research/">Архив</a><a href="/ru/feed.xml">RSS-лента</a></div>
+      <div><strong>Проект</strong><a href="https://parano1d.org">Сайт</a><a href="https://docs.parano1d.org">Документация</a><a href="https://github.com/ignotusnemo/parano1d">Исходный код</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 O(1) Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=4286a63d1931" defer></script>
+</body>
+</html>

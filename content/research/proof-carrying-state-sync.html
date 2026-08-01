@@ -1,13 +1,14 @@
 <h2 id="remove-replay">Remove replay, not verification</h2>
-<p>Historical replay combines several different tasks and calls all of them “synchronization.” A node reads headers to compare proof of work. It downloads transaction bodies to reconstruct state. It executes every historical rule to decide whether the reconstructed state is valid. As the chain ages, the third task grows even when the present State stays the same size.</p>
+<p>Historical replay combines several different tasks and calls all of them “synchronization.” A node reads headers to compare proof of work. It downloads transaction bodies to reconstruct State—the authenticated set of current unspent outputs and consensus counters. It executes every historical rule to decide whether the reconstructed State is valid. As the chain ages, the third task grows even when the present State stays the same size.</p>
 <p>ParanO(1)d replaces historical execution replay with a recursive HistoryStep. Each accepted block proves the exact transition from its authenticated parent State to its child State. The current boundary therefore carries a proof of the transition chain that produced it.</p>
+<p>A <em>finalized boundary</em> is a block old enough to lie outside the protocol's permitted reorganization window. The <em>recent suffix</em> is the sequence of no more than eighteen complete blocks between that boundary and the current tip.</p>
 <div class="result">
   <strong>What disappears</strong>
   <p>A joining node does not download and execute every historical transaction body. It verifies one recursive terminal at a finalized boundary, reconstructs the exact committed live State, then applies a bounded recent suffix.</p>
 </div>
 
-<h2 id="cost-model">The honest cost model</h2>
-<p>“O(1) synchronization” is easy to overstate. The proof-verification work at the boundary is constant in chain age. Header work and State transfer are not.</p>
+<h2 id="cost-model">Costs that remain</h2>
+<p>Only boundary proof verification is constant in chain age. Header validation and live State transfer still scale with the data a full node must possess.</p>
 <div class="table-wrap"><table>
   <thead><tr><th>Phase</th><th>Scales with</th><th>Why it remains</th></tr></thead>
   <tbody>
@@ -21,7 +22,7 @@
 
 <h2 id="paths">Two synchronization paths</h2>
 <h3>A short gap</h3>
-<p>Every full node retains the latest eighteen complete accepted blocks. A peer within that window requests atomic bundles containing the semantic block and matching HistoryStep terminal. It checks header continuity, exact difficulty and timestamp rules, Poseidon2b proof of work, transaction and State commitments, recursive validity, fork choice and finality before materializing writes.</p>
+<p>Every full node retains the latest eighteen complete accepted blocks. A peer within that window requests atomic bundles containing the semantic block and matching HistoryStep terminal. It checks header continuity, exact difficulty and timestamp rules, the Poseidon2b-based proof-of-work hash, transaction and State commitments, recursive validity, fork choice and finality before materializing writes.</p>
 
 <h3>A deep gap</h3>
 <p>A peer farther behind selects a finalized snapshot boundary:</p>
@@ -37,7 +38,7 @@
 
 <h2 id="boundary">Bind every object to one boundary</h2>
 <p>A valid proof for height <em>h</em> must not authenticate a manifest from <em>h − 1</em> or a segment set from another branch. The snapshot manifest therefore binds the boundary height, State root, slot geometry, active count, allocation counter, segment identifiers, segment roots and lengths. The recursive terminal, canonical header and manifest must name the same boundary.</p>
-<p>Several July 12 implementation passes focused specifically on typestate around that boundary: header staging, selected proof sessions, durable proof jobs and exact boundary binding. These are not network cosmetics. They prevent a peer from combining individually valid objects into an invalid snapshot package.</p>
+<p>The implementation uses distinct types for header staging, the selected proof session, durable proof work and exact boundary binding. These are not network cosmetics. They prevent a peer from combining individually valid objects into an invalid snapshot package.</p>
 
 <h2 id="staging">Disk staging as a consensus boundary</h2>
 <p>Segments arrive into an isolated scratch environment. The active database is not updated page by page. Only after every segment, counter, root, boundary header and terminal agrees does the node atomically replace the installed State.</p>
@@ -55,12 +56,12 @@
 <p>The finalized boundary cannot be reorganized. Fork choice considers only candidates that preserve it, and the accepted rollback depth is less than eighteen blocks. Recent complete blocks and undo data cover the suffix. A deeper competing branch is rejected rather than “repaired” by installing a different snapshot.</p>
 <p>This rule keeps the snapshot authority aligned with recursive validity. Without a hard boundary, a node could authenticate one present and then be asked to reconstruct a deep alternative history whose bodies it intentionally did not retain.</p>
 
-<h2 id="research-result">The research result</h2>
-<p>The important result is not a fast file-transfer protocol. It is the division of verification work:</p>
+<h2 id="research-result">Four checks, no snapshot authority</h2>
+<p>Bootstrap separates four kinds of evidence:</p>
 <ul>
   <li>headers establish the greatest-work eligible chain;</li>
   <li>HistoryStep establishes validity at the boundary;</li>
   <li>the manifest and segment roots establish the exact current State;</li>
   <li>the retained suffix establishes freshness to the live tip.</li>
 </ul>
-<p>Once those roles are separate, synchronization can be optimized without turning a cache, checkpoint publisher or convenient peer into a hidden source of consensus authority.</p>
+<p>A peer supplies bytes for all four stages but controls none of their acceptance rules. Transfer and staging can change without turning a cache, seed or snapshot mirror into a checkpoint authority.</p>
