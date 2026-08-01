@@ -72,6 +72,10 @@ function linkIcon(className = "share-icon share-icon--link") {
   return `<svg class="${className}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`;
 }
 
+function checkIcon(className = "share-icon share-icon--check") {
+  return `<svg class="${className}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg>`;
+}
+
 function xIcon(className = "share-icon share-icon--x") {
   return `<svg class="${className}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`;
 }
@@ -187,16 +191,18 @@ function header(active, locale, basePath) {
       <span class="brand-mark" aria-hidden="true">①</span>
       <span class="brand-copy"><strong>O(1) Lab</strong><small>${esc(t.brandSection)}</small></span>
     </a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
-    <nav class="site-nav" id="site-nav" aria-label="${esc(t.navLabel)}">
-      <a${active === "latest" ? ' aria-current="page"' : ""} href="${pathFor(locale, "/")}#latest">${esc(t.navLatest)}</a>
-      <a${active === "research" ? ' aria-current="page"' : ""} href="${pathFor(locale, "/research/")}">${esc(t.navResearch)}</a>
-      <span class="nav-rule" aria-hidden="true"></span>
-      <a href="https://docs.parano1d.org">${esc(t.navDocs)} <span aria-hidden="true">↗</span></a>
-      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
-      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="${esc(t.githubAria)}">${githubIcon("nav-github-icon")}<span>GitHub</span></a>
+    <div class="header-controls">
+      <nav class="site-nav" id="site-nav" aria-label="${esc(t.navLabel)}">
+        <a${active === "latest" ? ' aria-current="page"' : ""} href="${pathFor(locale, "/")}#latest">${esc(t.navLatest)}</a>
+        <a${active === "research" ? ' aria-current="page"' : ""} href="${pathFor(locale, "/research/")}">${esc(t.navResearch)}</a>
+        <span class="nav-rule" aria-hidden="true"></span>
+        <a href="https://docs.parano1d.org">${esc(t.navDocs)} <span aria-hidden="true">↗</span></a>
+        <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+        <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="${esc(t.githubAria)}">${githubIcon("nav-github-icon")}<span>GitHub</span></a>
+      </nav>
       ${languageSwitcher(locale, basePath)}
-    </nav>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    </div>
   </header>`;
 }
 
@@ -393,7 +399,7 @@ function shareControls(item, locale, basePath) {
   const t = ui[locale.code];
   const canonical = absolute(pathFor(locale, basePath));
   const shareUrl = `https://x.com/intent/post?text=${encodeURIComponent(item.title)}&url=${encodeURIComponent(canonical)}`;
-  return `<div class="article-share" aria-label="${esc(t.shareAria)}"><span class="article-share-label">${esc(t.share)}</span><button class="share-action" type="button" data-copy-link="${esc(canonical)}" data-copy-default="${esc(t.copyLink)}" data-copy-success="${esc(t.copied)}" data-copy-failure="${esc(t.copyFailed)}" aria-label="${esc(t.copyAria)}">${linkIcon()}<span data-copy-label aria-live="polite">${esc(t.copyLink)}</span></button><a class="share-action" href="${esc(shareUrl)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(t.shareXAria)}">${xIcon()}<span>${esc(t.shareX)}</span></a></div>`;
+  return `<div class="article-share" aria-label="${esc(t.shareAria)}"><span class="article-share-label">${esc(t.share)}</span><button class="share-action share-action--icon" type="button" data-copy-link="${esc(canonical)}" data-copy-default="${esc(t.copyLink)}" data-copy-success="${esc(t.copied)}" data-copy-failure="${esc(t.copyFailed)}" aria-label="${esc(t.copyAria)}" title="${esc(t.copyLink)}">${linkIcon()}${checkIcon()}<span class="visually-hidden" data-copy-label aria-live="polite">${esc(t.copyLink)}</span></button><a class="share-action" href="${esc(shareUrl)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(t.shareXAria)}">${xIcon()}<span>${esc(t.shareX)}</span></a></div>`;
 }
 
 function tocFor(html, locale) {

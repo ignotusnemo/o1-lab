@@ -36,7 +36,7 @@
   <meta property="article:section" content="递归证明">
   <meta property="article:author" content="O(1) Lab">
   <title>HistoryStep 为何采用两种证明类别 · O(1) Lab</title>
-  <link rel="stylesheet" href="/assets/site.css?v=5ddc41b98eaf">
+  <link rel="stylesheet" href="/assets/site.css?v=f5f4e315f5e2">
   <link rel="stylesheet" href="/assets/katex.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"HistoryStep 为何采用两种证明类别","description":"本研究考察递归区块证明是否需要一种介于两种正式类别之间的几何。B64 覆盖最多 64 个物理用户页面的区块；B255 在不改变所证明关系的前提下覆盖 65 至 255 页。测试包含实际部署的完整证明路径、经过认证的矩阵，以及最高 1,020 个输入的钱包聚合。中间几何曾被实现，随后被移除：它会在共识中增加一条选择规则和一个验证分支，却没有改善任何已证实的工作负载。","datePublished":"2026-07-17","dateModified":"2026-07-17","mainEntityOfPage":"https://lab.parano1d.org/zh/research/b64-b255-proof-classes/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"O(1) Lab"}],"publisher":{"@type":"Organization","name":"O(1) Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-lab-hero.png","about":"递归证明"}</script>
 </head>
@@ -48,20 +48,22 @@
       <span class="brand-mark" aria-hidden="true">①</span>
       <span class="brand-copy"><strong>O(1) Lab</strong><small>研究</small></span>
     </a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
-    <nav class="site-nav" id="site-nav" aria-label="主导航">
-      <a href="/zh/#latest">最新</a>
-      <a aria-current="page" href="/zh/research/">全部研究</a>
-      <span class="nav-rule" aria-hidden="true"></span>
-      <a href="https://docs.parano1d.org">文档 <span aria-hidden="true">↗</span></a>
-      <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
-      <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="GitHub 上的 ParanO(1)d"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+    <div class="header-controls">
+      <nav class="site-nav" id="site-nav" aria-label="主导航">
+        <a href="/zh/#latest">最新</a>
+        <a aria-current="page" href="/zh/research/">全部研究</a>
+        <span class="nav-rule" aria-hidden="true"></span>
+        <a href="https://docs.parano1d.org">文档 <span aria-hidden="true">↗</span></a>
+        <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+        <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="GitHub 上的 ParanO(1)d"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      </nav>
       <details class="language-switcher"><summary aria-label="切换语言"><span>中文</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="语言"><a href="/research/b64-b255-proof-classes/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/b64-b255-proof-classes/" lang="ru" hreflang="ru"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/b64-b255-proof-classes/" lang="zh-Hans" hreflang="zh-Hans" aria-current="true"><span>中文</span><strong>简体中文</strong></a></div></details>
-    </nav>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    </div>
   </header>
     <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
     <header class="article-hero">
-      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>工程研究</span><span>递归证明</span><time datetime="2026-07-17">2026年7月17日</time></div><h1>HistoryStep 为何采用两种证明类别</h1><p class="article-dek">HistoryStep 是区块状态转换的递归证明。B64 可处理最多 64 个用户交易页面，并能在参考笔记本上满足准备时间预算；B255 将同一证明关系扩展到每区块 255 页的上限。测量没有发现第三种类别可以覆盖的有用运行区间。</p><div class="article-byline"><span>作者 O(1) Lab</span><span>5 分钟阅读</span><span>可复现基准测试</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action" type="button" data-copy-link="https://lab.parano1d.org/zh/research/b64-b255-proof-classes/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=HistoryStep%20%E4%B8%BA%E4%BD%95%E9%87%87%E7%94%A8%E4%B8%A4%E7%A7%8D%E8%AF%81%E6%98%8E%E7%B1%BB%E5%88%AB&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fb64-b255-proof-classes%2F" target="_blank" rel="noopener noreferrer" aria-label="将本文分享到 X"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
+      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>工程研究</span><span>递归证明</span><time datetime="2026-07-17">2026年7月17日</time></div><h1>HistoryStep 为何采用两种证明类别</h1><p class="article-dek">HistoryStep 是区块状态转换的递归证明。B64 可处理最多 64 个用户交易页面，并能在参考笔记本上满足准备时间预算；B255 将同一证明关系扩展到每区块 255 页的上限。测量没有发现第三种类别可以覆盖的有用运行区间。</p><div class="article-byline"><span>作者 O(1) Lab</span><span>5 分钟阅读</span><span>可复现基准测试</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/zh/research/b64-b255-proof-classes/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接" title="复制链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=HistoryStep%20%E4%B8%BA%E4%BD%95%E9%87%87%E7%94%A8%E4%B8%A4%E7%A7%8D%E8%AF%81%E6%98%8E%E7%B1%BB%E5%88%AB&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fb64-b255-proof-classes%2F" target="_blank" rel="noopener noreferrer" aria-label="将本文分享到 X"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
       <div class="research-art art--classes" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
     <defs>
     <pattern id="grid-classes" width="24" height="24" patternUnits="userSpaceOnUse">
