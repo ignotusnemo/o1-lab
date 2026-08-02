@@ -189,7 +189,7 @@ img, svg { max-width: 100%; }
 .site-nav .nav-github:hover { border-color: rgba(0,104,58,.34); background: #fff; color: var(--green-dark); box-shadow: 0 8px 20px rgba(7,18,13,.1); }
 .nav-github-icon { width: 17px; height: 17px; flex: 0 0 auto; fill: currentColor; }
 .header-controls { display: flex; align-items: center; gap: 4px; }
-.language-switcher { position: relative; margin-left: 4px; }
+.language-switcher { position: relative; margin-right: 4px; }
 .language-switcher summary {
   min-width: 56px;
   min-height: 38px;
@@ -983,7 +983,7 @@ img, svg { max-width: 100%; }
   .brand-copy strong { flex: 0 0 auto; font-size: 15px; }
   .brand-copy small { display: none; }
   .header-controls { display: flex; flex: 0 0 auto; align-items: center; gap: 7px; }
-  .header-controls > .language-switcher { margin-left: 0; }
+  .header-controls > .language-switcher { margin-right: 0; }
   .header-controls > .language-switcher summary { min-width: 54px; min-height: 40px; padding: 7px 9px; }
   .header-controls > .language-switcher .language-menu { position: absolute; top: calc(100% + 9px); right: 0; width: 184px; margin-top: 0; box-shadow: 0 18px 42px rgba(7,18,13,.13); }
   .nav-toggle { width: 40px; height: 40px; display: grid; place-content: center; gap: 5px; border: 1px solid var(--control-border); border-radius: 8px; background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(247,249,247,.62)); box-shadow: var(--shadow-xs), inset 0 1px 0 rgba(255,255,255,.88); cursor: pointer; transition: transform .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease; }

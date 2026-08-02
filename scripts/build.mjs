@@ -204,15 +204,15 @@ function header(active, locale, basePath) {
       <span class="brand-copy"><strong>ParanO(1)d Lab</strong><small>${esc(t.brandSection)}</small></span>
     </a>
     <div class="header-controls">
+      ${languageSwitcher(locale, basePath)}
       <nav class="site-nav" id="site-nav" aria-label="${esc(t.navLabel)}">
         <a${active === "latest" ? ' aria-current="page"' : ""} href="${pathFor(locale, "/")}#latest">${esc(t.navLatest)}</a>
         <a${active === "research" ? ' aria-current="page"' : ""} href="${pathFor(locale, "/research/")}">${esc(t.navResearch)}</a>
         <span class="nav-rule" aria-hidden="true"></span>
         <a href="https://docs.parano1d.org">${esc(t.navDocs)} <span aria-hidden="true">↗</span></a>
-        <a href="https://parano1d.org">ParanO(1)d <span aria-hidden="true">↗</span></a>
+        <a href="https://parano1d.org">Parano1d <span aria-hidden="true">↗</span></a>
         <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="${esc(t.githubAria)}">${githubIcon("nav-github-icon")}<span>GitHub</span></a>
       </nav>
-      ${languageSwitcher(locale, basePath)}
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
     </div>
   </header>`;
