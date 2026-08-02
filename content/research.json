@@ -9,7 +9,7 @@
     "title": "Parano1d under the Block–Tiwari FS-FRI metric",
     "shortTitle": "Block–Tiwari FS-FRI",
     "dek": "The current History parameters are evaluated under Block and Tiwari's expected-work definition, with the proved and conjectured RBR premises kept separate and the query optimization solved exactly.",
-    "abstract": "Block and Tiwari define concrete security for a non-interactive FRI proof through the expected random-oracle query work Q/epsilon. This study maps the current Parano1d History parameters into that definition, derives the proved and conjectured RBR inputs, solves the integer optimization exactly and places the resulting row beside Table 1 of their comparison.",
+    "abstract": "Block and Tiwari define concrete security for a non-interactive FRI proof through the expected random-oracle query work Q/epsilon. This study maps the current Parano1d History parameters into that definition, derives the proved and conjectured RBR inputs and solves the integer optimization exactly.",
     "authors": ["Ignotus Nemo"],
     "art": "fsfri",
     "evidence": [

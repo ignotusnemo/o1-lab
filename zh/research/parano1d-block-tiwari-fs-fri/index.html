@@ -43,7 +43,7 @@
   <title>Block–Tiwari FS-FRI · Parano1d Lab</title>
   <link rel="stylesheet" href="/assets/site.css?v=ef75dc965770">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Block–Tiwari FS-FRI 指标下的 Parano1d","description":"Block 与 Tiwari 通过随机预言机查询的期望工作量 Q/epsilon 定义非交互式 FRI 的具体安全性。本文把当前 Parano1d History 参数映射到该定义，分别推导已证明和基于猜想的 RBR 输入，精确求解整数优化，并把所得一行加入其比较表 1。","datePublished":"2026-08-03","dateModified":"2026-08-03","mainEntityOfPage":"https://lab.parano1d.org/zh/research/parano1d-block-tiwari-fs-fri/","inLanguage":"zh-Hans","author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/parano1d-block-tiwari-fs-fri.png","about":"Fiat–Shamir 安全性"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Block–Tiwari FS-FRI 指标下的 Parano1d","description":"Block 与 Tiwari 通过随机预言机查询的期望工作量 Q/epsilon 定义非交互式 FRI 的具体安全性。本文把当前 Parano1d History 参数映射到该定义，分别推导已证明和基于猜想的 RBR 输入，并精确求解整数优化。","datePublished":"2026-08-03","dateModified":"2026-08-03","mainEntityOfPage":"https://lab.parano1d.org/zh/research/parano1d-block-tiwari-fs-fri/","inLanguage":"zh-Hans","author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/parano1d-block-tiwari-fs-fri.png","about":"Fiat–Shamir 安全性"}</script>
 </head>
 <body class="locale-zh">
   <a class="skip-link" href="#content">跳到正文</a>
@@ -153,7 +153,7 @@
     </header>
     <div class="article-layout">
       <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#question">安全位表格背后的问题</a><a href="#metric">从交互式可靠性到期望攻击工作量</a><a href="#inputs">当前 History 参数集</a><a href="#rbr-premises">同一参数集的两种 RBR 前提</a><a href="#optimizer">全局优化为何只需检查两个整数</a><a href="#calculations">两个安全性列的精确计算</a><a href="#comparison">与 Block–Tiwari 参数快照比较</a><a href="#interpretation">两列数值说明了什么</a><a href="#reproduction">复现整数证书</a><a href="#references">主要原始资料</a></aside>
-      <article class="article-body"><div class="article-abstract"><span>摘要</span><p>Block 与 Tiwari 通过随机预言机查询的期望工作量 Q/epsilon 定义非交互式 FRI 的具体安全性。本文把当前 Parano1d History 参数映射到该定义，分别推导已证明和基于猜想的 RBR 输入，精确求解整数优化，并把所得一行加入其比较表 1。</p></div><h2 id="question">安全位表格背后的问题</h2>
+      <article class="article-body"><div class="article-abstract"><span>摘要</span><p>Block 与 Tiwari 通过随机预言机查询的期望工作量 Q/epsilon 定义非交互式 FRI 的具体安全性。本文把当前 Parano1d History 参数映射到该定义，分别推导已证明和基于猜想的 RBR 输入，并精确求解整数优化。</p></div><h2 id="question">安全位表格背后的问题</h2>
 
 <p>FRI 是针对 Reed–Solomon 码的接近性证明，也是许多透明证明系统的核心组件。FRI 原本是一种交互式预言机证明（IOP）：验证者发送随机挑战值，只读取证明者大型预言机中的少量位置。Fiat–Shamir 变换通过随机预言机导出挑战值，从而消除交互。一旦完成这项变换，相关资源便不再只是单份交互记录中的 FRI 查询数。恶意证明者可以反复查询随机预言机，筛选有利的交互记录并重复攻击。</p>
 
