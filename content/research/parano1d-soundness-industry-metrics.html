@@ -1,7 +1,7 @@
 <p>Four recurring terms are used in the comparison. FRI is the low-degree proof family underlying the listed code-based systems. An interactive oracle proof (IOP) lets a verifier query committed oracle data instead of reading an entire proof table. The <em>Toy Problem</em> score is an industry parameter heuristic based on code rate, query count and a field-size cap. Round-by-round knowledge soundness (RBR) instead bounds the extractor's failure at each verifier move; the related <math-inline>t/e(t)</math-inline> convention divides attack work <math-inline>t</math-inline> by its success probability <math-inline>e(t)</math-inline>. The table compares scalar scores only within the metric named in each row; it does not treat the underlying protocols as identical objects.</p>
 
 <div class="table-wrap comparison-table"><table>
-  <thead><tr><th>Published system and metric</th><th>Published value</th><th>ParanO(1)d under the corresponding metric</th></tr></thead>
+  <thead><tr><th>Published system and metric</th><th>Published value</th><th>Parano1d under the corresponding metric</th></tr></thead>
   <tbody>
     <tr><td><a href="https://github.com/0xPolygonZero/plonky2#security">Plonky2 default FRI</a>, Toy Problem conjecture</td><td><b>100 bits conjectured</b>; the project estimates its default Poseidon configuration at about <b>95 bits</b></td><td><b>128 bits conjectured</b>, using the literal Plonky2/Toy-Problem formula and the production field cap</td></tr>
     <tr><td><a href="https://github.com/risc0/risc0/blob/release-3.0/risc0/zkp/src/prove/soundness.rs">RISC Zero soundness calculator</a>, Toy Problem conjecture</td><td><b>97 bits conjectured</b> at <code>SEGMENT_SIZE = 2^20</code>; <b>95 bits conjectured</b> at <code>2^24</code></td><td><b>128 bits conjectured</b>, using the same Toy-Problem-style rate/query calculation</td></tr>
@@ -9,18 +9,18 @@
   </tbody>
 </table></div>
 
-<p>The ParanO(1)d values are derived from pinned production inputs, implemented as executable formulas and fixed by regression tests. Each value retains the scope of the metric that produced it: conjectured parameter score, generalized-RBR knowledge bound or finite work-accounted composition.</p>
+<p>The Parano1d values are derived from pinned production inputs, implemented as executable formulas and fixed by regression tests. Each value retains the scope of the metric that produced it: conjectured parameter score, generalized-RBR knowledge bound or finite work-accounted composition.</p>
 
 <div class="note">
   <strong>How to read the final row</strong>
-  <p>The protocols are not identical. The <b>96.047</b> figure is a generalized round-by-round knowledge bound for the interactive ParanO(1)d wallet base IOP. The <b>95.022</b> figure is the fixed-invalid-block, work-accounted finite composition defined below. Each is paired with the closest published scalar convention; the exact definition remains visible throughout the comparison.</p>
+  <p>The protocols are not identical. The <b>96.047</b> figure is a generalized round-by-round knowledge bound for the interactive Parano1d wallet base IOP. The <b>95.022</b> figure is the fixed-invalid-block, work-accounted finite composition defined below. Each is paired with the closest published scalar convention; the exact definition remains visible throughout the comparison.</p>
 </div>
 
 <h2 id="question">Scope and method</h2>
 
 <p>Security numbers are easy to compare after their definitions have been removed. That is also when the comparison stops meaning anything. “100 bits,” “96 bits” and “128 bits” may refer to a conjectured query score, a proved interactive soundness error, a relaxed work-per-success definition, a hash primitive or a composed application. The integer is the last step. The attack game and the reduction come first.</p>
 
-<p>This study asks one reproducible question: <em>what does the committed ParanO(1)d proof geometry score under the same classical conventions published by established proof-system projects?</em> Four objects are evaluated separately:</p>
+<p>This study asks one reproducible question: <em>what does the committed Parano1d proof geometry score under the same classical conventions published by established proof-system projects?</em> Four objects are evaluated separately:</p>
 
 <ol>
   <li>the literal Plonky2/Toy-Problem parameter score;</li>
@@ -33,7 +33,7 @@
 
 <h2 id="inputs">Production inputs, not illustrative parameters</h2>
 
-<p>The inputs are copied from ParanO(1)d commit <a href="https://github.com/ignotusnemo/parano1d/commit/93b0252317208c20f8a769afb74681aa9389e286"><code>93b0252317208c20f8a769afb74681aa9389e286</code></a>. That revision is recorded inside the workbench. A later protocol revision must deliberately update both the source pin and the expected results.</p>
+<p>The inputs are copied from Parano1d commit <a href="https://github.com/ignotusnemo/parano1d/commit/93b0252317208c20f8a769afb74681aa9389e286"><code>93b0252317208c20f8a769afb74681aa9389e286</code></a>. That revision is recorded inside the workbench. A later protocol revision must deliberately update both the source pin and the expected results.</p>
 <p><code>State</code> is the authenticated set of current unspent outputs and consensus counters. HistoryStep is the recursive proof of a block's exact transition from its parent State to its child State. B64 and B255 are its two fixed proof-capacity classes, sized for blocks containing up to 64 and 255 user-transaction pages respectively; they enforce the same validity rules with different constraint-domain capacities.</p>
 
 <div class="table-wrap"><table>
@@ -257,7 +257,7 @@ close(rbr.generalized_rbr_bits, 96.046_815_693_930_09, 1e-12);</code></pre>
 
 <h3 id="grind">Where the grind belongs</h3>
 
-<p>The 16-bit grind occurs immediately before query sampling. Applying it only to the later query term, rather than multiplying unrelated finite field exceptions, gives a fixed-invalid-block result of <b>95.021747 bits</b>. This is the closest ParanO(1)d scalar in the workbench to the relaxed work-accounting convention used in the ethSTARK comparison.</p>
+<p>The 16-bit grind occurs immediately before query sampling. Applying it only to the later query term, rather than multiplying unrelated finite field exceptions, gives a fixed-invalid-block result of <b>95.021747 bits</b>. This is the closest Parano1d scalar in the workbench to the relaxed work-accounting convention used in the ethSTARK comparison.</p>
 
 <p>A separate one-shot experiment lets one block contain up to 255 independently attackable wallet proof events:</p>
 
@@ -314,7 +314,7 @@ RUSTDOCFLAGS='-D warnings' cargo doc --release --no-deps</code></pre>
 <h2 id="references">Primary sources</h2>
 
 <ul>
-  <li><a href="https://github.com/ignotusnemo/parano1d-soundness">Ignotus Nemo, ParanO(1)d soundness</a>.</li>
+  <li><a href="https://github.com/ignotusnemo/parano1d-soundness">Ignotus Nemo, Parano1d soundness</a>.</li>
   <li><a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/wallet-generalized-rbr.md">Wallet authorization: a 96.047-bit generalized RBR bound</a>.</li>
   <li><a href="https://github.com/0xPolygonZero/plonky2#security">Plonky2 security statement</a> and its <a href="https://github.com/0xPolygonZero/plonky2/blob/main/starky/src/config.rs#L119-L126">literal parameter calculation</a>.</li>
   <li><a href="https://github.com/risc0/risc0/blob/release-3.0/risc0/zkp/src/prove/soundness.rs">RISC Zero soundness calculator</a>.</li>

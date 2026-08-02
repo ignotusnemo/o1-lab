@@ -6,24 +6,24 @@
   <meta name="theme-color" content="#f3f2ed">
   <meta name="color-scheme" content="light">
   <meta name="description" content="HistoryStep 在不含 nonce 的语义域中绑定区块头的全部语义字段；PoW 可以改变 nonce，而无需重建 State 转换证明。">
-  <meta name="author" content="ParanO(1)d Lab">
-  <meta name="keywords" content="Parano1d, ParanO(1)d, ParanO(1)d Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺">
+  <meta name="author" content="Parano1d Lab">
+  <meta name="keywords" content="Parano1d, Parano1d Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺">
   <link rel="canonical" href="https://lab.parano1d.org/zh/research/prove-once-search-nonces/">
   <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/prove-once-search-nonces/">
   <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/prove-once-search-nonces/">
   <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/prove-once-search-nonces/">
   <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/prove-once-search-nonces/">
-  <link rel="alternate" type="application/rss+xml" title="ParanO(1)d Lab 研究" href="https://lab.parano1d.org/zh/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Parano1d Lab 研究" href="https://lab.parano1d.org/zh/feed.xml">
   <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
   <meta property="og:type" content="article">
-  <meta property="og:site_name" content="ParanO(1)d Lab 研究">
+  <meta property="og:site_name" content="Parano1d Lab 研究">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:locale:alternate" content="en_US">
   <meta property="og:locale:alternate" content="ru_RU">
   <meta property="og:url" content="https://lab.parano1d.org/zh/research/prove-once-search-nonces/">
-  <meta property="og:title" content="区块只证明一次，随后搜索 nonce · ParanO(1)d Lab">
+  <meta property="og:title" content="区块只证明一次，随后搜索 nonce · Parano1d Lab">
   <meta property="og:description" content="HistoryStep 在不含 nonce 的语义域中绑定区块头的全部语义字段；PoW 可以改变 nonce，而无需重建 State 转换证明。">
   <meta property="og:image" content="https://lab.parano1d.org/assets/og/prove-once-search-nonces.png">
   <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/prove-once-search-nonces.png">
@@ -32,17 +32,17 @@
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="区块只证明一次，随后搜索 nonce">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="区块只证明一次，随后搜索 nonce · ParanO(1)d Lab">
+  <meta name="twitter:title" content="区块只证明一次，随后搜索 nonce · Parano1d Lab">
   <meta name="twitter:description" content="HistoryStep 在不含 nonce 的语义域中绑定区块头的全部语义字段；PoW 可以改变 nonce，而无需重建 State 转换证明。">
   <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/prove-once-search-nonces.png">
   <meta name="twitter:image:alt" content="区块只证明一次，随后搜索 nonce">
   <meta property="article:published_time" content="2026-07-15T00:00:00Z">
   <meta property="article:section" content="挖矿">
-  <meta property="article:author" content="ParanO(1)d Lab">
-  <title>区块只证明一次，随后搜索 nonce · ParanO(1)d Lab</title>
+  <meta property="article:author" content="Parano1d Lab">
+  <title>区块只证明一次，随后搜索 nonce · Parano1d Lab</title>
   <link rel="stylesheet" href="/assets/site.css?v=c92b14e703cc">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"区块只证明一次，随后搜索 nonce","description":"经过域分离的语义区块头 ID 承诺除 nonce 之外的所有共识字段，而规范区块 ID 则包含 nonce。矿工先证明一次完整 State 转换，再搜索大量采用不同 nonce 的区块头，最后通过原生 PoW 检查与精确边界检查，将找到有效 nonce 的区块头重新绑定到该证明。","datePublished":"2026-07-15","dateModified":"2026-07-15","mainEntityOfPage":"https://lab.parano1d.org/zh/research/prove-once-search-nonces/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"ParanO(1)d Lab"}],"publisher":{"@type":"Organization","name":"ParanO(1)d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/prove-once-search-nonces.png","about":"挖矿"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"区块只证明一次，随后搜索 nonce","description":"经过域分离的语义区块头 ID 承诺除 nonce 之外的所有共识字段，而规范区块 ID 则包含 nonce。矿工先证明一次完整 State 转换，再搜索大量采用不同 nonce 的区块头，最后通过原生 PoW 检查与精确边界检查，将找到有效 nonce 的区块头重新绑定到该证明。","datePublished":"2026-07-15","dateModified":"2026-07-15","mainEntityOfPage":"https://lab.parano1d.org/zh/research/prove-once-search-nonces/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/prove-once-search-nonces.png","about":"挖矿"}</script>
 </head>
 <body class="locale-zh">
   <a class="skip-link" href="#content">跳到正文</a>
@@ -67,7 +67,7 @@
   </header>
     <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
     <header class="article-hero">
-      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>协议研究</span><span>挖矿</span><time datetime="2026-07-15">2026年7月15日</time></div><h1>区块只证明一次，随后搜索 nonce</h1><p class="article-dek">HistoryStep 在不含 nonce 的语义域中绑定区块头的全部语义字段；PoW 可以改变 nonce，而无需重建 State 转换证明。</p><div class="article-byline"><span>作者 ParanO(1)d Lab</span><span>2 分钟阅读</span><span>正式构造</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/zh/research/prove-once-search-nonces/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接" title="复制链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=%E5%8C%BA%E5%9D%97%E5%8F%AA%E8%AF%81%E6%98%8E%E4%B8%80%E6%AC%A1%EF%BC%8C%E9%9A%8F%E5%90%8E%E6%90%9C%E7%B4%A2%20nonce&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fprove-once-search-nonces%2F" aria-label="将本文分享到 X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
+      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>协议研究</span><span>挖矿</span><time datetime="2026-07-15">2026年7月15日</time></div><h1>区块只证明一次，随后搜索 nonce</h1><p class="article-dek">HistoryStep 在不含 nonce 的语义域中绑定区块头的全部语义字段；PoW 可以改变 nonce，而无需重建 State 转换证明。</p><div class="article-byline"><span>作者 Parano1d Lab</span><span>2 分钟阅读</span><span>正式构造</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/zh/research/prove-once-search-nonces/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接" title="复制链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=%E5%8C%BA%E5%9D%97%E5%8F%AA%E8%AF%81%E6%98%8E%E4%B8%80%E6%AC%A1%EF%BC%8C%E9%9A%8F%E5%90%8E%E6%90%9C%E7%B4%A2%20nonce&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fprove-once-search-nonces%2F" aria-label="将本文分享到 X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
       <div class="research-art art--nonce" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
     <defs>
     <pattern id="grid-nonce" width="24" height="24" patternUnits="userSpaceOnUse">

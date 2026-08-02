@@ -6,24 +6,24 @@
   <meta name="theme-color" content="#f3f2ed">
   <meta name="color-scheme" content="light">
   <meta name="description" content="新接入节点验证区块头与最终性边界上的一份递归转换证明，安装精确 Live State，并应用不超过十八个近期区块。">
-  <meta name="author" content="ParanO(1)d Lab">
-  <meta name="keywords" content="Parano1d, ParanO(1)d, ParanO(1)d Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺">
+  <meta name="author" content="Parano1d Lab">
+  <meta name="keywords" content="Parano1d, Parano1d Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺">
   <link rel="canonical" href="https://lab.parano1d.org/zh/research/proof-carrying-state-sync/">
   <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/proof-carrying-state-sync/">
   <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/proof-carrying-state-sync/">
   <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/proof-carrying-state-sync/">
   <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/proof-carrying-state-sync/">
-  <link rel="alternate" type="application/rss+xml" title="ParanO(1)d Lab 研究" href="https://lab.parano1d.org/zh/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Parano1d Lab 研究" href="https://lab.parano1d.org/zh/feed.xml">
   <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
   <meta property="og:type" content="article">
-  <meta property="og:site_name" content="ParanO(1)d Lab 研究">
+  <meta property="og:site_name" content="Parano1d Lab 研究">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:locale:alternate" content="en_US">
   <meta property="og:locale:alternate" content="ru_RU">
   <meta property="og:url" content="https://lab.parano1d.org/zh/research/proof-carrying-state-sync/">
-  <meta property="og:title" content="从携带证明的 State 启动同步 · ParanO(1)d Lab">
+  <meta property="og:title" content="从携带证明的 State 启动同步 · Parano1d Lab">
   <meta property="og:description" content="新接入节点验证区块头与最终性边界上的一份递归转换证明，安装精确 Live State，并应用不超过十八个近期区块。">
   <meta property="og:image" content="https://lab.parano1d.org/assets/og/proof-carrying-state-sync.png">
   <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/proof-carrying-state-sync.png">
@@ -32,17 +32,17 @@
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="从携带证明的 State 启动同步">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="从携带证明的 State 启动同步 · ParanO(1)d Lab">
+  <meta name="twitter:title" content="从携带证明的 State 启动同步 · Parano1d Lab">
   <meta name="twitter:description" content="新接入节点验证区块头与最终性边界上的一份递归转换证明，安装精确 Live State，并应用不超过十八个近期区块。">
   <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/proof-carrying-state-sync.png">
   <meta name="twitter:image:alt" content="从携带证明的 State 启动同步">
   <meta property="article:published_time" content="2026-07-12T00:00:00Z">
   <meta property="article:section" content="Proof-carrying State">
-  <meta property="article:author" content="ParanO(1)d Lab">
-  <title>从携带证明的 State 启动同步 · ParanO(1)d Lab</title>
+  <meta property="article:author" content="Parano1d Lab">
+  <title>从携带证明的 State 启动同步 · Parano1d Lab</title>
   <link rel="stylesheet" href="/assets/site.css?v=c92b14e703cc">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"从携带证明的 State 启动同步","description":"新节点仍然验证工作量证明，也仍然下载当前 State；它不再需要下载全部历史交易体并从创世区块重放整条链。本文记录经过认证的快照边界、基于磁盘临时区的安装流程、保留后缀，以及常数级证明验证与必然随区块头数量或 Live State 大小增长的成本之间的区别。","datePublished":"2026-07-12","dateModified":"2026-07-12","mainEntityOfPage":"https://lab.parano1d.org/zh/research/proof-carrying-state-sync/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"ParanO(1)d Lab"}],"publisher":{"@type":"Organization","name":"ParanO(1)d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/proof-carrying-state-sync.png","about":"Proof-carrying State"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"从携带证明的 State 启动同步","description":"新节点仍然验证工作量证明，也仍然下载当前 State；它不再需要下载全部历史交易体并从创世区块重放整条链。本文记录经过认证的快照边界、基于磁盘临时区的安装流程、保留后缀，以及常数级证明验证与必然随区块头数量或 Live State 大小增长的成本之间的区别。","datePublished":"2026-07-12","dateModified":"2026-07-12","mainEntityOfPage":"https://lab.parano1d.org/zh/research/proof-carrying-state-sync/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/proof-carrying-state-sync.png","about":"Proof-carrying State"}</script>
 </head>
 <body class="locale-zh">
   <a class="skip-link" href="#content">跳到正文</a>
@@ -67,7 +67,7 @@
   </header>
     <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
     <header class="article-hero">
-      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>系统研究</span><span>Proof-carrying State</span><time datetime="2026-07-12">2026年7月12日</time></div><h1>从携带证明的 State 启动同步</h1><p class="article-dek">新接入节点验证区块头与最终性边界上的一份递归转换证明，安装精确 Live State，并应用不超过十八个近期区块。</p><div class="article-byline"><span>作者 ParanO(1)d Lab</span><span>4 分钟阅读</span><span>正式协议</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/zh/research/proof-carrying-state-sync/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接" title="复制链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=%E4%BB%8E%E6%90%BA%E5%B8%A6%E8%AF%81%E6%98%8E%E7%9A%84%20State%20%E5%90%AF%E5%8A%A8%E5%90%8C%E6%AD%A5&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fproof-carrying-state-sync%2F" aria-label="将本文分享到 X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
+      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>系统研究</span><span>Proof-carrying State</span><time datetime="2026-07-12">2026年7月12日</time></div><h1>从携带证明的 State 启动同步</h1><p class="article-dek">新接入节点验证区块头与最终性边界上的一份递归转换证明，安装精确 Live State，并应用不超过十八个近期区块。</p><div class="article-byline"><span>作者 Parano1d Lab</span><span>4 分钟阅读</span><span>正式协议</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/zh/research/proof-carrying-state-sync/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接" title="复制链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=%E4%BB%8E%E6%90%BA%E5%B8%A6%E8%AF%81%E6%98%8E%E7%9A%84%20State%20%E5%90%AF%E5%8A%A8%E5%90%8C%E6%AD%A5&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fproof-carrying-state-sync%2F" aria-label="将本文分享到 X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
       <div class="research-art art--state" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
     <defs>
     <pattern id="grid-state" width="24" height="24" patternUnits="userSpaceOnUse">
@@ -129,7 +129,7 @@
       <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#remove-replay">移除重放，而不是移除验证</a><a href="#cost-model">仍然存在的成本</a><a href="#paths">两条同步路径</a><a href="#boundary">将每个对象绑定到同一边界</a><a href="#staging">以磁盘暂存形成共识边界</a><a href="#peer">对等节点只是数据源</a><a href="#finality">近期重组与最终性</a><a href="#research-result">四项检查，不引入快照权威</a></aside>
       <article class="article-body"><div class="article-abstract"><span>摘要</span><p>新节点仍然验证工作量证明，也仍然下载当前 State；它不再需要下载全部历史交易体并从创世区块重放整条链。本文记录经过认证的快照边界、基于磁盘临时区的安装流程、保留后缀，以及常数级证明验证与必然随区块头数量或 Live State 大小增长的成本之间的区别。</p></div><h2 id="remove-replay">移除重放，而不是移除验证</h2>
 <p>历史重放把几项不同任务混在一起，统称为“同步”。节点读取区块头以比较工作量证明；下载交易体以重建 State，即由当前未花费输出与共识计数器组成的认证集合；再执行历来的每条规则，判断重建出的 State 是否有效。随着链龄增长，即使当前 State 大小不变，第三项任务仍会不断变重。</p>
-<p>ParanO(1)d 用递归 HistoryStep 取代历史执行重放。每个已接受区块都证明从认证父 State 到子 State 的精确转换。因此，当前边界携带了产生它的整条转换链证明。</p>
+<p>Parano1d 用递归 HistoryStep 取代历史执行重放。每个已接受区块都证明从认证父 State 到子 State 的精确转换。因此，当前边界携带了产生它的整条转换链证明。</p>
 <p><em>最终性边界</em>是已经处在协议允许的重组窗口之外的区块。<em>近期后缀</em>则是从该边界到当前链尖之间不超过十八个完整区块的序列。</p>
 <div class="result">
   <strong>消失的工作</strong>

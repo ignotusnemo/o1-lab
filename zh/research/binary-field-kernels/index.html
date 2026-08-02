@@ -6,24 +6,24 @@
   <meta name="theme-color" content="#f3f2ed">
   <meta name="color-scheme" content="light">
   <meta name="description" content="PCLMUL、VPCLMUL、AVX-512 与 PMULL 执行完全相同的 GF(2¹²⁸) 运算，不改变见证布局或证明字节。">
-  <meta name="author" content="ParanO(1)d Lab">
-  <meta name="keywords" content="Parano1d, ParanO(1)d, ParanO(1)d Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺">
+  <meta name="author" content="Parano1d Lab">
+  <meta name="keywords" content="Parano1d, Parano1d Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺">
   <link rel="canonical" href="https://lab.parano1d.org/zh/research/binary-field-kernels/">
   <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/binary-field-kernels/">
   <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/binary-field-kernels/">
   <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/binary-field-kernels/">
   <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/binary-field-kernels/">
-  <link rel="alternate" type="application/rss+xml" title="ParanO(1)d Lab 研究" href="https://lab.parano1d.org/zh/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Parano1d Lab 研究" href="https://lab.parano1d.org/zh/feed.xml">
   <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
   <meta property="og:type" content="article">
-  <meta property="og:site_name" content="ParanO(1)d Lab 研究">
+  <meta property="og:site_name" content="Parano1d Lab 研究">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:locale:alternate" content="en_US">
   <meta property="og:locale:alternate" content="ru_RU">
   <meta property="og:url" content="https://lab.parano1d.org/zh/research/binary-field-kernels/">
-  <meta property="og:title" content="四条硬件路径使用同一种证明格式 · ParanO(1)d Lab">
+  <meta property="og:title" content="四条硬件路径使用同一种证明格式 · Parano1d Lab">
   <meta property="og:description" content="PCLMUL、VPCLMUL、AVX-512 与 PMULL 执行完全相同的 GF(2¹²⁸) 运算，不改变见证布局或证明字节。">
   <meta property="og:image" content="https://lab.parano1d.org/assets/og/binary-field-kernels.png">
   <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/binary-field-kernels.png">
@@ -32,17 +32,17 @@
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="四条硬件路径使用同一种证明格式">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="四条硬件路径使用同一种证明格式 · ParanO(1)d Lab">
+  <meta name="twitter:title" content="四条硬件路径使用同一种证明格式 · Parano1d Lab">
   <meta name="twitter:description" content="PCLMUL、VPCLMUL、AVX-512 与 PMULL 执行完全相同的 GF(2¹²⁸) 运算，不改变见证布局或证明字节。">
   <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/binary-field-kernels.png">
   <meta name="twitter:image:alt" content="四条硬件路径使用同一种证明格式">
   <meta property="article:published_time" content="2026-07-09T00:00:00Z">
   <meta property="article:section" content="二进制域">
-  <meta property="article:author" content="ParanO(1)d Lab">
-  <title>四条硬件路径使用同一种证明格式 · ParanO(1)d Lab</title>
+  <meta property="article:author" content="Parano1d Lab">
+  <title>四条硬件路径使用同一种证明格式 · Parano1d Lab</title>
   <link rel="stylesheet" href="/assets/site.css?v=c92b14e703cc">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"四条硬件路径使用同一种证明格式","description":"无进位乘法是二进制域证明栈中的核心运算。节点在启动时选择 x86-64 或 ARM64 实现，而域表示、见证布局与序列化证明保持不变。在参考笔记本上，AVX2+VPCLMUL 实现将 Poseidon2b 批量哈希加速 5.4 倍，并把含 2^24 个位置的实测证明时间从 34.9 秒降至 18.9 秒。","datePublished":"2026-07-09","dateModified":"2026-07-09","mainEntityOfPage":"https://lab.parano1d.org/zh/research/binary-field-kernels/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"ParanO(1)d Lab"}],"publisher":{"@type":"Organization","name":"ParanO(1)d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/binary-field-kernels.png","about":"二进制域"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"四条硬件路径使用同一种证明格式","description":"无进位乘法是二进制域证明栈中的核心运算。节点在启动时选择 x86-64 或 ARM64 实现，而域表示、见证布局与序列化证明保持不变。在参考笔记本上，AVX2+VPCLMUL 实现将 Poseidon2b 批量哈希加速 5.4 倍，并把含 2^24 个位置的实测证明时间从 34.9 秒降至 18.9 秒。","datePublished":"2026-07-09","dateModified":"2026-07-09","mainEntityOfPage":"https://lab.parano1d.org/zh/research/binary-field-kernels/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/binary-field-kernels.png","about":"二进制域"}</script>
 </head>
 <body class="locale-zh">
   <a class="skip-link" href="#content">跳到正文</a>
@@ -67,7 +67,7 @@
   </header>
     <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
     <header class="article-hero">
-      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>工程研究</span><span>二进制域</span><time datetime="2026-07-09">2026年7月09日</time></div><h1>四条硬件路径使用同一种证明格式</h1><p class="article-dek">PCLMUL、VPCLMUL、AVX-512 与 PMULL 执行完全相同的 GF(2¹²⁸) 运算，不改变见证布局或证明字节。</p><div class="article-byline"><span>作者 ParanO(1)d Lab</span><span>4 分钟阅读</span><span>正式实现</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/zh/research/binary-field-kernels/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接" title="复制链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=%E5%9B%9B%E6%9D%A1%E7%A1%AC%E4%BB%B6%E8%B7%AF%E5%BE%84%E4%BD%BF%E7%94%A8%E5%90%8C%E4%B8%80%E7%A7%8D%E8%AF%81%E6%98%8E%E6%A0%BC%E5%BC%8F&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fbinary-field-kernels%2F" aria-label="将本文分享到 X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
+      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>工程研究</span><span>二进制域</span><time datetime="2026-07-09">2026年7月09日</time></div><h1>四条硬件路径使用同一种证明格式</h1><p class="article-dek">PCLMUL、VPCLMUL、AVX-512 与 PMULL 执行完全相同的 GF(2¹²⁸) 运算，不改变见证布局或证明字节。</p><div class="article-byline"><span>作者 Parano1d Lab</span><span>4 分钟阅读</span><span>正式实现</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/zh/research/binary-field-kernels/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接" title="复制链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=%E5%9B%9B%E6%9D%A1%E7%A1%AC%E4%BB%B6%E8%B7%AF%E5%BE%84%E4%BD%BF%E7%94%A8%E5%90%8C%E4%B8%80%E7%A7%8D%E8%AF%81%E6%98%8E%E6%A0%BC%E5%BC%8F&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fbinary-field-kernels%2F" aria-label="将本文分享到 X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
       <div class="research-art art--kernel" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
     <defs>
     <pattern id="grid-kernel" width="24" height="24" patternUnits="userSpaceOnUse">
@@ -119,7 +119,7 @@
     <div class="article-layout">
       <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#why-binary">为何二进制域内核主导性能</a><a href="#dispatch">统一布局，运行时分派</a><a href="#poseidon">让 Poseidon2b 全程留在寄存器中</a><a href="#flat-basis">在正确边界使用平坦基</a><a href="#portability">可移植，但不隐藏标量模式</a><a href="#verification">如何核验各后端</a><a href="#lesson">为何域选择经受住了实现检验</a></aside>
       <article class="article-body"><div class="article-abstract"><span>摘要</span><p>无进位乘法是二进制域证明栈中的核心运算。节点在启动时选择 x86-64 或 ARM64 实现，而域表示、见证布局与序列化证明保持不变。在参考笔记本上，AVX2+VPCLMUL 实现将 Poseidon2b 批量哈希加速 5.4 倍，并把含 2^24 个位置的实测证明时间从 34.9 秒降至 18.9 秒。</p></div><h2 id="why-binary">为何二进制域内核主导性能</h2>
-<p>ParanO(1)d 的证明机制工作在含有 2<sup>128</sup> 个元素的二元扩域 GF(2<sup>128</sup>) 上。Poseidon2b 是证明栈与工作量证明哈希采用的密码学置换，也实现在同一个域上。加法是 XOR；乘法是无进位多项式乘法，再进行约减。因此，决定证明者、验证者和工作量证明哈希吞吐量的关键原语，是硬件无进位乘法，而不是普通整数乘法。</p>
+<p>Parano1d 的证明机制工作在含有 2<sup>128</sup> 个元素的二元扩域 GF(2<sup>128</sup>) 上。Poseidon2b 是证明栈与工作量证明哈希采用的密码学置换，也实现在同一个域上。加法是 XOR；乘法是无进位多项式乘法，再进行约减。因此，决定证明者、验证者和工作量证明哈希吞吐量的关键原语，是硬件无进位乘法，而不是普通整数乘法。</p>
 <p>架构约束比“让快机器更快”严格得多。不同机器上的证明形状、见证数据布局和交互记录字节必须完全一致。面向特定指令集架构（ISA）的后端可以改变执行方式，却绝不能改变被证明的断言。</p>
 
 <h2 id="dispatch">统一布局，运行时分派</h2>

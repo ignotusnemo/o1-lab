@@ -3,11 +3,11 @@
     "kind": "安全性分析",
     "topic": "证明可靠性",
     "status": "可复现计算并绑定源码版本",
-    "title": "行业指标下的 ParanO(1)d 可靠性",
+    "title": "行业指标下的 Parano1d 可靠性",
     "shortTitle": "行业指标下的可靠性",
     "dek": "使用 Plonky2、RISC Zero 与 ethSTARK 发布的指标评估实际部署参数，并将基于猜想的评分与由有限定理支撑的上界明确分开。",
-    "abstract": "本文按照 Plonky2、RISC Zero 与 ethSTARK 采用的经典约定评估 ParanO(1)d 的实际部署参数，将基于猜想的评分与由有限定理支撑的界限明确区分，并用可执行的 Rust 计算固定每个公布值。每个数值只在其对应指标内比较。",
-    "evidence": ["ParanO(1)d 可靠性", "钱包广义 RBR 推导", "固定的实际部署版本", "Plonky2 安全性说明", "RISC Zero 可靠性计算器", "ethSTARK 具体安全性概览", "FRI 的 Fiat–Shamir 安全性", "非交互 FRI 的具体安全性", "交互式预言机证明的可靠性概念", "Reed–Solomon 码的接近度间隙"]
+    "abstract": "本文按照 Plonky2、RISC Zero 与 ethSTARK 采用的经典约定评估 Parano1d 的实际部署参数，将基于猜想的评分与由有限定理支撑的界限明确区分，并用可执行的 Rust 计算固定每个公布值。每个数值只在其对应指标内比较。",
+    "evidence": ["Parano1d 可靠性", "钱包广义 RBR 推导", "固定的实际部署版本", "Plonky2 安全性说明", "RISC Zero 可靠性计算器", "ethSTARK 具体安全性概览", "FRI 的 Fiat–Shamir 安全性", "非交互 FRI 的具体安全性", "交互式预言机证明的可靠性概念", "Reed–Solomon 码的接近度间隙"]
   },
   "frost-gkr-global-trace-protocol": {
     "kind": "论文",

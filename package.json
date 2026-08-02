@@ -2,7 +2,7 @@
   "name": "parano1d-lab-research",
   "version": "1.0.0",
   "private": true,
-  "description": "Static research journal for ParanO(1)d Lab",
+  "description": "Static research journal for Parano1d Lab",
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",

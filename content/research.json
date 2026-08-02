@@ -6,14 +6,14 @@
     "topic": "Soundness",
     "status": "Executable and source-pinned",
     "featured": true,
-    "title": "ParanO(1)d soundness under industry metrics",
+    "title": "Parano1d soundness under industry metrics",
     "shortTitle": "Soundness under industry metrics",
     "dek": "Committed production parameters evaluated under the metrics published by Plonky2, RISC Zero and ethSTARK, with conjectured scores separated from finite theorem-backed bounds.",
-    "abstract": "This analysis evaluates committed ParanO(1)d production parameters under the classical conventions published by Plonky2, RISC Zero and ethSTARK. It separates conjectured scores from finite theorem-backed bounds and pins every reported value in executable Rust calculations. Each value is compared only within its named metric.",
+    "abstract": "This analysis evaluates committed Parano1d production parameters under the classical conventions published by Plonky2, RISC Zero and ethSTARK. It separates conjectured scores from finite theorem-backed bounds and pins every reported value in executable Rust calculations. Each value is compared only within its named metric.",
     "authors": ["Ignotus Nemo"],
     "art": "soundness",
     "evidence": [
-      {"label": "ParanO(1)d soundness", "href": "https://github.com/ignotusnemo/parano1d-soundness", "type": "Code and tests"},
+      {"label": "Parano1d soundness", "href": "https://github.com/ignotusnemo/parano1d-soundness", "type": "Code and tests"},
       {"label": "Wallet generalized-RBR derivation", "href": "https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/wallet-generalized-rbr.md", "type": "Proof"},
       {"label": "Pinned production revision", "href": "https://github.com/ignotusnemo/parano1d/commit/93b0252317208c20f8a769afb74681aa9389e286", "type": "Commit"},
       {"label": "Plonky2 security statement", "href": "https://github.com/0xPolygonZero/plonky2#security", "type": "Source"},
@@ -36,7 +36,7 @@
     "shortTitle": "FROST-GKR",
     "dek": "A three-column committed trace reduces an entire batch of Poseidon2b executions with two constraint sumchecks.",
     "abstract": "FROST-GKR proves an entire batch of repeated Poseidon2b computations as one global trace instead of reducing every permutation separately. The batch is committed as three multilinear columns, and all round and consistency relations are reduced to two sumchecks. In the published 59-permutation harness, it proves the same relation while cutting constraint sumchecks from 472 to 2, raw algebraic proof payload from 287,712 to 5,568 bytes, and median reduction-prover time from 1,605.931 to 150.218 ms. The gain comes from reusing the permutation's shared structure across the whole batch, not from weakening the computation being checked.",
-    "authors": ["Andrew Boyle", "ParanO(1)d Lab"],
+    "authors": ["Andrew Boyle", "Parano1d Lab"],
     "art": "frost",
     "evidence": [
       {"label": "Read the paper", "href": "/papers/FROST_GKR.pdf", "type": "PDF"},
@@ -55,7 +55,7 @@
     "shortTitle": "B64 / B255",
     "dek": "HistoryStep is the recursive proof of a block's state transition. B64 handles up to 64 user transaction pages and meets the preparation budget on the reference laptop; B255 extends the same relation to the 255-page block limit. Measurements found no useful operating range for a third class.",
     "abstract": "This study asks whether the recursive block proof needs a geometry between its two production classes. B64 covers blocks with up to 64 physical user pages; B255 covers 65–255 without changing the relation being proved. The exact production path, authenticated matrices and wallet fan-in up to 1,020 inputs were measured. A middle geometry was implemented and then removed: it added another consensus selection rule and verifier branch without improving a demonstrated workload.",
-    "authors": ["ParanO(1)d Lab"],
+    "authors": ["Parano1d Lab"],
     "art": "classes",
     "evidence": [
       {"label": "Two-class laboratory", "href": "https://github.com/ignotusnemo/parano1d/tree/main/research/two_class", "type": "Code"},
@@ -74,7 +74,7 @@
     "shortTitle": "Binary-field kernels",
     "dek": "PCLMUL, VPCLMUL, AVX-512 and PMULL execute the same GF(2¹²⁸) arithmetic without changing witness layout or proof bytes.",
     "abstract": "Carry-less multiplication is the hot arithmetic primitive in the binary-field proof stack. The node selects an x86-64 or ARM64 kernel at startup, while the field representation, witness layout and serialized proof remain fixed. The AVX2+VPCLMUL path improved Poseidon2b batch hashing by 5.4× on the reference laptop and reduced the measured 2^24-position proof from 34.9 to 18.9 seconds.",
-    "authors": ["ParanO(1)d Lab"],
+    "authors": ["Parano1d Lab"],
     "art": "kernel",
     "evidence": [
       {"label": "VPCLMUL kernel commit", "href": "https://github.com/ignotusnemo/parano1d/commit/6e29b73e", "type": "Commit"},
@@ -93,7 +93,7 @@
     "shortTitle": "Proof-carrying State",
     "dek": "A joining node validates headers, verifies one recursive transition proof at a finalized boundary, installs exact live State and applies no more than eighteen recent blocks.",
     "abstract": "A new node still validates proof of work and still downloads current State. What it no longer does is download every historical transaction body and execute the chain from genesis. This study records the authenticated snapshot boundary, disk-staged installation, retained suffix and the distinction between constant proof verification and costs that necessarily scale with headers or live State.",
-    "authors": ["ParanO(1)d Lab"],
+    "authors": ["Parano1d Lab"],
     "art": "state",
     "evidence": [
       {"label": "O(1) synchronization design", "href": "https://github.com/ignotusnemo/parano1d/commit/9fffd832", "type": "Commit"},
@@ -112,7 +112,7 @@
     "shortTitle": "Single global walk",
     "dek": "A full-composition benchmark showed that independent verifier walks multiplied memory beyond 30 GB. One shared domain removed that factor.",
     "abstract": "A reference recursive composition assigned one 66-layer Poseidon2b walk to each authentication family so its full-graph cost could be measured directly. Memory scaled with family count and exceeded a 30 GB machine. The implemented redesign localizes family patterns inside one shared slot domain and discharges all nine families through one global walk, one shared state transfer and one combined polynomial identity.",
-    "authors": ["ParanO(1)d Lab"],
+    "authors": ["Parano1d Lab"],
     "art": "walk",
     "evidence": [
       {"label": "Two-family union primitive", "href": "https://github.com/ignotusnemo/parano1d/commit/6d0cfaf0", "type": "Commit"},
@@ -131,7 +131,7 @@
     "shortTitle": "Recursive fixed point",
     "dek": "A class with a 2^23-position constraint domain closes recursively: each proof verifies a predecessor with the same authenticated matrix and public layout.",
     "abstract": "A recursive verifier must fit inside a successor proof of the same authenticated class. This study states the fixed-point acceptance test, closes a two-link chain in a 2^23-position class, records two implementation probes and separates recursion mechanics from application-level block semantics.",
-    "authors": ["ParanO(1)d Lab"],
+    "authors": ["Parano1d Lab"],
     "art": "recursion",
     "evidence": [
       {"label": "In-trace BaseFold replay", "href": "https://github.com/ignotusnemo/parano1d/commit/fc328e70", "type": "Commit"},
@@ -150,7 +150,7 @@
     "shortTitle": "Owner-batched authorization",
     "dek": "Public transaction arithmetic belongs to the block relation. The wallet proves one private fact—ownership—even when a spend contains 1,020 inputs.",
     "abstract": "This study compares a wallet bundle that proves public logic and ownership with a separated construction that proves only secret knowledge. Native admission checks transparent arithmetic, HistoryStep proves the canonical transition, and owner batching keeps one authorization capsule nearly flat from one to 1,020 inputs.",
-    "authors": ["ParanO(1)d Lab"],
+    "authors": ["Parano1d Lab"],
     "art": "authorization",
     "evidence": [
       {"label": "Auth-only transition", "href": "https://github.com/ignotusnemo/parano1d/commit/539107f7", "type": "Commit"},
@@ -169,7 +169,7 @@
     "shortTitle": "Shared-query source binding",
     "dek": "An A/A′ adversarial test separates low-degree consistency from commitment provenance. A source root and shared queries close the edge.",
     "abstract": "This study evaluates a candidate mixed-opening construction against a coherent A/A′ source-substitution test. Low-degree consistency alone does not authenticate the compact FRI round-zero oracle to the original interleaved commitment. The completed construction adds a source root and shared authentication queries, giving an explicit path from every sampled oracle symbol back to the committed columns.",
-    "authors": ["ParanO(1)d Lab"],
+    "authors": ["Parano1d Lab"],
     "art": "binding",
     "evidence": [
       {"label": "Source-binding implementation", "href": "https://github.com/ignotusnemo/parano1d/commit/e5e4655a", "type": "Commit"},
@@ -188,7 +188,7 @@
     "shortTitle": "Three commitment experiments",
     "dek": "Ladder FRI exposed proof-byte cost, FRI-Binius exposed source binding, and BaseFold exposed the cost of putting a verifier inside its successor.",
     "abstract": "Three prototypes evaluate different boundaries of polynomial commitments. Ladder-batched FRI measures opening bytes for shifted traces. Interleaved FRI-Binius exposes a source-provenance gap through an A/A′ attack. In-trace BaseFold tests whether verifier geometry can close inside a fixed recursive class.",
-    "authors": ["ParanO(1)d Lab"],
+    "authors": ["Parano1d Lab"],
     "art": "pcs",
     "evidence": [
       {"label": "Ladder-batch FRI and VSHIFT", "href": "https://github.com/ignotusnemo/parano1d/commit/63ac7af1", "type": "Commit"},
@@ -207,7 +207,7 @@
     "shortTitle": "AuthStream compiler",
     "dek": "Streaming compilation bounded 14–16 MiB of private authorization data with 4.7% overhead. The evaluated terminal proof did not meet the production latency budget.",
     "abstract": "AuthStream tests whether block-scale private authorization data can be compiled into typed streams and bounded sparse segments before terminal proof construction. The front end keeps claim construction within 4.7% of direct verification, bounds the largest segment at 2^17 rows and emits a compact internal handoff. A cryptographically complete dense terminal closes the relation but projects to roughly eleven minutes at maximum fan-in, so the architecture is not selected for consensus.",
-    "authors": ["ParanO(1)d Lab"],
+    "authors": ["Parano1d Lab"],
     "art": "compiler",
     "evidence": [
       {"label": "AuthStream witness layout", "href": "https://github.com/ignotusnemo/parano1d/commit/93bb9d32", "type": "Commit"},
@@ -226,7 +226,7 @@
     "shortTitle": "Atomic HistoryStep",
     "dek": "An early design accepted a block first and produced its recursive proof later in the background. The canonical chain could therefore move ahead of the HistoryStep-proven tip, forcing nodes to persist and recover a second queue. The production design accepts the block and its matching HistoryStep together: one atomic object, one canonical height and no deferred proof backlog.",
     "abstract": "This study compares two fully implemented architectures. In the first, a block entered the canonical chain before recursive proving finished, and a three-stage background pipeline later built the block proof, linked it into the recursive history and advanced a separate proven tip. In the second, the block, matching HistoryStep terminal, State and indexes commit as one atomic result. This moves proof preparation onto the mining critical path, but removes the durable queue, partial promotion and ambiguous restart state: at every accepted height, the block and its recursive proof exist together.",
-    "authors": ["ParanO(1)d Lab"],
+    "authors": ["Parano1d Lab"],
     "art": "atomic",
     "evidence": [
       {"label": "Background recursive-proof pipeline", "href": "https://github.com/ignotusnemo/parano1d/commit/53fdd75f", "type": "Commit"},
@@ -245,7 +245,7 @@
     "shortTitle": "UTXO incarnations",
     "dek": "A monotone creation identifier inside the existing value lane invalidates stale slot openings without a second consensus root or reuse quarantine.",
     "abstract": "A 256-bucket reuse guard and packed UTXO incarnations were implemented against the same stale-opening threat: one physical slot can later hold an output with the same visible value but a different identity. Incarnations distinguish successive outputs, permit same-block reuse, reject old openings and remove the second guard root and its proof families. The identifier remains branch-local and composes with canonical history.",
-    "authors": ["ParanO(1)d Lab"],
+    "authors": ["Parano1d Lab"],
     "art": "incarnation",
     "evidence": [
       {"label": "ReuseGuard implementation", "href": "https://github.com/ignotusnemo/parano1d/commit/c7372ea1", "type": "Commit"},
@@ -264,7 +264,7 @@
     "shortTitle": "Rejected Merkle fusion",
     "dek": "Fusing two Merkle relations saved 5.94 KB but enlarged the combined multilinear trace and removed parallelism. Proving regressed from 2.68 to 4.50 seconds.",
     "abstract": "A mixed-domain tagged Merkle proof fused the main unspent-output path and the slot-reuse guard into one relation. Proof size fell from 29.69 to 23.75 KB, while proving rose from 2.68 to 4.50 seconds and verification from 450.82 to 612.96 milliseconds. The fused construction was removed after measurement.",
-    "authors": ["ParanO(1)d Lab"],
+    "authors": ["Parano1d Lab"],
     "art": "fusion",
     "evidence": [
       {"label": "Exact-State fusion measurements", "href": "https://github.com/ignotusnemo/parano1d/blob/3242542a/docs/IMPLEMENTATION_LOG.md#rejected-exact-state-merkle-fusion", "type": "Data"},
@@ -282,7 +282,7 @@
     "shortTitle": "Semantic header projection",
     "dek": "HistoryStep binds every semantic header field under a nonce-free domain. PoW can vary the nonce without rebuilding the transition proof.",
     "abstract": "A domain-separated semantic header ID commits to every consensus field except nonce, while the canonical block ID includes it. The miner proves the complete transition once, searches many nonce-bearing headers and reconnects the winner through native PoW and exact boundary checks.",
-    "authors": ["ParanO(1)d Lab"],
+    "authors": ["Parano1d Lab"],
     "art": "nonce",
     "evidence": [
       {"label": "Semantic header projection", "href": "https://github.com/ignotusnemo/parano1d/commit/0e69409c", "type": "Commit"},

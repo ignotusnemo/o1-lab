@@ -1,7 +1,7 @@
 <p>比较中反复使用四个术语。FRI 是下列编码型系统所采用的一类低次数证明。交互式预言机证明（IOP）允许验证者查询已承诺预言机数据的少量位置，而不必读取整张证明表。<em>Toy Problem</em> 分数是业界常用的参数启发式，取决于码率、查询数和域大小上限。逐轮知识可靠性（RBR）则限制提取器在验证者每一步交互中的失败概率；相关的 <math-inline>t/e(t)</math-inline> 约定用攻击工作量 <math-inline>t</math-inline> 除以其成功概率 <math-inline>e(t)</math-inline>。表格只在每一行明确写出的指标内比较标量数值，并不把底层协议视为同一对象。</p>
 
 <div class="table-wrap comparison-table"><table>
-  <thead><tr><th>已发布系统与指标</th><th>已发布数值</th><th>ParanO(1)d 在对应指标下的数值</th></tr></thead>
+  <thead><tr><th>已发布系统与指标</th><th>已发布数值</th><th>Parano1d 在对应指标下的数值</th></tr></thead>
   <tbody>
     <tr><td><a href="https://github.com/0xPolygonZero/plonky2#security">Plonky2 默认 FRI</a>，Toy Problem 猜想</td><td><b>基于猜想的 100 位安全性</b>；项目估计其默认 Poseidon 配置约为 <b>95 位</b></td><td><b>基于猜想的 128 位安全性</b>，严格采用 Plonky2/Toy Problem 公式，并受实际部署所用域的大小限制</td></tr>
     <tr><td><a href="https://github.com/risc0/risc0/blob/release-3.0/risc0/zkp/src/prove/soundness.rs">RISC Zero 可靠性计算器</a>，Toy Problem 猜想</td><td>当 <code>SEGMENT_SIZE = 2^20</code> 时为<b>基于猜想的 97 位安全性</b>；当其为 <code>2^24</code> 时为<b>基于猜想的 95 位安全性</b></td><td><b>基于猜想的 128 位安全性</b>，采用同类 Toy Problem 码率与查询数计算</td></tr>
@@ -9,18 +9,18 @@
   </tbody>
 </table></div>
 
-<p>ParanO(1)d 的数值均从固定的实际部署参数导出，以可执行公式实现，并由回归测试锁定。每个数值都保留其所属指标的适用范围：基于猜想的参数评分、广义 RBR 知识可靠性界，或计入工作量的有限组合。</p>
+<p>Parano1d 的数值均从固定的实际部署参数导出，以可执行公式实现，并由回归测试锁定。每个数值都保留其所属指标的适用范围：基于猜想的参数评分、广义 RBR 知识可靠性界，或计入工作量的有限组合。</p>
 
 <div class="note">
   <strong>如何阅读最后一行</strong>
-  <p>这些协议并不相同。<b>96.047</b> 是 ParanO(1)d 交互式钱包基础 IOP 的广义逐轮知识可靠性界。<b>95.022</b> 是下文定义的固定无效区块有限组合，其中计入了工作量。两者分别与最接近的已发布标量约定配对；精确定义在整个比较中始终明确可见。</p>
+  <p>这些协议并不相同。<b>96.047</b> 是 Parano1d 交互式钱包基础 IOP 的广义逐轮知识可靠性界。<b>95.022</b> 是下文定义的固定无效区块有限组合，其中计入了工作量。两者分别与最接近的已发布标量约定配对；精确定义在整个比较中始终明确可见。</p>
 </div>
 
 <h2 id="question">范围与方法</h2>
 
 <p>一旦去掉定义，安全数值就很容易比较；但这样的比较也同时失去意义。“100 位”“96 位”和“128 位”可能分别指基于猜想的查询评分、已有证明支持的交互式可靠性误差、较宽松的单次成功工作量定义、哈希原语，或应用层组合。整数只是分析的最后一步，安全性游戏与归约才是起点。</p>
 
-<p>本研究只提出一个可复现问题：<em>按照成熟证明系统项目所发布的同类经典约定，固定的 ParanO(1)d 证明几何会得到怎样的评分？</em> 四个对象分别评估：</p>
+<p>本研究只提出一个可复现问题：<em>按照成熟证明系统项目所发布的同类经典约定，固定的 Parano1d 证明几何会得到怎样的评分？</em> 四个对象分别评估：</p>
 
 <ol>
   <li>严格按 Plonky2/Toy-Problem 原式计算的参数评分；</li>
@@ -33,7 +33,7 @@
 
 <h2 id="inputs">实际部署参数，而非示例参数</h2>
 
-<p>输入取自 ParanO(1)d 提交 <a href="https://github.com/ignotusnemo/parano1d/commit/93b0252317208c20f8a769afb74681aa9389e286"><code>93b0252317208c20f8a769afb74681aa9389e286</code></a>。该版本已记录在独立计算项目中。后续协议修订必须显式更新源码版本绑定与预期结果。</p>
+<p>输入取自 Parano1d 提交 <a href="https://github.com/ignotusnemo/parano1d/commit/93b0252317208c20f8a769afb74681aa9389e286"><code>93b0252317208c20f8a769afb74681aa9389e286</code></a>。该版本已记录在独立计算项目中。后续协议修订必须显式更新源码版本绑定与预期结果。</p>
 <p>State 是由当前未花费输出与共识计数器组成的认证集合。HistoryStep 是区块从父 State 到子 State 精确转换的递归证明。B64 与 B255 是两种固定证明容量类别，分别容纳最多 64 页和 255 页用户交易。两者执行相同的有效性规则，只是约束域容量不同。</p>
 
 <div class="table-wrap"><table>
@@ -257,7 +257,7 @@ close(rbr.generalized_rbr_bits, 96.046_815_693_930_09, 1e-12);</code></pre>
 
 <h3 id="grind">查询前搜索应计入何处</h3>
 
-<p>16 位查询前工作量搜索（grinding）紧接在查询抽样之前。若只把它应用于后续查询项，而不乘到无关的有限域异常上，固定无效区块得到 <b>95.021747 位</b>。在计算项目中，这是 ParanO(1)d 最接近 ethSTARK 对比所用较宽松工作量核算口径的标量。</p>
+<p>16 位查询前工作量搜索（grinding）紧接在查询抽样之前。若只把它应用于后续查询项，而不乘到无关的有限域异常上，固定无效区块得到 <b>95.021747 位</b>。在计算项目中，这是 Parano1d 最接近 ethSTARK 对比所用较宽松工作量核算口径的标量。</p>
 
 <p>另一项单次实验允许一个区块包含最多 255 个可独立攻击的钱包证明事件：</p>
 
@@ -314,7 +314,7 @@ RUSTDOCFLAGS='-D warnings' cargo doc --release --no-deps</code></pre>
 <h2 id="references">主要来源</h2>
 
 <ul>
-  <li><a href="https://github.com/ignotusnemo/parano1d-soundness">Ignotus Nemo，ParanO(1)d soundness</a>。</li>
+  <li><a href="https://github.com/ignotusnemo/parano1d-soundness">Ignotus Nemo，Parano1d soundness</a>。</li>
   <li><a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/wallet-generalized-rbr.md">钱包授权：96.047-bit 广义 RBR 界</a>。</li>
   <li><a href="https://github.com/0xPolygonZero/plonky2#security">Plonky2 安全声明</a>及其<a href="https://github.com/0xPolygonZero/plonky2/blob/main/starky/src/config.rs#L119-L126">字面参数计算</a>。</li>
   <li><a href="https://github.com/risc0/risc0/blob/release-3.0/risc0/zkp/src/prove/soundness.rs">RISC Zero 可靠性计算器</a>。</li>

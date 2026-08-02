@@ -116,7 +116,7 @@ function renderMath(source, sourcePath) {
         macros: {
           "\\State": "\\mathsf{State}",
           "\\HistoryStep": "\\mathsf{HistoryStep}",
-          "\\Parano": "\\mathsf{ParanO(1)d}"
+          "\\Parano": "\\mathsf{Parano1d}"
         }
       });
     } catch (error) {
@@ -262,7 +262,7 @@ function compactDescription(value, locale) {
 }
 
 function articleSeoTitle(item, locale) {
-  const suffixLength = " · ParanO(1)d Lab".length;
+  const suffixLength = " · Parano1d Lab".length;
   const limit = locale.code === "zh" ? 42 : 65;
   return item.title.length + suffixLength <= limit ? item.title : item.shortTitle;
 }
@@ -284,7 +284,7 @@ function shell({
   const t = ui[locale.code];
   const pagePath = pathFor(locale, basePath);
   const canonical = absolute(pagePath);
-  const fullTitle = title === "ParanO(1)d Lab" ? t.siteTitle : `${title} · ParanO(1)d Lab`;
+  const fullTitle = title === "Parano1d Lab" ? t.siteTitle : `${title} · Parano1d Lab`;
   const image = absolute(imagePath);
   const alternates = locales.map((target) => `<link rel="alternate" hreflang="${target.hreflang}" href="${absolute(pathFor(target, basePath))}">`).join("\n  ");
   const ogAlternates = locales.filter((target) => target.code !== locale.code).map((target) => `<meta property="og:locale:alternate" content="${target.ogLocale}">`).join("\n  ");
@@ -337,7 +337,7 @@ function shell({
   <meta name="theme-color" content="#f3f2ed">
   <meta name="color-scheme" content="light">
   <meta name="description" content="${esc(description)}">
-  <meta name="author" content="ParanO(1)d Lab">
+  <meta name="author" content="Parano1d Lab">
   <meta name="keywords" content="${esc(t.keywords)}">
   ${discoveryMeta}
   <link rel="icon" href="/assets/favicon-32.png?v=${faviconVersion}" sizes="32x32" type="image/png">
@@ -418,7 +418,7 @@ function homePage(locale, newestFirst) {
 
   </main>`;
   return shell({
-    title: "ParanO(1)d Lab",
+    title: "Parano1d Lab",
     locale,
     description: t.siteDescription,
     basePath: "/",
@@ -427,7 +427,7 @@ function homePage(locale, newestFirst) {
     schema: {
       "@context": "https://schema.org",
       "@graph": [
-        { "@type": "Organization", "@id": `${siteUrl}/#organization`, name: "ParanO(1)d Lab", url: siteUrl, parentOrganization: { "@type": "Organization", name: "ParanO(1)d", url: "https://parano1d.org" } },
+        { "@type": "Organization", "@id": `${siteUrl}/#organization`, name: "Parano1d Lab", url: siteUrl, parentOrganization: { "@type": "Organization", name: "Parano1d", url: "https://parano1d.org" } },
         { "@type": "WebSite", "@id": `${siteUrl}/#website`, name: t.siteTitle, url: absolute(pathFor(locale, "/")), inLanguage: locale.htmlLang, publisher: { "@id": `${siteUrl}/#organization` } }
       ]
     }
@@ -496,8 +496,8 @@ function articlePage(item, index, locale, newestFirst) {
     dateModified: item.date,
     mainEntityOfPage: canonical,
     inLanguage: locale.htmlLang,
-    author: item.authors.map((name) => ({ "@type": name === "ParanO(1)d Lab" ? "Organization" : "Person", name })),
-    publisher: { "@type": "Organization", name: "ParanO(1)d Lab", url: siteUrl },
+    author: item.authors.map((name) => ({ "@type": name === "Parano1d Lab" ? "Organization" : "Person", name })),
+    publisher: { "@type": "Organization", name: "Parano1d Lab", url: siteUrl },
     image: absolute(imagePath),
     about: item.topic
   };
@@ -570,5 +570,5 @@ for (const locale of locales) {
 }
 await emit("sitemap.xml", sitemap());
 await emit("robots.txt", `User-agent: *\nAllow: /\nSitemap: ${siteUrl}/sitemap.xml\n`);
-await emit("manifest.webmanifest", JSON.stringify({ name: "ParanO(1)d Lab Research", short_name: "ParanO(1)d Lab", start_url: "/", display: "standalone", background_color: "#f3f2ed", theme_color: "#f3f2ed", icons: [{ src: "/assets/icon-192.png", sizes: "192x192", type: "image/png" }, { src: "/assets/icon-512.png", sizes: "512x512", type: "image/png" }] }, null, 2));
+await emit("manifest.webmanifest", JSON.stringify({ name: "Parano1d Lab Research", short_name: "Parano1d Lab", start_url: "/", display: "standalone", background_color: "#f3f2ed", theme_color: "#f3f2ed", icons: [{ src: "/assets/icon-192.png", sizes: "192x192", type: "image/png" }, { src: "/assets/icon-512.png", sizes: "512x512", type: "image/png" }] }, null, 2));
 console.log(`Built ${baseData.length} research articles in ${locales.length} languages for ${siteUrl}`);

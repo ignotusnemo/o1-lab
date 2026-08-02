@@ -6,43 +6,43 @@
   <meta name="theme-color" content="#f3f2ed">
   <meta name="color-scheme" content="light">
   <meta name="description" content="使用 Plonky2、RISC Zero 与 ethSTARK 发布的指标评估实际部署参数，并将基于猜想的评分与由有限定理支撑的上界明确分开。">
-  <meta name="author" content="ParanO(1)d Lab">
-  <meta name="keywords" content="Parano1d, ParanO(1)d, ParanO(1)d Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺">
+  <meta name="author" content="Parano1d Lab">
+  <meta name="keywords" content="Parano1d, Parano1d Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺">
   <link rel="canonical" href="https://lab.parano1d.org/zh/research/parano1d-soundness-industry-metrics/">
   <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/parano1d-soundness-industry-metrics/">
   <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/parano1d-soundness-industry-metrics/">
   <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/parano1d-soundness-industry-metrics/">
   <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/parano1d-soundness-industry-metrics/">
-  <link rel="alternate" type="application/rss+xml" title="ParanO(1)d Lab 研究" href="https://lab.parano1d.org/zh/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Parano1d Lab 研究" href="https://lab.parano1d.org/zh/feed.xml">
   <link rel="icon" href="/assets/favicon-32.png?v=d98541782051" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
   <meta property="og:type" content="article">
-  <meta property="og:site_name" content="ParanO(1)d Lab 研究">
+  <meta property="og:site_name" content="Parano1d Lab 研究">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:locale:alternate" content="en_US">
   <meta property="og:locale:alternate" content="ru_RU">
   <meta property="og:url" content="https://lab.parano1d.org/zh/research/parano1d-soundness-industry-metrics/">
-  <meta property="og:title" content="行业指标下的 ParanO(1)d 可靠性 · ParanO(1)d Lab">
+  <meta property="og:title" content="行业指标下的 Parano1d 可靠性 · Parano1d Lab">
   <meta property="og:description" content="使用 Plonky2、RISC Zero 与 ethSTARK 发布的指标评估实际部署参数，并将基于猜想的评分与由有限定理支撑的上界明确分开。">
   <meta property="og:image" content="https://lab.parano1d.org/assets/og/parano1d-soundness-industry-metrics.png">
   <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/parano1d-soundness-industry-metrics.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="行业指标下的 ParanO(1)d 可靠性">
+  <meta property="og:image:alt" content="行业指标下的 Parano1d 可靠性">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="行业指标下的 ParanO(1)d 可靠性 · ParanO(1)d Lab">
+  <meta name="twitter:title" content="行业指标下的 Parano1d 可靠性 · Parano1d Lab">
   <meta name="twitter:description" content="使用 Plonky2、RISC Zero 与 ethSTARK 发布的指标评估实际部署参数，并将基于猜想的评分与由有限定理支撑的上界明确分开。">
   <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/parano1d-soundness-industry-metrics.png">
-  <meta name="twitter:image:alt" content="行业指标下的 ParanO(1)d 可靠性">
+  <meta name="twitter:image:alt" content="行业指标下的 Parano1d 可靠性">
   <meta property="article:published_time" content="2026-07-31T00:00:00Z">
   <meta property="article:section" content="证明可靠性">
   <meta property="article:author" content="Ignotus Nemo">
-  <title>行业指标下的 ParanO(1)d 可靠性 · ParanO(1)d Lab</title>
+  <title>行业指标下的 Parano1d 可靠性 · Parano1d Lab</title>
   <link rel="stylesheet" href="/assets/site.css?v=c92b14e703cc">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"行业指标下的 ParanO(1)d 可靠性","description":"本文按照 Plonky2、RISC Zero 与 ethSTARK 采用的经典约定评估 ParanO(1)d 的实际部署参数，将基于猜想的评分与由有限定理支撑的界限明确区分，并用可执行的 Rust 计算固定每个公布值。每个数值只在其对应指标内比较。","datePublished":"2026-07-31","dateModified":"2026-07-31","mainEntityOfPage":"https://lab.parano1d.org/zh/research/parano1d-soundness-industry-metrics/","inLanguage":"zh-Hans","author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"ParanO(1)d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/parano1d-soundness-industry-metrics.png","about":"证明可靠性"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"行业指标下的 Parano1d 可靠性","description":"本文按照 Plonky2、RISC Zero 与 ethSTARK 采用的经典约定评估 Parano1d 的实际部署参数，将基于猜想的评分与由有限定理支撑的界限明确区分，并用可执行的 Rust 计算固定每个公布值。每个数值只在其对应指标内比较。","datePublished":"2026-07-31","dateModified":"2026-07-31","mainEntityOfPage":"https://lab.parano1d.org/zh/research/parano1d-soundness-industry-metrics/","inLanguage":"zh-Hans","author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/parano1d-soundness-industry-metrics.png","about":"证明可靠性"}</script>
 </head>
 <body class="locale-zh">
   <a class="skip-link" href="#content">跳到正文</a>
@@ -67,7 +67,7 @@
   </header>
     <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
     <header class="article-hero">
-      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>安全性分析</span><span>证明可靠性</span><time datetime="2026-07-31">2026年7月31日</time></div><h1>行业指标下的 ParanO(1)d 可靠性</h1><p class="article-dek">使用 Plonky2、RISC Zero 与 ethSTARK 发布的指标评估实际部署参数，并将基于猜想的评分与由有限定理支撑的上界明确分开。</p><div class="article-byline"><span>作者 Ignotus Nemo</span><span>13 分钟阅读</span><span>可复现计算并绑定源码版本</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/zh/research/parano1d-soundness-industry-metrics/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接" title="复制链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=%E8%A1%8C%E4%B8%9A%E6%8C%87%E6%A0%87%E4%B8%8B%E7%9A%84%20ParanO(1)d%20%E5%8F%AF%E9%9D%A0%E6%80%A7&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fparano1d-soundness-industry-metrics%2F" aria-label="将本文分享到 X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
+      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>安全性分析</span><span>证明可靠性</span><time datetime="2026-07-31">2026年7月31日</time></div><h1>行业指标下的 Parano1d 可靠性</h1><p class="article-dek">使用 Plonky2、RISC Zero 与 ethSTARK 发布的指标评估实际部署参数，并将基于猜想的评分与由有限定理支撑的上界明确分开。</p><div class="article-byline"><span>作者 Ignotus Nemo</span><span>13 分钟阅读</span><span>可复现计算并绑定源码版本</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/zh/research/parano1d-soundness-industry-metrics/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接" title="复制链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=%E8%A1%8C%E4%B8%9A%E6%8C%87%E6%A0%87%E4%B8%8B%E7%9A%84%20Parano1d%20%E5%8F%AF%E9%9D%A0%E6%80%A7&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fparano1d-soundness-industry-metrics%2F" aria-label="将本文分享到 X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
       <div class="research-art art--soundness" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
     <defs>
     <pattern id="grid-soundness" width="24" height="24" patternUnits="userSpaceOnUse">
@@ -178,10 +178,10 @@
     </header>
     <div class="article-layout">
       <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#question">范围与方法</a><a href="#inputs">实际部署参数，而非示例参数</a><a href="#toy-problem">指标一：严格按原式计算的 Toy Problem 评分</a><a href="#production-radius">指标二：实际接受半径下的查询工作量</a><a href="#rbr">指标三：96.047 位广义 RBR 知识可靠性界</a><a href="#finite-ledger">指标四：有限接受路径的可靠性界</a><a href="#reproduction">可执行记录</a><a href="#scope-boundary">如何解释这些结果</a><a href="#references">主要来源</a></aside>
-      <article class="article-body"><div class="article-abstract"><span>摘要</span><p>本文按照 Plonky2、RISC Zero 与 ethSTARK 采用的经典约定评估 ParanO(1)d 的实际部署参数，将基于猜想的评分与由有限定理支撑的界限明确区分，并用可执行的 Rust 计算固定每个公布值。每个数值只在其对应指标内比较。</p></div><p>比较中反复使用四个术语。FRI 是下列编码型系统所采用的一类低次数证明。交互式预言机证明（IOP）允许验证者查询已承诺预言机数据的少量位置，而不必读取整张证明表。<em>Toy Problem</em> 分数是业界常用的参数启发式，取决于码率、查询数和域大小上限。逐轮知识可靠性（RBR）则限制提取器在验证者每一步交互中的失败概率；相关的 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mi mathvariant="normal">/</mi><mi>e</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">t/e(t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">t</span><span class="mord">/</span><span class="mord mathnormal">e</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span></span> 约定用攻击工作量 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span></span></span></span></span> 除以其成功概率 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">e(t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">e</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span></span>。表格只在每一行明确写出的指标内比较标量数值，并不把底层协议视为同一对象。</p>
+      <article class="article-body"><div class="article-abstract"><span>摘要</span><p>本文按照 Plonky2、RISC Zero 与 ethSTARK 采用的经典约定评估 Parano1d 的实际部署参数，将基于猜想的评分与由有限定理支撑的界限明确区分，并用可执行的 Rust 计算固定每个公布值。每个数值只在其对应指标内比较。</p></div><p>比较中反复使用四个术语。FRI 是下列编码型系统所采用的一类低次数证明。交互式预言机证明（IOP）允许验证者查询已承诺预言机数据的少量位置，而不必读取整张证明表。<em>Toy Problem</em> 分数是业界常用的参数启发式，取决于码率、查询数和域大小上限。逐轮知识可靠性（RBR）则限制提取器在验证者每一步交互中的失败概率；相关的 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mi mathvariant="normal">/</mi><mi>e</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">t/e(t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">t</span><span class="mord">/</span><span class="mord mathnormal">e</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span></span> 约定用攻击工作量 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span></span></span></span></span> 除以其成功概率 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">e(t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">e</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span></span>。表格只在每一行明确写出的指标内比较标量数值，并不把底层协议视为同一对象。</p>
 
 <div class="table-wrap comparison-table"><table>
-  <thead><tr><th>已发布系统与指标</th><th>已发布数值</th><th>ParanO(1)d 在对应指标下的数值</th></tr></thead>
+  <thead><tr><th>已发布系统与指标</th><th>已发布数值</th><th>Parano1d 在对应指标下的数值</th></tr></thead>
   <tbody>
     <tr><td><a href="https://github.com/0xPolygonZero/plonky2#security" target="_blank" rel="noopener noreferrer">Plonky2 默认 FRI</a>，Toy Problem 猜想</td><td><b>基于猜想的 100 位安全性</b>；项目估计其默认 Poseidon 配置约为 <b>95 位</b></td><td><b>基于猜想的 128 位安全性</b>，严格采用 Plonky2/Toy Problem 公式，并受实际部署所用域的大小限制</td></tr>
     <tr><td><a href="https://github.com/risc0/risc0/blob/release-3.0/risc0/zkp/src/prove/soundness.rs" target="_blank" rel="noopener noreferrer">RISC Zero 可靠性计算器</a>，Toy Problem 猜想</td><td>当 <code>SEGMENT_SIZE = 2^20</code> 时为<b>基于猜想的 97 位安全性</b>；当其为 <code>2^24</code> 时为<b>基于猜想的 95 位安全性</b></td><td><b>基于猜想的 128 位安全性</b>，采用同类 Toy Problem 码率与查询数计算</td></tr>
@@ -189,18 +189,18 @@
   </tbody>
 </table></div>
 
-<p>ParanO(1)d 的数值均从固定的实际部署参数导出，以可执行公式实现，并由回归测试锁定。每个数值都保留其所属指标的适用范围：基于猜想的参数评分、广义 RBR 知识可靠性界，或计入工作量的有限组合。</p>
+<p>Parano1d 的数值均从固定的实际部署参数导出，以可执行公式实现，并由回归测试锁定。每个数值都保留其所属指标的适用范围：基于猜想的参数评分、广义 RBR 知识可靠性界，或计入工作量的有限组合。</p>
 
 <div class="note">
   <strong>如何阅读最后一行</strong>
-  <p>这些协议并不相同。<b>96.047</b> 是 ParanO(1)d 交互式钱包基础 IOP 的广义逐轮知识可靠性界。<b>95.022</b> 是下文定义的固定无效区块有限组合，其中计入了工作量。两者分别与最接近的已发布标量约定配对；精确定义在整个比较中始终明确可见。</p>
+  <p>这些协议并不相同。<b>96.047</b> 是 Parano1d 交互式钱包基础 IOP 的广义逐轮知识可靠性界。<b>95.022</b> 是下文定义的固定无效区块有限组合，其中计入了工作量。两者分别与最接近的已发布标量约定配对；精确定义在整个比较中始终明确可见。</p>
 </div>
 
 <h2 id="question">范围与方法</h2>
 
 <p>一旦去掉定义，安全数值就很容易比较；但这样的比较也同时失去意义。“100 位”“96 位”和“128 位”可能分别指基于猜想的查询评分、已有证明支持的交互式可靠性误差、较宽松的单次成功工作量定义、哈希原语，或应用层组合。整数只是分析的最后一步，安全性游戏与归约才是起点。</p>
 
-<p>本研究只提出一个可复现问题：<em>按照成熟证明系统项目所发布的同类经典约定，固定的 ParanO(1)d 证明几何会得到怎样的评分？</em> 四个对象分别评估：</p>
+<p>本研究只提出一个可复现问题：<em>按照成熟证明系统项目所发布的同类经典约定，固定的 Parano1d 证明几何会得到怎样的评分？</em> 四个对象分别评估：</p>
 
 <ol>
   <li>严格按 Plonky2/Toy-Problem 原式计算的参数评分；</li>
@@ -213,7 +213,7 @@
 
 <h2 id="inputs">实际部署参数，而非示例参数</h2>
 
-<p>输入取自 ParanO(1)d 提交 <a href="https://github.com/ignotusnemo/parano1d/commit/93b0252317208c20f8a769afb74681aa9389e286" target="_blank" rel="noopener noreferrer"><code>93b0252317208c20f8a769afb74681aa9389e286</code></a>。该版本已记录在独立计算项目中。后续协议修订必须显式更新源码版本绑定与预期结果。</p>
+<p>输入取自 Parano1d 提交 <a href="https://github.com/ignotusnemo/parano1d/commit/93b0252317208c20f8a769afb74681aa9389e286" target="_blank" rel="noopener noreferrer"><code>93b0252317208c20f8a769afb74681aa9389e286</code></a>。该版本已记录在独立计算项目中。后续协议修订必须显式更新源码版本绑定与预期结果。</p>
 <p>State 是由当前未花费输出与共识计数器组成的认证集合。HistoryStep 是区块从父 State 到子 State 精确转换的递归证明。B64 与 B255 是两种固定证明容量类别，分别容纳最多 64 页和 255 页用户交易。两者执行相同的有效性规则，只是约束域容量不同。</p>
 
 <div class="table-wrap"><table>
@@ -433,7 +433,7 @@ close(rbr.generalized_rbr_bits, 96.046_815_693_930_09, 1e-12);</code></pre>
 
 <h3 id="grind">查询前搜索应计入何处</h3>
 
-<p>16 位查询前工作量搜索（grinding）紧接在查询抽样之前。若只把它应用于后续查询项，而不乘到无关的有限域异常上，固定无效区块得到 <b>95.021747 位</b>。在计算项目中，这是 ParanO(1)d 最接近 ethSTARK 对比所用较宽松工作量核算口径的标量。</p>
+<p>16 位查询前工作量搜索（grinding）紧接在查询抽样之前。若只把它应用于后续查询项，而不乘到无关的有限域异常上，固定无效区块得到 <b>95.021747 位</b>。在计算项目中，这是 Parano1d 最接近 ethSTARK 对比所用较宽松工作量核算口径的标量。</p>
 
 <p>另一项单次实验允许一个区块包含最多 255 个可独立攻击的钱包证明事件：</p>
 
@@ -488,7 +488,7 @@ RUSTDOCFLAGS='-D warnings' cargo doc --release --no-deps</code></pre>
 <h2 id="references">主要来源</h2>
 
 <ul>
-  <li><a href="https://github.com/ignotusnemo/parano1d-soundness" target="_blank" rel="noopener noreferrer">Ignotus Nemo，ParanO(1)d soundness</a>。</li>
+  <li><a href="https://github.com/ignotusnemo/parano1d-soundness" target="_blank" rel="noopener noreferrer">Ignotus Nemo，Parano1d soundness</a>。</li>
   <li><a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/wallet-generalized-rbr.md" target="_blank" rel="noopener noreferrer">钱包授权：96.047-bit 广义 RBR 界</a>。</li>
   <li><a href="https://github.com/0xPolygonZero/plonky2#security" target="_blank" rel="noopener noreferrer">Plonky2 安全声明</a>及其<a href="https://github.com/0xPolygonZero/plonky2/blob/main/starky/src/config.rs#L119-L126" target="_blank" rel="noopener noreferrer">字面参数计算</a>。</li>
   <li><a href="https://github.com/risc0/risc0/blob/release-3.0/risc0/zkp/src/prove/soundness.rs" target="_blank" rel="noopener noreferrer">RISC Zero 可靠性计算器</a>。</li>
@@ -502,7 +502,7 @@ RUSTDOCFLAGS='-D warnings' cargo doc --release --no-deps</code></pre>
 <p><em>Ignotus Nemo</em></p>
 </article>
     </div>
-    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">研究记录</p><h2 id="evidence-title">证据与产物</h2><p>以下链接保存了支撑本文的实现、测量或推导。</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d-soundness" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>代码与测试</small><strong>ParanO(1)d 可靠性</strong></span></span><span aria-hidden="true">↗</span></a>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">研究记录</p><h2 id="evidence-title">证据与产物</h2><p>以下链接保存了支撑本文的实现、测量或推导。</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d-soundness" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>代码与测试</small><strong>Parano1d 可靠性</strong></span></span><span aria-hidden="true">↗</span></a>
 <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/wallet-generalized-rbr.md" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>证明</small><strong>钱包广义 RBR 推导</strong></span></span><span aria-hidden="true">↗</span></a>
 <a href="https://github.com/ignotusnemo/parano1d/commit/93b0252317208c20f8a769afb74681aa9389e286" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>固定的实际部署版本</strong></span></span><span aria-hidden="true">↗</span></a>
 <a href="https://github.com/0xPolygonZero/plonky2#security" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>来源</small><strong>Plonky2 安全性说明</strong></span></span><span aria-hidden="true">↗</span></a>

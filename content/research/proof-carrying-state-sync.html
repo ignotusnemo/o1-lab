@@ -1,6 +1,6 @@
 <h2 id="remove-replay">Remove replay, not verification</h2>
 <p>Historical replay combines several different tasks and calls all of them “synchronization.” A node reads headers to compare proof of work. It downloads transaction bodies to reconstruct State—the authenticated set of current unspent outputs and consensus counters. It executes every historical rule to decide whether the reconstructed State is valid. As the chain ages, the third task grows even when the present State stays the same size.</p>
-<p>ParanO(1)d replaces historical execution replay with a recursive HistoryStep. Each accepted block proves the exact transition from its authenticated parent State to its child State. The current boundary therefore carries a proof of the transition chain that produced it.</p>
+<p>Parano1d replaces historical execution replay with a recursive HistoryStep. Each accepted block proves the exact transition from its authenticated parent State to its child State. The current boundary therefore carries a proof of the transition chain that produced it.</p>
 <p>A <em>finalized boundary</em> is a block old enough to lie outside the protocol's permitted reorganization window. The <em>recent suffix</em> is the sequence of no more than eighteen complete blocks between that boundary and the current tip.</p>
 <div class="result">
   <strong>What disappears</strong>
