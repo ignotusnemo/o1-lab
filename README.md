@@ -24,7 +24,7 @@ Then open <http://localhost:4173>.
 - `content/research.json` contains article metadata and evidence links.
 - `content/research/*.html` contains article bodies.
 - `scripts/build.mjs` creates the home page, archive, article pages, RSS feed,
-  sitemap, manifest and structured metadata.
+  sitemap and structured metadata.
 - `assets/site.css` and `assets/site.js` are the complete presentation layer.
 - `papers/` contains publication files linked by the journal.
 

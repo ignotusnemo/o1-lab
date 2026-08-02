@@ -339,10 +339,10 @@ function shell({
   <meta name="author" content="Parano1d Lab">
   <meta name="keywords" content="${esc(t.keywords)}">
   ${discoveryMeta}
-  <link rel="icon" href="/favicon-96.png" sizes="96x96" type="image/png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-  <link rel="manifest" href="/manifest.webmanifest">
   ${socialMeta}
   ${articleMeta}
   <title>${esc(fullTitle)}</title>
@@ -570,5 +570,4 @@ for (const locale of locales) {
 }
 await emit("sitemap.xml", sitemap());
 await emit("robots.txt", `User-agent: *\nAllow: /\nSitemap: ${siteUrl}/sitemap.xml\n`);
-await emit("manifest.webmanifest", JSON.stringify({ name: "Parano1d Lab Research", short_name: "Parano1d Lab", start_url: "/", display: "standalone", background_color: "#f3f2ed", theme_color: "#f3f2ed", icons: [{ src: "/assets/icon-192.png", sizes: "192x192", type: "image/png" }, { src: "/assets/icon-512.png", sizes: "512x512", type: "image/png" }] }, null, 2));
 console.log(`Built ${baseData.length} research articles in ${locales.length} languages for ${siteUrl}`);

@@ -42,10 +42,11 @@ jobs:
           cp -a \
             404.html \
             CNAME \
-            favicon-96.png \
+            favicon-16.png \
+            favicon-32.png \
+            favicon-48.png \
             favicon.ico \
             index.html \
-            manifest.webmanifest \
             robots.txt \
             sitemap.xml \
             assets \
