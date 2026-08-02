@@ -237,20 +237,99 @@ function jsonLd(value) {
   return `<script type="application/ld+json">${JSON.stringify(value).replaceAll("<", "\\u003c")}</script>`;
 }
 
-function shell({ locale, title, description, basePath, body, active = "", type = "website", schema, article }) {
+function compactDescription(value, locale) {
+  const limit = locale.code === "zh" ? 82 : 160;
+  const normalized = value.replace(/\s+/g, " ").trim();
+  if (normalized.length <= limit) return normalized;
+
+  const candidate = normalized.slice(0, limit + 1);
+  const sentenceBoundary = Math.max(
+    candidate.lastIndexOf("。"),
+    candidate.lastIndexOf("！"),
+    candidate.lastIndexOf("？"),
+    candidate.lastIndexOf(". "),
+    candidate.lastIndexOf("! "),
+    candidate.lastIndexOf("? ")
+  );
+  const minimumSentence = locale.code === "zh" ? 40 : 96;
+  if (sentenceBoundary >= minimumSentence) {
+    return candidate.slice(0, sentenceBoundary + 1).trim();
+  }
+
+  if (locale.code === "zh") return `${normalized.slice(0, limit - 1).trim()}…`;
+  const wordBoundary = candidate.lastIndexOf(" ");
+  return `${candidate.slice(0, wordBoundary > 96 ? wordBoundary : limit - 1).trim()}…`;
+}
+
+function articleSeoTitle(item, locale) {
+  const suffixLength = " · ParanO(1)d Lab".length;
+  const limit = locale.code === "zh" ? 42 : 65;
+  return item.title.length + suffixLength <= limit ? item.title : item.shortTitle;
+}
+
+function shell({
+  locale,
+  title,
+  description,
+  basePath,
+  body,
+  active = "",
+  type = "website",
+  schema,
+  article,
+  imagePath = "/assets/og-lab-hero.png",
+  imageAlt = title,
+  indexable = true
+}) {
   const t = ui[locale.code];
   const pagePath = pathFor(locale, basePath);
   const canonical = absolute(pagePath);
   const fullTitle = title === "ParanO(1)d Lab" ? t.siteTitle : `${title} · ParanO(1)d Lab`;
-  const image = absolute("/assets/og-lab-hero.png");
+  const image = absolute(imagePath);
   const alternates = locales.map((target) => `<link rel="alternate" hreflang="${target.hreflang}" href="${absolute(pathFor(target, basePath))}">`).join("\n  ");
   const ogAlternates = locales.filter((target) => target.code !== locale.code).map((target) => `<meta property="og:locale:alternate" content="${target.ogLocale}">`).join("\n  ");
-  const articleMeta = article
+  const articleMeta = indexable && article
     ? `<meta property="article:published_time" content="${esc(article.date)}T00:00:00Z">
   <meta property="article:section" content="${esc(article.topic)}">
   ${article.authors.map((author) => `<meta property="article:author" content="${esc(author)}">`).join("\n  ")}`
     : "";
-  return externalLinksInNewTabs(`<!doctype html>
+  const discoveryMeta = indexable
+    ? `<link rel="canonical" href="${canonical}">
+  ${alternates}
+  <link rel="alternate" hreflang="x-default" href="${absolute(pathFor(defaultLocale, basePath))}">
+  <link rel="alternate" type="application/rss+xml" title="${esc(t.siteTitle)}" href="${absolute(pathFor(locale, "/feed.xml"))}">`
+    : `<meta name="robots" content="noindex,follow">`;
+  const socialMeta = indexable
+    ? `<meta property="og:type" content="${type}">
+  <meta property="og:site_name" content="${esc(t.siteTitle)}">
+  <meta property="og:locale" content="${locale.ogLocale}">
+  ${ogAlternates}
+  <meta property="og:url" content="${canonical}">
+  <meta property="og:title" content="${esc(fullTitle)}">
+  <meta property="og:description" content="${esc(description)}">
+  <meta property="og:image" content="${image}">
+  <meta property="og:image:secure_url" content="${image}">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="${esc(imageAlt)}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${esc(fullTitle)}">
+  <meta name="twitter:description" content="${esc(description)}">
+  <meta name="twitter:image" content="${image}">
+  <meta name="twitter:image:alt" content="${esc(imageAlt)}">`
+    : "";
+  const structuredData = indexable
+    ? jsonLd(schema ?? {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: t.siteTitle,
+        url: canonical,
+        description,
+        inLanguage: locale.htmlLang
+      })
+    : "";
+  const document = `<!doctype html>
 <html lang="${locale.htmlLang}">
 <head>
   <meta charset="utf-8">
@@ -260,39 +339,16 @@ function shell({ locale, title, description, basePath, body, active = "", type =
   <meta name="description" content="${esc(description)}">
   <meta name="author" content="ParanO(1)d Lab">
   <meta name="keywords" content="${esc(t.keywords)}">
-  <link rel="canonical" href="${canonical}">
-  ${alternates}
-  <link rel="alternate" hreflang="x-default" href="${absolute(pathFor(defaultLocale, basePath))}">
-  <link rel="alternate" type="application/rss+xml" title="${esc(t.siteTitle)}" href="${absolute(pathFor(locale, "/feed.xml"))}">
+  ${discoveryMeta}
   <link rel="icon" href="/assets/favicon-32.png?v=${faviconVersion}" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
-  <meta property="og:type" content="${type}">
-  <meta property="og:site_name" content="${esc(t.siteTitle)}">
-  <meta property="og:locale" content="${locale.ogLocale}">
-  ${ogAlternates}
-  <meta property="og:url" content="${canonical}">
-  <meta property="og:title" content="${esc(fullTitle)}">
-  <meta property="og:description" content="${esc(description)}">
-  <meta property="og:image" content="${image}">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${esc(fullTitle)}">
-  <meta name="twitter:description" content="${esc(description)}">
-  <meta name="twitter:image" content="${image}">
+  ${socialMeta}
   ${articleMeta}
   <title>${esc(fullTitle)}</title>
   <link rel="stylesheet" href="/assets/site.css?v=${siteCssVersion}">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  ${jsonLd(schema ?? {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: t.siteTitle,
-    url: canonical,
-    description,
-    inLanguage: locale.htmlLang
-  })}
+  ${structuredData}
 </head>
 <body class="locale-${locale.code}">
   <a class="skip-link" href="#content">${esc(t.skip)}</a>
@@ -303,7 +359,8 @@ function shell({ locale, title, description, basePath, body, active = "", type =
   </div>
   <script src="/assets/site.js?v=${siteJsVersion}" defer></script>
 </body>
-</html>`);
+</html>`;
+  return externalLinksInNewTabs(document.replace(/^[ \t]+$/gm, ""));
 }
 
 function articleCard(item, locale, { large = false } = {}) {
@@ -427,6 +484,9 @@ function articlePage(item, index, locale, newestFirst) {
   const newer = newestFirst[index - 1];
   const basePath = `/research/${item.slug}/`;
   const canonical = absolute(pathFor(locale, basePath));
+  const imagePath = `/assets/og/${item.slug}.png`;
+  const seoTitle = articleSeoTitle(item, locale);
+  const seoDescription = compactDescription(item.dek, locale);
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": item.schemaType,
@@ -438,7 +498,7 @@ function articlePage(item, index, locale, newestFirst) {
     inLanguage: locale.htmlLang,
     author: item.authors.map((name) => ({ "@type": name === "ParanO(1)d Lab" ? "Organization" : "Person", name })),
     publisher: { "@type": "Organization", name: "ParanO(1)d Lab", url: siteUrl },
-    image: absolute("/assets/og-lab-hero.png"),
+    image: absolute(imagePath),
     about: item.topic
   };
   const body = `<div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
@@ -454,15 +514,17 @@ function articlePage(item, index, locale, newestFirst) {
     <nav class="article-next" aria-label="${esc(t.adjacent)}">${older ? `<a href="${pathFor(locale, `/research/${older.slug}/`)}"><small>${esc(t.earlier)}</small><strong>${esc(older.shortTitle)}</strong><span>←</span></a>` : "<span></span>"}${newer ? `<a href="${pathFor(locale, `/research/${newer.slug}/`)}"><small>${esc(t.later)}</small><strong>${esc(newer.shortTitle)}</strong><span>→</span></a>` : "<span></span>"}</nav>
   </main>`;
   return shell({
-    title: item.title,
-    description: item.dek,
+    title: seoTitle,
+    description: seoDescription,
     locale,
     basePath,
     body,
     active: "research",
     type: "article",
     schema: articleSchema,
-    article: item
+    article: item,
+    imagePath,
+    imageAlt: item.title
   });
 }
 
@@ -477,7 +539,9 @@ function rss(locale, newestFirst) {
 
 function sitemap() {
   const basePaths = ["/", "/research/", ...baseData.map((item) => `/research/${item.slug}/`)];
-  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${basePaths.flatMap((basePath) => locales.map((locale) => `<url><loc>${absolute(pathFor(locale, basePath))}</loc>${locales.map((alternate) => `<xhtml:link rel="alternate" hreflang="${alternate.hreflang}" href="${absolute(pathFor(alternate, basePath))}"/>`).join("")}<xhtml:link rel="alternate" hreflang="x-default" href="${absolute(pathFor(defaultLocale, basePath))}"/><changefreq>${basePath === "/" ? "weekly" : "monthly"}</changefreq><priority>${basePath === "/" ? "1.0" : basePath === "/research/" ? "0.9" : "0.7"}</priority></url>`)).join("")}</urlset>`;
+  const newestDate = baseData.map((item) => item.date).sort().at(-1);
+  const dates = new Map(baseData.map((item) => [`/research/${item.slug}/`, item.date]));
+  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${basePaths.flatMap((basePath) => locales.map((locale) => `<url><loc>${absolute(pathFor(locale, basePath))}</loc><lastmod>${dates.get(basePath) ?? newestDate}</lastmod>${locales.map((alternate) => `<xhtml:link rel="alternate" hreflang="${alternate.hreflang}" href="${absolute(pathFor(alternate, basePath))}"/>`).join("")}<xhtml:link rel="alternate" hreflang="x-default" href="${absolute(pathFor(defaultLocale, basePath))}"/></url>`)).join("")}</urlset>`;
 }
 
 async function emit(path, contents) {
@@ -502,7 +566,7 @@ for (const locale of locales) {
   }
   await emit(outputPath(locale, "/feed.xml"), rss(locale, newestFirst));
   const t = ui[locale.code];
-  await emit(outputPath(locale, "/404.html"), shell({ locale, title: t.notFoundTitle, description: t.notFoundText, basePath: "/404.html", body: `<main id="content" class="not-found"><span>404</span><h1>${esc(t.notFoundHeading)}</h1><p>${esc(t.notFoundText)}</p><a class="button button--primary" href="${pathFor(locale, "/")}">${esc(t.notFoundAction)}</a></main>` }));
+  await emit(outputPath(locale, "/404.html"), shell({ locale, title: t.notFoundTitle, description: t.notFoundText, basePath: "/404.html", body: `<main id="content" class="not-found"><span>404</span><h1>${esc(t.notFoundHeading)}</h1><p>${esc(t.notFoundText)}</p><a class="button button--primary" href="${pathFor(locale, "/")}">${esc(t.notFoundAction)}</a></main>`, indexable: false }));
 }
 await emit("sitemap.xml", sitemap());
 await emit("robots.txt", `User-agent: *\nAllow: /\nSitemap: ${siteUrl}/sitemap.xml\n`);

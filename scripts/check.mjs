@@ -48,6 +48,7 @@ function targetFor(href) {
 for (const file of htmlFiles) {
   const html = await readFile(file, "utf8");
   const { locale, path } = pageIdentity(file);
+  const isNotFound = path.endsWith("/404.html") || path === "/404.html";
   const lang = html.match(/<html lang="([^"]+)"/)?.[1];
   const title = html.match(/<title>([^<]+)<\/title>/)?.[1];
   const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
@@ -55,11 +56,27 @@ for (const file of htmlFiles) {
   const alternateLanguages = new Set(alternateLinks.map((match) => match[1]));
   if (lang !== locale.htmlLang) errors.push(`${file}: expected html lang ${locale.htmlLang}, found ${lang ?? "none"}`);
   if (!title) errors.push(`${file}: missing title`);
-  if (canonical !== `${siteUrl}${path}`) errors.push(`${file}: invalid canonical ${canonical ?? "none"}`);
-  for (const hreflang of expectedHreflangs) {
-    if (!alternateLanguages.has(hreflang)) errors.push(`${file}: missing ${hreflang} alternate`);
+  if (isNotFound) {
+    if (!/<meta name="robots" content="noindex,follow">/.test(html)) errors.push(`${file}: missing noindex directive`);
+    if (canonical) errors.push(`${file}: 404 page must not declare a canonical URL`);
+    if (alternateLinks.length) errors.push(`${file}: 404 page must not declare language alternates`);
+    if (/<meta property="og:|<meta name="twitter:|application\/ld\+json/.test(html)) errors.push(`${file}: 404 page exposes indexable social or structured metadata`);
+  } else {
+    if (canonical !== `${siteUrl}${path}`) errors.push(`${file}: invalid canonical ${canonical ?? "none"}`);
+    for (const hreflang of expectedHreflangs) {
+      if (!alternateLanguages.has(hreflang)) errors.push(`${file}: missing ${hreflang} alternate`);
+    }
+    if (alternateLanguages.size !== expectedHreflangs.size) errors.push(`${file}: unexpected language alternate`);
+    const twitterCards = html.match(/<meta name="twitter:card"/g)?.length ?? 0;
+    if (twitterCards !== 1) errors.push(`${file}: expected one twitter:card, found ${twitterCards}`);
+    if (!/<meta property="og:image:alt" content="[^"]+">/.test(html)) errors.push(`${file}: missing Open Graph image alt text`);
+    if (path.includes("/research/") && path !== "/research/" && !path.endsWith("/research/")) {
+      const slug = path.split("/").filter(Boolean).at(-1);
+      const expectedImage = `${siteUrl}/assets/og/${slug}.png`;
+      if (!html.includes(`<meta property="og:image" content="${expectedImage}">`)) errors.push(`${file}: missing article-specific Open Graph image`);
+      try { await stat(join(root, "assets", "og", `${slug}.png`)); } catch { errors.push(`${file}: missing article Open Graph asset assets/og/${slug}.png`); }
+    }
   }
-  if (alternateLanguages.size !== expectedHreflangs.size) errors.push(`${file}: unexpected language alternate`);
   if (title) {
     const titleKey = `${locale.code}:${title}`;
     if (titles.has(titleKey)) errors.push(`${file}: duplicate ${locale.code} title with ${titles.get(titleKey)}`);
@@ -80,6 +97,17 @@ for (const file of htmlFiles) {
 if (new Set(pagesPerLocale.values()).size !== 1) {
   errors.push(`localized page counts differ: ${[...pagesPerLocale].map(([code, count]) => `${code}=${count}`).join(", ")}`);
 }
+
+const sitemap = await readFile(join(root, "sitemap.xml"), "utf8");
+if (/<changefreq>|<priority>/.test(sitemap)) {
+  errors.push("sitemap.xml: obsolete changefreq or priority field present");
+}
+const indexablePageCount = htmlFiles.length - locales.length;
+const lastmodCount = sitemap.match(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g)?.length ?? 0;
+if (lastmodCount !== indexablePageCount) {
+  errors.push(`sitemap.xml: expected ${indexablePageCount} lastmod values, found ${lastmodCount}`);
+}
+if (/404\.html/.test(sitemap)) errors.push("sitemap.xml: 404 page must not be listed");
 
 if (errors.length) {
   console.error(errors.join("\n"));

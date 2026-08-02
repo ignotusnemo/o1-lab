@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f3f2ed">
   <meta name="color-scheme" content="light">
-  <meta name="description" content="HistoryStep 是区块状态转换的递归证明。B64 可处理最多 64 个用户交易页面，并能在参考笔记本上满足准备时间预算；B255 将同一证明关系扩展到每区块 255 页的上限。测量没有发现第三种类别可以覆盖的有用运行区间。">
+  <meta name="description" content="HistoryStep 是区块状态转换的递归证明。B64 可处理最多 64 个用户交易页面，并能在参考笔记本上满足准备时间预算；B255 将同一证明关系扩展到每区…">
   <meta name="author" content="ParanO(1)d Lab">
   <meta name="keywords" content="Parano1d, ParanO(1)d, ParanO(1)d Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺">
   <link rel="canonical" href="https://lab.parano1d.org/zh/research/b64-b255-proof-classes/">
@@ -24,21 +24,25 @@
   <meta property="og:locale:alternate" content="ru_RU">
   <meta property="og:url" content="https://lab.parano1d.org/zh/research/b64-b255-proof-classes/">
   <meta property="og:title" content="HistoryStep 为何采用两种证明类别 · ParanO(1)d Lab">
-  <meta property="og:description" content="HistoryStep 是区块状态转换的递归证明。B64 可处理最多 64 个用户交易页面，并能在参考笔记本上满足准备时间预算；B255 将同一证明关系扩展到每区块 255 页的上限。测量没有发现第三种类别可以覆盖的有用运行区间。">
-  <meta property="og:image" content="https://lab.parano1d.org/assets/og-lab-hero.png">
+  <meta property="og:description" content="HistoryStep 是区块状态转换的递归证明。B64 可处理最多 64 个用户交易页面，并能在参考笔记本上满足准备时间预算；B255 将同一证明关系扩展到每区…">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og/b64-b255-proof-classes.png">
+  <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/b64-b255-proof-classes.png">
+  <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="HistoryStep 为何采用两种证明类别">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="HistoryStep 为何采用两种证明类别 · ParanO(1)d Lab">
-  <meta name="twitter:description" content="HistoryStep 是区块状态转换的递归证明。B64 可处理最多 64 个用户交易页面，并能在参考笔记本上满足准备时间预算；B255 将同一证明关系扩展到每区块 255 页的上限。测量没有发现第三种类别可以覆盖的有用运行区间。">
-  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-lab-hero.png">
+  <meta name="twitter:description" content="HistoryStep 是区块状态转换的递归证明。B64 可处理最多 64 个用户交易页面，并能在参考笔记本上满足准备时间预算；B255 将同一证明关系扩展到每区…">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/b64-b255-proof-classes.png">
+  <meta name="twitter:image:alt" content="HistoryStep 为何采用两种证明类别">
   <meta property="article:published_time" content="2026-07-17T00:00:00Z">
   <meta property="article:section" content="递归证明">
   <meta property="article:author" content="ParanO(1)d Lab">
   <title>HistoryStep 为何采用两种证明类别 · ParanO(1)d Lab</title>
-  <link rel="stylesheet" href="/assets/site.css?v=6d9b995a8ab9">
+  <link rel="stylesheet" href="/assets/site.css?v=c92b14e703cc">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"HistoryStep 为何采用两种证明类别","description":"本研究考察递归区块证明是否需要一种介于两种正式类别之间的几何。B64 覆盖最多 64 个物理用户页面的区块；B255 在不改变所证明关系的前提下覆盖 65 至 255 页。测试包含实际部署的完整证明路径、经过认证的矩阵，以及最高 1,020 个输入的钱包聚合。中间几何曾被实现，随后被移除：它会在共识中增加一条选择规则和一个验证分支，却没有改善任何已证实的工作负载。","datePublished":"2026-07-17","dateModified":"2026-07-17","mainEntityOfPage":"https://lab.parano1d.org/zh/research/b64-b255-proof-classes/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"ParanO(1)d Lab"}],"publisher":{"@type":"Organization","name":"ParanO(1)d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-lab-hero.png","about":"递归证明"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"HistoryStep 为何采用两种证明类别","description":"本研究考察递归区块证明是否需要一种介于两种正式类别之间的几何。B64 覆盖最多 64 个物理用户页面的区块；B255 在不改变所证明关系的前提下覆盖 65 至 255 页。测试包含实际部署的完整证明路径、经过认证的矩阵，以及最高 1,020 个输入的钱包聚合。中间几何曾被实现，随后被移除：它会在共识中增加一条选择规则和一个验证分支，却没有改善任何已证实的工作负载。","datePublished":"2026-07-17","dateModified":"2026-07-17","mainEntityOfPage":"https://lab.parano1d.org/zh/research/b64-b255-proof-classes/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"ParanO(1)d Lab"}],"publisher":{"@type":"Organization","name":"ParanO(1)d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/b64-b255-proof-classes.png","about":"递归证明"}</script>
 </head>
 <body class="locale-zh">
   <a class="skip-link" href="#content">跳到正文</a>

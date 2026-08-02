@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f3f2ed">
   <meta name="color-scheme" content="light">
-  <meta name="description" content="Монотонный идентификатор создания в существующем поле значения делает устаревшие открытия слотов недействительными без второго корня консенсуса и карантина повторного использования.">
+  <meta name="description" content="Монотонный идентификатор создания в существующем поле значения делает устаревшие открытия слотов недействительными без второго корня консенсуса и карантина…">
   <meta name="author" content="ParanO(1)d Lab">
   <meta name="keywords" content="Parano1d, ParanO(1)d, ParanO(1)d Lab, доказательства с нулевым разглашением, системы доказательств, криптография, рекурсивные доказательства, бинарные поля, полиномиальные обязательства">
   <link rel="canonical" href="https://lab.parano1d.org/ru/research/utxo-incarnations/">
@@ -23,22 +23,26 @@
   <meta property="og:locale:alternate" content="en_US">
   <meta property="og:locale:alternate" content="zh_CN">
   <meta property="og:url" content="https://lab.parano1d.org/ru/research/utxo-incarnations/">
-  <meta property="og:title" content="Идентификаторы поколений UTXO вместо карантина консенсуса · ParanO(1)d Lab">
-  <meta property="og:description" content="Монотонный идентификатор создания в существующем поле значения делает устаревшие открытия слотов недействительными без второго корня консенсуса и карантина повторного использования.">
-  <meta property="og:image" content="https://lab.parano1d.org/assets/og-lab-hero.png">
+  <meta property="og:title" content="Поколения UTXO · ParanO(1)d Lab">
+  <meta property="og:description" content="Монотонный идентификатор создания в существующем поле значения делает устаревшие открытия слотов недействительными без второго корня консенсуса и карантина…">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og/utxo-incarnations.png">
+  <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/utxo-incarnations.png">
+  <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Идентификаторы поколений UTXO вместо карантина консенсуса">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Идентификаторы поколений UTXO вместо карантина консенсуса · ParanO(1)d Lab">
-  <meta name="twitter:description" content="Монотонный идентификатор создания в существующем поле значения делает устаревшие открытия слотов недействительными без второго корня консенсуса и карантина повторного использования.">
-  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og-lab-hero.png">
+  <meta name="twitter:title" content="Поколения UTXO · ParanO(1)d Lab">
+  <meta name="twitter:description" content="Монотонный идентификатор создания в существующем поле значения делает устаревшие открытия слотов недействительными без второго корня консенсуса и карантина…">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/utxo-incarnations.png">
+  <meta name="twitter:image:alt" content="Идентификаторы поколений UTXO вместо карантина консенсуса">
   <meta property="article:published_time" content="2026-07-10T00:00:00Z">
   <meta property="article:section" content="Live State">
   <meta property="article:author" content="ParanO(1)d Lab">
-  <title>Идентификаторы поколений UTXO вместо карантина консенсуса · ParanO(1)d Lab</title>
-  <link rel="stylesheet" href="/assets/site.css?v=6d9b995a8ab9">
+  <title>Поколения UTXO · ParanO(1)d Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=c92b14e703cc">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Идентификаторы поколений UTXO вместо карантина консенсуса","description":"Карантин повторного использования на 256 корзин и упакованные идентификаторы поколений UTXO были реализованы против одной угрозы: физический слот может позднее содержать выход с тем же видимым значением, но уже другой идентичностью. Идентификаторы различают последовательные выходы, разрешают повторное использование в том же блоке, отклоняют старые открытия и устраняют второй корень State вместе с соответствующими семействами доказательств. Идентификатор остаётся локальным для ветви и однозначно связывается с канонической историей.","datePublished":"2026-07-10","dateModified":"2026-07-10","mainEntityOfPage":"https://lab.parano1d.org/ru/research/utxo-incarnations/","inLanguage":"ru","author":[{"@type":"Organization","name":"ParanO(1)d Lab"}],"publisher":{"@type":"Organization","name":"ParanO(1)d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og-lab-hero.png","about":"Live State"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Идентификаторы поколений UTXO вместо карантина консенсуса","description":"Карантин повторного использования на 256 корзин и упакованные идентификаторы поколений UTXO были реализованы против одной угрозы: физический слот может позднее содержать выход с тем же видимым значением, но уже другой идентичностью. Идентификаторы различают последовательные выходы, разрешают повторное использование в том же блоке, отклоняют старые открытия и устраняют второй корень State вместе с соответствующими семействами доказательств. Идентификатор остаётся локальным для ветви и однозначно связывается с канонической историей.","datePublished":"2026-07-10","dateModified":"2026-07-10","mainEntityOfPage":"https://lab.parano1d.org/ru/research/utxo-incarnations/","inLanguage":"ru","author":[{"@type":"Organization","name":"ParanO(1)d Lab"}],"publisher":{"@type":"Organization","name":"ParanO(1)d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/utxo-incarnations.png","about":"Live State"}</script>
 </head>
 <body class="locale-ru">
   <a class="skip-link" href="#content">К содержанию</a>
