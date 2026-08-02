@@ -82,7 +82,96 @@
     <section class="latest-section section" id="latest">
       <div class="section-heading"><div><p class="section-index">01 · Latest</p><h2>Latest research</h2></div><a class="text-link" href="/research/">All research <span aria-hidden="true">↗</span></a></div>
       <article class="lead-story">
-        <div class="lead-story-art"><div class="research-art art--soundness" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+        <div class="lead-story-art"><div class="research-art art--fsfri" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-fsfri" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-fsfri" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-fsfri" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-fsfri" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-fsfri" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-fsfri" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-fsfri)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-fsfri)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">CONCRETE FS-FRI SECURITY · BLOCK–TIWARI EXPECTED WORK</text>
+    <g class="diagram-panel diagram-panel--neutral" filter="url(#shadow-fsfri)">
+    <rect x="42" y="76" width="148" height="244" rx="14"/>
+    <text class="diagram-micro" x="60" y="101">CURRENT HISTORY INPUT</text>
+    <text class="diagram-label" x="60" y="132">FIELD</text>
+    <text class="diagram-value diagram-value--compact" x="172" y="132" text-anchor="end">2¹²⁸</text>
+    <path class="diagram-divider" d="M60 146H172"/>
+    <text class="diagram-label" x="60" y="171">RATE ρ</text>
+    <text class="diagram-value diagram-value--compact" x="172" y="171" text-anchor="end">1 / 4</text>
+    <text class="diagram-label" x="60" y="202">QUERIES ℓ</text>
+    <text class="diagram-value diagram-value--compact" x="172" y="202" text-anchor="end">125</text>
+    <text class="diagram-label" x="60" y="233">ORACLE κ</text>
+    <text class="diagram-value diagram-value--compact" x="172" y="233" text-anchor="end">256</text>
+    <path class="diagram-divider" d="M60 249H172"/>
+    <text class="diagram-label" x="60" y="275">CLASSES</text>
+    <text class="diagram-value diagram-value--compact" x="172" y="275" text-anchor="end">B64 / B255</text>
+    <g class="diagram-tag"><rect x="60" y="289" width="112" height="23" rx="6"/><text x="116" y="305">TARGET · 128</text></g>
+  </g>
+
+  <path class="diagram-arrow " d="M190 198H222" marker-end="url(#arrow-fsfri)"/>
+
+  <g class="diagram-panel diagram-panel--blue" filter="url(#shadow-fsfri)">
+    <rect x="222" y="105" width="166" height="184" rx="15"/>
+    <text class="diagram-micro" x="242" y="131">MINIMIZE OVER ALL Q ≥ 1</text>
+    <text class="diagram-value diagram-value--compact" x="305" y="169" text-anchor="middle">W(Q) = Q / ε(Q)</text>
+    <path class="diagram-divider" d="M242 187H368"/>
+    <text class="diagram-label" x="305" y="214" text-anchor="middle">EXPECTED ORACLE WORK</text>
+    <text class="diagram-number diagram-number--blue" x="305" y="254" text-anchor="middle">min W(Q)</text>
+    <text class="diagram-micro" x="305" y="274" text-anchor="middle">EXACT INTEGER BOUNDARY</text>
+  </g>
+
+  <path class="diagram-arrow " d="M388 170H416" marker-end="url(#arrow-fsfri)"/>
+  <path class="diagram-arrow " d="M388 238H416" marker-end="url(#arrow-fsfri)"/>
+
+  <g class="diagram-panel diagram-panel--green" filter="url(#shadow-fsfri)">
+    <rect x="416" y="76" width="182" height="111" rx="14"/>
+    <text class="diagram-micro" x="434" y="101">PROVED RBR · (3/5)¹²⁵</text>
+    <text class="diagram-label" x="434" y="127">FS-FRI BITS</text>
+    <text class="diagram-number" x="580" y="157" text-anchor="end">92</text>
+    <text class="diagram-micro" x="434" y="171">CERTIFICATE [92, 93)</text>
+  </g>
+
+  <g class="diagram-panel diagram-panel--blue" filter="url(#shadow-fsfri)">
+    <rect x="416" y="209" width="182" height="111" rx="14"/>
+    <text class="diagram-micro" x="434" y="234">CONJECTURE 1 · 2⁻¹²⁸</text>
+    <text class="diagram-label" x="434" y="260">FS-FRI BITS</text>
+    <text class="diagram-number diagram-number--blue" x="580" y="290" text-anchor="end">126</text>
+    <text class="diagram-micro" x="434" y="304">CERTIFICATE [126, 127)</text>
+  </g>
+    <text class="diagram-caption" x="42" y="390">One parameter set · two RBR premises · exact minimization across every query budget</text>
+  </svg></div></div>
+        <div class="lead-story-copy">
+          <div class="story-meta"><span>Security analysis</span><time datetime="2026-08-03">03 Aug 2026</time></div>
+          <h3><a href="/research/parano1d-block-tiwari-fs-fri/">Parano1d under the Block–Tiwari FS-FRI metric</a></h3>
+          <p>Block and Tiwari define concrete security for a non-interactive FRI proof through the expected random-oracle query work Q/epsilon. This study maps the current Parano1d History parameters into that definition, derives the proved and conjectured RBR inputs, solves the integer optimization exactly and places the resulting row beside Table 1 of their comparison.</p>
+          <div class="story-actions"><a class="button button--primary" href="/research/parano1d-block-tiwari-fs-fri/">Read the research</a><a class="button button--quiet" href="https://github.com/ignotusnemo/parano1d-qrom" target="_blank" rel="noopener noreferrer"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>Parano1d QROM workbench</span></a></div>
+        </div>
+      </article>
+      <div class="research-grid"><article class="research-card" data-topic="Soundness">
+    <a class="card-art-link" href="/research/parano1d-soundness-industry-metrics/" tabindex="-1" aria-hidden="true"><div class="research-art art--soundness research-art--compact" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
     <defs>
     <pattern id="grid-soundness" width="24" height="24" patternUnits="userSpaceOnUse">
       <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
@@ -188,15 +277,15 @@
     <path d="M65 325H188"/><text x="65" y="344">VALUES ARE NOT COLLAPSED</text>
   </g>
     <text class="diagram-caption" x="42" y="390">One source-pinned parameter set · three explicit games · every value keeps its definition</text>
-  </svg></div></div>
-        <div class="lead-story-copy">
-          <div class="story-meta"><span>Security analysis</span><time datetime="2026-07-31">31 Jul 2026</time></div>
-          <h3><a href="/research/parano1d-soundness-industry-metrics/">Parano1d soundness under industry metrics</a></h3>
-          <p>This analysis evaluates committed Parano1d production parameters under the classical conventions published by Plonky2, RISC Zero and ethSTARK. It separates conjectured scores from finite theorem-backed bounds and pins every reported value in executable Rust calculations. Each value is compared only within its named metric.</p>
-          <div class="story-actions"><a class="button button--primary" href="/research/parano1d-soundness-industry-metrics/">Read the research</a><a class="button button--quiet" href="https://github.com/ignotusnemo/parano1d-soundness" target="_blank" rel="noopener noreferrer"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>Parano1d soundness</span></a></div>
-        </div>
-      </article>
-      <div class="research-grid"><article class="research-card" data-topic="Proof systems">
+  </svg></div></a>
+    <div class="card-body">
+      <div class="card-meta"><span>Security analysis</span><time datetime="2026-07-31">31 Jul 2026</time></div>
+      <h3><a href="/research/parano1d-soundness-industry-metrics/">Parano1d soundness under industry metrics</a></h3>
+      <p>Committed production parameters evaluated under the metrics published by Plonky2, RISC Zero and ethSTARK, with conjectured scores separated from finite theorem-backed bounds.</p>
+      <div class="card-foot"><span>14 min read</span><a class="text-link" href="/research/parano1d-soundness-industry-metrics/">Read <span aria-hidden="true">↗</span></a></div>
+    </div>
+  </article>
+<article class="research-card" data-topic="Proof systems">
     <a class="card-art-link" href="/research/frost-gkr-global-trace-protocol/" tabindex="-1" aria-hidden="true"><div class="research-art art--frost research-art--compact" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
     <defs>
     <pattern id="grid-frost" width="24" height="24" patternUnits="userSpaceOnUse">
@@ -482,59 +571,15 @@
       <p>A joining node validates headers, verifies one recursive transition proof at a finalized boundary, installs exact live State and applies no more than eighteen recent blocks.</p>
       <div class="card-foot"><span>4 min read</span><a class="text-link" href="/research/proof-carrying-state-sync/">Read <span aria-hidden="true">↗</span></a></div>
     </div>
-  </article>
-<article class="research-card" data-topic="Live State">
-    <a class="card-art-link" href="/research/utxo-incarnations/" tabindex="-1" aria-hidden="true"><div class="research-art art--incarnation research-art--compact" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
-    <defs>
-    <pattern id="grid-incarnation" width="24" height="24" patternUnits="userSpaceOnUse">
-      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
-      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
-    </pattern>
-    <radialGradient id="halo-incarnation" cx="50%" cy="48%" r="64%">
-      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
-      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
-      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="panel-incarnation" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
-      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
-    </linearGradient>
-    <filter id="shadow-incarnation" x="-20%" y="-30%" width="140%" height="170%">
-      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
-    </filter>
-    <filter id="glow-incarnation" x="-80%" y="-80%" width="260%" height="260%">
-      <feGaussianBlur stdDeviation="3.2" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <marker id="arrow-incarnation" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
-    </marker>
-  </defs>
-    <rect width="640" height="420" fill="#07120d"/>
-    <rect width="640" height="420" fill="url(#halo-incarnation)"/>
-    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-incarnation)"/>
-    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
-    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">ONE PHYSICAL SLOT · DISTINCT LOGICAL OUTPUTS</text>
-    <g class="diagram-panel diagram-panel--neutral" filter="url(#shadow-incarnation)"><rect x="38" y="78" width="230" height="246" rx="15"/><text class="diagram-micro" x="60" y="105">SLOT 148 · INCARNATION 41</text><text class="diagram-value diagram-value--compact" x="60" y="143">50 NOID</text><path class="diagram-divider" d="M60 161H246"/><text class="diagram-label" x="60" y="190">OWNER</text><text class="diagram-value diagram-value--compact" x="246" y="190" text-anchor="end">A7…2C</text><text class="diagram-label" x="60" y="224">CREATION</text><text class="diagram-number" x="246" y="226" text-anchor="end">41</text><g class="leaf-hash"><rect x="60" y="252" width="186" height="43" rx="8"/><text class="diagram-micro" x="74" y="269">LEAF IDENTITY</text><text class="diagram-value diagram-value--compact" x="74" y="289">H(slot ∥ 41 ∥ value)</text></g></g>
-  <g class="reuse-channel"><path d="M268 169H372" marker-end="url(#arrow-incarnation)"/><text class="diagram-micro" x="320" y="151" text-anchor="middle">SPEND → REUSE</text><path class="stale-cross" d="M301 232 339 270M339 232 301 270"/><text class="diagram-micro diagram-micro--coral" x="320" y="292" text-anchor="middle">STALE H₄₁</text></g>
-  <g class="diagram-panel diagram-panel--green" filter="url(#shadow-incarnation)"><rect x="372" y="78" width="230" height="246" rx="15"/><text class="diagram-micro" x="394" y="105">SLOT 148 · INCARNATION 42</text><text class="diagram-value diagram-value--compact" x="394" y="143">50 NOID</text><path class="diagram-divider" d="M394 161H580"/><text class="diagram-label" x="394" y="190">OWNER</text><text class="diagram-value diagram-value--compact" x="580" y="190" text-anchor="end">A7…2C</text><text class="diagram-label" x="394" y="224">CREATION</text><text class="diagram-number" x="580" y="226" text-anchor="end">42</text><g class="leaf-hash leaf-hash--new"><rect x="394" y="252" width="186" height="43" rx="8"/><text class="diagram-micro" x="408" y="269">NEW LEAF IDENTITY</text><text class="diagram-value diagram-value--compact" x="408" y="289">H(slot ∥ 42 ∥ value)</text></g></g>
-    <text class="diagram-caption" x="42" y="390">The incarnation travels with value, so reuse needs no quarantine root or delay</text>
-  </svg></div></a>
-    <div class="card-body">
-      <div class="card-meta"><span>Protocol study</span><time datetime="2026-07-10">10 Jul 2026</time></div>
-      <h3><a href="/research/utxo-incarnations/">Replacing a consensus quarantine with UTXO incarnations</a></h3>
-      <p>A monotone creation identifier inside the existing value lane invalidates stale slot openings without a second consensus root or reuse quarantine.</p>
-      <div class="card-foot"><span>3 min read</span><a class="text-link" href="/research/utxo-incarnations/">Read <span aria-hidden="true">↗</span></a></div>
-    </div>
   </article></div>
     </section>
 
     <section class="focus-section section">
       <div class="section-heading"><div><p class="section-index">02 · Selected work</p><h2>Current research record</h2></div></div>
-      <div class="focus-list"><a href="/research/parano1d-soundness-industry-metrics/"><span class="focus-number">01</span><span><small>Soundness</small><strong>Soundness under industry metrics</strong></span><span class="focus-arrow">↗</span></a>
-<a href="/research/frost-gkr-global-trace-protocol/"><span class="focus-number">02</span><span><small>Proof systems</small><strong>FROST-GKR</strong></span><span class="focus-arrow">↗</span></a>
-<a href="/research/b64-b255-proof-classes/"><span class="focus-number">03</span><span><small>Recursive proving</small><strong>B64 / B255</strong></span><span class="focus-arrow">↗</span></a>
-<a href="/research/atomic-history-step/"><span class="focus-number">04</span><span><small>Consensus</small><strong>Atomic HistoryStep</strong></span><span class="focus-arrow">↗</span></a></div>
+      <div class="focus-list"><a href="/research/parano1d-block-tiwari-fs-fri/"><span class="focus-number">01</span><span><small>Fiat–Shamir security</small><strong>Block–Tiwari FS-FRI</strong></span><span class="focus-arrow">↗</span></a>
+<a href="/research/parano1d-soundness-industry-metrics/"><span class="focus-number">02</span><span><small>Soundness</small><strong>Soundness under industry metrics</strong></span><span class="focus-arrow">↗</span></a>
+<a href="/research/frost-gkr-global-trace-protocol/"><span class="focus-number">03</span><span><small>Proof systems</small><strong>FROST-GKR</strong></span><span class="focus-arrow">↗</span></a>
+<a href="/research/b64-b255-proof-classes/"><span class="focus-number">04</span><span><small>Recursive proving</small><strong>B64 / B255</strong></span><span class="focus-arrow">↗</span></a></div>
     </section>
 
   </main>
