@@ -9,10 +9,9 @@ import { defaultLocale, locales, pathFor, ui } from "./i18n.mjs";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const siteUrl = "https://lab.parano1d.org";
 const versionOf = (contents) => createHash("sha256").update(contents).digest("hex").slice(0, 12);
-const [siteCssVersion, siteJsVersion, faviconVersion] = await Promise.all([
+const [siteCssVersion, siteJsVersion] = await Promise.all([
   readFile(join(root, "assets/site.css")).then(versionOf),
-  readFile(join(root, "assets/site.js")).then(versionOf),
-  readFile(join(root, "assets/favicon-32.png")).then(versionOf)
+  readFile(join(root, "assets/site.js")).then(versionOf)
 ]);
 const baseData = JSON.parse(await readFile(join(root, "content/research.json"), "utf8"));
 
@@ -340,7 +339,8 @@ function shell({
   <meta name="author" content="Parano1d Lab">
   <meta name="keywords" content="${esc(t.keywords)}">
   ${discoveryMeta}
-  <link rel="icon" href="/assets/favicon-32.png?v=${faviconVersion}" sizes="32x32" type="image/png">
+  <link rel="icon" href="/favicon-96.png" sizes="96x96" type="image/png">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
   ${socialMeta}
