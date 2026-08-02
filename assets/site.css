@@ -968,6 +968,89 @@ img, svg { max-width: 100%; }
 .footer-links a:hover { color: var(--green-dark); }
 .footer-bottom { grid-column: 1 / -1; margin-top: 20px; padding-top: 22px; display: flex; justify-content: space-between; border-top: 1px solid var(--line-dark); color: var(--muted); font: 9px/1.2 "Lab Mono", monospace; text-transform: uppercase; }
 
+body.repository-gate-open { overflow: hidden; }
+
+.repository-gate-layer[hidden] { display: none; }
+.repository-gate-layer {
+  position: fixed;
+  z-index: 300;
+  inset: 0;
+  padding: 20px;
+  display: grid;
+  place-items: center;
+  background: rgba(229,232,228,.8);
+  backdrop-filter: blur(14px) saturate(108%);
+  -webkit-backdrop-filter: blur(14px) saturate(108%);
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+.repository-gate-layer.is-open { opacity: 1; }
+.repository-gate-dialog {
+  position: relative;
+  width: min(460px, 100%);
+  padding: 34px 35px 30px;
+  overflow: hidden;
+  border: 1px solid rgba(22,38,29,.14);
+  border-radius: 17px;
+  background: radial-gradient(circle at 96% 0%, rgba(0,138,75,.09), transparent 14rem), var(--paper-bright);
+  box-shadow: 0 2px 3px rgba(7,18,13,.055), 0 32px 92px rgba(7,18,13,.18), inset 0 1px rgba(255,255,255,.94);
+  transform: translateY(9px) scale(.985);
+  transition: transform .25s cubic-bezier(.16,.88,.24,1);
+}
+.repository-gate-layer.is-open .repository-gate-dialog { transform: none; }
+.repository-gate-dialog::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: .42;
+  background-image: linear-gradient(rgba(0,138,75,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(0,138,75,.035) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(135deg, #000, transparent 70%);
+}
+.repository-gate-dialog > * { position: relative; }
+.repository-gate-close {
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: #8c9690;
+  cursor: pointer;
+  transition: color .16s ease, border-color .16s ease, background .16s ease;
+}
+.repository-gate-close:hover { border-color: #cedbd2; background: #edf7f1; color: var(--green-dark); }
+.repository-gate-close svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; }
+.repository-gate-eyebrow { margin: 0 0 12px; color: var(--green); font: 700 9px/1.2 "Lab Mono", monospace; letter-spacing: .13em; text-transform: uppercase; }
+.repository-gate-dialog h2 { max-width: 370px; margin: 0; color: var(--ink); font-size: clamp(25px,3vw,31px); line-height: 1.1; letter-spacing: -.04em; }
+.repository-gate-copy { margin: 17px 0 20px; color: var(--ink-soft); font-size: 14px; line-height: 1.65; }
+.repository-gate-meta { margin: 0 0 22px; padding: 13px 0; display: grid; gap: 7px; border-top: 1px solid #e1e8e3; border-bottom: 1px solid #e1e8e3; color: #58645d; font: 700 9px/1.35 "Lab Mono", monospace; letter-spacing: .065em; text-transform: uppercase; }
+.repository-gate-meta p { margin: 0; }
+.repository-gate-meta a { color: var(--green-dark); text-decoration: none; }
+.repository-gate-meta a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.repository-gate-dismiss {
+  min-width: 108px;
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px solid var(--green-dark);
+  border-radius: 10px;
+  background: linear-gradient(180deg,#009b55,#008548);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: inset 0 1px rgba(255,255,255,.18), 0 10px 24px rgba(0,104,58,.15);
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+.repository-gate-dismiss:hover { transform: translateY(-1px); box-shadow: inset 0 1px rgba(255,255,255,.2), 0 14px 30px rgba(0,104,58,.2); }
+
 @media (max-width: 1050px) {
   .home-hero { grid-template-columns: 1fr 390px; gap: 25px; }
   .hero-field { opacity: .9; transform: scale(.92); transform-origin: right center; }
@@ -1084,6 +1167,10 @@ img, svg { max-width: 100%; }
   .site-footer { grid-template-columns: 1fr; }
   .footer-links { grid-template-columns: 1fr 1fr; }
   .footer-bottom { gap: 10px; flex-direction: column; }
+  .repository-gate-layer { padding: 14px; }
+  .repository-gate-dialog { padding: 30px 24px 25px; border-radius: 14px; }
+  .repository-gate-copy { font-size: 13px; }
+  .repository-gate-meta { font-size: 8.5px; letter-spacing: .04em; }
 }
 
 @media (max-width: 350px) {
