@@ -346,6 +346,57 @@ const soundness = frame("soundness", "SOUNDNESS METROLOGY · ONE PARAMETER SET, 
   </g>
 `, "One source-pinned parameter set · three explicit games · every value keeps its definition");
 
+const fsfri = frame("fsfri", "CONCRETE FS-FRI SECURITY · BLOCK–TIWARI EXPECTED WORK", `
+  <g class="${tone("neutral")}" filter="url(#shadow-fsfri)">
+    <rect x="42" y="76" width="148" height="244" rx="14"/>
+    <text class="diagram-micro" x="60" y="101">CURRENT HISTORY INPUT</text>
+    <text class="diagram-label" x="60" y="132">FIELD</text>
+    <text class="diagram-value diagram-value--compact" x="172" y="132" text-anchor="end">2¹²⁸</text>
+    <path class="diagram-divider" d="M60 146H172"/>
+    <text class="diagram-label" x="60" y="171">RATE ρ</text>
+    <text class="diagram-value diagram-value--compact" x="172" y="171" text-anchor="end">1 / 4</text>
+    <text class="diagram-label" x="60" y="202">QUERIES ℓ</text>
+    <text class="diagram-value diagram-value--compact" x="172" y="202" text-anchor="end">125</text>
+    <text class="diagram-label" x="60" y="233">ORACLE κ</text>
+    <text class="diagram-value diagram-value--compact" x="172" y="233" text-anchor="end">256</text>
+    <path class="diagram-divider" d="M60 249H172"/>
+    <text class="diagram-label" x="60" y="275">CLASSES</text>
+    <text class="diagram-value diagram-value--compact" x="172" y="275" text-anchor="end">B64 / B255</text>
+    <g class="diagram-tag"><rect x="60" y="289" width="112" height="23" rx="6"/><text x="116" y="305">TARGET · 128</text></g>
+  </g>
+
+  ${arrow("fsfri", "M190 198H222")}
+
+  <g class="${tone("blue")}" filter="url(#shadow-fsfri)">
+    <rect x="222" y="105" width="166" height="184" rx="15"/>
+    <text class="diagram-micro" x="242" y="131">MINIMIZE OVER ALL Q ≥ 1</text>
+    <text class="diagram-value diagram-value--compact" x="305" y="169" text-anchor="middle">W(Q) = Q / ε(Q)</text>
+    <path class="diagram-divider" d="M242 187H368"/>
+    <text class="diagram-label" x="305" y="214" text-anchor="middle">EXPECTED ORACLE WORK</text>
+    <text class="diagram-number diagram-number--blue" x="305" y="254" text-anchor="middle">min W(Q)</text>
+    <text class="diagram-micro" x="305" y="274" text-anchor="middle">EXACT INTEGER BOUNDARY</text>
+  </g>
+
+  ${arrow("fsfri", "M388 170H416")}
+  ${arrow("fsfri", "M388 238H416")}
+
+  <g class="${tone("green")}" filter="url(#shadow-fsfri)">
+    <rect x="416" y="76" width="182" height="111" rx="14"/>
+    <text class="diagram-micro" x="434" y="101">PROVED RBR · (3/5)¹²⁵</text>
+    <text class="diagram-label" x="434" y="127">FS-FRI BITS</text>
+    <text class="diagram-number" x="580" y="157" text-anchor="end">92</text>
+    <text class="diagram-micro" x="434" y="171">CERTIFICATE [92, 93)</text>
+  </g>
+
+  <g class="${tone("blue")}" filter="url(#shadow-fsfri)">
+    <rect x="416" y="209" width="182" height="111" rx="14"/>
+    <text class="diagram-micro" x="434" y="234">CONJECTURE 1 · 2⁻¹²⁸</text>
+    <text class="diagram-label" x="434" y="260">FS-FRI BITS</text>
+    <text class="diagram-number diagram-number--blue" x="580" y="290" text-anchor="end">126</text>
+    <text class="diagram-micro" x="434" y="304">CERTIFICATE [126, 127)</text>
+  </g>
+`, "One parameter set · two RBR premises · exact minimization across every query budget");
+
 export const artDiagrams = {
   frost,
   classes,
@@ -361,5 +412,6 @@ export const artDiagrams = {
   incarnation,
   fusion,
   nonce,
-  soundness
+  soundness,
+  fsfri
 };
