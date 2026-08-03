@@ -1,3 +1,32 @@
+<p>Block 与 Tiwari 为每组 FRI 配置报告三个数值：声明的目标、可证明的 Fiat–Shamir 安全性，以及基于猜想的 Fiat–Shamir 安全性。后两个计算列衡量成功伪造所需的随机预言机查询期望工作量。下表前八行复现其公开比较，最后一行按同一定义和整数位展示方式加入当前 Parano1d History 参数。</p>
+
+<div class="table-wrap comparison-table"><table>
+  <thead><tr><th>组织</th><th>仓库或配置</th><th>目标 FRI 安全性</th><th>可证明 FS-FRI 安全性</th><th>基于猜想的 FS-FRI 安全性</th></tr></thead>
+  <tbody>
+    <tr><td>Polygon</td><td>Plonky2</td><td>100</td><td>38</td><td>99</td></tr>
+    <tr><td>StarkWare</td><td>stone-prover</td><td>96</td><td>54</td><td>99</td></tr>
+    <tr><td>StarkWare</td><td>SHARP Verifier</td><td>96</td><td>59</td><td>95</td></tr>
+    <tr><td>dYdX</td><td>dYdX Protocol</td><td>80</td><td>52</td><td>79</td></tr>
+    <tr><td>Polygon Miden</td><td>Miden-VM</td><td>96 / 128</td><td>45 / 67</td><td>96 / 128</td></tr>
+    <tr><td>Lambda Class</td><td>lambdaworks</td><td>80 / 100 / 128</td><td>81 / 99 / 127</td><td>81 / 101 / 129</td></tr>
+    <tr><td>RISC Zero</td><td>RISC Zero</td><td>100</td><td>37</td><td>99</td></tr>
+    <tr><td>Matter Labs</td><td>era-boojum</td><td>100</td><td>50</td><td>99</td></tr>
+    <tr><td><b>Parano1d</b></td><td>History B64 / B255</td><td><b>128</b></td><td><b>92</b></td><td><b>126</b></td></tr>
+  </tbody>
+</table></div>
+
+<p>表中对指数向下取整。Parano1d 的两个整数分别由精确区间 <math-inline>[92,93)</math-inline> 与 <math-inline>[126,127)</math-inline> 认证，并非对十进制估计值四舍五入。</p>
+
+<div class="result">
+  <strong>Block–Tiwari 定义下的 Parano1d 一行</strong>
+  <p><b>目标 FRI 安全性：128 位。</b><b>可证明 FS-FRI 安全性：92 位。</b><b>基于猜想的 FS-FRI 安全性：126 位。</b>期望工作量的精确指数分别为 92.120699270775… 位与 126.796626145577… 位。</p>
+</div>
+
+<div class="note">
+  <strong>如何解读 Parano1d 一行</strong>
+  <p>128 位是声明的参数目标，并非计算所得的界。92 位采用已证明的 History RBR 前提；126 位则以 Block–Tiwari 猜想 1 取代该前提。两项计算使用同一期望工作量公式，但前者建立在已证明前提上，后者依赖猜想。</p>
+</div>
+
 <h2 id="question">安全位表格背后的问题</h2>
 
 <p>FRI 是针对 Reed–Solomon 码的接近性证明，也是许多透明证明系统的核心组件。FRI 原本是一种交互式预言机证明（IOP）：验证者发送随机挑战值，只读取证明者大型预言机中的少量位置。Fiat–Shamir 变换通过随机预言机导出挑战值，从而消除交互。一旦完成这项变换，相关资源便不再只是单份交互记录中的 FRI 查询数。恶意证明者可以反复查询随机预言机，筛选有利的交互记录并重复攻击。</p>
@@ -208,27 +237,6 @@ W(Q0)          = 147,770,525,858,126,068,760,353,057,306,253,383,503.60115492026
 =126.796626145577656957\ldots\ \text{位}.}
 </math-block>
 
-<h2 id="comparison">与 Block–Tiwari 参数快照比较</h2>
-
-<p>前八行复现 Block–Tiwari 研究中的表 1。Parano1d 一行采用同一 <math-inline>\kappa=256</math-inline> 编译器项、定义 2 的期望工作量指标与整数位展示方式。与原表相同，目标列记录声明的参数目标；两个计算列不会被目标值截断。</p>
-
-<div class="table-wrap comparison-table"><table>
-  <thead><tr><th>组织</th><th>仓库或配置</th><th>目标 FRI 安全性</th><th>可证明 FS-FRI 安全性</th><th>基于猜想的 FS-FRI 安全性</th></tr></thead>
-  <tbody>
-    <tr><td>Polygon</td><td>Plonky2</td><td>100</td><td>38</td><td>99</td></tr>
-    <tr><td>StarkWare</td><td>stone-prover</td><td>96</td><td>54</td><td>99</td></tr>
-    <tr><td>StarkWare</td><td>SHARP Verifier</td><td>96</td><td>59</td><td>95</td></tr>
-    <tr><td>dYdX</td><td>dYdX Protocol</td><td>80</td><td>52</td><td>79</td></tr>
-    <tr><td>Polygon Miden</td><td>Miden-VM</td><td>96 / 128</td><td>45 / 67</td><td>96 / 128</td></tr>
-    <tr><td>Lambda Class</td><td>lambdaworks</td><td>80 / 100 / 128</td><td>81 / 99 / 127</td><td>81 / 101 / 129</td></tr>
-    <tr><td>RISC Zero</td><td>RISC Zero</td><td>100</td><td>37</td><td>99</td></tr>
-    <tr><td>Matter Labs</td><td>era-boojum</td><td>100</td><td>50</td><td>99</td></tr>
-    <tr><td><b>Parano1d</b></td><td>History B64 / B255</td><td><b>128</b></td><td><b>92</b></td><td><b>126</b></td></tr>
-  </tbody>
-</table></div>
-
-<p>表中对指数向下取整。Parano1d 的两个整数分别由精确区间 <math-inline>[92,93)</math-inline> 与 <math-inline>[126,127)</math-inline> 认证，并非对十进制估计值四舍五入。</p>
-
 <h2 id="interpretation">两列数值说明了什么</h2>
 
 <p>在 2024 年参数快照中，Parano1d 的可证明数值高于除 lambdaworks 之外的所有数值，包括 Miden 128 位配置的 67。在三组 lambdaworks 参数中，它高于 80 位配置，低于 100 位和 128 位配置。Block 与 Tiwari 特别指出，lambdaworks 是其快照中唯一一个所有可证明数值都接近对应目标的系统族。</p>
@@ -242,11 +250,6 @@ W(Q0)          = 147,770,525,858,126,068,760,353,057,306,253,383,503.60115492026
 </math-block>
 
 <p>在该方法中，这一差值具有明确含义：把已证明的 RBR 前提 <math-inline>(3/5)^{125}</math-inline> 替换为猜想 1 的 <math-inline>2^{-128}</math-inline> 前提时，具体 FS-FRI 安全性增加了这么多。它不是取整造成的误差，也没有被隐藏在目标列中。</p>
-
-<div class="result">
-  <strong>Block–Tiwari 定义下的 Parano1d 一行</strong>
-  <p><b>目标 FRI 安全性：128 位。</b><b>可证明 FS-FRI 安全性：92 位。</b><b>基于猜想的 FS-FRI 安全性：126 位。</b>期望工作量的精确指数分别为 92.120699270775… 位与 126.796626145577… 位。</p>
-</div>
 
 <h2 id="reproduction">复现整数证书</h2>
 

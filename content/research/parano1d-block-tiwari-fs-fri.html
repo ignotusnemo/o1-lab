@@ -1,3 +1,32 @@
+<p>Block and Tiwari report three numbers for each FRI configuration: its declared target, a provable Fiat–Shamir value and a conjectured Fiat–Shamir value. The two computed columns measure the expected random-oracle query work required for a successful forgery. The first eight rows below reproduce their published comparison; the final row adds the current Parano1d History parameters under the same definition and whole-bit display convention.</p>
+
+<div class="table-wrap comparison-table"><table>
+  <thead><tr><th>Organization</th><th>Repository or configuration</th><th>Target FRI security</th><th>Provable FS-FRI security</th><th>Conjectured FS-FRI security</th></tr></thead>
+  <tbody>
+    <tr><td>Polygon</td><td>Plonky2</td><td>100</td><td>38</td><td>99</td></tr>
+    <tr><td>StarkWare</td><td>stone-prover</td><td>96</td><td>54</td><td>99</td></tr>
+    <tr><td>StarkWare</td><td>SHARP Verifier</td><td>96</td><td>59</td><td>95</td></tr>
+    <tr><td>dYdX</td><td>dYdX Protocol</td><td>80</td><td>52</td><td>79</td></tr>
+    <tr><td>Polygon Miden</td><td>Miden-VM</td><td>96 / 128</td><td>45 / 67</td><td>96 / 128</td></tr>
+    <tr><td>Lambda Class</td><td>lambdaworks</td><td>80 / 100 / 128</td><td>81 / 99 / 127</td><td>81 / 101 / 129</td></tr>
+    <tr><td>RISC Zero</td><td>RISC Zero</td><td>100</td><td>37</td><td>99</td></tr>
+    <tr><td>Matter Labs</td><td>era-boojum</td><td>100</td><td>50</td><td>99</td></tr>
+    <tr><td><b>Parano1d</b></td><td>History B64 / B255</td><td><b>128</b></td><td><b>92</b></td><td><b>126</b></td></tr>
+  </tbody>
+</table></div>
+
+<p>The table displays integer floors. For Parano1d those integers are certified by the exact intervals <math-inline>[92,93)</math-inline> and <math-inline>[126,127)</math-inline>; they are not rounded decimal estimates.</p>
+
+<div class="result">
+  <strong>Parano1d row under the Block–Tiwari definition</strong>
+  <p><b>Target FRI security: 128 bits.</b> <b>Provable FS-FRI security: 92 bits.</b> <b>Conjectured FS-FRI security: 126 bits.</b> The exact expected-work exponents are 92.120699270775… bits and 126.796626145577… bits.</p>
+</div>
+
+<div class="note">
+  <strong>How to read the Parano1d row</strong>
+  <p>The 128-bit target is a declared parameter target, not a computed bound. The 92-bit value uses the proved History RBR premise. The 126-bit value replaces that premise with Block–Tiwari Conjecture 1. Both calculations use the same expected-work formula; the former rests on a proved premise, while the latter depends on the conjecture.</p>
+</div>
+
 <h2 id="question">The question behind a security-bit table</h2>
 
 <p>FRI is a proximity proof for Reed–Solomon codes and a core component of many transparent proof systems. Its original form is an interactive oracle proof (IOP): the verifier sends random challenges and inspects a small number of positions in large prover oracles. The Fiat–Shamir transformation removes that interaction by deriving the challenges from a random oracle. Once this transformation is applied, the relevant resource is no longer only the number of FRI queries inside one transcript. A cheating prover may query the random oracle many times, choose a favorable transcript and repeat the attack.</p>
@@ -208,27 +237,6 @@ W(Q0)          = 147,770,525,858,126,068,760,353,057,306,253,383,503.60115492026
 =126.796626145577656957\ldots\ \text{bits}.}
 </math-block>
 
-<h2 id="comparison">Comparison with the Block–Tiwari snapshot</h2>
-
-<p>The first eight rows reproduce Table 1 of the Block–Tiwari study. The Parano1d row uses the same <math-inline>\kappa=256</math-inline> compiler term, Definition 2 expected-work metric and whole-bit presentation. As in that table, the target is a declared parameter target; the two computed columns are not clamped to it.</p>
-
-<div class="table-wrap comparison-table"><table>
-  <thead><tr><th>Organization</th><th>Repository or configuration</th><th>Target FRI security</th><th>Provable FS-FRI security</th><th>Conjectured FS-FRI security</th></tr></thead>
-  <tbody>
-    <tr><td>Polygon</td><td>Plonky2</td><td>100</td><td>38</td><td>99</td></tr>
-    <tr><td>StarkWare</td><td>stone-prover</td><td>96</td><td>54</td><td>99</td></tr>
-    <tr><td>StarkWare</td><td>SHARP Verifier</td><td>96</td><td>59</td><td>95</td></tr>
-    <tr><td>dYdX</td><td>dYdX Protocol</td><td>80</td><td>52</td><td>79</td></tr>
-    <tr><td>Polygon Miden</td><td>Miden-VM</td><td>96 / 128</td><td>45 / 67</td><td>96 / 128</td></tr>
-    <tr><td>Lambda Class</td><td>lambdaworks</td><td>80 / 100 / 128</td><td>81 / 99 / 127</td><td>81 / 101 / 129</td></tr>
-    <tr><td>RISC Zero</td><td>RISC Zero</td><td>100</td><td>37</td><td>99</td></tr>
-    <tr><td>Matter Labs</td><td>era-boojum</td><td>100</td><td>50</td><td>99</td></tr>
-    <tr><td><b>Parano1d</b></td><td>History B64 / B255</td><td><b>128</b></td><td><b>92</b></td><td><b>126</b></td></tr>
-  </tbody>
-</table></div>
-
-<p>The table displays integer floors. For Parano1d those integers are certified by the exact intervals <math-inline>[92,93)</math-inline> and <math-inline>[126,127)</math-inline>; they are not rounded decimal estimates.</p>
-
 <h2 id="interpretation">What the two columns show</h2>
 
 <p>The provable Parano1d value is higher than every non-lambdaworks value in the 2024 snapshot, including 67 for the Miden 128-bit configuration. Among the three lambdaworks rows, it is above the 80-bit configuration and below the 100- and 128-bit configurations. Block and Tiwari singled out lambdaworks as the only family in their snapshot whose proved values stayed close to all of its targets.</p>
@@ -242,11 +250,6 @@ W(Q0)          = 147,770,525,858,126,068,760,353,057,306,253,383,503.60115492026
 </math-block>
 
 <p>That gap has a precise meaning in this methodology: it is the additional concrete FS-FRI security obtained when the proved RBR premise <math-inline>(3/5)^{125}</math-inline> is replaced by Conjecture 1's <math-inline>2^{-128}</math-inline> premise. It is not a rounding artifact and it is not hidden inside the target column.</p>
-
-<div class="result">
-  <strong>Parano1d row under the Block–Tiwari definition</strong>
-  <p><b>Target FRI security: 128 bits.</b> <b>Provable FS-FRI security: 92 bits.</b> <b>Conjectured FS-FRI security: 126 bits.</b> The exact expected-work exponents are 92.120699270775… bits and 126.796626145577… bits.</p>
-</div>
 
 <h2 id="reproduction">Reproducing the integer certificates</h2>
 
