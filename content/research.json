@@ -6,19 +6,19 @@
     "topic": "Fiat–Shamir security",
     "status": "Exact and executable",
     "featured": true,
-    "title": "Parano1d under the Block–Tiwari FS-FRI metric",
+    "title": "FS-FRI security in Parano1d: a Block–Tiwari analysis",
     "shortTitle": "Block–Tiwari FS-FRI",
-    "dek": "What security do the current Parano1d History parameters provide under Block and Tiwari's model for non-interactive FRI? This analysis develops their method step by step and derives the proved and conjectured estimates separately.",
-    "abstract": "Block and Tiwari define concrete security for a non-interactive FRI proof through the expected random-oracle query work Q/epsilon. This study maps the current Parano1d History parameters into that definition, derives the proved and conjectured RBR inputs and solves the integer optimization exactly.",
+    "dek": "Block and Tiwari measure the security of non-interactive FRI by the expected work of a successful forgery. We apply their metric to History B64/B255 and compare the result with other published configurations.",
+    "abstract": "Two inputs are evaluated: the proved History RBR bound and Block–Tiwari Conjecture 1. In both cases, the minimum over the integer query budget is found without floating-point arithmetic.",
     "authors": ["Ignotus Nemo"],
     "art": "fsfri",
     "evidence": [
-      {"label": "Parano1d QROM workbench", "href": "https://github.com/ignotusnemo/parano1d-qrom", "type": "Code and proofs"},
+      {"label": "Parano1d QROM repository", "href": "https://github.com/ignotusnemo/parano1d-qrom", "type": "Code and proofs"},
       {"label": "Concrete security of non-interactive FRI", "href": "https://eprint.iacr.org/2024/1161", "type": "Paper"},
       {"label": "Block–Tiwari SageMath analysis", "href": "https://github.com/alexander-r-block/FRI-Parameter-Testing-Sagemath", "type": "Code"},
       {"label": "Fiat–Shamir security of FRI", "href": "https://eprint.iacr.org/2023/1071", "type": "Paper"},
       {"label": "Prior Parano1d industry-metrics study", "href": "/research/parano1d-soundness-industry-metrics/", "type": "Analysis"},
-      {"label": "Pinned production revision", "href": "https://github.com/ignotusnemo/parano1d/commit/2cce53fc31a0bc173661bf5e07efaa56d8dc661b", "type": "Commit"}
+      {"label": "Parano1d revision used here", "href": "https://github.com/ignotusnemo/parano1d/commit/2cce53fc31a0bc173661bf5e07efaa56d8dc661b", "type": "Commit"}
     ]
   },
   {

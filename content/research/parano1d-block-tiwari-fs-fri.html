@@ -1,4 +1,4 @@
-<p>Block and Tiwari report three numbers for each FRI configuration: its declared target, a provable Fiat–Shamir value and a conjectured Fiat–Shamir value. The two computed columns measure the expected random-oracle query work required for a successful forgery. The first eight rows below reproduce their published comparison; the final row adds the current Parano1d History parameters under the same definition and whole-bit display convention.</p>
+<p>Block and Tiwari's comparison gives each FRI configuration three entries: the stated target, a provable Fiat–Shamir estimate and an estimate under Conjecture 1. Its first eight rows are reproduced below; the last row applies the same definition and whole-bit convention to History B64/B255.</p>
 
 <div class="table-wrap comparison-table"><table>
   <thead><tr><th>Organization</th><th>Repository or configuration</th><th>Target FRI security</th><th>Provable FS-FRI security</th><th>Conjectured FS-FRI security</th></tr></thead>
@@ -15,27 +15,16 @@
   </tbody>
 </table></div>
 
-<p>The table displays integer floors. For Parano1d those integers are certified by the exact intervals <math-inline>[92,93)</math-inline> and <math-inline>[126,127)</math-inline>; they are not rounded decimal estimates.</p>
-
-<div class="result">
-  <strong>Parano1d row under the Block–Tiwari definition</strong>
-  <p><b>Target FRI security: 128 bits.</b> <b>Provable FS-FRI security: 92 bits.</b> <b>Conjectured FS-FRI security: 126 bits.</b> The exact expected-work exponents are 92.120699270775… bits and 126.796626145577… bits.</p>
-</div>
-
 <div class="note">
-  <strong>How to read the Parano1d row</strong>
-  <p>The 128-bit target is a declared parameter target, not a computed bound. The 92-bit value uses the proved History RBR premise. The 126-bit value replaces that premise with Block–Tiwari Conjecture 1. Both calculations use the same expected-work formula; the former rests on a proved premise, while the latter depends on the conjecture.</p>
+  <strong>Reading the Parano1d row</strong>
+  <p>The 128-bit entry is the target. The 92-bit entry follows from the proved History RBR bound; the 126-bit entry uses Block–Tiwari Conjecture 1 instead. As in their table, both exponents are floored to whole bits; the exact certificates appear below.</p>
 </div>
 
-<h2 id="question">The question behind a security-bit table</h2>
+<h2 id="metric">Why Fiat–Shamir changes the calculation</h2>
 
-<p>FRI is a proximity proof for Reed–Solomon codes and a core component of many transparent proof systems. Its original form is an interactive oracle proof (IOP): the verifier sends random challenges and inspects a small number of positions in large prover oracles. The Fiat–Shamir transformation removes that interaction by deriving the challenges from a random oracle. Once this transformation is applied, the relevant resource is no longer only the number of FRI queries inside one transcript. A cheating prover may query the random oracle many times, choose a favorable transcript and repeat the attack.</p>
+<p>In interactive FRI, the verifier samples fresh challenges for one transcript. After Fiat–Shamir, those challenges come from a random oracle, which a cheating prover can query repeatedly while searching for a favorable transcript. The attack must therefore be priced across the prover's entire oracle-query budget, not only by the FRI queries inside one attempted proof.</p>
 
-<p>Block and Tiwari gave this attack an explicit work measure in <a href="https://eprint.iacr.org/2024/1161"><em>On the Concrete Security of Non-interactive FRI</em></a>. They start from a round-by-round (RBR) soundness error for the interactive protocol, apply the Fiat–Shamir compiler bound and minimize expected attack work over every random-oracle query budget.</p>
-
-<p>This study asks one question: <em>what security row do the current Parano1d History parameters obtain under the same definition, the same 256-bit oracle-output setting and the same whole-bit display convention?</em> The proved RBR premise and the premise based on Block–Tiwari Conjecture 1 are derived and reported separately.</p>
-
-<h2 id="metric">From interactive soundness to expected attack work</h2>
+<p>Block and Tiwari formalize this cost in <a href="https://eprint.iacr.org/2024/1161"><em>On the Concrete Security of Non-interactive FRI</em></a>. Starting from a round-by-round (RBR) soundness error for the interactive protocol, they apply the Fiat–Shamir compiler bound and minimize expected oracle work over every query budget.</p>
 
 <p>Let a malicious prover make at most <math-inline>Q</math-inline> classical queries to a random oracle</p>
 
@@ -73,14 +62,14 @@ W(Q)=\frac{Q}{\varepsilon_{\mathrm{BT}}(Q,\kappa)}
 
 <p>A protocol has <math-inline>\lambda</math-inline> bits under this definition exactly when <math-inline>W(Q)\ge2^\lambda</math-inline> for every positive integer <math-inline>Q</math-inline>. The minimization over <math-inline>Q</math-inline> is part of the metric; choosing a convenient adversarial budget is not.</p>
 
-<h2 id="inputs">The current History parameter set</h2>
+<h2 id="inputs">History B64/B255 inputs</h2>
 
 <p>The protocol inputs were checked against Parano1d revision <a href="https://github.com/ignotusnemo/parano1d/commit/2cce53fc31a0bc173661bf5e07efaa56d8dc661b"><code>2cce53fc31a0bc173661bf5e07efaa56d8dc661b</code></a>. HistoryStep is the recursive proof of a block's exact transition from its parent State to its child State. B64 and B255 enforce the same transition relation with capacities for at most 64 and 255 user-transaction pages. Their BaseFold codewords contain <math-inline>2^{20}</math-inline> and <math-inline>2^{21}</math-inline> positions respectively, but both classes use the same rate and query count.</p>
 
-<p>The audited snapshot, exact arithmetic crates, theorem notes and regression tests are published in the <a href="https://github.com/ignotusnemo/parano1d-qrom">Parano1d QROM workbench</a>. The workbench is standalone: it records the production provenance used here but does not import or alter a node checkout.</p>
+<p>The exact arithmetic, theorem notes and regression tests used below are published in the <a href="https://github.com/ignotusnemo/parano1d-qrom">Parano1d QROM research repository</a>.</p>
 
 <div class="table-wrap"><table>
-  <thead><tr><th>Block–Tiwari input</th><th>Current value</th><th>Role in the calculation</th></tr></thead>
+  <thead><tr><th>Block–Tiwari input</th><th>Value</th><th>Role in the calculation</th></tr></thead>
   <tbody>
     <tr><td>Field</td><td>GF(2<sup>128</sup>)</td><td>Field-size branch in Conjecture 1</td></tr>
     <tr><td>FRI code rate <math-inline>\rho</math-inline></td><td>1/4</td><td>Agreement and conjectured RBR terms</td></tr>
@@ -97,9 +86,9 @@ W(Q)=\frac{Q}{\varepsilon_{\mathrm{BT}}(Q,\kappa)}
 
 <h3 id="proved-rbr">The proved History RBR bound</h3>
 
-<p>The <a href="https://github.com/ignotusnemo/parano1d-qrom/blob/main/docs/history-rbrk-theorem.md">current History theorem</a> analyzes the decommitted public-coin IOP over GF(2<sup>128</sup>). At relative distance <math-inline>2/5</math-inline>, every candidate retained for the final query move agrees with the initial 32-column oracle on at most a <math-inline>3/5</math-inline> fraction unless an earlier verifier challenge falls into a counted exceptional set.</p>
+<p>The <a href="https://github.com/ignotusnemo/parano1d-qrom/blob/main/docs/history-rbrk-theorem.md">History RBR theorem</a> analyzes the decommitted public-coin IOP over GF(2<sup>128</sup>). At relative distance <math-inline>2/5</math-inline>, every candidate retained for the final query move agrees with the initial 32-column oracle on at most a <math-inline>3/5</math-inline> fraction unless an earlier verifier challenge falls into a counted exceptional set.</p>
 
-<p>The 32 columns are packed into one Reed–Solomon word over a fixed degree-32 extension. Multiplicity-five list decoding leaves at most eleven initial candidates. List-correlated agreement carries any later fold candidate back to that fixed list; switching among candidates at an algebraic challenge is then paid by a union of their root sets rather than assumed away. The largest per-candidate algebraic degree is 127.</p>
+<p>The 32 columns are packed into one Reed–Solomon word over a fixed degree-32 extension. Multiplicity-five list decoding leaves at most eleven initial candidates. List-correlated agreement carries every later fold candidate back to that fixed list. If the prover switches candidates at an algebraic challenge, the bound includes the union of their root sets; it does not assume that one candidate remains fixed. The largest per-candidate algebraic degree is 127.</p>
 
 <div class="table-wrap"><table>
   <thead><tr><th>RBR move family</th><th>B64 bound</th><th>B255 bound</th></tr></thead>
@@ -124,7 +113,7 @@ W(Q)=\frac{Q}{\varepsilon_{\mathrm{BT}}(Q,\kappa)}
 =\left(\frac35\right)^{125}.
 </math-block>
 
-<p>The extractor returns a valid History witness outside these bad-response events. Acceptance of a false statement is therefore contained in extractor failure, so the same quantity is a valid RBR soundness premise for the Block–Tiwari compiler:</p>
+<p>Outside these bad-response events, the extractor returns a valid History witness. Thus, if the verifier accepts a false statement, the extractor must have failed. The same quantity can therefore be used as the RBR soundness premise for the Block–Tiwari compiler:</p>
 
 <math-block>
 \boxed{
@@ -134,14 +123,14 @@ W(Q)=\frac{Q}{\varepsilon_{\mathrm{BT}}(Q,\kappa)}
 
 <h3 id="conjectured-rbr">The Conjecture 1 premise</h3>
 
-<p>For the conjectured column, Block and Tiwari model the best known information-theoretic FRI attack as optimal. Their current expression is</p>
+<p>For the conjectured column, Block and Tiwari model the best known information-theoretic FRI attack as optimal. This gives the RBR premise</p>
 
 <math-block>
 \varepsilon_{\mathrm{RBR}}^{\mathrm{conj}}
 =\max\!\left\{\frac1{|\mathbb F|},\rho^\ell\right\}.
 </math-block>
 
-<p>Substituting the current field, rate and query count gives</p>
+<p>Substituting the field, rate and query count gives</p>
 
 <math-block>
 \boxed{
@@ -239,7 +228,7 @@ W(Q0)          = 147,770,525,858,126,068,760,353,057,306,253,383,503.60115492026
 
 <h2 id="interpretation">What the two columns show</h2>
 
-<p>The provable Parano1d value is higher than every non-lambdaworks value in the 2024 snapshot, including 67 for the Miden 128-bit configuration. Among the three lambdaworks rows, it is above the 80-bit configuration and below the 100- and 128-bit configurations. Block and Tiwari singled out lambdaworks as the only family in their snapshot whose proved values stayed close to all of its targets.</p>
+<p>The provable Parano1d value is higher than every non-lambdaworks value in Block and Tiwari's comparison, including 67 for the Miden 128-bit configuration. Among the three lambdaworks rows, it is above the 80-bit configuration and below the 100- and 128-bit configurations. Block and Tiwari singled out lambdaworks as the only family in their comparison whose proved values stayed close to all of its targets.</p>
 
 <p>The conjectured Parano1d exponent is <math-inline>1.203373854422\ldots</math-inline> bits below the 128-bit target, which appears as 126 after flooring. The difference between the two exact Parano1d exponents is</p>
 
@@ -253,7 +242,7 @@ W(Q0)          = 147,770,525,858,126,068,760,353,057,306,253,383,503.60115492026
 
 <h2 id="reproduction">Reproducing the integer certificates</h2>
 
-<p>The public workbench contains the exact optimizer in <a href="https://github.com/ignotusnemo/parano1d-qrom/tree/main/crates/block-tiwari-rom"><code>crates/block-tiwari-rom</code></a> and pins both results with regression tests:</p>
+<p>The public repository contains the exact optimizer in <a href="https://github.com/ignotusnemo/parano1d-qrom/tree/main/crates/block-tiwari-rom"><code>crates/block-tiwari-rom</code></a>, with regression tests for both results:</p>
 
 <pre><code>git clone https://github.com/ignotusnemo/parano1d-qrom.git
 cd parano1d-qrom
@@ -281,12 +270,12 @@ cargo run --release --locked -p scenarios -- block-tiwari-rom</code></pre>
 <h2 id="references">Primary sources</h2>
 
 <ul>
-  <li><a href="https://github.com/ignotusnemo/parano1d-qrom">Ignotus Nemo, Parano1d QROM workbench</a>: exact arithmetic, theorem notes, parameter snapshot and regression tests.</li>
+  <li><a href="https://github.com/ignotusnemo/parano1d-qrom">Ignotus Nemo, Parano1d QROM repository</a>: exact arithmetic, theorem notes, parameter values and regression tests.</li>
   <li><a href="https://eprint.iacr.org/2024/1161">Alexander R. Block and Pratyush Ranjan Tiwari, <em>On the Concrete Security of Non-interactive FRI</em></a>, especially Definitions 1–2, Lemma 1, Conjecture 1, Section 4 and Table 1.</li>
   <li><a href="https://github.com/alexander-r-block/FRI-Parameter-Testing-Sagemath">Block and Tiwari, FRI Parameter Testing in SageMath</a>.</li>
   <li><a href="https://eprint.iacr.org/2023/1071">Block, Garreta, Tiwari and Zając, <em>Fiat–Shamir Security of FRI and Related SNARKs</em></a>.</li>
-  <li><a href="https://github.com/ignotusnemo/parano1d/commit/2cce53fc31a0bc173661bf5e07efaa56d8dc661b">Parano1d production revision used for the parameter snapshot</a>.</li>
-  <li><a href="/research/parano1d-soundness-industry-metrics/">Parano1d soundness under industry metrics</a>, the preceding study of the same production family under other published conventions.</li>
+  <li><a href="https://github.com/ignotusnemo/parano1d/commit/2cce53fc31a0bc173661bf5e07efaa56d8dc661b">Parano1d revision used for these calculations</a>.</li>
+  <li><a href="/research/parano1d-soundness-industry-metrics/">Parano1d soundness under industry metrics</a>, the preceding study of the same History configurations under other published conventions.</li>
 </ul>
 
 <p><em>Ignotus Nemo</em></p>

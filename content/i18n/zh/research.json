@@ -3,11 +3,11 @@
     "kind": "安全性分析",
     "topic": "Fiat–Shamir 安全性",
     "status": "精确可执行分析",
-    "title": "Block–Tiwari FS-FRI 指标下的 Parano1d",
+    "title": "Parano1d 的 FS-FRI 安全性：Block–Tiwari 分析",
     "shortTitle": "Block–Tiwari FS-FRI",
-    "dek": "在 Block–Tiwari 的非交互式 FRI 模型下，当前 Parano1d History 参数能提供怎样的安全性？本文逐步展开其分析方法，并分别推导可证明估计与基于猜想的估计。",
-    "abstract": "Block 与 Tiwari 通过随机预言机查询的期望工作量 Q/epsilon 定义非交互式 FRI 的具体安全性。本文把当前 Parano1d History 参数映射到该定义，分别推导已证明和基于猜想的 RBR 输入，并精确求解整数优化。",
-    "evidence": ["Parano1d QROM 研究工作台", "非交互式 FRI 的具体安全性", "Block–Tiwari SageMath 分析", "FRI 的 Fiat–Shamir 安全性", "Parano1d 先前的行业指标研究", "固定的实际部署版本"]
+    "dek": "Block 与 Tiwari 以成功伪造所需的期望工作量来衡量非交互式 FRI 的安全性。本文将该指标应用于 History B64/B255，并与其他已公开配置进行比较。",
+    "abstract": "计算采用两个输入：已证明的 History RBR 界和 Block–Tiwari 猜想 1。两种情况下都在整数查询预算上求得最小值，不使用浮点运算。",
+    "evidence": ["Parano1d QROM 研究仓库", "非交互式 FRI 的具体安全性", "Block–Tiwari SageMath 分析", "FRI 的 Fiat–Shamir 安全性", "Parano1d 先前的行业指标研究", "计算所用的 Parano1d 版本"]
   },
   "parano1d-soundness-industry-metrics": {
     "kind": "安全性分析",

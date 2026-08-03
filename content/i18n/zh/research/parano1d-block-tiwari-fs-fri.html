@@ -1,4 +1,4 @@
-<p>Block 与 Tiwari 为每组 FRI 配置报告三个数值：声明的目标、可证明的 Fiat–Shamir 安全性，以及基于猜想的 Fiat–Shamir 安全性。后两个计算列衡量成功伪造所需的随机预言机查询期望工作量。下表前八行复现其公开比较，最后一行按同一定义和整数位展示方式加入当前 Parano1d History 参数。</p>
+<p>在 Block 与 Tiwari 的比较中，每组 FRI 配置对应三个数值：声明的目标、可证明的 Fiat–Shamir 估计，以及采用猜想 1 时的估计。下表前八行来自其论文；最后一行按相同定义和整数位展示方式计算 History B64/B255。</p>
 
 <div class="table-wrap comparison-table"><table>
   <thead><tr><th>组织</th><th>仓库或配置</th><th>目标 FRI 安全性</th><th>可证明 FS-FRI 安全性</th><th>基于猜想的 FS-FRI 安全性</th></tr></thead>
@@ -15,27 +15,16 @@
   </tbody>
 </table></div>
 
-<p>表中对指数向下取整。Parano1d 的两个整数分别由精确区间 <math-inline>[92,93)</math-inline> 与 <math-inline>[126,127)</math-inline> 认证，并非对十进制估计值四舍五入。</p>
-
-<div class="result">
-  <strong>Block–Tiwari 定义下的 Parano1d 一行</strong>
-  <p><b>目标 FRI 安全性：128 位。</b><b>可证明 FS-FRI 安全性：92 位。</b><b>基于猜想的 FS-FRI 安全性：126 位。</b>期望工作量的精确指数分别为 92.120699270775… 位与 126.796626145577… 位。</p>
-</div>
-
 <div class="note">
   <strong>如何解读 Parano1d 一行</strong>
-  <p>128 位是声明的参数目标，并非计算所得的界。92 位采用已证明的 History RBR 前提；126 位则以 Block–Tiwari 猜想 1 取代该前提。两项计算使用同一期望工作量公式，但前者建立在已证明前提上，后者依赖猜想。</p>
+  <p>128 位为目标值。92 位由已证明的 History RBR 界推出；126 位则采用 Block–Tiwari 猜想 1。与原表一致，两项指数均向下取整为整数位；精确证书见后文。</p>
 </div>
 
-<h2 id="question">安全位表格背后的问题</h2>
+<h2 id="metric">Fiat–Shamir 为何改变安全性计算</h2>
 
-<p>FRI 是针对 Reed–Solomon 码的接近性证明，也是许多透明证明系统的核心组件。FRI 原本是一种交互式预言机证明（IOP）：验证者发送随机挑战值，只读取证明者大型预言机中的少量位置。Fiat–Shamir 变换通过随机预言机导出挑战值，从而消除交互。一旦完成这项变换，相关资源便不再只是单份交互记录中的 FRI 查询数。恶意证明者可以反复查询随机预言机，筛选有利的交互记录并重复攻击。</p>
+<p>在交互式 FRI 中，验证者为一份交互记录抽取新的随机挑战。采用 Fiat–Shamir 后，挑战由随机预言机生成，恶意证明者可以反复查询预言机，寻找有利的交互记录。因此，攻击成本必须按证明者的全部预言机查询预算计算，而不能只看一次证明中的 FRI 查询数。</p>
 
-<p>Block 与 Tiwari 在 <a href="https://eprint.iacr.org/2024/1161"><em>On the Concrete Security of Non-interactive FRI</em></a> 中为这类攻击给出了明确的工作量度量。他们从交互式协议的逐轮（round-by-round，RBR）可靠性误差出发，应用 Fiat–Shamir 编译器界，再对所有随机预言机查询预算最小化期望攻击工作量。</p>
-
-<p>本文只回答一个问题：<em>按照同一定义、同一 256 位预言机输出设置和同一整数位展示方式，当前 Parano1d History 参数会得到怎样的一行安全性数据？</em> 已证明的 RBR 前提与基于 Block–Tiwari 猜想 1 的前提将分别推导、分别报告。</p>
-
-<h2 id="metric">从交互式可靠性到期望攻击工作量</h2>
+<p>Block 与 Tiwari 在 <a href="https://eprint.iacr.org/2024/1161"><em>On the Concrete Security of Non-interactive FRI</em></a> 中将这一成本形式化。他们从交互式协议的逐轮（round-by-round，RBR）可靠性误差出发，应用 Fiat–Shamir 编译器界，再对所有查询预算最小化预期的预言机工作量。</p>
 
 <p>设恶意证明者至多向下列随机预言机发出 <math-inline>Q</math-inline> 次经典查询：</p>
 
@@ -73,14 +62,14 @@ W(Q)=\frac{Q}{\varepsilon_{\mathrm{BT}}(Q,\kappa)}.
 
 <p>按照该定义，协议具有 <math-inline>\lambda</math-inline> 位安全性，当且仅当对每个正整数 <math-inline>Q</math-inline> 都有 <math-inline>W(Q)\ge2^\lambda</math-inline>。对 <math-inline>Q</math-inline> 的最小化本身就是指标的一部分，不能只选择一个方便的敌手查询预算。</p>
 
-<h2 id="inputs">当前 History 参数集</h2>
+<h2 id="inputs">History B64/B255 参数</h2>
 
 <p>协议输入已与 Parano1d 版本 <a href="https://github.com/ignotusnemo/parano1d/commit/2cce53fc31a0bc173661bf5e07efaa56d8dc661b"><code>2cce53fc31a0bc173661bf5e07efaa56d8dc661b</code></a> 核对。HistoryStep 是区块从父 State 到子 State 的精确转换所对应的递归证明。B64 与 B255 验证同一转换关系，容量分别覆盖最多 64 页和 255 页用户交易。两类 BaseFold 码字分别包含 <math-inline>2^{20}</math-inline> 和 <math-inline>2^{21}</math-inline> 个位置，但采用相同码率与查询数。</p>
 
-<p>经过审计的参数快照、精确算术 crate、定理说明与回归测试均发布在 <a href="https://github.com/ignotusnemo/parano1d-qrom">Parano1d QROM 研究工作台</a>中。该工作台独立运行：它记录本文采用的实际部署来源，但不会导入或修改节点代码。</p>
+<p>下文计算所用的精确算术、定理说明和回归测试均发布在 <a href="https://github.com/ignotusnemo/parano1d-qrom">Parano1d QROM 研究仓库</a>中。</p>
 
 <div class="table-wrap"><table>
-  <thead><tr><th>Block–Tiwari 输入</th><th>当前取值</th><th>在计算中的作用</th></tr></thead>
+  <thead><tr><th>Block–Tiwari 输入</th><th>取值</th><th>在计算中的作用</th></tr></thead>
   <tbody>
     <tr><td>域</td><td>GF(2<sup>128</sup>)</td><td>猜想 1 中的域大小分支</td></tr>
     <tr><td>FRI 码率 <math-inline>\rho</math-inline></td><td>1/4</td><td>一致率与基于猜想的 RBR 项</td></tr>
@@ -97,9 +86,9 @@ W(Q)=\frac{Q}{\varepsilon_{\mathrm{BT}}(Q,\kappa)}.
 
 <h3 id="proved-rbr">已证明的 History RBR 界</h3>
 
-<p><a href="https://github.com/ignotusnemo/parano1d-qrom/blob/main/docs/history-rbrk-theorem.md">当前 History 定理</a>分析 GF(2<sup>128</sup>) 上的公币 IOP，其中承诺已替换为对预言机的直接访问。在相对距离 <math-inline>2/5</math-inline> 下，任何保留到最终查询动作的候选，与初始 32 列预言机的一致位置比例至多为 <math-inline>3/5</math-inline>；唯一例外是此前某个验证者挑战值落入已明确计数的异常集合。</p>
+<p><a href="https://github.com/ignotusnemo/parano1d-qrom/blob/main/docs/history-rbrk-theorem.md">History RBR 定理</a>分析 GF(2<sup>128</sup>) 上的公币 IOP，其中承诺已替换为对预言机的直接访问。在相对距离 <math-inline>2/5</math-inline> 下，任何保留到最终查询动作的候选，与初始 32 列预言机的一致位置比例至多为 <math-inline>3/5</math-inline>；唯一例外是此前某个验证者挑战值落入已明确计数的异常集合。</p>
 
-<p>32 列被打包成固定的 32 次扩域上的一个 Reed–Solomon 码字。重数为 5 的列表译码至多留下 11 个初始候选。列表相关一致性（list-correlated agreement）把后续折叠产生的任一候选追溯到这份固定列表；在代数挑战值处切换候选时，对各候选的根集合取并集并计入代价，而不是假定候选始终不变。单个候选的最大代数次数为 127。</p>
+<p>32 列被打包成固定的 32 次扩域上的一个 Reed–Solomon 码字。重数为 5 的列表译码至多留下 11 个初始候选。列表相关一致性（list-correlated agreement）把后续折叠产生的每个候选追溯到这份固定列表。若在代数挑战处切换候选，界中会计入各候选根集合的并集，而不假设候选始终固定。单个候选的最大代数次数为 127。</p>
 
 <div class="table-wrap"><table>
   <thead><tr><th>RBR 动作类别</th><th>B64 界</th><th>B255 界</th></tr></thead>
@@ -124,7 +113,7 @@ W(Q)=\frac{Q}{\varepsilon_{\mathrm{BT}}(Q,\kappa)}.
 =\left(\frac35\right)^{125}.
 </math-block>
 
-<p>在这些坏响应事件之外，提取器会返回有效的 History 见证。接受错误陈述必然包含在提取失败事件中，因此同一数值可作为 Block–Tiwari 编译器的 RBR 可靠性前提：</p>
+<p>在这些坏响应事件之外，提取器会返回有效的 History 见证。因此，如果验证者接受错误陈述，提取器必然已经失败；同一数值也就可以作为 Block–Tiwari 编译器的 RBR 可靠性前提：</p>
 
 <math-block>
 \boxed{
@@ -134,14 +123,14 @@ W(Q)=\frac{Q}{\varepsilon_{\mathrm{BT}}(Q,\kappa)}.
 
 <h3 id="conjectured-rbr">猜想 1 前提</h3>
 
-<p>在基于猜想的列中，Block 与 Tiwari 假定目前已知的最佳信息论 FRI 攻击是最优的。相应表达式为</p>
+<p>在基于猜想的列中，Block 与 Tiwari 假定目前已知的最佳信息论 FRI 攻击是最优的。相应的 RBR 前提为</p>
 
 <math-block>
 \varepsilon_{\mathrm{RBR}}^{\mathrm{conj}}
 =\max\!\left\{\frac1{|\mathbb F|},\rho^\ell\right\}.
 </math-block>
 
-<p>代入当前域、码率和查询数，得到</p>
+<p>代入域、码率和查询数，得到</p>
 
 <math-block>
 \boxed{
@@ -239,7 +228,7 @@ W(Q0)          = 147,770,525,858,126,068,760,353,057,306,253,383,503.60115492026
 
 <h2 id="interpretation">两列数值说明了什么</h2>
 
-<p>在 2024 年参数快照中，Parano1d 的可证明数值高于除 lambdaworks 之外的所有数值，包括 Miden 128 位配置的 67。在三组 lambdaworks 参数中，它高于 80 位配置，低于 100 位和 128 位配置。Block 与 Tiwari 特别指出，lambdaworks 是其快照中唯一一个所有可证明数值都接近对应目标的系统族。</p>
+<p>在 Block 与 Tiwari 的比较中，Parano1d 的可证明数值高于除 lambdaworks 之外的所有数值，包括 Miden 128 位配置的 67。在三组 lambdaworks 参数中，它高于 80 位配置，低于 100 位和 128 位配置。Block 与 Tiwari 特别指出，lambdaworks 是其比较中唯一一个所有可证明数值都接近对应目标的系统族。</p>
 
 <p>Parano1d 基于猜想的指数比 128 位目标低 <math-inline>1.203373854422\ldots</math-inline> 位，向下取整后显示为 126。两个 Parano1d 精确指数之差为</p>
 
@@ -253,7 +242,7 @@ W(Q0)          = 147,770,525,858,126,068,760,353,057,306,253,383,503.60115492026
 
 <h2 id="reproduction">复现整数证书</h2>
 
-<p>公开工作台中的精确优化器位于 <a href="https://github.com/ignotusnemo/parano1d-qrom/tree/main/crates/block-tiwari-rom"><code>crates/block-tiwari-rom</code></a>，两项结果均由回归测试固定：</p>
+<p>公开仓库中的精确优化器位于 <a href="https://github.com/ignotusnemo/parano1d-qrom/tree/main/crates/block-tiwari-rom"><code>crates/block-tiwari-rom</code></a>，两项结果均由回归测试验证：</p>
 
 <pre><code>git clone https://github.com/ignotusnemo/parano1d-qrom.git
 cd parano1d-qrom
@@ -281,12 +270,12 @@ cargo run --release --locked -p scenarios -- block-tiwari-rom</code></pre>
 <h2 id="references">主要原始资料</h2>
 
 <ul>
-  <li><a href="https://github.com/ignotusnemo/parano1d-qrom">Ignotus Nemo，Parano1d QROM 研究工作台</a>：精确算术、定理说明、参数快照与回归测试。</li>
+  <li><a href="https://github.com/ignotusnemo/parano1d-qrom">Ignotus Nemo，Parano1d QROM 研究仓库</a>：精确算术、定理说明、参数与回归测试。</li>
   <li><a href="https://eprint.iacr.org/2024/1161">Alexander R. Block 与 Pratyush Ranjan Tiwari，<em>On the Concrete Security of Non-interactive FRI</em></a>，重点参见定义 1–2、引理 1、猜想 1、第 4 节与表 1。</li>
   <li><a href="https://github.com/alexander-r-block/FRI-Parameter-Testing-Sagemath">Block 与 Tiwari，FRI Parameter Testing in SageMath</a>。</li>
   <li><a href="https://eprint.iacr.org/2023/1071">Block、Garreta、Tiwari 与 Zając，<em>Fiat–Shamir Security of FRI and Related SNARKs</em></a>。</li>
-  <li><a href="https://github.com/ignotusnemo/parano1d/commit/2cce53fc31a0bc173661bf5e07efaa56d8dc661b">参数快照所用的 Parano1d 实际部署版本</a>。</li>
-  <li><a href="/zh/research/parano1d-soundness-industry-metrics/">行业指标下的 Parano1d 可靠性</a>：在其他已发布口径下研究同一实际部署系统族的前一篇文章。</li>
+  <li><a href="https://github.com/ignotusnemo/parano1d/commit/2cce53fc31a0bc173661bf5e07efaa56d8dc661b">这些计算所用的 Parano1d 版本</a>。</li>
+  <li><a href="/zh/research/parano1d-soundness-industry-metrics/">行业指标下的 Parano1d 可靠性</a>：采用其他已公开口径研究同一组 History 配置的前一篇文章。</li>
 </ul>
 
 <p><em>Ignotus Nemo</em></p>
