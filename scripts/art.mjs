@@ -34,10 +34,10 @@ function frame(kind, title, body, caption) {
     <rect width="640" height="420" fill="#07120d"/>
     <rect width="640" height="420" fill="url(#halo-${kind})"/>
     <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-${kind})"/>
-    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
-    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">${title}</text>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 374V394H54M586 394H606V374"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="320" y="48" text-anchor="middle">${title}</text>
     ${body.trim()}
-    <text class="diagram-caption" x="42" y="390">${caption}</text>
+    <text class="diagram-caption" x="320" y="384" text-anchor="middle">${caption}</text>
   </svg>`;
 }
 
@@ -57,22 +57,7 @@ function dotGrid(x, y, columns, rows, stepX, stepY, accentEvery = 0) {
   return circles;
 }
 
-function radialTicks(cx, cy, count, innerRadius, outerRadius, majorEvery = 4) {
-  let ticks = "";
-  for (let index = 0; index < count; index += 1) {
-    const angle = (Math.PI * 2 * index) / count - Math.PI / 2;
-    const inner = index % majorEvery === 0 ? innerRadius - 4 : innerRadius;
-    const x1 = cx + Math.cos(angle) * inner;
-    const y1 = cy + Math.sin(angle) * inner;
-    const x2 = cx + Math.cos(angle) * outerRadius;
-    const y2 = cy + Math.sin(angle) * outerRadius;
-    const cls = index % majorEvery === 0 ? "sound-calibration-tick sound-calibration-tick--major" : "sound-calibration-tick";
-    ticks += `<path class="${cls}" d="M${x1.toFixed(2)} ${y1.toFixed(2)}L${x2.toFixed(2)} ${y2.toFixed(2)}"/>`;
-  }
-  return ticks;
-}
-
-const frost = frame("frost", "GLOBAL SLOT × ROUND × LANE TRACE", `
+const frost = frame("frost", "ONE TRACE · ALL POSEIDON2b EXECUTIONS", `
   <g class="trace-axis">
     <path d="M74 310H232M74 310V126M74 310 140 350"/>
     <text x="239" y="315">SLOT</text><text x="48" y="118">ROUND</text><text x="145" y="361">LANE</text>
@@ -94,34 +79,9 @@ const frost = frame("frost", "GLOBAL SLOT × ROUND × LANE TRACE", `
     <text class="diagram-micro" x="486" y="326">TWO REDUCTIONS</text>
     <text class="diagram-value diagram-value--compact" x="486" y="344">Σd9  +  Σd2</text>
   </g>
-  <g class="diagram-tag"><rect x="108" y="80" width="118" height="29" rx="7"/><text x="167" y="99">3 COLUMNS</text></g>
-  <g class="diagram-tag diagram-tag--blue"><rect x="238" y="80" width="124" height="29" rx="7"/><text x="300" y="99">59 PERMUTATIONS</text></g>
-`, "One product domain · committed columns · two global sumchecks");
-
-const classes = frame("classes", "TWO AUTHENTICATED HISTORYSTEP CLASSES", `
-  <g class="${tone("green")}" filter="url(#shadow-classes)">
-    <rect x="42" y="76" width="258" height="230" rx="15"/>
-    <text class="diagram-micro" x="64" y="102">CLASS 00 · REFERENCE PREP</text>
-    <text class="diagram-number" x="64" y="145">B64</text><text class="diagram-value diagram-value--compact" x="235" y="141" text-anchor="end">m23</text>
-    <path class="diagram-divider" d="M64 164H278"/>
-    <text class="diagram-label" x="64" y="190">PHYSICAL PAGES</text><text class="diagram-value diagram-value--compact" x="278" y="190" text-anchor="end">0—64</text>
-    <text class="diagram-label" x="64" y="219">BASEFOLD QUERIES</text><text class="diagram-value diagram-value--compact" x="278" y="219" text-anchor="end">148</text>
-    <text class="diagram-label" x="64" y="248">PREPARE P95</text><text class="diagram-value diagram-value--compact" x="278" y="248" text-anchor="end">14.387 s</text>
-    <g class="cadence-ruler"><path d="M64 278H278"/><path d="M64 272V284M117 274V282M171 272V284M224 274V282M278 272V284"/><circle cx="269" cy="278" r="5"/></g>
-  </g>
-  <g class="${tone("blue")}" filter="url(#shadow-classes)">
-    <rect x="340" y="76" width="258" height="230" rx="15"/>
-    <text class="diagram-micro" x="362" y="102">CLASS 01 · EXPANDED STATE</text>
-    <text class="diagram-number diagram-number--blue" x="362" y="145">B255</text><text class="diagram-value diagram-value--compact" x="576" y="141" text-anchor="end">m24</text>
-    <path class="diagram-divider" d="M362 164H576"/>
-    <text class="diagram-label" x="362" y="190">PHYSICAL PAGES</text><text class="diagram-value diagram-value--compact" x="576" y="190" text-anchor="end">65—255</text>
-    <text class="diagram-label" x="362" y="219">BASEFOLD QUERIES</text><text class="diagram-value diagram-value--compact" x="576" y="219" text-anchor="end">148</text>
-    <text class="diagram-label" x="362" y="248">PREPARE P95</text><text class="diagram-value diagram-value--compact" x="576" y="248" text-anchor="end">29.755 s</text>
-    <g class="cadence-ruler cadence-ruler--blue"><path d="M362 278H576"/><path d="M362 272V284M415 274V282M469 272V284M522 274V282M576 272V284"/><circle cx="568" cy="278" r="5"/></g>
-  </g>
-  <g class="class-bridge"><path d="M300 191H340"/><circle cx="320" cy="191" r="6"/><text class="diagram-micro" x="320" y="178" text-anchor="middle">TIER SELECT</text></g>
-  <g class="diagram-tag diagram-tag--yellow"><rect x="230" y="326" width="180" height="31" rx="8"/><text x="320" y="346">15 s PREPARE REFERENCE</text></g>
-`, "Fixed matrices · authenticated class identity · no speculative middle geometry");
+  <g class="diagram-tag"><rect x="92" y="80" width="134" height="29" rx="7"/><text x="159" y="99">59 PERMUTATIONS</text></g>
+  <g class="diagram-tag diagram-tag--blue"><rect x="238" y="80" width="144" height="29" rx="7"/><text x="310" y="99">472 → 2 CHECKS</text></g>
+`, "51.67× smaller transcript · 10.69× faster reduction prover");
 
 const kernel = frame("kernel", "ONE CANONICAL GF(2¹²⁸) REPRESENTATION", `
   <g class="kernel-register">
@@ -166,7 +126,7 @@ const state = frame("state", "PROOF-CARRYING SNAPSHOT INSTALL", `
   </g>
 `, "Headers remain permanent · spent transaction bodies do not need historical replay");
 
-const walk = frame("walk", "NINE AUTHENTICATION FAMILIES · ONE WALK", `
+const walk = frame("walk", "3 LINK + 6 BLOCK REGIONS · ONE WALK", `
   <g class="walk-sources">
     <text class="diagram-micro" x="44" y="81">RELATION FAMILIES</text>
     <g class="family-lines">
@@ -174,7 +134,7 @@ const walk = frame("walk", "NINE AUTHENTICATION FAMILIES · ONE WALK", `
       <rect x="44" y="171" width="176" height="16" rx="4"/><rect x="44" y="196" width="214" height="16" rx="4"/><rect x="44" y="221" width="158" height="16" rx="4"/>
       <rect x="44" y="246" width="194" height="16" rx="4"/><rect x="44" y="271" width="170" height="16" rx="4"/><rect x="44" y="296" width="206" height="16" rx="4"/>
     </g>
-    <text class="diagram-label" x="264" y="107">OWNER</text><text class="diagram-label" x="264" y="157">STATE</text><text class="diagram-label" x="264" y="207">MERKLE</text><text class="diagram-label" x="264" y="257">CHANNEL</text><text class="diagram-label" x="264" y="307">BOUNDARY</text>
+    <text class="diagram-label" x="264" y="107">LINK ×3</text><text class="diagram-label" x="264" y="157">BLOCK ×6</text><text class="diagram-label" x="264" y="207">ONE SLOT DOMAIN</text><text class="diagram-label" x="264" y="257">ONE STATE CARRY</text><text class="diagram-label" x="264" y="307">ONE TRANSCRIPT</text>
   </g>
   <g class="walk-merge"><path d="M258 104C304 104 290 188 336 188M258 129C300 129 298 198 336 198M258 154C300 154 300 208 336 208M258 179C300 179 306 218 336 218M258 204H336M258 229C300 229 306 230 336 230M258 254C300 254 300 240 336 240M258 279C300 279 298 250 336 250M258 304C304 304 290 260 336 260"/></g>
   <g class="${tone("green")}" filter="url(#shadow-walk)"><rect x="336" y="157" width="112" height="130" rx="15"/><text class="diagram-micro" x="392" y="184" text-anchor="middle">SHARED CARRY</text><text class="diagram-number" x="392" y="224" text-anchor="middle">C0…C3</text><text class="diagram-label" x="392" y="252" text-anchor="middle">one accumulator</text></g>
@@ -183,41 +143,32 @@ const walk = frame("walk", "NINE AUTHENTICATION FAMILIES · ONE WALK", `
     <path d="M539 190V322"/><circle cx="539" cy="201" r="5"/><circle cx="539" cy="225" r="5"/><circle cx="539" cy="249" r="5"/><circle cx="539" cy="273" r="5"/><circle cx="539" cy="297" r="5"/><circle cx="539" cy="321" r="5"/>
     <text class="diagram-micro" x="522" y="205" text-anchor="end">ABSORB</text><text class="diagram-micro" x="522" y="253" text-anchor="end">MIX</text><text class="diagram-micro" x="522" y="301" text-anchor="end">CLOSE</text>
   </g>
-`, "A direct recursive composition replaced nine duplicated Poseidon2b walks");
+`, "Nine recursive regions share one ordered ragged 66-layer Poseidon2b walk");
 
-const recursion = frame("recursion", "RECURSIVE FIXED POINT · SAME PUBLIC I/O", `
-  <g class="fixed-loop"><path d="M520 89C520 48 320 48 320 89" marker-end="url(#arrow-recursion)"/><text class="diagram-micro" x="420" y="63" text-anchor="middle">VERIFIER SHAPE CLOSES AT m23</text></g>
-  <g class="proof-step ${tone("neutral")}" filter="url(#shadow-recursion)"><rect x="44" y="104" width="160" height="220" rx="15"/><text class="diagram-micro" x="64" y="131">HEIGHT 0</text><text class="diagram-value" x="64" y="175">π₀</text><path class="diagram-divider" d="M64 193H184"/><text class="diagram-label" x="64" y="218">PUBLIC I/O</text><text class="diagram-micro" x="64" y="242">ROOT₀ · ACC₀</text><rect class="proof-core" x="64" y="266" width="120" height="36" rx="7"/><text x="124" y="289" text-anchor="middle">GENESIS</text></g>
-  ${arrow("recursion", "M204 214H242")}
-  <g class="proof-step ${tone("green")}" filter="url(#shadow-recursion)"><rect x="242" y="104" width="160" height="220" rx="15"/><text class="diagram-micro" x="262" y="131">HEIGHT 1</text><text class="diagram-value" x="262" y="175">π₁</text><path class="diagram-divider" d="M262 193H382"/><text class="diagram-label" x="262" y="218">VERIFY INSIDE</text><rect class="proof-core" x="262" y="236" width="120" height="42" rx="7"/><text x="322" y="262" text-anchor="middle">V(π₀)=1</text><text class="diagram-micro" x="262" y="301">ROOT₁ · ACC₁</text></g>
-  ${arrow("recursion", "M402 214H440")}
-  <g class="proof-step ${tone("blue")}" filter="url(#shadow-recursion)"><rect x="440" y="104" width="156" height="220" rx="15"/><text class="diagram-micro" x="460" y="131">HEIGHT 2</text><text class="diagram-value" x="460" y="175">π₂</text><path class="diagram-divider" d="M460 193H576"/><text class="diagram-label" x="460" y="218">VERIFY INSIDE</text><rect class="proof-core" x="460" y="236" width="116" height="42" rx="7"/><text x="518" y="262" text-anchor="middle">V(π₁)=1</text><text class="diagram-micro" x="460" y="301">ROOT₂ · ACC₂</text></g>
-`, "The successor proves the same verifier without growing the matrix class");
-
-const authorization = frame("authorization", "OWNER-BATCHED AUTHORIZATION", `
+const authorization = frame("authorization", "ONE OWNER · ONE AUTHORIZATION CAPSULE", `
   <g class="${tone("neutral")}" filter="url(#shadow-authorization)"><rect x="42" y="78" width="226" height="246" rx="15"/>
     <text class="diagram-micro" x="64" y="105">ONE OWNER · MANY INPUT PAGES</text><text class="diagram-number" x="64" y="147">1,020</text><text class="diagram-label" x="157" y="145">INPUTS</text>
     <g class="page-grid">${dotGrid(66, 181, 8, 5, 21, 21, 7)}</g>
     <path class="diagram-divider" d="M64 279H246"/><text class="diagram-label" x="64" y="303">128 PHYSICAL PAGES</text><text class="diagram-micro" x="246" y="303" text-anchor="end">SECRET K₀</text>
   </g>
   ${arrow("authorization", "M268 201H315")}
-  <g class="${tone("green")}" filter="url(#shadow-authorization)"><rect x="315" y="112" width="142" height="178" rx="16"/><text class="diagram-micro" x="386" y="140" text-anchor="middle">RANDOMIZED CAPSULE</text><circle class="proof-ring" cx="386" cy="191" r="35"/><text class="diagram-number" x="386" y="201" text-anchor="middle">π</text><text class="diagram-value diagram-value--compact" x="386" y="253" text-anchor="middle">≈56 KiB</text><text class="diagram-micro" x="386" y="272" text-anchor="middle">ONE OWNER PROOF</text></g>
+  <g class="${tone("green")}" filter="url(#shadow-authorization)"><rect x="315" y="112" width="142" height="178" rx="16"/><text class="diagram-micro" x="386" y="140" text-anchor="middle">WITNESS-HIDING</text><circle class="proof-ring" cx="386" cy="187" r="32"/><text class="diagram-number" x="386" y="197" text-anchor="middle">π</text><text class="diagram-value diagram-value--compact" x="386" y="240" text-anchor="middle">≤92,696 B</text><text class="diagram-micro" x="386" y="261" text-anchor="middle">65 FS QUERIES</text><text class="diagram-micro" x="386" y="278" text-anchor="middle">ONE OWNER PROOF</text></g>
   ${arrow("authorization", "M457 201H498")}
   <g class="${tone("blue")}" filter="url(#shadow-authorization)"><rect x="498" y="91" width="100" height="220" rx="15"/><text class="diagram-micro" x="548" y="118" text-anchor="middle">BLOCK</text><g class="block-pages"><rect x="518" y="145" width="60" height="24" rx="4"/><rect x="518" y="178" width="60" height="24" rx="4"/><rect x="518" y="211" width="60" height="24" rx="4"/><rect x="518" y="244" width="60" height="24" rx="4"/></g><text class="diagram-label" x="548" y="291" text-anchor="middle">TRANSITION</text></g>
   <g class="diagram-tag"><rect x="291" y="327" width="190" height="30" rx="7"/><text x="386" y="347">PROOF COUNT = OWNERS</text></g>
-`, "The proof count follows distinct owners, not the number of consumed pages");
+`, "Proof count follows owners · HistoryStep proves the public State transition");
 
-const binding = frame("binding", "BINDING THE COMMITTED SOURCE TO THE FRI WORD", `
-  <g class="${tone("green")}" filter="url(#shadow-binding)"><rect x="42" y="77" width="206" height="242" rx="15"/><text class="diagram-micro" x="62" y="104">COMMITTED SOURCE A</text>
+const binding = frame("binding", "SOURCE-BOUND COMPACT MIXED OPENING", `
+  <g class="${tone("green")}" filter="url(#shadow-binding)"><rect x="42" y="77" width="206" height="242" rx="15"/><text class="diagram-micro" x="62" y="104">POSEIDON2b SOURCE CAP</text>
     <g class="merkle-tree"><path d="M145 139 97 184M145 139 193 184M97 184 73 229M97 184 121 229M193 184 169 229M193 184 217 229"/><circle cx="145" cy="139" r="14"/><circle cx="97" cy="184" r="11"/><circle cx="193" cy="184" r="11"/><circle cx="73" cy="229" r="8"/><circle cx="121" cy="229" r="8"/><circle cx="169" cy="229" r="8"/><circle cx="217" cy="229" r="8"/><path class="merkle-open" d="M145 139 193 184 217 229"/></g>
-    <text class="diagram-label" x="62" y="276">CAP ROOT</text><text class="diagram-value diagram-value--compact" x="62" y="300">H(A)=7F…91</text>
+    <text class="diagram-label" x="62" y="276">ENCODED GF(2¹²⁸)</text><text class="diagram-value diagram-value--compact" x="62" y="300">32-BYTE HASHES</text>
   </g>
   ${arrow("binding", "M248 198H292")}
-  <g class="query-gate" filter="url(#shadow-binding)"><rect x="292" y="132" width="116" height="132" rx="15"/><text class="diagram-micro" x="350" y="159" text-anchor="middle">SAME INDICES</text><text class="diagram-number" x="350" y="207" text-anchor="middle">q=64</text><path d="M319 229H381"/><circle cx="329" cy="229" r="4"/><circle cx="350" cy="229" r="4"/><circle cx="371" cy="229" r="4"/></g>
+  <g class="query-gate" filter="url(#shadow-binding)"><rect x="292" y="132" width="116" height="132" rx="15"/><text class="diagram-micro" x="350" y="159" text-anchor="middle">SAME INDICES</text><text class="diagram-value" x="350" y="207" text-anchor="middle">SHARED q</text><path d="M319 229H381"/><circle cx="329" cy="229" r="4"/><circle cx="350" cy="229" r="4"/><circle cx="371" cy="229" r="4"/></g>
   ${arrow("binding", "M408 198H452")}
-  <g class="${tone("blue")}" filter="url(#shadow-binding)"><rect x="452" y="77" width="146" height="242" rx="15"/><text class="diagram-micro" x="472" y="104">COMPACT FRI WORD</text><g class="fri-layers"><rect x="474" y="137" width="102" height="22" rx="4"/><rect x="486" y="174" width="78" height="22" rx="4"/><rect x="498" y="211" width="54" height="22" rx="4"/><rect x="510" y="248" width="30" height="22" rx="4"/><path d="M525 159V174M525 196V211M525 233V248"/></g><text class="diagram-label" x="525" y="296" text-anchor="middle">FOLD CONSISTENCY</text></g>
+  <g class="${tone("blue")}" filter="url(#shadow-binding)"><rect x="452" y="77" width="146" height="242" rx="15"/><text class="diagram-micro" x="525" y="104" text-anchor="middle">COMPACT FRI</text><g class="fri-layers"><rect x="474" y="137" width="102" height="22" rx="4"/><rect x="486" y="174" width="78" height="22" rx="4"/><rect x="498" y="211" width="54" height="22" rx="4"/><rect x="510" y="248" width="30" height="22" rx="4"/><path d="M525 159V174M525 196V211M525 233V248"/></g><text class="diagram-label" x="525" y="296" text-anchor="middle">ROUND-ZERO ROOT</text></g>
   <g class="rejected-splice"><path d="M248 296C309 343 393 343 452 296"/><path d="M330 319 350 339M350 319 330 339"/><text class="diagram-micro" x="340" y="358" text-anchor="middle">A′ SPLICE REJECTED</text></g>
-`, "Transcript binding is insufficient unless the opened FRI word is the committed source");
+`, "Authenticated source symbols · shared queries · round-zero root equality");
 
 const pcs = frame("pcs", "THREE PCS EXPERIMENTS · THREE DIFFERENT LIMITS", `
   <g class="${tone("yellow")}" filter="url(#shadow-pcs)"><rect x="36" y="78" width="178" height="250" rx="15"/><text class="diagram-micro" x="56" y="105">01 · OPENING BYTES</text><text class="diagram-value diagram-value--compact" x="56" y="138">LADDER FRI</text><text class="diagram-number" x="56" y="183">99.1%</text><text class="diagram-label" x="56" y="205">OF MULTIPOINT OBJECT</text><g class="byte-stack"><rect x="56" y="237" width="138" height="12" rx="4"/><rect x="56" y="257" width="136" height="12" rx="4"/><rect x="56" y="277" width="134" height="12" rx="4"/><rect x="56" y="297" width="132" height="12" rx="4"/></g></g>
@@ -269,99 +220,22 @@ const nonce = frame("nonce", "PROVE THE TEMPLATE ONCE · SEARCH THE NONCE", `
   </g>
 `, "The winning PoW nonce is reconnected to the already-proved immutable template");
 
-const soundness = frame("soundness", "SOUNDNESS METROLOGY · ONE PARAMETER SET, THREE GAMES", `
-  <g class="sound-bench">
-    <path class="sound-bench-rail" d="M38 210H602M320 68V350"/>
-    <path class="sound-bench-rail sound-bench-rail--minor" d="M105 84 535 336M105 336 535 84"/>
-    <circle cx="320" cy="210" r="130"/>
-    <circle cx="320" cy="210" r="116"/>
-  </g>
-
-  <g class="sound-calibration" filter="url(#shadow-soundness)">
-    <circle class="sound-calibration-bed" cx="320" cy="210" r="104"/>
-    <circle class="sound-calibration-bezel" cx="320" cy="210" r="91"/>
-    ${radialTicks(320, 210, 48, 79, 88, 4)}
-    <path class="sound-calibration-arc sound-calibration-arc--blue" d="M263 149A83 83 0 0 1 375 147"/>
-    <path class="sound-calibration-arc sound-calibration-arc--violet" d="M394 178A83 83 0 0 1 376 273"/>
-    <path class="sound-calibration-arc sound-calibration-arc--green" d="M347 288A83 83 0 0 1 252 258"/>
-    <circle class="sound-calibration-glass" cx="320" cy="210" r="57"/>
-    <circle class="sound-calibration-inner" cx="320" cy="210" r="43"/>
-    <path class="sound-calibration-needle" d="M320 210 356 174"/>
-    <circle class="sound-calibration-pin" cx="320" cy="210" r="7"/>
-  </g>
-
-  <g class="sound-feed">
-    <path d="M188 210H213C226 210 228 224 240 224H251"/>
-    <circle cx="213" cy="210" r="3"/><circle cx="240" cy="224" r="3"/>
-  </g>
-  <g class="sound-readout sound-readout--input" filter="url(#shadow-soundness)">
-    <rect x="42" y="169" width="146" height="82" rx="13"/>
-    <text class="sound-readout-kind" x="59" y="191">COMMITTED INPUT</text>
-    <text class="sound-readout-name" x="59" y="216">PRODUCTION SET</text>
-    <text class="sound-readout-detail" x="59" y="237">SOURCE PIN · 93B025</text>
-    <path d="M162 184H174V196"/>
-  </g>
-
-  <g class="sound-output sound-output--blue">
-    <path d="M365 129C382 109 397 105 420 105H438"/>
-    <circle cx="365" cy="129" r="3.4"/><circle cx="420" cy="105" r="3"/>
-  </g>
-  <g class="sound-readout sound-readout--blue" filter="url(#shadow-soundness)">
-    <rect x="438" y="70" width="160" height="76" rx="13"/>
-    <text class="sound-readout-kind" x="455" y="92">CONJECTURED SCORE</text>
-    <text class="sound-readout-name" x="455" y="113">TOY PROBLEM</text>
-    <text class="sound-readout-value" x="579" y="136" text-anchor="end">128</text>
-    <path d="M455 123H531"/>
-  </g>
-
-  <g class="sound-output sound-output--violet">
-    <path d="M410 210H438"/>
-    <circle cx="410" cy="210" r="3.4"/>
-  </g>
-  <g class="sound-readout sound-readout--violet" filter="url(#shadow-soundness)">
-    <rect x="438" y="172" width="160" height="76" rx="13"/>
-    <text class="sound-readout-kind" x="455" y="194">FINITE SOUNDNESS</text>
-    <text class="sound-readout-name" x="455" y="215">ACCEPTING PATH</text>
-    <text class="sound-readout-value" x="579" y="238" text-anchor="end">84.757</text>
-    <path d="M455 225H520"/>
-  </g>
-
-  <g class="sound-output sound-output--green">
-    <path d="M366 290C382 311 398 315 420 315H438"/>
-    <circle cx="366" cy="290" r="3.4"/><circle cx="420" cy="315" r="3"/>
-  </g>
-  <g class="sound-readout sound-readout--green" filter="url(#shadow-soundness)">
-    <rect x="438" y="274" width="160" height="76" rx="13"/>
-    <text class="sound-readout-kind" x="455" y="296">KNOWLEDGE BOUND</text>
-    <text class="sound-readout-name" x="455" y="317">GENERALIZED RBR</text>
-    <text class="sound-readout-value" x="579" y="340" text-anchor="end">96.047</text>
-    <path d="M455 327H520"/>
-  </g>
-
-  <g class="sound-game-key">
-    <circle class="sound-game-key--blue" cx="65" cy="285" r="3"/><text x="76" y="289">SCORE</text>
-    <circle class="sound-game-key--violet" cx="119" cy="285" r="3"/><text x="130" y="289">SOUNDNESS</text>
-    <circle class="sound-game-key--green" cx="65" cy="306" r="3"/><text x="76" y="310">KNOWLEDGE</text>
-    <path d="M65 325H188"/><text x="65" y="344">VALUES ARE NOT COLLAPSED</text>
-  </g>
-`, "One source-pinned parameter set · three explicit games · every value keeps its definition");
-
 const fsfri = frame("fsfri", "CONCRETE FS-FRI SECURITY · BLOCK–TIWARI EXPECTED WORK", `
   <g class="${tone("neutral")}" filter="url(#shadow-fsfri)">
     <rect x="42" y="76" width="148" height="244" rx="14"/>
-    <text class="diagram-micro" x="60" y="101">CURRENT HISTORY INPUT</text>
-    <text class="diagram-label" x="60" y="132">FIELD</text>
-    <text class="diagram-value diagram-value--compact" x="172" y="132" text-anchor="end">2¹²⁸</text>
+    <text class="diagram-micro" x="60" y="101">HISTORY INPUT</text>
+    <text class="diagram-label" x="60" y="132">CHALLENGE</text>
+    <text class="diagram-value diagram-value--compact" x="172" y="132" text-anchor="end">2²⁵⁵</text>
     <path class="diagram-divider" d="M60 146H172"/>
     <text class="diagram-label" x="60" y="171">RATE ρ</text>
     <text class="diagram-value diagram-value--compact" x="172" y="171" text-anchor="end">1 / 4</text>
     <text class="diagram-label" x="60" y="202">QUERIES ℓ</text>
-    <text class="diagram-value diagram-value--compact" x="172" y="202" text-anchor="end">125</text>
+    <text class="diagram-value diagram-value--compact" x="172" y="202" text-anchor="end">133</text>
     <text class="diagram-label" x="60" y="233">ORACLE κ</text>
     <text class="diagram-value diagram-value--compact" x="172" y="233" text-anchor="end">256</text>
     <path class="diagram-divider" d="M60 249H172"/>
-    <text class="diagram-label" x="60" y="275">CLASSES</text>
-    <text class="diagram-value diagram-value--compact" x="172" y="275" text-anchor="end">B64 / B255</text>
+    <text class="diagram-label" x="60" y="275">PROOF</text>
+    <text class="diagram-value diagram-value--compact" x="172" y="275" text-anchor="end">HistoryStep</text>
     <g class="diagram-tag"><rect x="60" y="289" width="112" height="23" rx="6"/><text x="116" y="305">TARGET · 128</text></g>
   </g>
 
@@ -369,7 +243,7 @@ const fsfri = frame("fsfri", "CONCRETE FS-FRI SECURITY · BLOCK–TIWARI EXPECTE
 
   <g class="${tone("blue")}" filter="url(#shadow-fsfri)">
     <rect x="222" y="105" width="166" height="184" rx="15"/>
-    <text class="diagram-micro" x="242" y="131">MINIMIZE OVER ALL Q ≥ 1</text>
+    <text class="diagram-micro" x="305" y="131" text-anchor="middle">MINIMIZE OVER ALL Q ≥ 1</text>
     <text class="diagram-value diagram-value--compact" x="305" y="169" text-anchor="middle">W(Q) = Q / ε(Q)</text>
     <path class="diagram-divider" d="M242 187H368"/>
     <text class="diagram-label" x="305" y="214" text-anchor="middle">EXPECTED ORACLE WORK</text>
@@ -382,28 +256,106 @@ const fsfri = frame("fsfri", "CONCRETE FS-FRI SECURITY · BLOCK–TIWARI EXPECTE
 
   <g class="${tone("green")}" filter="url(#shadow-fsfri)">
     <rect x="416" y="76" width="182" height="111" rx="14"/>
-    <text class="diagram-micro" x="434" y="101">PROVED RBR · (3/5)¹²⁵</text>
+    <text class="diagram-micro" x="434" y="101">PROVED RBR · m = 861824</text>
     <text class="diagram-label" x="434" y="127">FS-FRI BITS</text>
-    <text class="diagram-number" x="580" y="157" text-anchor="end">92</text>
-    <text class="diagram-micro" x="434" y="171">CERTIFICATE [92, 93)</text>
+    <text class="diagram-number" x="580" y="157" text-anchor="end">127</text>
+    <text class="diagram-micro" x="434" y="171">CERTIFICATE [127, 128)</text>
   </g>
 
   <g class="${tone("blue")}" filter="url(#shadow-fsfri)">
     <rect x="416" y="209" width="182" height="111" rx="14"/>
-    <text class="diagram-micro" x="434" y="234">CONJECTURE 1 · 2⁻¹²⁸</text>
+    <text class="diagram-micro" x="434" y="234">CONJECTURE 1 · 2⁻²⁵⁵</text>
     <text class="diagram-label" x="434" y="260">FS-FRI BITS</text>
-    <text class="diagram-number diagram-number--blue" x="580" y="290" text-anchor="end">126</text>
-    <text class="diagram-micro" x="434" y="304">CERTIFICATE [126, 127)</text>
+    <text class="diagram-number diagram-number--blue" x="580" y="290" text-anchor="end">127</text>
+    <text class="diagram-micro" x="434" y="304">CERTIFICATE [127, 128)</text>
   </g>
 `, "One parameter set · two RBR premises · exact minimization across every query budget");
 
+const categoryone = `<svg viewBox="0 0 640 420" role="presentation">
+  <defs>
+    <radialGradient id="categoryone-disc" cx="39%" cy="31%" r="76%">
+      <stop offset="0" stop-color="#182b30"/>
+      <stop offset=".58" stop-color="#091316"/>
+      <stop offset="1" stop-color="#020607"/>
+    </radialGradient>
+    <linearGradient id="categoryone-green" x1=".2" y1=".1" x2=".8" y2=".9">
+      <stop offset="0" stop-color="#3dff91"/>
+      <stop offset=".42" stop-color="#00e874"/>
+      <stop offset="1" stop-color="#00b95c"/>
+    </linearGradient>
+    <radialGradient id="categoryone-blue" cx="35%" cy="28%" r="72%">
+      <stop offset="0" stop-color="#78a8ff"/>
+      <stop offset=".38" stop-color="#1768ef"/>
+      <stop offset="1" stop-color="#002d92"/>
+    </radialGradient>
+    <radialGradient id="categoryone-node-green" cx="35%" cy="28%" r="72%">
+      <stop offset="0" stop-color="#57ff9b"/>
+      <stop offset=".38" stop-color="#00c960"/>
+      <stop offset="1" stop-color="#006f34"/>
+    </radialGradient>
+    <radialGradient id="categoryone-red" cx="35%" cy="28%" r="72%">
+      <stop offset="0" stop-color="#ff8c75"/>
+      <stop offset=".4" stop-color="#ec3e28"/>
+      <stop offset="1" stop-color="#891207"/>
+    </radialGradient>
+    <filter id="categoryone-orbit-glow" x="-10%" y="-15%" width="120%" height="130%">
+      <feGaussianBlur stdDeviation=".65" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="categoryone-node-glow" x="-170%" y="-170%" width="440%" height="440%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="categoryone-coin-shadow" x="-35%" y="-35%" width="170%" height="180%">
+      <feDropShadow dx="0" dy="9" stdDeviation="11" flood-color="#000" flood-opacity=".86"/>
+    </filter>
+    <filter id="categoryone-green-glow" x="-45%" y="-45%" width="190%" height="190%">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <g class="categoryone-orbits" fill="none" stroke="#f4f8f6" stroke-width="1.15" filter="url(#categoryone-orbit-glow)">
+    <ellipse cx="320" cy="200" rx="150" ry="152" stroke-dasharray="5.2 5.2" opacity=".9"/>
+    <ellipse cx="320" cy="200" rx="150" ry="55" stroke-dasharray="5.2 5.2" opacity=".88"/>
+    <ellipse cx="320" cy="200" rx="59" ry="152" stroke-dasharray="5.2 5.2" opacity=".88"/>
+    <path d="M170 200H470" stroke-dasharray="5.2 5.2" opacity=".9"/>
+    <path d="M320 48V352" stroke-dasharray="5.2 5.2" opacity=".9"/>
+  </g>
+
+  <g class="categoryone-states" fill="#fff" font-family="KaTeX_Main, 'Times New Roman', serif" font-size="25">
+    <text x="320" y="31" text-anchor="middle">|0⟩</text>
+    <text x="320" y="382" text-anchor="middle">|1⟩</text>
+    <text x="132" y="210" text-anchor="middle">|−i⟩</text>
+    <text x="508" y="210" text-anchor="middle">|i⟩</text>
+    <text x="208" y="282" text-anchor="middle">|−⟩</text>
+    <text x="432" y="282" text-anchor="middle">|+⟩</text>
+  </g>
+
+  <g class="categoryone-nodes" filter="url(#categoryone-node-glow)" stroke-width=".8">
+    <circle cx="320" cy="48" r="7.5" fill="url(#categoryone-blue)" stroke="#5595ff"/>
+    <circle cx="320" cy="352" r="7.5" fill="url(#categoryone-red)" stroke="#ff6a50"/>
+    <circle cx="170" cy="200" r="7.5" fill="url(#categoryone-node-green)" stroke="#3bfb85"/>
+    <circle cx="470" cy="200" r="7.5" fill="url(#categoryone-node-green)" stroke="#3bfb85"/>
+    <circle cx="208" cy="299" r="7.5" fill="url(#categoryone-blue)" stroke="#5595ff"/>
+    <circle cx="432" cy="299" r="7.5" fill="url(#categoryone-blue)" stroke="#5595ff"/>
+  </g>
+
+  <g class="categoryone-coin" filter="url(#categoryone-coin-shadow)">
+    <circle cx="320" cy="210" r="86" fill="url(#categoryone-disc)" stroke="#31545b" stroke-width="1.1"/>
+    <circle cx="320" cy="210" r="66" fill="none" stroke="#004c2c" stroke-width="23" opacity=".7"/>
+    <circle cx="320" cy="210" r="66" fill="none" stroke="url(#categoryone-green)" stroke-width="18" filter="url(#categoryone-green-glow)"/>
+    <circle cx="320" cy="210" r="52" fill="#020809" stroke="#152729" stroke-width="1"/>
+    <path d="M298 194L319 173C324 168 331 172 331 179V253" fill="none" stroke="#006b3e" stroke-width="23" stroke-linecap="round" stroke-linejoin="round" opacity=".68"/>
+    <path d="M298 191L317 172C322 167 328 171 328 178V251" fill="none" stroke="url(#categoryone-green)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" filter="url(#categoryone-green-glow)"/>
+  </g>
+</svg>`;
+
 export const artDiagrams = {
   frost,
-  classes,
   kernel,
   state,
   walk,
-  recursion,
   authorization,
   binding,
   pcs,
@@ -412,6 +364,6 @@ export const artDiagrams = {
   incarnation,
   fusion,
   nonce,
-  soundness,
-  fsfri
+  fsfri,
+  categoryone
 };

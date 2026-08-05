@@ -41,9 +41,9 @@
   <meta property="article:section" content="Binary fields">
   <meta property="article:author" content="Parano1d Lab">
   <title>One proof format across four hardware paths · Parano1d Lab</title>
-  <link rel="stylesheet" href="/assets/site.css?v=ef75dc965770">
+  <link rel="stylesheet" href="/assets/site.css?v=400ff32ebeaa">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"One proof format across four hardware paths","description":"Carry-less multiplication is the hot arithmetic primitive in the binary-field proof stack. The node selects an x86-64 or ARM64 kernel at startup, while the field representation, witness layout and serialized proof remain fixed. The AVX2+VPCLMUL path improved Poseidon2b batch hashing by 5.4× on the reference laptop and reduced the measured 2^24-position proof from 34.9 to 18.9 seconds.","datePublished":"2026-07-09","dateModified":"2026-07-09","mainEntityOfPage":"https://lab.parano1d.org/research/binary-field-kernels/","inLanguage":"en","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/binary-field-kernels.png","about":"Binary fields"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"One proof format across four hardware paths","description":"Carry-less multiplication is the hot arithmetic primitive for committed traces and Poseidon2b over GF(2^128). The node selects an x86-64 or ARM64 path at startup while the field representation, witness layout and serialized proof remain unchanged. In the pinned measurement, AVX2 with VPCLMUL accelerated Poseidon2b batch hashing by 5.4× and reduced a 2^24-position proof from 34.9 to 18.9 seconds.","datePublished":"2026-07-09","dateModified":"2026-07-09","mainEntityOfPage":"https://lab.parano1d.org/research/binary-field-kernels/","inLanguage":"en","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/binary-field-kernels.png","about":"Binary fields"}</script>
 </head>
 <body class="locale-en">
   <a class="skip-link" href="#content">Skip to content</a>
@@ -98,8 +98,8 @@
     <rect width="640" height="420" fill="#07120d"/>
     <rect width="640" height="420" fill="url(#halo-kernel)"/>
     <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-kernel)"/>
-    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
-    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">ONE CANONICAL GF(2¹²⁸) REPRESENTATION</text>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 374V394H54M586 394H606V374"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="320" y="48" text-anchor="middle">ONE CANONICAL GF(2¹²⁸) REPRESENTATION</text>
     <g class="kernel-register">
     <text class="diagram-micro" x="50" y="83">FIELD ELEMENT · 128 BITS</text>
     <rect x="50" y="98" width="360" height="54" rx="11"/>
@@ -114,13 +114,13 @@
     <g class="diagram-panel diagram-panel--blue"><rect x="50" y="302" width="540" height="45" rx="10"/><text class="diagram-value diagram-value--compact" x="68" y="330">ARM64</text><text class="diagram-label" x="193" y="330">NEON + PMULL</text><g class="lane-cells"><circle class="diagram-dot diagram-dot--accent" cx="454" cy="324" r="3.2"/><circle class="diagram-dot" cx="469" cy="324" r="3.2"/><circle class="diagram-dot" cx="484" cy="324" r="3.2"/><circle class="diagram-dot" cx="499" cy="324" r="3.2"/><circle class="diagram-dot diagram-dot--accent" cx="514" cy="324" r="3.2"/><circle class="diagram-dot" cx="529" cy="324" r="3.2"/><circle class="diagram-dot" cx="544" cy="324" r="3.2"/><circle class="diagram-dot" cx="559" cy="324" r="3.2"/></g></g>
   </g>
   <g class="diagram-tag"><rect x="456" y="51" width="134" height="28" rx="7"/><text x="523" y="70">UP TO 5.4×</text></g>
-    <text class="diagram-caption" x="42" y="390">Backend dispatch changes throughput, never arithmetic layout or proof bytes</text>
+    <text class="diagram-caption" x="320" y="384" text-anchor="middle">Backend dispatch changes throughput, never arithmetic layout or proof bytes</text>
   </svg></div>
     </header>
     <div class="article-layout">
       <aside class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#why-binary">Why binary-field kernels dominate</a><a href="#dispatch">One layout, runtime dispatch</a><a href="#poseidon">Keeping Poseidon2b in registers</a><a href="#flat-basis">Flat basis at the right boundary</a><a href="#portability">Portability without a silent scalar mode</a><a href="#verification">How the backends are checked</a><a href="#lesson">Why the field choice survived implementation</a></aside>
-      <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>Carry-less multiplication is the hot arithmetic primitive in the binary-field proof stack. The node selects an x86-64 or ARM64 kernel at startup, while the field representation, witness layout and serialized proof remain fixed. The AVX2+VPCLMUL path improved Poseidon2b batch hashing by 5.4× on the reference laptop and reduced the measured 2^24-position proof from 34.9 to 18.9 seconds.</p></div><h2 id="why-binary">Why binary-field kernels dominate</h2>
-<p>Parano1d's proof machinery works over the binary extension field GF(2<sup>128</sup>), which contains 2<sup>128</sup> elements. Poseidon2b—the cryptographic permutation used by the proof stack and proof-of-work hash—is implemented over the same field. Addition is XOR. Multiplication is carry-less polynomial multiplication followed by reduction. That makes hardware carry-less multiply—not ordinary integer multiply—the key primitive for prover throughput, verifier throughput and proof-of-work hashing.</p>
+      <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>Carry-less multiplication is the hot arithmetic primitive for committed traces and Poseidon2b over GF(2^128). The node selects an x86-64 or ARM64 path at startup while the field representation, witness layout and serialized proof remain unchanged. In the pinned measurement, AVX2 with VPCLMUL accelerated Poseidon2b batch hashing by 5.4× and reduced a 2^24-position proof from 34.9 to 18.9 seconds.</p></div><h2 id="why-binary">Why binary-field kernels dominate</h2>
+<p>Parano1d's committed traces use the binary extension field GF(2<sup>128</sup>), which contains 2<sup>128</sup> elements. Poseidon2b, the cryptographic permutation used by the proof stack and proof-of-work hash, is implemented over the same field. Addition is XOR. Multiplication is carry-less polynomial multiplication followed by reduction. That makes hardware carry-less multiply, rather than ordinary integer multiply, the key primitive for prover throughput, verifier throughput and proof-of-work hashing.</p>
 <p>The architectural constraint was stricter than “make the fast machine faster.” Proof shapes, witness layout and transcript bytes had to remain identical across machines. A backend specialized for one instruction-set architecture (ISA) may change execution, never the statement being proved.</p>
 
 <h2 id="dispatch">One layout, runtime dispatch</h2>
@@ -141,6 +141,10 @@
   <div class="metric"><strong>5.4×</strong><span>Poseidon2b batch-hashing speedup</span></div>
   <div class="metric"><strong>34.9 s</strong><span>2<sup>24</sup>-position proof before</span></div>
   <div class="metric"><strong>18.9 s</strong><span>2<sup>24</sup>-position proof after</span></div>
+</div>
+<div class="note">
+  <strong>Measurement scope</strong>
+  <p>The 34.9-second and 18.9-second proof measurements belong to the pinned implementation measured in this study. They establish the effect of the kernel change on that revision. They are not current full-HistoryStep timings. Runtime dispatch and the canonical field representation remain part of production.</p>
 </div>
 <p>The proof-time improvement is smaller than the isolated hashing speedup because the complete prover also performs witness assembly, polynomial-commitment (PCS) work and non-hash algebra. That difference is useful: it locates the next bottleneck instead of turning a microbenchmark into an end-to-end claim.</p>
 

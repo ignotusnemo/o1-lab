@@ -1,8 +1,8 @@
 <h2 id="question">Can block-scale authorization proving be streamed?</h2>
-<p>A wallet-authorization <em>sidecar</em> is the private proof input attached to a transaction but omitted from its public body. A maximum block can carry roughly 14–16 MiB of this data. Materializing the complete workload as one dense circuit would make peak memory grow with the whole block. AuthStream tested a different front end: extract the secret-dependent field elements once, compile them into bounded sparse segments, then give those segments to the proof system. The <em>complete relation</em> means all constraints connecting every segment to one public authorization statement; no segment may remain outside the final proof.</p>
+<p>AuthStream evaluated an earlier block-wide authorization layout. In its maximum 255-authorization workload, the private proof input attached outside the public transaction body occupied roughly 14–16 MiB. Materializing that complete workload as one dense circuit would have made peak memory grow with the whole test block. The experiment instead extracted the secret-dependent field elements once, compiled them into bounded sparse segments, then passed those segments to the proof system. The <em>complete relation</em> meant all constraints connecting every segment to one public authorization statement; no segment could remain outside the final proof.</p>
 
 <div class="protocol-flow" aria-label="AuthStream feasibility pipeline">
-  <div class="flow-step"><small>Private input</small><strong>Authorization sidecars</strong><span>14–16 MiB at maximum fan-in</span></div>
+  <div class="flow-step"><small>Measured private input</small><strong>Authorization sidecars</strong><span>14–16 MiB in the evaluated maximum workload</span></div>
   <div class="flow-arrow">→</div>
   <div class="flow-step"><small>Compiler</small><strong>Typed bounded segments</strong><span>Extraction, coverage and witness layout</span></div>
   <div class="flow-arrow">→</div>

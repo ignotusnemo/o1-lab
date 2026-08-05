@@ -1,8 +1,13 @@
 <h2 id="question">When is a block complete?</h2>
 <p><code>State</code> is the authenticated set of current unspent outputs and consensus counters. <code>HistoryStep</code> is the recursive terminal that proves one block's exact transition from its parent State to its child State and verifies the preceding terminal. The experiment asks when it must exist: may a block enter the canonical chain before its HistoryStep is ready, or must both become accepted together? Both designs were implemented to compare their consensus state machines, restart behavior and mining critical path.</p>
 
+<div class="note">
+  <strong>Historical configuration</strong>
+  <p>The B8 and B32 classes and the <code>m = 22</code> link matrices below belonged to the deleted background-pipeline prototype. The production launch bank contains B64 at <code>m = 23</code> and B255 at <code>m = 24</code>. The historical parameters remain here only to describe the state machine that was measured and removed.</p>
+</div>
+
 <h2 id="pipeline">Experiment 1. Background proof pipeline</h2>
-<p>The experiment divided blocks into four fixed proof-capacity classes: B8, B32, B64 and B255. The number in each name was the maximum number of user transactions that the class could prove. Each class had one authenticated constraint matrix for the block transition and another for linking that block proof into the recursive history; a ninth matrix anchored the chain at genesis.</p>
+<p>The deleted prototype divided blocks into four fixed proof-capacity classes: B8, B32, B64 and B255. The number in each name was the maximum number of user transactions that the class could prove. Each class had one authenticated constraint matrix for the block transition and another for linking that block proof into the recursive history; a ninth matrix anchored the initial chain state.</p>
 <p>A <em>recursive-link relation</em> is the constraint system that verifies one block proof together with the preceding <code>HistoryStep</code> and produces the next link in the proved history. All four such relations used <code>m = 22</code>. Here <code>m</code> is the base-two logarithm of the padded witness and constraint domain, so each relation occupied <code>2^22</code> field positions. Work then moved through three stages whose intermediate state was saved to disk:</p>
 <div class="protocol-flow" aria-label="Background proof pipeline">
   <div class="flow-step"><small>Stage 1</small><strong>Block proof</strong><span>Prove one accepted height</span></div>
@@ -11,7 +16,7 @@
   <div class="flow-arrow">→</div>
   <div class="flow-step"><small>Stage 3</small><strong>Verify and promote</strong><span>Advance the tip covered by recursive proofs</span></div>
 </div>
-<p>The three smaller classes—covering blocks with at most 64 user transactions—allowed up to three block heights to be processed concurrently. The maximum-capacity B255 class, which covered up to 255 user transactions, ran one height at a time because of its larger memory footprint. This overlap improved throughput, but consensus now exposed two progress variables: the canonical block tip and the tip already covered by recursive proofs. Durable proof jobs, in-order promotion, recovery logic and partial pipeline state existed solely to keep those two positions consistent.</p>
+<p>The three smaller classes—covering blocks with at most 64 user transactions—allowed up to three block heights to be processed concurrently. The maximum-capacity B255 class, which covered up to 255 user transactions, ran one height at a time because of its larger memory footprint. This overlap improved throughput, but the prototype exposed two consensus progress variables: the canonical block tip and the tip already covered by recursive proofs. Durable proof jobs, in-order promotion, recovery logic and partial pipeline state existed solely to keep those two positions consistent.</p>
 
 <h2 id="atomic">Experiment 2. Atomic PoW and HistoryStep</h2>
 <p>The alternative defines one accepted unit:</p>
@@ -31,7 +36,7 @@
 </table></div>
 
 <h2 id="tradeoff">The trade-off</h2>
-<p>Atomicity does not make proving free. Deterministic HistoryStep preparation moves onto the mining path and must be budgeted so supported hardware can keep producing candidates at the network cadence. Proof-of-work nonce search remains probabilistic and difficulty-dependent; it is not a fixed fifteen-second local task. The proof-class measurements are recorded separately in <a href="/research/b64-b255-proof-classes/">Why HistoryStep uses two proof classes</a>.</p>
+<p>Atomicity does not make proving free. Deterministic HistoryStep preparation moves onto the mining path and must be budgeted so supported hardware can keep producing candidates at the network cadence. Proof-of-work nonce search remains probabilistic and difficulty-dependent; it is not a fixed fifteen-second local task.</p>
 <p>The benefit is not raw speed. It is removal of an entire consensus-visible backlog state machine.</p>
 
 <h2 id="result">Result</h2>

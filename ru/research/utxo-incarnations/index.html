@@ -41,9 +41,9 @@
   <meta property="article:section" content="Live State">
   <meta property="article:author" content="Parano1d Lab">
   <title>Поколения UTXO · Parano1d Lab</title>
-  <link rel="stylesheet" href="/assets/site.css?v=ef75dc965770">
+  <link rel="stylesheet" href="/assets/site.css?v=400ff32ebeaa">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Идентификаторы поколений UTXO вместо карантина консенсуса","description":"Карантин повторного использования на 256 корзин и упакованные идентификаторы поколений UTXO были реализованы против одной угрозы: физический слот может позднее содержать выход с тем же видимым значением, но уже другой идентичностью. Идентификаторы различают последовательные выходы, разрешают повторное использование в том же блоке, отклоняют старые открытия и устраняют второй корень State вместе с соответствующими семействами доказательств. Идентификатор остаётся локальным для ветви и однозначно связывается с канонической историей.","datePublished":"2026-07-10","dateModified":"2026-07-10","mainEntityOfPage":"https://lab.parano1d.org/ru/research/utxo-incarnations/","inLanguage":"ru","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/utxo-incarnations.png","about":"Live State"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Идентификаторы поколений UTXO вместо карантина консенсуса","description":"Карантин повторного использования на 256 корзин и упакованные идентификаторы поколений UTXO были реализованы против одной угрозы: физический слот может позднее содержать выход с тем же видимым значением, но уже другой идентичностью. Идентификаторы различают последовательные выходы, отклоняют старые открытия и устраняют второй корень State вместе с соответствующими семействами доказательств. Повторное использование физического слота внутри одного блока по-прежнему запрещает правило уникальности операций. Идентификатор остаётся локальным для ветви и однозначно связывается с канонической историей.","datePublished":"2026-07-10","dateModified":"2026-07-10","mainEntityOfPage":"https://lab.parano1d.org/ru/research/utxo-incarnations/","inLanguage":"ru","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/utxo-incarnations.png","about":"Live State"}</script>
 </head>
 <body class="locale-ru">
   <a class="skip-link" href="#content">К содержанию</a>
@@ -98,17 +98,17 @@
     <rect width="640" height="420" fill="#07120d"/>
     <rect width="640" height="420" fill="url(#halo-incarnation)"/>
     <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-incarnation)"/>
-    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
-    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">ONE PHYSICAL SLOT · DISTINCT LOGICAL OUTPUTS</text>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 374V394H54M586 394H606V374"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="320" y="48" text-anchor="middle">ONE PHYSICAL SLOT · DISTINCT LOGICAL OUTPUTS</text>
     <g class="diagram-panel diagram-panel--neutral" filter="url(#shadow-incarnation)"><rect x="38" y="78" width="230" height="246" rx="15"/><text class="diagram-micro" x="60" y="105">SLOT 148 · INCARNATION 41</text><text class="diagram-value diagram-value--compact" x="60" y="143">50 NOID</text><path class="diagram-divider" d="M60 161H246"/><text class="diagram-label" x="60" y="190">OWNER</text><text class="diagram-value diagram-value--compact" x="246" y="190" text-anchor="end">A7…2C</text><text class="diagram-label" x="60" y="224">CREATION</text><text class="diagram-number" x="246" y="226" text-anchor="end">41</text><g class="leaf-hash"><rect x="60" y="252" width="186" height="43" rx="8"/><text class="diagram-micro" x="74" y="269">LEAF IDENTITY</text><text class="diagram-value diagram-value--compact" x="74" y="289">H(slot ∥ 41 ∥ value)</text></g></g>
   <g class="reuse-channel"><path d="M268 169H372" marker-end="url(#arrow-incarnation)"/><text class="diagram-micro" x="320" y="151" text-anchor="middle">SPEND → REUSE</text><path class="stale-cross" d="M301 232 339 270M339 232 301 270"/><text class="diagram-micro diagram-micro--coral" x="320" y="292" text-anchor="middle">STALE H₄₁</text></g>
   <g class="diagram-panel diagram-panel--green" filter="url(#shadow-incarnation)"><rect x="372" y="78" width="230" height="246" rx="15"/><text class="diagram-micro" x="394" y="105">SLOT 148 · INCARNATION 42</text><text class="diagram-value diagram-value--compact" x="394" y="143">50 NOID</text><path class="diagram-divider" d="M394 161H580"/><text class="diagram-label" x="394" y="190">OWNER</text><text class="diagram-value diagram-value--compact" x="580" y="190" text-anchor="end">A7…2C</text><text class="diagram-label" x="394" y="224">CREATION</text><text class="diagram-number" x="580" y="226" text-anchor="end">42</text><g class="leaf-hash leaf-hash--new"><rect x="394" y="252" width="186" height="43" rx="8"/><text class="diagram-micro" x="408" y="269">NEW LEAF IDENTITY</text><text class="diagram-value diagram-value--compact" x="408" y="289">H(slot ∥ 42 ∥ value)</text></g></g>
-    <text class="diagram-caption" x="42" y="390">The incarnation travels with value, so reuse needs no quarantine root or delay</text>
+    <text class="diagram-caption" x="320" y="384" text-anchor="middle">The incarnation travels with value, so reuse needs no quarantine root or delay</text>
   </svg></div>
     </header>
     <div class="article-layout">
       <aside class="article-toc" aria-label="В этой статье"><strong>В этой статье</strong><a href="#problem">Проблема повторного использования слота</a><a href="#quarantine">Эксперимент 1. Карантин консенсуса</a><a href="#incarnation">Эксперимент 2. Поместить идентичность в значение</a><a href="#tests">Негативные и граничные тесты</a><a href="#scope">Границы конструкции</a><a href="#result">Результат</a></aside>
-      <article class="article-body"><div class="article-abstract"><span>Аннотация</span><p>Карантин повторного использования на 256 корзин и упакованные идентификаторы поколений UTXO были реализованы против одной угрозы: физический слот может позднее содержать выход с тем же видимым значением, но уже другой идентичностью. Идентификаторы различают последовательные выходы, разрешают повторное использование в том же блоке, отклоняют старые открытия и устраняют второй корень State вместе с соответствующими семействами доказательств. Идентификатор остаётся локальным для ветви и однозначно связывается с канонической историей.</p></div><h2 id="problem">Проблема повторного использования слота</h2>
+      <article class="article-body"><div class="article-abstract"><span>Аннотация</span><p>Карантин повторного использования на 256 корзин и упакованные идентификаторы поколений UTXO были реализованы против одной угрозы: физический слот может позднее содержать выход с тем же видимым значением, но уже другой идентичностью. Идентификаторы различают последовательные выходы, отклоняют старые открытия и устраняют второй корень State вместе с соответствующими семействами доказательств. Повторное использование физического слота внутри одного блока по-прежнему запрещает правило уникальности операций. Идентификатор остаётся локальным для ветви и однозначно связывается с канонической историей.</p></div><h2 id="problem">Проблема повторного использования слота</h2>
 <p>UTXO — непотраченный выход транзакции. Parano1d хранит текущие UTXO в ограниченном State, где <em>физический слот</em> служит повторно используемым индексом, а не постоянным именем выхода. Точное открытие State — доказательство Merkle, аутентифицирующее полное содержимое листа в таком слоте. Если позднее тот же слот снова содержит ту же сумму и того же владельца, старое открытие не должно подтверждать новый выход. Это классическая последовательность A→B→A, или проблема ABA: видимое значение вернулось к A, хотя логический объект уже другой.</p>
 
 <h2 id="quarantine">Эксперимент 1. Карантин консенсуса</h2>
@@ -117,7 +117,6 @@
 <ul>
   <li>дополнительный корень State в консенсусе и отдельный домен отката;</li>
   <li>три компонента доказательства для корзин <code>ReuseGuard</code> и привязки корня State;</li>
-  <li>невозможность потратить и снова создать выход в одном физическом слоте внутри блока;</li>
   <li>два пути перехода, обязанные одинаково обновлять <code>ReuseGuard</code>.</li>
 </ul>
 <p>Тест эквивалентности прототипа намеренно запускал оба пути перехода и отклонял расхождения в правиле обновления <code>ReuseGuard</code>. Пути можно было сделать идентичными, но эквивалентность пришлось бы доказывать постоянно из-за второго автомата State.</p>
@@ -125,17 +124,16 @@
 <h2 id="incarnation">Эксперимент 2. Поместить идентичность в значение</h2>
 <p>Альтернатива упаковывает сумму и монотонный идентификатор создания в существующую 128-битную координату значения:</p>
 <div class="equation">packed_value = (creation_id &lt;&lt; 64) | amount</div>
-<p>Каждый созданный выход получает следующий локальный для ветви <code>creation_id</code>. Поэтому лист точного State и входной лист фиксируют криптографическим обязательством логическое поколение выхода вместе со слотом, владельцем и суммой.</p>
+<p>Каждый обычный создаваемый выход получает следующий локальный для ветви <code>creation_id</code>. Основная награда за блок тоже увеличивает счётчик распределения, но записывает идентификатор, образованный из высоты блока и принадлежащий отдельному пространству имён. Поэтому лист точного State и входной лист фиксируют криптографическим обязательством логическое поколение выхода вместе со слотом, владельцем и суммой.</p>
 
 <h2 id="tests">Негативные и граничные тесты</h2>
 <div class="table-wrap"><table>
   <thead><tr><th>Сценарий</th><th>Ожидаемое свойство</th><th>Результат</th></tr></thead>
   <tbody>
     <tr><td>Тот же слот, владелец и сумма; новый ID</td><td>Старое точное открытие должно завершиться ошибкой</td><td>Разные хеши State и входного листа</td></tr>
-    <tr><td>Расходование → создание в одном блоке</td><td>Новый выход использует следующий ID</td><td>Однозначно</td></tr>
-    <tr><td>Создание → расходование в одном блоке</td><td>Дочерний вход указывает созданный ID</td><td>Однозначно</td></tr>
+    <tr><td>Один физический слот участвует в двух действующих операциях одного блока</td><td>Отклонить до применения перехода</td><td><code>BlockSlotConflict</code></td></tr>
     <tr><td>Пропущенные, повторные или переставленные ID</td><td>Отклонить</td><td>Отклонено</td></tr>
-    <tr><td>Счётчик <code>u64::MAX</code></td><td>Не допустить переполнения</td><td>Отклонено по правилам консенсуса</td></tr>
+    <tr><td>Следующий ID распределителя попадает в пространство наград или переполняет <code>u64</code></td><td>Не допустить пересечения пространств имён и переполнения</td><td>Отклонено по правилам консенсуса</td></tr>
   </tbody>
 </table></div>
 

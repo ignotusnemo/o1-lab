@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f3f2ed">
   <meta name="color-scheme" content="light">
-  <meta name="description" content="A full-composition benchmark showed that independent verifier walks multiplied memory beyond 30 GB. One shared domain removed that factor.">
+  <meta name="description" content="Three Link groups and six Block groups share one ordered ragged 66-layer Poseidon2b walk instead of materializing nine verifier traces.">
   <meta name="author" content="Parano1d Lab">
   <meta name="keywords" content="Parano1d, Parano1d Lab, zero-knowledge proofs, proof systems, cryptography, recursive proofs, binary fields, polynomial commitments">
   <link rel="canonical" href="https://lab.parano1d.org/research/single-global-walk/">
@@ -25,7 +25,7 @@
   <meta property="og:locale:alternate" content="zh_CN">
   <meta property="og:url" content="https://lab.parano1d.org/research/single-global-walk/">
   <meta property="og:title" content="Single global walk · Parano1d Lab">
-  <meta property="og:description" content="A full-composition benchmark showed that independent verifier walks multiplied memory beyond 30 GB. One shared domain removed that factor.">
+  <meta property="og:description" content="Three Link groups and six Block groups share one ordered ragged 66-layer Poseidon2b walk instead of materializing nine verifier traces.">
   <meta property="og:image" content="https://lab.parano1d.org/assets/og/single-global-walk.png">
   <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/single-global-walk.png">
   <meta property="og:image:type" content="image/png">
@@ -34,16 +34,16 @@
   <meta property="og:image:alt" content="One global Poseidon walk replaces nine verifier walks">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Single global walk · Parano1d Lab">
-  <meta name="twitter:description" content="A full-composition benchmark showed that independent verifier walks multiplied memory beyond 30 GB. One shared domain removed that factor.">
+  <meta name="twitter:description" content="Three Link groups and six Block groups share one ordered ragged 66-layer Poseidon2b walk instead of materializing nine verifier traces.">
   <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/single-global-walk.png">
   <meta name="twitter:image:alt" content="One global Poseidon walk replaces nine verifier walks">
   <meta property="article:published_time" content="2026-07-06T00:00:00Z">
   <meta property="article:section" content="Recursive proving">
   <meta property="article:author" content="Parano1d Lab">
   <title>Single global walk · Parano1d Lab</title>
-  <link rel="stylesheet" href="/assets/site.css?v=ef75dc965770">
+  <link rel="stylesheet" href="/assets/site.css?v=400ff32ebeaa">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"One global Poseidon walk replaces nine verifier walks","description":"A reference recursive composition assigned one 66-layer Poseidon2b walk to each authentication family so its full-graph cost could be measured directly. Memory scaled with family count and exceeded a 30 GB machine. The implemented redesign localizes family patterns inside one shared slot domain and discharges all nine families through one global walk, one shared state transfer and one combined polynomial identity.","datePublished":"2026-07-06","dateModified":"2026-07-06","mainEntityOfPage":"https://lab.parano1d.org/research/single-global-walk/","inLanguage":"en","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/single-global-walk.png","about":"Recursive proving"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"One global Poseidon walk replaces nine verifier walks","description":"Independent verifier walks made memory scale with the number of authentication families and exceeded a 30 GB machine. Production HistoryStep places three Link groups and six Block groups in one joint transcript and one ordered ragged Poseidon2b walk. Canonical region columns and endpoint claims preserve the meaning of each group while the expensive permutation trace is shared across all nine.","datePublished":"2026-07-06","dateModified":"2026-07-06","mainEntityOfPage":"https://lab.parano1d.org/research/single-global-walk/","inLanguage":"en","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/single-global-walk.png","about":"Recursive proving"}</script>
 </head>
 <body class="locale-en">
   <a class="skip-link" href="#content">Skip to content</a>
@@ -68,7 +68,7 @@
   </header>
     <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
     <header class="article-hero">
-      <div class="article-hero-copy"><a class="back-link" href="/research/">← All research</a><div class="article-meta"><span>Engineering study</span><span>Recursive proving</span><time datetime="2026-07-06">06 Jul 2026</time></div><h1>One global Poseidon walk replaces nine verifier walks</h1><p class="article-dek">A full-composition benchmark showed that independent verifier walks multiplied memory beyond 30 GB. One shared domain removed that factor.</p><div class="article-byline"><span>By Parano1d Lab</span><span>5 min read</span><span>Implemented composition redesign</span></div><div class="article-share" aria-label="Share this research"><span class="article-share-label">Share</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/research/single-global-walk/" data-copy-default="Copy link" data-copy-success="Copied" data-copy-failure="Copy failed" aria-label="Copy article link" title="Copy link"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">Copy link</span></button><a class="share-action" href="https://x.com/intent/post?text=One%20global%20Poseidon%20walk%20replaces%20nine%20verifier%20walks&amp;url=https%3A%2F%2Flab.parano1d.org%2Fresearch%2Fsingle-global-walk%2F" aria-label="Share this article on X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Share on X</span></a></div></div>
+      <div class="article-hero-copy"><a class="back-link" href="/research/">← All research</a><div class="article-meta"><span>Engineering study</span><span>Recursive proving</span><time datetime="2026-07-06">06 Jul 2026</time></div><h1>One global Poseidon walk replaces nine verifier walks</h1><p class="article-dek">Three Link groups and six Block groups share one ordered ragged 66-layer Poseidon2b walk instead of materializing nine verifier traces.</p><div class="article-byline"><span>By Parano1d Lab</span><span>5 min read</span><span>Production composition</span></div><div class="article-share" aria-label="Share this research"><span class="article-share-label">Share</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/research/single-global-walk/" data-copy-default="Copy link" data-copy-success="Copied" data-copy-failure="Copy failed" aria-label="Copy article link" title="Copy link"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">Copy link</span></button><a class="share-action" href="https://x.com/intent/post?text=One%20global%20Poseidon%20walk%20replaces%20nine%20verifier%20walks&amp;url=https%3A%2F%2Flab.parano1d.org%2Fresearch%2Fsingle-global-walk%2F" aria-label="Share this article on X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Share on X</span></a></div></div>
       <div class="research-art art--walk" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
     <defs>
     <pattern id="grid-walk" width="24" height="24" patternUnits="userSpaceOnUse">
@@ -98,8 +98,8 @@
     <rect width="640" height="420" fill="#07120d"/>
     <rect width="640" height="420" fill="url(#halo-walk)"/>
     <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-walk)"/>
-    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
-    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">NINE AUTHENTICATION FAMILIES · ONE WALK</text>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 374V394H54M586 394H606V374"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="320" y="48" text-anchor="middle">3 LINK + 6 BLOCK REGIONS · ONE WALK</text>
     <g class="walk-sources">
     <text class="diagram-micro" x="44" y="81">RELATION FAMILIES</text>
     <g class="family-lines">
@@ -107,7 +107,7 @@
       <rect x="44" y="171" width="176" height="16" rx="4"/><rect x="44" y="196" width="214" height="16" rx="4"/><rect x="44" y="221" width="158" height="16" rx="4"/>
       <rect x="44" y="246" width="194" height="16" rx="4"/><rect x="44" y="271" width="170" height="16" rx="4"/><rect x="44" y="296" width="206" height="16" rx="4"/>
     </g>
-    <text class="diagram-label" x="264" y="107">OWNER</text><text class="diagram-label" x="264" y="157">STATE</text><text class="diagram-label" x="264" y="207">MERKLE</text><text class="diagram-label" x="264" y="257">CHANNEL</text><text class="diagram-label" x="264" y="307">BOUNDARY</text>
+    <text class="diagram-label" x="264" y="107">LINK ×3</text><text class="diagram-label" x="264" y="157">BLOCK ×6</text><text class="diagram-label" x="264" y="207">ONE SLOT DOMAIN</text><text class="diagram-label" x="264" y="257">ONE STATE CARRY</text><text class="diagram-label" x="264" y="307">ONE TRANSCRIPT</text>
   </g>
   <g class="walk-merge"><path d="M258 104C304 104 290 188 336 188M258 129C300 129 298 198 336 198M258 154C300 154 300 208 336 208M258 179C300 179 306 218 336 218M258 204H336M258 229C300 229 306 230 336 230M258 254C300 254 300 240 336 240M258 279C300 279 298 250 336 250M258 304C304 304 290 260 336 260"/></g>
   <g class="diagram-panel diagram-panel--green" filter="url(#shadow-walk)"><rect x="336" y="157" width="112" height="130" rx="15"/><text class="diagram-micro" x="392" y="184" text-anchor="middle">SHARED CARRY</text><text class="diagram-number" x="392" y="224" text-anchor="middle">C0…C3</text><text class="diagram-label" x="392" y="252" text-anchor="middle">one accumulator</text></g>
@@ -116,17 +116,17 @@
     <path d="M539 190V322"/><circle cx="539" cy="201" r="5"/><circle cx="539" cy="225" r="5"/><circle cx="539" cy="249" r="5"/><circle cx="539" cy="273" r="5"/><circle cx="539" cy="297" r="5"/><circle cx="539" cy="321" r="5"/>
     <text class="diagram-micro" x="522" y="205" text-anchor="end">ABSORB</text><text class="diagram-micro" x="522" y="253" text-anchor="end">MIX</text><text class="diagram-micro" x="522" y="301" text-anchor="end">CLOSE</text>
   </g>
-    <text class="diagram-caption" x="42" y="390">A direct recursive composition replaced nine duplicated Poseidon2b walks</text>
+    <text class="diagram-caption" x="320" y="384" text-anchor="middle">Nine recursive regions share one ordered ragged 66-layer Poseidon2b walk</text>
   </svg></div>
     </header>
     <div class="article-layout">
-      <aside class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#clean-design">Reference composition and its scaling limit</a><a href="#shared-object">Find the shared object</a><a href="#localization">Localizing family equations</a><a href="#primitive">Two-family adversarial test</a><a href="#nine-families">Full nine-family composition</a><a href="#memory-work">Orthogonal memory controls</a><a href="#result">Scope of the construction</a><a href="#why-publish">Why the full-graph benchmark matters</a></aside>
-      <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>A reference recursive composition assigned one 66-layer Poseidon2b walk to each authentication family so its full-graph cost could be measured directly. Memory scaled with family count and exceeded a 30 GB machine. The implemented redesign localizes family patterns inside one shared slot domain and discharges all nine families through one global walk, one shared state transfer and one combined polynomial identity.</p></div><h2 id="clean-design">Reference composition and its scaling limit</h2>
+      <aside class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#clean-design">Reference composition and its scaling limit</a><a href="#shared-object">Find the shared object</a><a href="#localization">Localizing family equations</a><a href="#primitive">Two-family adversarial test</a><a href="#nine-families">Production joint composition</a><a href="#memory-work">Orthogonal memory controls</a><a href="#result">Scope of the construction</a><a href="#why-publish">Why the full-graph benchmark matters</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>Independent verifier walks made memory scale with the number of authentication families and exceeded a 30 GB machine. Production HistoryStep places three Link groups and six Block groups in one joint transcript and one ordered ragged Poseidon2b walk. Canonical region columns and endpoint claims preserve the meaning of each group while the expensive permutation trace is shared across all nine.</p></div><h2 id="clean-design">Reference composition and its scaling limit</h2>
 <p>Poseidon2b is the four-word cryptographic permutation used to hash and authenticate proof data. The recursive verifier had to replay several Poseidon2b-based <em>authentication families</em>. Each family is one repeated type of hash relation—such as source-tree nodes, source leaves, pairs of symbols opened together at a fold layer or Merkle-path nodes—together with the openings that bind it to committed data. The reference composition intentionally gave every family its own slot schedule, its own selection of the four state words passed between layers, and its own <em>deep-chain walk</em>: a constraint trace that replays all sixty-six Poseidon2b layers for every occupied slot. That direct construction provided a clear baseline for measuring the complete authentication graph.</p>
 <p>Algebraically, every family remained easy to inspect. Operationally, the full-graph benchmark showed memory growing with family count because every independent walk materialized another large set of trace columns. The complete nine-family shape exceeded a 30 GB machine, establishing that independent walks were not a viable composition topology.</p>
 <div class="failure">
   <strong>Composition result</strong>
-  <p>“One walk per family” is a useful reference construction, but its memory cost scales with the number of authentication families. Production composition therefore needed to share the expensive permutation walk.</p>
+  <p>“One walk per family” is a useful reference construction, but its memory cost scales with the number of authentication families. Production composition shares the expensive permutation walk.</p>
 </div>
 
 <h2 id="shared-object">Find the shared object</h2>
@@ -151,16 +151,15 @@
 <p>The minimal end-to-end experiment combined two genuinely different deep-chain families: a source-leaf chain and a Merkle path. It drove one state-transfer selection, one deep-chain walk and one combined polynomial identity—the sum of the localized family equations—through the outer polynomial commitment scheme (PCS) and public input/output boundary. The Merkle direction bits kept a separate booleanity sumcheck, but not a second permutation walk.</p>
 <p>The regression tests changed an input symbol or sibling while leaving a satisfiable trace. The altered committed column then failed at the opening boundary. This was important: the test demonstrated that the union was not merely capable of accepting its own assembled witness; it still bound each family back to its commitment.</p>
 
-<h2 id="nine-families">Full nine-family composition</h2>
-<p>The full experiment composed the source-binding graph: the source-tree family, source-leaf queries and one family of paired-symbol openings for each fold layer—nine family types in the measured shape. All of them shared:</p>
+<h2 id="nine-families">Production joint composition</h2>
+<p>Current HistoryStep composition places nine recursive regions in one joint transcript. Link contributes three groups and Block contributes six. All nine groups share:</p>
 <ul>
-  <li>one slot domain;</li>
-  <li>one state-transfer selection;</li>
-  <li>one Poseidon2b deep-chain walk;</li>
-  <li>one combined polynomial identity;</li>
-  <li>one real FRI low-degree-proof channel schedule.</li>
+  <li>one ordered ragged slot schedule;</li>
+  <li>one 66-layer Poseidon2b walk;</li>
+  <li>one batching challenge schedule;</li>
+  <li>one canonical set of terminal claims entering the outer PCS batch.</li>
 </ul>
-<p>The channel was driven once from absorption of the <em>Merkle cap</em>—the compact list of roots authenticating the commitment trees—through mixed-opening challenges, round roots, final codeword, source-binding roots and shared query indices. Those challenges fed both the algebra and the source-opening claims. Each family retained its own committed input columns, but did not instantiate its own verifier walk.</p>
+<p>The outer post-commit channel derives the three Link prefixes and seeds the Block child channel. The child processes the ordered nine-group walk and completes the six Block suffixes. Its terminal digest returns to the outer channel before the three Link suffixes complete. Each region keeps its own canonical committed columns, but no region instantiates an independent permutation walk.</p>
 
 <h2 id="memory-work">Orthogonal memory controls</h2>
 <p>The single global walk removed the dominant multiplicative factor. Separate experiments moved constraint matrices to compressed sparse row (CSR) storage, right-sized the two alternating work buffers used by the BaseFold polynomial-commitment verifier, bounded temporary storage for linear-constraint checks (<em>lincheck</em>), capped scratch space by bytes and dictionary-encoded repeated matrix coefficients.</p>
@@ -180,7 +179,7 @@
     <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Research record</p><h2 id="evidence-title">Evidence and artifacts</h2><p>The links below preserve the implementation, measurement or derivation behind this article.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/6d0cfaf0" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Commit</small><strong>Two-family union primitive</strong></span></span><span aria-hidden="true">↗</span></a>
 <a href="https://github.com/ignotusnemo/parano1d/commit/4bdd7b5a" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Commit</small><strong>Nine-family assembly core</strong></span></span><span aria-hidden="true">↗</span></a>
 <a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_recursive/src/acceptance/trace/region_source_binding.rs" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Code</small><strong>Current region source binding</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
-    <nav class="article-next" aria-label="Adjacent research"><a href="/research/recursive-fixed-point/"><small>Earlier</small><strong>Recursive fixed point</strong><span>←</span></a><a href="/research/binary-field-kernels/"><small>Later</small><strong>Binary-field kernels</strong><span>→</span></a></nav>
+    <nav class="article-next" aria-label="Adjacent research"><a href="/research/authstream-proof-compiler/"><small>Earlier</small><strong>AuthStream compiler</strong><span>←</span></a><a href="/research/binary-field-kernels/"><small>Later</small><strong>Binary-field kernels</strong><span>→</span></a></nav>
   </main>
     <footer class="site-footer">
     <div class="footer-brand">

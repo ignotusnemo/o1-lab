@@ -41,9 +41,9 @@
   <meta property="article:section" content="证明工程">
   <meta property="article:author" content="Parano1d Lab">
   <title>证明缩小 20%，速度却下降 68% · Parano1d Lab</title>
-  <link rel="stylesheet" href="/assets/site.css?v=ef75dc965770">
+  <link rel="stylesheet" href="/assets/site.css?v=400ff32ebeaa">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"证明缩小 20%，速度却下降 68%","description":"一个采用混合域并带有类型标签的 Merkle 证明，把未花费输出路径与槽重用保护路径合并到同一关系中。证明大小从 29.69 KB 降到 23.75 KB，但生成时间从 2.68 秒升至 4.50 秒，验证时间也从 450.82 毫秒升至 612.96 毫秒。测量完成后，该融合构造被移除。","datePublished":"2026-06-25","dateModified":"2026-06-25","mainEntityOfPage":"https://lab.parano1d.org/zh/research/merkle-fusion-negative-result/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/merkle-fusion-negative-result.png","about":"证明工程"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"证明缩小 20%，速度却下降 68%","description":"一个采用域分离标签的融合 Merkle 证明，把未花费输出路径与槽重用保护路径合并到同一关系中。证明大小从 29.69 KB 降到 23.75 KB，但生成时间从 2.68 秒升至 4.50 秒，验证时间也从 450.82 毫秒升至 612.96 毫秒。测量完成后，该融合构造被移除。","datePublished":"2026-06-25","dateModified":"2026-06-25","mainEntityOfPage":"https://lab.parano1d.org/zh/research/merkle-fusion-negative-result/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/merkle-fusion-negative-result.png","about":"证明工程"}</script>
 </head>
 <body class="locale-zh">
   <a class="skip-link" href="#content">跳到正文</a>
@@ -98,8 +98,8 @@
     <rect width="640" height="420" fill="#07120d"/>
     <rect width="640" height="420" fill="url(#halo-fusion)"/>
     <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-fusion)"/>
-    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
-    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">MERKLE FUSION · MEASURED TRADE-OFF</text>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 374V394H54M586 394H606V374"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="320" y="48" text-anchor="middle">MERKLE FUSION · MEASURED TRADE-OFF</text>
     <g class="chart-axis"><path d="M104 82V322H402"/><path d="M104 122H402M104 172H402M104 222H402M104 272H402"/><text x="93" y="326" text-anchor="end">0</text><text x="93" y="276" text-anchor="end">25</text><text x="93" y="226" text-anchor="end">50</text><text x="93" y="176" text-anchor="end">75</text><text x="93" y="126" text-anchor="end">100</text></g>
   <g class="fusion-bars">
     <text class="diagram-micro" x="125" y="346">PROOF BYTES</text><rect class="bar bar--base" x="126" y="142" width="72" height="180" rx="7"/><rect class="bar bar--good" x="211" y="178" width="72" height="144" rx="7"/><text x="162" y="132" text-anchor="middle">29.69 KiB</text><text x="247" y="168" text-anchor="middle">23.75 KiB</text>
@@ -107,13 +107,13 @@
   </g>
   <g class="fusion-legend"><circle cx="139" cy="370" r="4"/><text x="150" y="374">SEPARATE</text><circle class="good" cx="232" cy="370" r="4"/><text x="243" y="374">FUSED</text></g>
   <g class="fusion-metrics"><rect x="488" y="102" width="112" height="91" rx="12"/><text class="diagram-micro" x="506" y="128">SERIALIZED</text><text class="diagram-number" x="506" y="166">−20.0%</text><rect x="488" y="219" width="112" height="91" rx="12"/><text class="diagram-micro" x="506" y="245">PROVER</text><text class="diagram-number diagram-number--coral" x="506" y="283">+67.9%</text></g>
-    <text class="diagram-caption" x="42" y="390">Smaller serialization lost to a larger MLE and reduced prover parallelism</text>
+    <text class="diagram-caption" x="320" y="384" text-anchor="middle">Smaller serialization lost to a larger MLE and reduced prover parallelism</text>
   </svg></div>
     </header>
     <div class="article-layout">
       <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#question">两个 Merkle 关系能否共享一份证明？</a><a href="#experiment">实测对比</a><a href="#cause">更小的证明为何更慢</a><a href="#conclusion">可复用的结论</a></aside>
-      <article class="article-body"><div class="article-abstract"><span>摘要</span><p>一个采用混合域并带有类型标签的 Merkle 证明，把未花费输出路径与槽重用保护路径合并到同一关系中。证明大小从 29.69 KB 降到 23.75 KB，但生成时间从 2.68 秒升至 4.50 秒，验证时间也从 450.82 毫秒升至 612.96 毫秒。测量完成后，该融合构造被移除。</p></div><h2 id="question">两个 Merkle 关系能否共享一份证明？</h2>
-<p>State 是由当前未花费交易输出（UTXO）与共识计数器组成的认证集合。UTXO 路径用于认证主 State 树中的一个此类输出。重用保护路径则认证另一棵树；在受测设计中，这棵树阻止刚释放的物理槽位被过早重新分配。两者都是固定深度的二叉 Merkle 路径，也都会在证明前后两个 State 根之间的精确转换时接受检查。一个带域标签的混合域构造把它们融合成一条更大的多线性轨迹。</p>
+      <article class="article-body"><div class="article-abstract"><span>摘要</span><p>一个采用域分离标签的融合 Merkle 证明，把未花费输出路径与槽重用保护路径合并到同一关系中。证明大小从 29.69 KB 降到 23.75 KB，但生成时间从 2.68 秒升至 4.50 秒，验证时间也从 450.82 毫秒升至 612.96 毫秒。测量完成后，该融合构造被移除。</p></div><h2 id="question">两个 Merkle 关系能否共享一份证明？</h2>
+<p>State 是由当前未花费交易输出（UTXO）与共识计数器组成的认证集合。UTXO 路径用于认证主 State 树中的一个此类输出。重用保护路径则认证另一棵树；在受测设计中，这棵树阻止刚释放的物理槽位被过早重新分配。两者都是固定深度的二叉 Merkle 路径，也都会在证明前后两个 State 根之间的精确转换时接受检查。一个带域分离标签的融合构造把它们合并成一条更大的多线性轨迹。</p>
 <p>假设很直接：共享代数与单一证明封装应当减少证明字节，同时不显著改变生成成本。</p>
 
 <h2 id="experiment">实测对比</h2>
@@ -130,11 +130,11 @@
 <p>融合构造产生了一个更大的多线性扩展（MLE），即组合轨迹在布尔域上的多项式表示。Sumcheck 工作量随扩大的域增长，而原来的两份独立证明可以并行执行。字节节省来自共享证明封装；时间退化则来自失去域分离与并行性。</p>
 <div class="failure">
   <strong>决定</strong>
-  <p>完成测量后，我们移除了融合关系。精确 State 证明继续使用两份针对各自域的 Merkle 证明。</p>
+  <p>测量完成后，融合关系被移除。该版本的分离构造保留了两份域专用 Merkle 证明；后续 State 与递归证明变更不属于本实验。</p>
 </div>
 
 <h2 id="conclusion">可复用的结论</h2>
-<p>证明大小并不能可靠代表证明系统成本。在融合关系之前，应当实测扩大后的多线性扩展、sumcheck 次数以及因融合而损失的调度并行性。对于这项工作负载，用 68% 的证明生成时间换取 20% 的序列化证明缩减并不划算。</p>
+<p>证明大小并不能可靠代表证明系统成本。在融合关系之前，应当实测扩大后的多线性扩展、sumcheck 多项式次数以及因融合而损失的调度并行性。对于这项工作负载，用 68% 的证明生成时间换取 20% 的序列化证明缩减并不划算。</p>
 </article>
     </div>
     <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">研究记录</p><h2 id="evidence-title">证据与产物</h2><p>以下链接保存了支撑本文的实现、测量或推导。</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/blob/3242542a/docs/IMPLEMENTATION_LOG.md#rejected-exact-state-merkle-fusion" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>数据</small><strong>Exact-State 融合测量</strong></span></span><span aria-hidden="true">↗</span></a>

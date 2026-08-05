@@ -41,9 +41,9 @@
   <meta property="article:section" content="挖矿">
   <meta property="article:author" content="Parano1d Lab">
   <title>区块只证明一次，随后搜索 nonce · Parano1d Lab</title>
-  <link rel="stylesheet" href="/assets/site.css?v=ef75dc965770">
+  <link rel="stylesheet" href="/assets/site.css?v=400ff32ebeaa">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"区块只证明一次，随后搜索 nonce","description":"经过域分离的语义区块头 ID 承诺除 nonce 之外的所有共识字段，而规范区块 ID 则包含 nonce。矿工先证明一次完整 State 转换，再搜索大量采用不同 nonce 的区块头，最后通过原生 PoW 检查与精确边界检查，将找到有效 nonce 的区块头重新绑定到该证明。","datePublished":"2026-07-15","dateModified":"2026-07-15","mainEntityOfPage":"https://lab.parano1d.org/zh/research/prove-once-search-nonces/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/prove-once-search-nonces.png","about":"挖矿"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"区块只证明一次，随后搜索 nonce","description":"经过域分离的语义区块头 ID 承诺除 nonce 之外的所有共识字段。规范区块 ID 与工作量证明摘要都包含 nonce，并分别使用独立域。矿工先证明一次完整 State 转换，再搜索大量采用不同 nonce 的区块头，最后通过原生 PoW 检查与精确边界检查，将找到有效 nonce 的区块头重新绑定到该证明。","datePublished":"2026-07-15","dateModified":"2026-07-15","mainEntityOfPage":"https://lab.parano1d.org/zh/research/prove-once-search-nonces/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/prove-once-search-nonces.png","about":"挖矿"}</script>
 </head>
 <body class="locale-zh">
   <a class="skip-link" href="#content">跳到正文</a>
@@ -98,8 +98,8 @@
     <rect width="640" height="420" fill="#07120d"/>
     <rect width="640" height="420" fill="url(#halo-nonce)"/>
     <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-nonce)"/>
-    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
-    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">PROVE THE TEMPLATE ONCE · SEARCH THE NONCE</text>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 374V394H54M586 394H606V374"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="320" y="48" text-anchor="middle">PROVE THE TEMPLATE ONCE · SEARCH THE NONCE</text>
     <g class="diagram-panel diagram-panel--neutral" filter="url(#shadow-nonce)"><rect x="38" y="83" width="184" height="238" rx="15"/><text class="diagram-micro" x="60" y="111">FIXED BLOCK TEMPLATE</text><text class="diagram-value diagram-value--compact" x="60" y="145">SEMHDR__</text><g class="template-fields"><rect x="60" y="174" width="140" height="28" rx="6"/><rect x="60" y="211" width="140" height="28" rx="6"/><rect x="60" y="248" width="140" height="28" rx="6"/><text x="72" y="193">STATE ROOT</text><text x="72" y="230">TX COMMITMENT</text><text x="72" y="267">DIFFICULTY</text></g><text class="diagram-micro" x="60" y="301">NONCE EXCLUDED</text></g>
   <path class="diagram-arrow " d="M222 202H268" marker-end="url(#arrow-nonce)"/>
   <g class="diagram-panel diagram-panel--green" filter="url(#shadow-nonce)"><rect x="268" y="133" width="120" height="138" rx="15"/><text class="diagram-micro" x="328" y="160" text-anchor="middle">HISTORYSTEP</text><text class="diagram-number" x="328" y="207" text-anchor="middle">π</text><text class="diagram-label" x="328" y="237" text-anchor="middle">ONE PROOF</text></g>
@@ -110,21 +110,22 @@
     <g><rect x="444" y="208" width="154" height="49" rx="9"/><text x="460" y="229">NONCE D331</text><text class="diagram-micro" x="460" y="246">HASH 07…B4</text></g>
     <g class="winner"><rect x="444" y="270" width="154" height="58" rx="9"/><text x="460" y="292">NONCE F102</text><text class="diagram-micro" x="460" y="310">0000…A7 · WINNER</text><circle cx="576" cy="299" r="9"/><path d="M571 299 575 303 582 294"/></g>
   </g>
-    <text class="diagram-caption" x="42" y="390">The winning PoW nonce is reconnected to the already-proved immutable template</text>
+    <text class="diagram-caption" x="320" y="384" text-anchor="middle">The winning PoW nonce is reconnected to the already-proved immutable template</text>
   </svg></div>
     </header>
     <div class="article-layout">
       <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#question">Nonce 应当在哪一步进入证明？</a><a href="#projection">不含 nonce 的语义区块头</a><a href="#mining">证明一次，搜索多次</a><a href="#security">这种拆分为何没有放开其他字段</a><a href="#result">结果</a></aside>
-      <article class="article-body"><div class="article-abstract"><span>摘要</span><p>经过域分离的语义区块头 ID 承诺除 nonce 之外的所有共识字段，而规范区块 ID 则包含 nonce。矿工先证明一次完整 State 转换，再搜索大量采用不同 nonce 的区块头，最后通过原生 PoW 检查与精确边界检查，将找到有效 nonce 的区块头重新绑定到该证明。</p></div><h2 id="question">Nonce 应当在哪一步进入证明？</h2>
+      <article class="article-body"><div class="article-abstract"><span>摘要</span><p>经过域分离的语义区块头 ID 承诺除 nonce 之外的所有共识字段。规范区块 ID 与工作量证明摘要都包含 nonce，并分别使用独立域。矿工先证明一次完整 State 转换，再搜索大量采用不同 nonce 的区块头，最后通过原生 PoW 检查与精确边界检查，将找到有效 nonce 的区块头重新绑定到该证明。</p></div><h2 id="question">Nonce 应当在哪一步进入证明？</h2>
 <p>State 是由当前未花费输出与共识计数器组成的认证集合。HistoryStep 是区块从父 State 到子 State 精确转换的递归证明。它认证计算成本较高的语义工作，而工作量证明（PoW）只改变一个 128 位 nonce，也就是矿工在搜索过程中反复尝试的区块头字段。如果 nonce 被纳入递归断言，每个候选值都会改变断言，昂贵的证明便无法预先生成。</p>
 
 <h2 id="projection">不含 nonce 的语义区块头</h2>
-<p>该构造定义两个经过域分离的标识符：</p>
+<p>该构造定义三个经过域分离的哈希值：</p>
 <div class="table-wrap"><table>
   <thead><tr><th>标识符</th><th>域</th><th>字段</th><th>作用</th></tr></thead>
   <tbody>
     <tr><td>语义区块头 ID</td><td><code>SEMHDR__</code></td><td>除 nonce 外的全部共识区块头字段</td><td>HistoryStep 断言</td></tr>
-    <tr><td>区块 ID</td><td><code>BLOCKHDR</code></td><td>包括 nonce 在内的全部区块头字段</td><td>PoW、父链接与规范身份</td></tr>
+    <tr><td>区块 ID</td><td><code>BLOCKHDR</code></td><td>包括 nonce 在内的全部区块头字段</td><td>父链接与规范身份</td></tr>
+    <tr><td>PoW 摘要</td><td><code>POWHDR__</code></td><td>包括 nonce 在内的全部区块头字段</td><td>与区块头声明的挖矿目标值比较</td></tr>
   </tbody>
 </table></div>
 <p>语义投影保持区块头字段的精确顺序，只跳过 nonce。变异测试会独立修改每个字段：修改 nonce 必须保持语义 ID 不变；修改任何其他字段都必须改变该 ID。</p>
@@ -135,13 +136,13 @@
   <div class="flow-arrow">→</div>
   <div class="flow-step"><small>证明</small><strong>构造 HistoryStep π</strong><span>只绑定一次 SEMHDR__ 投影</span></div>
   <div class="flow-arrow">→</div>
-  <div class="flow-step"><small>PoW</small><strong>搜索 nonce</strong><span>反复哈希 BLOCKHDR</span></div>
+  <div class="flow-step"><small>PoW</small><strong>搜索 nonce</strong><span>反复计算 POWHDR__</span></div>
 </div>
 <p>当某个 nonce 满足目标值时，节点执行一次原生 PoW 检查，并验证该区块头指向的父 State 与子 State 边界同语义模板所证明的边界完全一致。随后，完整区块与终端证明被原子提交。</p>
 
 <h2 id="security">这种拆分为何没有放开其他字段</h2>
 <p>递归证明省略的是 nonce，而不是挖矿目标值或任何语义 State 转换字段。原生接受规则要求终端证明中的语义 ID 与候选区块头的所有非 nonce 字段完全一致。包含 nonce 的区块 ID 仍然是链上链接使用的身份标识。</p>
-<p>域分离防止同一 absorb 调度被交替解释为语义 ID 与规范区块 ID。</p>
+<p>域分离防止同一组区块头字段被交替解释为语义投影、规范区块 ID 或工作量证明摘要。</p>
 
 <h2 id="result">结果</h2>
 <div class="result">

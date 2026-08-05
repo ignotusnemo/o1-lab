@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f3f2ed">
   <meta name="color-scheme" content="light">
-  <meta name="description" content="Тест с подменой A/A′ отделяет низкостепенную согласованность от связи с исходным обязательством. Корень источника и общие запросы восстанавливают эту связь.">
+  <meta name="description" content="Cap источника Poseidon2b, аутентифицированные тензорные свёртки и общий набор запросов связывают каждое компактное открытие FRI с зафиксированными столбцами.">
   <meta name="author" content="Parano1d Lab">
   <meta name="keywords" content="Parano1d, Parano1d Lab, доказательства с нулевым разглашением, системы доказательств, криптография, рекурсивные доказательства, бинарные поля, полиномиальные обязательства">
   <link rel="canonical" href="https://lab.parano1d.org/ru/research/binding-a-mixed-opening/">
@@ -25,7 +25,7 @@
   <meta property="og:locale:alternate" content="zh_CN">
   <meta property="og:url" content="https://lab.parano1d.org/ru/research/binding-a-mixed-opening/">
   <meta property="og:title" content="Привязка общими запросами · Parano1d Lab">
-  <meta property="og:description" content="Тест с подменой A/A′ отделяет низкостепенную согласованность от связи с исходным обязательством. Корень источника и общие запросы восстанавливают эту связь.">
+  <meta property="og:description" content="Cap источника Poseidon2b, аутентифицированные тензорные свёртки и общий набор запросов связывают каждое компактное открытие FRI с зафиксированными столбцами.">
   <meta property="og:image" content="https://lab.parano1d.org/assets/og/binding-a-mixed-opening.png">
   <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/binding-a-mixed-opening.png">
   <meta property="og:image:type" content="image/png">
@@ -34,16 +34,16 @@
   <meta property="og:image:alt" content="Привязка компактного смешанного открытия к исходному обязательству">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Привязка общими запросами · Parano1d Lab">
-  <meta name="twitter:description" content="Тест с подменой A/A′ отделяет низкостепенную согласованность от связи с исходным обязательством. Корень источника и общие запросы восстанавливают эту связь.">
+  <meta name="twitter:description" content="Cap источника Poseidon2b, аутентифицированные тензорные свёртки и общий набор запросов связывают каждое компактное открытие FRI с зафиксированными столбцами.">
   <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/binding-a-mixed-opening.png">
   <meta name="twitter:image:alt" content="Привязка компактного смешанного открытия к исходному обязательству">
   <meta property="article:published_time" content="2026-06-21T00:00:00Z">
   <meta property="article:section" content="Полиномиальные обязательства">
   <meta property="article:author" content="Parano1d Lab">
   <title>Привязка общими запросами · Parano1d Lab</title>
-  <link rel="stylesheet" href="/assets/site.css?v=ef75dc965770">
+  <link rel="stylesheet" href="/assets/site.css?v=400ff32ebeaa">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Привязка компактного смешанного открытия к исходному обязательству","description":"Исследование проверяет предложенную конструкцию смешанного открытия посредством согласованной подмены источника A/A′. Одной низкостепенной согласованности недостаточно, чтобы связать компактный оракул нулевого раунда FRI с исходным чередующимся обязательством. Завершённая конструкция добавляет корень источника и общие аутентификационные запросы, обеспечивая явный путь от каждого выбранного символа оракула к столбцам, зафиксированным обязательством.","datePublished":"2026-06-21","dateModified":"2026-06-21","mainEntityOfPage":"https://lab.parano1d.org/ru/research/binding-a-mixed-opening/","inLanguage":"ru","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/binding-a-mixed-opening.png","about":"Полиномиальные обязательства"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Привязка компактного смешанного открытия к исходному обязательству","description":"Штатный протокол смешанного открытия фиксирует исходные столбцы над GF(2^128) и их закодированный источник скорости 1/4, объединяет основные открываемые значения вызовом Fiat–Shamir и связывает оракул нулевого раунда компактного FRI с полными 32-байтными обязательствами источника Poseidon2b. Одни индексы запросов используются для аутентификации символов источника и согласованности FRI. Полная подмена A/A′, изменения старшей половины хеша и мутации путей свёртки проверяют всю границу обязательства.","datePublished":"2026-06-21","dateModified":"2026-06-21","mainEntityOfPage":"https://lab.parano1d.org/ru/research/binding-a-mixed-opening/","inLanguage":"ru","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/binding-a-mixed-opening.png","about":"Полиномиальные обязательства"}</script>
 </head>
 <body class="locale-ru">
   <a class="skip-link" href="#content">К содержанию</a>
@@ -68,7 +68,7 @@
   </header>
     <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
     <header class="article-hero">
-      <div class="article-hero-copy"><a class="back-link" href="/ru/research/">← Все исследования</a><div class="article-meta"><span>Исследование безопасности</span><span>Полиномиальные обязательства</span><time datetime="2026-06-21">21 июн. 2026 г.</time></div><h1>Привязка компактного смешанного открытия к исходному обязательству</h1><p class="article-dek">Тест с подменой A/A′ отделяет низкостепенную согласованность от связи с исходным обязательством. Корень источника и общие запросы восстанавливают эту связь.</p><div class="article-byline"><span>Автор Parano1d Lab</span><span>4 мин чтения</span><span>Конструкция, проверенная тестами с намеренной подменой</span></div><div class="article-share" aria-label="Поделиться исследованием"><span class="article-share-label">Поделиться</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/ru/research/binding-a-mixed-opening/" data-copy-default="Копировать ссылку" data-copy-success="Скопировано" data-copy-failure="Не удалось скопировать" aria-label="Скопировать ссылку на статью" title="Копировать ссылку"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">Копировать ссылку</span></button><a class="share-action" href="https://x.com/intent/post?text=%D0%9F%D1%80%D0%B8%D0%B2%D1%8F%D0%B7%D0%BA%D0%B0%20%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BA%D1%82%D0%BD%D0%BE%D0%B3%D0%BE%20%D1%81%D0%BC%D0%B5%D1%88%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BE%D1%82%D0%BA%D1%80%D1%8B%D1%82%D0%B8%D1%8F%20%D0%BA%20%D0%B8%D1%81%D1%85%D0%BE%D0%B4%D0%BD%D0%BE%D0%BC%D1%83%20%D0%BE%D0%B1%D1%8F%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D1%81%D1%82%D0%B2%D1%83&amp;url=https%3A%2F%2Flab.parano1d.org%2Fru%2Fresearch%2Fbinding-a-mixed-opening%2F" aria-label="Поделиться статьёй в X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Поделиться в X</span></a></div></div>
+      <div class="article-hero-copy"><a class="back-link" href="/ru/research/">← Все исследования</a><div class="article-meta"><span>Исследование безопасности</span><span>Полиномиальные обязательства</span><time datetime="2026-06-21">21 июн. 2026 г.</time></div><h1>Привязка компактного смешанного открытия к исходному обязательству</h1><p class="article-dek">Cap источника Poseidon2b, аутентифицированные тензорные свёртки и общий набор запросов связывают каждое компактное открытие FRI с зафиксированными столбцами.</p><div class="article-byline"><span>Автор Parano1d Lab</span><span>4 мин чтения</span><span>Штатная конструкция</span></div><div class="article-share" aria-label="Поделиться исследованием"><span class="article-share-label">Поделиться</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/ru/research/binding-a-mixed-opening/" data-copy-default="Копировать ссылку" data-copy-success="Скопировано" data-copy-failure="Не удалось скопировать" aria-label="Скопировать ссылку на статью" title="Копировать ссылку"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">Копировать ссылку</span></button><a class="share-action" href="https://x.com/intent/post?text=%D0%9F%D1%80%D0%B8%D0%B2%D1%8F%D0%B7%D0%BA%D0%B0%20%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BA%D1%82%D0%BD%D0%BE%D0%B3%D0%BE%20%D1%81%D0%BC%D0%B5%D1%88%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BE%D1%82%D0%BA%D1%80%D1%8B%D1%82%D0%B8%D1%8F%20%D0%BA%20%D0%B8%D1%81%D1%85%D0%BE%D0%B4%D0%BD%D0%BE%D0%BC%D1%83%20%D0%BE%D0%B1%D1%8F%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D1%81%D1%82%D0%B2%D1%83&amp;url=https%3A%2F%2Flab.parano1d.org%2Fru%2Fresearch%2Fbinding-a-mixed-opening%2F" aria-label="Поделиться статьёй в X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Поделиться в X</span></a></div></div>
       <div class="research-art art--binding" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
     <defs>
     <pattern id="grid-binding" width="24" height="24" patternUnits="userSpaceOnUse">
@@ -98,78 +98,86 @@
     <rect width="640" height="420" fill="#07120d"/>
     <rect width="640" height="420" fill="url(#halo-binding)"/>
     <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-binding)"/>
-    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
-    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">BINDING THE COMMITTED SOURCE TO THE FRI WORD</text>
-    <g class="diagram-panel diagram-panel--green" filter="url(#shadow-binding)"><rect x="42" y="77" width="206" height="242" rx="15"/><text class="diagram-micro" x="62" y="104">COMMITTED SOURCE A</text>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 374V394H54M586 394H606V374"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="320" y="48" text-anchor="middle">SOURCE-BOUND COMPACT MIXED OPENING</text>
+    <g class="diagram-panel diagram-panel--green" filter="url(#shadow-binding)"><rect x="42" y="77" width="206" height="242" rx="15"/><text class="diagram-micro" x="62" y="104">POSEIDON2b SOURCE CAP</text>
     <g class="merkle-tree"><path d="M145 139 97 184M145 139 193 184M97 184 73 229M97 184 121 229M193 184 169 229M193 184 217 229"/><circle cx="145" cy="139" r="14"/><circle cx="97" cy="184" r="11"/><circle cx="193" cy="184" r="11"/><circle cx="73" cy="229" r="8"/><circle cx="121" cy="229" r="8"/><circle cx="169" cy="229" r="8"/><circle cx="217" cy="229" r="8"/><path class="merkle-open" d="M145 139 193 184 217 229"/></g>
-    <text class="diagram-label" x="62" y="276">CAP ROOT</text><text class="diagram-value diagram-value--compact" x="62" y="300">H(A)=7F…91</text>
+    <text class="diagram-label" x="62" y="276">ENCODED GF(2¹²⁸)</text><text class="diagram-value diagram-value--compact" x="62" y="300">32-BYTE HASHES</text>
   </g>
   <path class="diagram-arrow " d="M248 198H292" marker-end="url(#arrow-binding)"/>
-  <g class="query-gate" filter="url(#shadow-binding)"><rect x="292" y="132" width="116" height="132" rx="15"/><text class="diagram-micro" x="350" y="159" text-anchor="middle">SAME INDICES</text><text class="diagram-number" x="350" y="207" text-anchor="middle">q=64</text><path d="M319 229H381"/><circle cx="329" cy="229" r="4"/><circle cx="350" cy="229" r="4"/><circle cx="371" cy="229" r="4"/></g>
+  <g class="query-gate" filter="url(#shadow-binding)"><rect x="292" y="132" width="116" height="132" rx="15"/><text class="diagram-micro" x="350" y="159" text-anchor="middle">SAME INDICES</text><text class="diagram-value" x="350" y="207" text-anchor="middle">SHARED q</text><path d="M319 229H381"/><circle cx="329" cy="229" r="4"/><circle cx="350" cy="229" r="4"/><circle cx="371" cy="229" r="4"/></g>
   <path class="diagram-arrow " d="M408 198H452" marker-end="url(#arrow-binding)"/>
-  <g class="diagram-panel diagram-panel--blue" filter="url(#shadow-binding)"><rect x="452" y="77" width="146" height="242" rx="15"/><text class="diagram-micro" x="472" y="104">COMPACT FRI WORD</text><g class="fri-layers"><rect x="474" y="137" width="102" height="22" rx="4"/><rect x="486" y="174" width="78" height="22" rx="4"/><rect x="498" y="211" width="54" height="22" rx="4"/><rect x="510" y="248" width="30" height="22" rx="4"/><path d="M525 159V174M525 196V211M525 233V248"/></g><text class="diagram-label" x="525" y="296" text-anchor="middle">FOLD CONSISTENCY</text></g>
+  <g class="diagram-panel diagram-panel--blue" filter="url(#shadow-binding)"><rect x="452" y="77" width="146" height="242" rx="15"/><text class="diagram-micro" x="525" y="104" text-anchor="middle">COMPACT FRI</text><g class="fri-layers"><rect x="474" y="137" width="102" height="22" rx="4"/><rect x="486" y="174" width="78" height="22" rx="4"/><rect x="498" y="211" width="54" height="22" rx="4"/><rect x="510" y="248" width="30" height="22" rx="4"/><path d="M525 159V174M525 196V211M525 233V248"/></g><text class="diagram-label" x="525" y="296" text-anchor="middle">ROUND-ZERO ROOT</text></g>
   <g class="rejected-splice"><path d="M248 296C309 343 393 343 452 296"/><path d="M330 319 350 339M350 319 330 339"/><text class="diagram-micro" x="340" y="358" text-anchor="middle">A′ SPLICE REJECTED</text></g>
-    <text class="diagram-caption" x="42" y="390">Transcript binding is insufficient unless the opened FRI word is the committed source</text>
+    <text class="diagram-caption" x="320" y="384" text-anchor="middle">Authenticated source symbols · shared queries · round-zero root equality</text>
   </svg></div>
     </header>
     <div class="article-layout">
-      <aside class="article-toc" aria-label="В этой статье"><strong>В этой статье</strong><a href="#gap">Согласованность не доказывает связь с исходными данными</a><a href="#attack">Обязательство к A, открытие из A′</a><a href="#source-root">Обязательство к закодированному источнику</a><a href="#shared-queries">Одни и те же индексы запросов</a><a href="#statement">Точное утверждение</a><a href="#tests">Тесты, отличающие привязку от выполнимости</a><a href="#cost">Стоимость при рекурсивной композиции</a><a href="#lesson">Граница, которую обязана замкнуть проверяющая сторона</a></aside>
-      <article class="article-body"><div class="article-abstract"><span>Аннотация</span><p>Исследование проверяет предложенную конструкцию смешанного открытия посредством согласованной подмены источника A/A′. Одной низкостепенной согласованности недостаточно, чтобы связать компактный оракул нулевого раунда FRI с исходным чередующимся обязательством. Завершённая конструкция добавляет корень источника и общие аутентификационные запросы, обеспечивая явный путь от каждого выбранного символа оракула к столбцам, зафиксированным обязательством.</p></div><h2 id="gap">Согласованность не доказывает связь с исходными данными</h2>
-<p>Полиномиальное обязательство фиксирует один или несколько столбцов до того, как у них запрашиваются значения. Чередующееся смешанное открытие использует вызов Fiat–Shamir <em>γ</em>, выведенный из всех предшествующих сообщений протокола, чтобы ответить сразу за несколько таких столбцов. Компактный FRI — применяемая здесь проверка малой степени — устанавливает, что объединённый многочлен <em>C</em> принимает заявленное значение в основной точке. Его <em>оракул</em> — кодированная таблица, из которой проверяющая сторона запрашивает отдельные позиции вместо чтения целиком. При анализе конструкции это алгебраическое утверждение намеренно отделялось от второго требования: комбинированный оракул должен быть получен именно из столбцов, указанных исходным обязательством.</p>
-<p>Он доказывал:</p>
-<div class="equation">∃ low-degree C such that C(r) = Σ γ<sup>i</sup> · v<sub>i</sub></div>
-<p>Приложению требовалось более сильное утверждение:</p>
-<div class="equation">C(x) = Σ γ<sup>i</sup> · committed_col<sub>i</sub>(x)</div>
-<p>Конструкция со значениями, привязанными к транскрипту протокола, но без аутентификации исходных данных доказывает первое утверждение, но не второе. Поэтому приведённая ниже проверка <em>A/A′</em> служила исходным критерием конструкции, а не обнаруженной после внедрения уязвимостью.</p>
+      <aside class="article-toc" aria-label="В этой статье"><strong>В этой статье</strong><a href="#statement">Что должно доказывать смешанное открытие</a><a href="#gap">Проверка A/A′</a><a href="#commitment">Штатное обязательство</a><a href="#opening">От зафиксированных символов к оракулу FRI</a><a href="#queries">Один набор запросов замыкает все связи</a><a href="#field-boundary">Граница полей</a><a href="#scope">Полученное утверждение</a><a href="#tests">Проверки на границе обязательства</a><a href="#result">Результат</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>Аннотация</span><p>Штатный протокол смешанного открытия фиксирует исходные столбцы над GF(2^128) и их закодированный источник скорости 1/4, объединяет основные открываемые значения вызовом Fiat–Shamir и связывает оракул нулевого раунда компактного FRI с полными 32-байтными обязательствами источника Poseidon2b. Одни индексы запросов используются для аутентификации символов источника и согласованности FRI. Полная подмена A/A′, изменения старшей половины хеша и мутации путей свёртки проверяют всю границу обязательства.</p></div><h2 id="statement">Что должно доказывать смешанное открытие</h2>
+<p>Parano1d одновременно фиксирует обязательством множество столбцов трассы, а затем открывает их в одной многолинейной точке. Вызов Fiat–Shamir <em>γ</em> объединяет основные открываемые значения в один полином:</p>
+<div class="equation">C(x) = Σ γ<sup>i</sup> · col<sub>i</sub>(x)</div>
+<p>Компактный FRI устанавливает, что <em>C</em> близок к требуемому коду малой степени и принимает заявленное значение в точке открытия. Полное утверждение полиномиального обязательства также должно связать <em>C</em> со столбцами, зафиксированными исходным обязательством. Эту связь обеспечивает аутентификация источника.</p>
 
-<h2 id="attack">Обязательство к A, открытие из A′</h2>
-<p>Тест с намеренной подменой компактен:</p>
-<pre><code>commit A
-build all_openings and the compact FRI oracle from A′
-verify using Com(A)</code></pre>
-<p>Если протокол открытия проверяет только оракул малой степени и объединённое заявленное значение, проверяющая сторона не получает доказательства на уровне запросов, что оракул был закодирован из <em>A</em>. Недобросовестно сформированный источник может быть внутренне согласованным и при этом не иметь отношения к обязательству, переданному вызывающей стороной.</p>
-<div class="failure">
-  <strong>Результат по безопасности</strong>
-  <p>Добавление в Fiat–Shamir дополнительных корней Merkle или компактных списков таких корней не устраняет эту атаку. Привязка транскрипта фиксирует вызов после сообщений, но не доказывает происхождение одного объекта обязательства из другого.</p>
+<h2 id="gap">Проверка A/A′</h2>
+<p>В решающей проверке противник создаёт обязательство для набора столбцов <em>A</em>, а открываемые значения и внутренне согласованный оракул компактного FRI строит из другого набора <em>A′</em>:</p>
+<pre><code>создать обязательство Com(A)
+получить открываемые значения, C и оракул FRI из A′
+проверить доказательство относительно Com(A)</code></pre>
+<p>Проверяющая сторона, которая проверяет только заявленное значение и малую степень оракула, может принять согласованное доказательство о неверном источнике. Поглощение оракула транскриптом фиксирует его место в последовательности сообщений. Для аутентификации источника нужен проверяемый путь от выбранных символов оракула к <code>Com(A)</code>.</p>
+
+<h2 id="commitment">Штатное обязательство</h2>
+<p>Каждый фиксируемый столбец состоит из элементов GF(2<sup>128</sup>). Штатное обязательство содержит два аутентифицированных представления, построенных из одних и тех же столбцов:</p>
+<ul>
+  <li>верхний уровень дерева (cap) над перемежающимися исходными строками столбцов;</li>
+  <li>cap источника над аддитивными кодами Рида–Соломона скорости 1/4 для этих столбцов.</li>
+</ul>
+<p>Лист источника содержит по две закодированные позиции каждого столбца, необходимые для первой тензорной свёртки старшей переменной. Хеш Poseidon2b включает отдельный доменный тег, двоичный логарифм числа строк, число столбцов, индекс листа и все пары символов. Узлы Merkle и элементы cap хранят полный 32-байтный результат Poseidon2b.</p>
+<pre><code>source_leaf = Poseidon2b(
+    domain, log_rows, n_cols, leaf_index,
+    col_0[pos0], col_0[pos1], …, col_n[pos0], col_n[pos1]
+)</code></pre>
+<p>Таким образом, обязательство фиксирует и столбцы трассы, и закодированные символы, которые позднее используются при компактном открытии.</p>
+
+<h2 id="opening">От зафиксированных символов к оракулу FRI</h2>
+<p>Доказывающая сторона сначала поглощает все заявленные открываемые значения и получает <em>γ</em>. Затем из зафиксированных столбцов строится <em>C</em>. Компактный FRI сводит утверждение о значении посредством свёртки фиксированного набора старших переменных. Оставшаяся таблица обозначается <em>H</em>.</p>
+<p>До выбора индексов запросов транскрипт поглощает <em>H</em> и все аутентифицированные корни промежуточных свёрток. Проверяющая сторона восстанавливает малую таблицу</p>
+<div class="equation">g = H · eq<sub>right</sub></div>
+<p>и требует, чтобы корень Merkle для <code>Code(g)</code> совпадал с корнем нулевого раунда компактного FRI. Это равенство однозначно определяет оракул нулевого раунда через аутентифицированный источник.</p>
+
+<div class="protocol-flow" aria-label="Штатный путь аутентификации источника">
+  <div class="flow-step"><small>Обязательство</small><strong>Cap источника Poseidon2b</strong><span>Фиксируются пары закодированных символов GF(2<sup>128</sup>)</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>Связь</small><strong>H и корни свёрток</strong><span>Поглощаются до выбора запросов</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>Открытие</small><strong>Один набор запросов</strong><span>Пути источника и компактный FRI сходятся в нулевом раунде</span></div>
 </div>
 
-<h2 id="source-root">Обязательство к закодированному источнику</h2>
-<p>Завершённая конструкция дополняет чередующееся обязательство корнем дерева над закодированными исходными столбцами. В эксперименте использовался разделённый по доменам корень Merkle на основе BLAKE3, усечённый до 128 бит. Для каждого столбца обязательства лист содержал пару позиций кодового слова, совместно запрашиваемых по одному индексу FRI:</p>
-<pre><code>leaf(log_rows, n_cols, index) =
-  H(domain || shape || index ||
-    col_0[pos0] || col_0[pos1] || ... || col_n[pos0] || col_n[pos1])</code></pre>
-<p>Доказывающая сторона сохраняла и закодированные столбцы, и дерево исходных данных. Это необходимая стоимость хранения: без закодированного источника она не смогла бы впоследствии ответить на общие запросы, связывающие оракул FRI с обязательством.</p>
+<h2 id="queries">Один набор запросов замыкает все связи</h2>
+<p>Обе проверки используют одни и те же индексы Fiat–Shamir. В каждой выбранной позиции пакетный путь Merkle аутентифицирует пару закодированных символов для каждого исходного столбца. Проверяющая сторона объединяет пары теми же степенями <em>γ</em>, выполняет предписанные тензорные свёртки и сравнивает результат с соответствующим символом <code>Code(H)</code>. Затем компактный FRI продолжает проверку от корня уже связанной с источником таблицы.</p>
+<p>Для крупных форм с одним столбцом требуемое развёртывание источника аутентифицируется непосредственно. Для меньших форм аутентифицируются промежуточные слои свёртки. В обоих случаях действует один инвариант: каждый принятый символ нулевого раунда происходит от символа, зафиксированного в cap источника.</p>
 
-<h2 id="shared-queries">Одни и те же индексы запросов</h2>
-<p>Проверка исходных данных и компактный FRI не выбирают независимые запросы. Транскрипт поглощает корни раундов компактного FRI и финальное кодовое слово, затем значения привязки к исходным данным и корни свёрток и лишь после этого определяет единый набор индексов. Обе проверки используют именно этот набор.</p>
-<div class="protocol-flow" aria-label="Транскрипт смешанного открытия с привязкой к исходным данным">
-  <div class="flow-step"><small>Обязательство</small><strong>Корень источника</strong><span>Закодированные столбцы зафиксированы</span></div>
-  <div class="flow-arrow">→</div>
-  <div class="flow-step"><small>Компактный FRI</small><strong>Корни раундов + финальное кодовое слово</strong><span>Оракул малой степени зафиксирован</span></div>
-  <div class="flow-arrow">→</div>
-  <div class="flow-step"><small>Один выбор</small><strong>Общие индексы запросов</strong><span>Пути FRI и источника проверяются совместно</span></div>
+<h2 id="field-boundary">Граница полей</h2>
+<p>Столбцы обязательства, аддитивное кодирование, объединение смешанных открытий и хеширование Poseidon2b в этой конструкции работают над GF(2<sup>128</sup>). Каждый 32-байтный хеш поглощается как два элемента поля, поэтому в транскрипт входит весь результат. Привязка к источнику аутентифицирует закодированный оракул, используемый компактным доказательством FRI.</p>
+
+<h2 id="scope">Полученное утверждение</h2>
+<p>Для основной точки открытия принятие означает с точностью до заявленной ошибки корректности PCS, что каждое возвращённое значение является значением многолинейного продолжения столбца, зафиксированного чередующимся обязательством. Путь проверки имеет явный вид:</p>
+<div class="equation">зафиксированный источник → аутентифицированные символы → H → оракул нулевого раунда → открытие компактного FRI</div>
+<p>Вторичные утверждения проходят проверку формы и связываются транскриптом смешанного открытия. Их отношение к другим точкам вычисления устанавливает внешняя многоточечная редукция или редукция среза.</p>
+
+<h2 id="tests">Проверки на границе обязательства</h2>
+<p>Штатные тесты сохраняют внутреннее вычисление согласованным, но изменяют данные, связанные с обязательством. Они отклоняют полную подмену <em>A/A′</em>, изменения символов источника и объединённых путей Merkle, подмену <em>H</em> или корня промежуточной свёртки, а также любое несовпадение между <code>Code(H · eq<sub>right</sub>)</code> и корнем нулевого раунда компактного FRI. Отдельные тесты меняют только байты с 16 по 31 в узле cap источника, соседнем узле пути или корне свёртки. Так проверяется использование всех 256 бит хеша.</p>
+
+<h2 id="result">Результат</h2>
+<div class="result">
+  <strong>Штатный инвариант</strong>
+  <p>Каждое компактное смешанное открытие содержит одну аутентифицированную цепочку от исходного чередующегося обязательства до оракула нулевого раунда FRI. Обе стороны цепочки используют одни и те же индексы запросов, полученные из транскрипта.</p>
 </div>
-<p>В каждой выбранной позиции путь Merkle открывает символы закодированных исходных данных. Правило тензорной свёртки протокола объединяет эти символы в значение, ожидаемое компактным FRI. Корни слоёв свёртки и открытия пар позиций сохраняют эту связь на всех слоях FRI.</p>
-
-<h2 id="statement">Точное утверждение</h2>
-<p>Для вызывающей стороны, использующей API смешанного открытия согласно спецификации, принятие означает — с учётом заявленной ошибки корректности — что каждое возвращённое основное открытие является значением многолинейного продолжения (MLE) столбца, зафиксированного чередующимся обязательством.</p>
-<p>Здесь важна граница утверждения. Теорема о самом примитиве относится к основной точке. Вторичные утверждения проверяются по форме и связываются транскриптом внутри смешанного открытия, однако их связь с другими точками вычисления следует из внешней многоточечной редукции или редукции по срезам, выполняемой вызывающей стороной. Заявление, будто схема полиномиальных обязательств (PCS) самостоятельно доказывает произвольные вторичные открытия, переоценивало бы возможности примитива.</p>
-
-<h2 id="tests">Тесты, отличающие привязку от выполнимости</h2>
-<p>Решающий тест создаёт обязательство к <em>A</em>, строит остальную часть доказательства из <em>A′</em> и требует отказа. Дополнительные мутации меняют символы источника, свёрнутые символы и пути Merkle. Некоторые из них сохраняют локально выполнимую алгебраическую трассу и отвергаются только при проверке открытия источника относительно обязательства.</p>
-<p>Этот подход применим и к другим системам доказательств. Недостаточно изменить ограничение и проверить, что доказательство отклонено. Следует менять объект по другую сторону границы обязательства, сохраняя внутреннее вычисление согласованным; иначе тест может вообще не затронуть проверяемое свойство привязки.</p>
-
-<h2 id="cost">Стоимость при рекурсивной композиции</h2>
-<p>Завершённая конструкция добавляет корень исходных данных, хранение закодированных столбцов и пакетные пути аутентификации. Воспроизведение этих путей внутри рекурсивной проверяющей схемы добавляет во внешнее отношение несколько семейств аутентификации Poseidon2b и приводит к эксперименту с памятью, описанному в статье <a href="/ru/research/single-global-walk/">«Один глобальный проход Poseidon вместо девяти проходов проверяющей стороны»</a>. Связь с исходными данными имеет измеримую стоимость, но её исключение меняет само доказываемое утверждение.</p>
-
-<h2 id="lesson">Граница, которую обязана замкнуть проверяющая сторона</h2>
-<blockquote><p>Транскрипт способен связать доказывающего с его сообщениями, хотя сами сообщения могут оставаться не связанными с обязательством, важным для приложения.</p></blockquote>
-<p>Любая композиция полиномиальных обязательств требует явного пути от терминальных утверждений об оценках через запрашиваемый оракул к исходному источнику обязательства. Если такого пути нет, дополнительное поглощение Fiat–Shamir свидетельствует о согласованности, но не о происхождении.</p>
 </article>
     </div>
-    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Материалы исследования</p><h2 id="evidence-title">Доказательства и артефакты</h2><p>Здесь сохранены реализации, измерения и выводы, на которых основана статья.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/e5e4655a" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Коммит</small><strong>Реализация привязки источника</strong></span></span><span aria-hidden="true">↗</span></a>
-<a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_fri_binius/src/mixed_open.rs" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Код</small><strong>Проверка смешанного открытия</strong></span></span><span aria-hidden="true">↗</span></a>
-<a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_fri_binius/src/interleaved_commit.rs" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Код</small><strong>Чередующееся обязательство</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Материалы исследования</p><h2 id="evidence-title">Доказательства и артефакты</h2><p>Здесь сохранены реализации, измерения и выводы, на которых основана статья.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/blob/afdce21b6125ae0487c71a9093ab089cb8e88d5a/noid_fri_binius/src/interleaved_commit.rs" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Код</small><strong>Чередующееся обязательство источника</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/blob/afdce21b6125ae0487c71a9093ab089cb8e88d5a/noid_fri_binius/src/mixed_open.rs" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Код</small><strong>Смешанное открытие с аутентификацией источника</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/blob/afdce21b6125ae0487c71a9093ab089cb8e88d5a/noid_recursive/tests/source_binding_reduction.rs" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Test</small><strong>Рекурсивная редукция аутентификации источника</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
     <nav class="article-next" aria-label="Соседние исследования"><a href="/ru/research/pcs-implementation-trail/"><small>Ранее</small><strong>Три эксперимента с обязательствами</strong><span>←</span></a><a href="/ru/research/owner-batched-authorization/"><small>Позднее</small><strong>Пакетная авторизация владельца</strong><span>→</span></a></nav>
   </main>
     <footer class="site-footer">

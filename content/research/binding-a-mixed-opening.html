@@ -1,51 +1,59 @@
-<h2 id="gap">Consistency is not source provenance</h2>
-<p>A polynomial commitment fixes one or more columns before their values are queried. An interleaved mixed opening uses a Fiat–Shamir challenge <em>γ</em>, derived from all preceding protocol messages, to answer for several such columns at once. Compact FRI—the low-degree test used here—establishes that a combined polynomial <em>C</em> has the claimed value at a primary point. Its <em>oracle</em> is the encoded table that the verifier samples instead of reading in full. The construction study deliberately separated that algebraic claim from a second requirement: this combined oracle must be derived from the columns named by the original commitment.</p>
-<p>It proved:</p>
-<div class="equation">∃ low-degree C such that C(r) = Σ γ<sup>i</sup> · v<sub>i</sub></div>
-<p>The application needed the stronger statement:</p>
-<div class="equation">C(x) = Σ γ<sup>i</sup> · committed_col<sub>i</sub>(x)</div>
-<p>A candidate with transcript-bound values but no source authentication proves the first statement, not the second. The <em>A/A′</em> test below was therefore an acceptance gate for the construction, not a post-deployment discovery.</p>
+<h2 id="statement">What a mixed opening has to prove</h2>
+<p>Parano1d commits many execution columns together and later opens all of them at one multilinear point. A Fiat–Shamir challenge <em>γ</em> combines the primary openings into one polynomial:</p>
+<div class="equation">C(x) = Σ γ<sup>i</sup> · col<sub>i</sub>(x)</div>
+<p>Compact FRI can establish that <em>C</em> is close to the required low-degree code and has the claimed value at the opening point. The complete polynomial commitment statement also has to connect <em>C</em> to the columns fixed by the original commitment. That connection is source binding.</p>
 
-<h2 id="attack">Commit to A, open from A′</h2>
-<p>The adversarial test is compact:</p>
+<h2 id="gap">The A/A′ test</h2>
+<p>The decisive adversarial test commits one set of columns <em>A</em>, then constructs the openings and compact FRI oracle from a different, internally consistent set <em>A′</em>:</p>
 <pre><code>commit A
-build all_openings and the compact FRI oracle from A′
-verify using Com(A)</code></pre>
-<p>If the opening protocol only checks the low-degree oracle and the combined claimed value, the verifier has no query-level evidence that the oracle was encoded from <em>A</em>. The dishonest source can be internally consistent and still be unrelated to the commitment supplied by the caller.</p>
-<div class="failure">
-  <strong>Security result</strong>
-  <p>Absorbing more Merkle roots—or compact lists of such roots—into Fiat–Shamir does not repair this attack. Transcript binding fixes the challenge after the messages; it does not prove that one committed object was derived from another.</p>
+derive openings, C and the FRI oracle from A′
+verify against Com(A)</code></pre>
+<p>A verifier that checks only the claimed value and low-degree oracle can accept a coherent proof about the wrong source. Absorbing that oracle into the transcript fixes its position in the message sequence. Source binding requires an authenticated path from the sampled oracle symbols back to <code>Com(A)</code>.</p>
+
+<h2 id="commitment">The production commitment</h2>
+<p>Every committed column contains elements of GF(2<sup>128</sup>). The production commitment carries two authenticated views built from the same columns:</p>
+<ul>
+  <li>an interleaved cap over the original column rows;</li>
+  <li>a source cap over the rate-one-quarter additive Reed–Solomon encodings of those columns.</li>
+</ul>
+<p>A source leaf contains the two encoded positions needed by the first high-variable tensor fold for every column. Its Poseidon2b hash includes a dedicated domain tag, the row logarithm, the column count, the leaf index and all symbol pairs. Merkle nodes and cap entries are full 32-byte Poseidon2b outputs.</p>
+<pre><code>source_leaf = Poseidon2b(
+    domain, log_rows, n_cols, leaf_index,
+    col_0[pos0], col_0[pos1], …, col_n[pos0], col_n[pos1]
+)</code></pre>
+<p>The commitment therefore fixes both the execution columns and the encoded symbols that can later answer a compact opening.</p>
+
+<h2 id="opening">From committed symbols to the FRI oracle</h2>
+<p>The prover first absorbs every claimed opening and draws <em>γ</em>. It then forms <em>C</em> from the committed columns. Compact FRI reduces the evaluation claim by folding a fixed set of high variables. The remaining table is called <em>H</em>.</p>
+<p>Before any query index is drawn, the transcript absorbs <em>H</em> and every authenticated intermediate fold root. The verifier reconstructs the low table</p>
+<div class="equation">g = H · eq<sub>right</sub></div>
+<p>and requires the Merkle root of <code>Code(g)</code> to equal the round-zero root of the compact FRI proof. This equality removes any independent prover-selected round-zero oracle.</p>
+
+<div class="protocol-flow" aria-label="Production source-binding path">
+  <div class="flow-step"><small>Commit</small><strong>Poseidon2b source cap</strong><span>Encoded GF(2<sup>128</sup>) column pairs are fixed</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>Bind</small><strong>H and fold roots</strong><span>Absorbed before queries are sampled</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>Open</small><strong>One shared query set</strong><span>Source paths and compact FRI meet at round zero</span></div>
 </div>
 
-<h2 id="source-root">Commit the encoded source</h2>
-<p>The completed construction extends the interleaved commitment with a source root over the encoded columns. The experiment used a domain-separated, 128-bit Blake3-truncated Merkle root. For every committed column, each source leaf held the pair of codeword positions queried together at one FRI index:</p>
-<pre><code>leaf(log_rows, n_cols, index) =
-  H(domain || shape || index ||
-    col_0[pos0] || col_0[pos1] || ... || col_n[pos0] || col_n[pos1])</code></pre>
-<p>The prover state retained both the encoded columns and the source tree. This was a deliberate storage cost: without the encoded source, the prover could not later answer shared queries that bind the FRI oracle to the commitment.</p>
+<h2 id="queries">One query set closes every edge</h2>
+<p>The same Fiat–Shamir indices drive both checks. At each selected position, a batched Merkle path authenticates the encoded pair for every source column. The verifier combines those pairs with the same powers of <em>γ</em>, applies the prescribed tensor folds and compares the result with the corresponding symbol of <code>Code(H)</code>. Compact FRI then continues from the root already fixed by that source-bound table.</p>
+<p>Large single-column shapes authenticate the necessary source expansion directly. Smaller shapes authenticate intermediate folded layers. These are two implementations of the same invariant: every accepted round-zero symbol descends from a symbol in the committed source cap.</p>
 
-<h2 id="shared-queries">Use the same query indices</h2>
-<p>Source binding and compact FRI do not draw independent queries. The transcript absorbs compact-FRI round roots and final codeword, then the source-binding evaluations and folded roots, and only then samples one shared set of query indices. Both verifiers consume those indices.</p>
-<div class="protocol-flow" aria-label="Mixed-opening transcript with source binding">
-  <div class="flow-step"><small>Commitment</small><strong>Source root</strong><span>Encoded columns fixed</span></div>
-  <div class="flow-arrow">→</div>
-  <div class="flow-step"><small>Compact FRI</small><strong>Round roots + final codeword</strong><span>Low-degree oracle fixed</span></div>
-  <div class="flow-arrow">→</div>
-  <div class="flow-step"><small>One draw</small><strong>Shared query indices</strong><span>FRI and source paths checked together</span></div>
+<h2 id="field-boundary">The field boundary</h2>
+<p>The committed columns, additive encoding, mixed-opening batching and Poseidon2b hashing in this construction use GF(2<sup>128</sup>). Each 32-byte hash is absorbed as two field elements, so the complete output enters the transcript. Source binding authenticates the encoded oracle used by the compact FRI proof.</p>
+
+<h2 id="scope">The statement obtained</h2>
+<p>For the primary opening point, acceptance implies up to the stated polynomial commitment soundness error that each returned value is the multilinear extension of the column fixed by the interleaved commitment. The proof path is explicit:</p>
+<div class="equation">committed source → authenticated symbols → H → round-zero oracle → compact FRI opening</div>
+<p>Secondary claims are shape-checked and transcript-bound by the mixed-opening protocol. Their evaluation-point relation is supplied by the outer multipoint or slice reduction that invokes it.</p>
+
+<h2 id="tests">Tests at the commitment boundary</h2>
+<p>The production tests keep the inner computation coherent while changing the object across the commitment boundary. They reject the complete <em>A/A′</em> substitution, mutations of source symbols and batched Merkle paths, changes to <em>H</em> or an intermediate fold root, and any mismatch between <code>Code(H · eq<sub>right</sub>)</code> and the compact FRI round-zero root. Separate tests flip only bytes 16 through 31 of a source cap node, sibling or folded root, confirming that all 256 hash bits are checked.</p>
+
+<h2 id="result">Result</h2>
+<div class="result">
+  <strong>Production invariant</strong>
+  <p>Every compact mixed opening has one authenticated chain from the original interleaved commitment to the round-zero FRI oracle, and both sides consume the same transcript-derived query indices.</p>
 </div>
-<p>At every sampled position, Merkle authentication opens the encoded source symbols. The protocol's tensor-folding rule combines those symbols into the value expected by compact FRI. Fold-layer roots and paired-position openings carry that relation through the FRI layers.</p>
-
-<h2 id="statement">The exact statement</h2>
-<p>For a caller using the mixed-opening API as specified, acceptance implies—up to the declared soundness error—that every returned primary opening is the multilinear-extension (MLE) value of the column fixed by the interleaved commitment.</p>
-<p>The scope matters. The standalone theorem is about the primary point. Secondary claims are shape-checked and transcript-bound inside the mixed opening, but their relation to other evaluation points comes from the caller's outer multipoint or slice reduction. Documentation that says the polynomial commitment scheme (PCS) alone proves arbitrary secondary openings would overstate the primitive.</p>
-
-<h2 id="tests">Tests that distinguish binding from satisfiability</h2>
-<p>The decisive test commits to <em>A</em>, constructs the rest of the proof from <em>A′</em>, and requires rejection. Additional mutations change source symbols, folded symbols and Merkle paths. Several of those mutations leave a locally satisfiable algebraic trace; they fail only when the source opening is checked against the commitment.</p>
-<p>That testing style is reusable. A proof system should not only mutate a constraint and observe failure. It should mutate the object on the far side of a commitment boundary while keeping the inner computation coherent. Otherwise the test may never exercise the binding theorem.</p>
-
-<h2 id="cost">Cost under recursive composition</h2>
-<p>The completed construction adds a source root, encoded source retention and batched authentication paths. Replaying those paths inside a recursive verifier contributes several Poseidon2b authentication families to the outer relation, producing the memory experiment described in <a href="/research/single-global-walk/">One global Poseidon walk replaces nine verifier walks</a>. Source provenance has a measurable cost, but omitting it changes the statement being proved.</p>
-
-<h2 id="lesson">The boundary the verifier must close</h2>
-<blockquote><p>A transcript can bind a prover to its messages while the messages remain unbound to the commitment the application cares about.</p></blockquote>
-<p>Every polynomial-commitment composition needs an explicit path from terminal evaluation claims, through the queried oracle, back to the original committed source. If that path is missing, additional Fiat–Shamir absorption is evidence of consistency, not provenance.</p>

@@ -1,97 +1,117 @@
-<h2 id="problem">重复置换问题</h2>
-<p>基于哈希的证明系统会反复执行同一种密码学置换。输入会变，轮常数、非线性层与线性映射却不会变。传统逐层算术化经常丢弃这种规律。即便五十九个实例执行完全相同的六十六轮计算，每个置换仍会获得独立列和独立归约序列。</p>
-<p>Poseidon2b 是本文研究的二元域密码学置换。它通过六十六个固定轮次变换由四个域元素组成的状态，并在 Parano1d 证明栈中反复用于哈希。</p>
-<p>Goldwasser–Kalai–Rothblum（GKR）方法提供多线性扩展与 sumcheck 工具，可把大型计算归约为验证者所选点上的少量求值。</p>
-<p>FROST-GKR 从另一种对象出发。它为每次独立的 Poseidon2b 执行分配一个<em>槽位</em>，再把整个批次放入同一个布尔乘积域；另外两个坐标分别是轮次与状态通道。协议不沿独立电路层逐层下降；它对全局执行轨迹作出承诺，再把轨迹上的关系归约为同一组承诺列的打开证明。</p>
+<h2 id="problem">同一个置换，一遍又一遍地证明</h2>
+<p>基于哈希的证明系统会反复证明同一个密码学置换。输入不断变化，但 S-box、轮常量和线性变换始终相同。传统的逐层算术化没有利用这种规律，每次 Poseidon2b 执行都有自己的列和自己的代数归约链。</p>
+<p>对 Parano1d 而言，这是一个架构问题。钱包授权、Merkle 认证、状态计算、交互记录和递归验证都会使用 Poseidon2b。如果每次调用都对应一套独立的代数电路，哈希层的规模就会随协议图增长，最终主导整个证明的成本。</p>
+<p>FROST-GKR 的基准工作负载把这道结构性瓶颈变成了具体数字。它包含 59 次宽度为 4 的 Poseidon2b 执行。作为对照的乘积链构造每次执行需要 8 个约束 sumcheck，合计 472 个。FROST-GKR 重新提出问题：能否只描述一次置换，把执行编号变成数据的另一个坐标？</p>
+<p>答案是一条全局承诺轨迹。执行槽位、轮次和状态分量成为同一个布尔乘积域的坐标。两次结构性 sumcheck 最终留下 4 项点值声明，随后再归并为每个承诺列各一项终端声明。</p>
+
+<div class="result">
+  <strong>架构层面的结果</strong>
+  <p>在基准工作负载中，FROST-GKR 消除了 472 个约束 sumcheck 中的 470 个。更重要的是，它把重复置换验证变成了一个可复用的线性时间后端。正是这一变化使更大的 Parano1d 证明架构具备可行性：增加一种新的哈希拓扑，不再意味着增加一份内部 Poseidon2b 证明。</p>
+</div>
 
 <figure class="figure">
-  <div class="domain-spec" role="img" aria-label="FROST-GKR 由槽位、轮次与状态通道构成的乘积域">
-    <div><small>槽位</small><strong>2<sup>s</sup></strong><span>填充后的执行</span></div>
+  <div class="domain-spec" role="img" aria-label="以槽位、轮次和状态分量为坐标的 FROST-GKR 乘积域">
+    <div><small>槽位</small><strong>2<sup>s</sup></strong><span>补齐后的执行数</span></div>
     <b aria-hidden="true">×</b>
-    <div><small>轮次</small><strong>2<sup>7</sup></strong><span>66 个活动轮</span></div>
+    <div><small>轮次</small><strong>2<sup>7</sup></strong><span>66 个有效轮次</span></div>
     <b aria-hidden="true">×</b>
-    <div><small>状态通道</small><strong>2<sup>2</sup></strong><span>宽度为四</span></div>
+    <div><small>状态分量</small><strong>2<sup>2</sup></strong><span>宽度为 4</span></div>
     <b aria-hidden="true">=</b>
     <div class="domain-spec__result"><small>轨迹域</small><strong>2<sup>s+9</sup></strong><span>一张多线性表</span></div>
   </div>
-  <figcaption>槽位、轮次与状态通道是同一个乘积域的坐标，而不是为每个置换建立的独立电路。</figcaption>
+  <figcaption>执行编号是轨迹坐标，而不是再创建一套电路的理由。</figcaption>
 </figure>
 
-<h2 id="trace">三个承诺列</h2>
-<p>对 <em>B</em> 次活动 Poseidon2b 执行，令 <em>L = 2<sup>s</sup></em> 为填充后的槽位数。Poseidon2b 宽度为四，有六十六个非线性轮。FROST 预留 128 个轮次位置，并使用四个状态通道位置，因此完整表满足：</p>
-<div class="equation">n = s + 7 + 2 &nbsp;&nbsp; and &nbsp;&nbsp; N = 2<sup>n</sup> = 512L</div>
-<p>见证数据只有三个多线性列：</p>
+<h2 id="trace">全部计算归入三列</h2>
+<p>设 <em>B</em> 为有效置换数，<em>L = 2<sup>s</sup> ≥ B</em> 为补齐后的槽位数。Poseidon2b 有 4 个状态分量和 66 个非线性轮。FROST-GKR 预留 128 个轮次位置，因此一个轨迹单元由下列坐标索引：</p>
+<div class="equation">(slot, round, lane) ∈ {0,1}<sup>s</sup> × {0,1}<sup>7</sup> × {0,1}<sup>2</sup></div>
+<p>完整定义域有 <em>n = s + 9</em> 个变量和 <em>N = 2<sup>n</sup> = 512L</em> 个单元。需要承诺的见证仅包含三列多线性表：</p>
 <ul>
-  <li><code>z</code> 存放进入每一轮的状态和最终状态行；</li>
-  <li><code>s_in</code> 存放活动 S-box 的输入；S-box 是置换中的非线性代换映射；</li>
-  <li><code>s_out</code> 存放对应的 S-box 输出。</li>
+  <li><code>state</code> 包含进入每一轮的状态以及终端状态行；</li>
+  <li><code>s_in</code> 包含每个有效 <code>x^7</code> S-box 的输入；</li>
+  <li><code>s_out</code> 包含相应的 S-box 输出。</li>
 </ul>
-<p>验证者抽取关系挑战值之前，三个列都已完成承诺。公开选择器标识活动槽位、活动轮次与活动 S-box 通道。七次幂映射直接在 GF(2<sup>128</sup>) 上求值：Frobenius 平方让 <code>x²</code> 和 <code>x⁴</code> 成为线性运算，而计算 <code>x³</code> 与 <code>x⁷</code> 只需两次通用乘法。这是实现层面的优势；形式上的 sumcheck 次数仍为七。</p>
+<p>公开选择器标记有效槽位、有效轮次和应用 S-box 的状态分量。实现根据固定轮次安排导出选择器 <code>sigma</code>。计算 sumcheck 时可以在内存中生成这张表，但它不是第四列见证，也没有单独的承诺。因此，同样三列见证既能表示全部 4 个分量都经过非线性层的全轮，也能表示只有第 0 个分量经过非线性层的部分轮。在 Parano1d 中，证明者必须在采样关系挑战值之前承诺这三列。独立对比程序在相同的终端多线性声明处停止，并直接检查这些声明。</p>
 
-<h2 id="reductions">两次约束归约</h2>
-<p>协议承担两项代数任务。首先证明每个局部 Poseidon2b 轮次等式；然后证明具体化的下一轮视图与通道投影视图确实来自原始承诺。</p>
-<p><em>零检验（zero-check）</em>判断一个多项式关系是否在编码执行域的每个点上都为零。sumcheck 协议逐个消去布尔变量，把这项全局断言归约为验证者所选点上的少量求值。最后，多项式承诺方案（PCS）把这些求值绑定到挑战值产生之前已经固定的轨迹列。</p>
+<h2 id="name">FROST 名称的含义</h2>
+<p>FROST 是 <strong>Frobenius Reduction over Shifted Tables</strong> 的缩写。名称的两部分分别对应构造中不可缺少的两个环节。</p>
+<p>在二元域上，Frobenius 平方是线性的：</p>
+<div class="equation">(a + b)<sup>2</sup> = a<sup>2</sup> + b<sup>2</sup></div>
+<p>Poseidon2b 的直接 S-box 可以写成 <code>x³ = x²·x</code> 和 <code>x⁷ = x⁴·x³</code>。<code>x²</code> 与 <code>x⁴</code> 由平方得到，因此只需要两次一般域乘法。证明保留直接的七次关系，不必把每个 S-box 分解成一串辅助电路层。</p>
+<p>移位表解决另一个关键问题。轮方程同时读取第 <em>r</em> 轮状态和第 <em>r + 1</em> 轮状态。七位二进制轮次索引的递增不是多线性变量的仿射变换，因此移位表的求值不能直接视为原始列在变换点上的打开。FROST-GKR 会显式证明这项联系。</p>
+
+<h2 id="reductions">两次归约如何证明全部计算</h2>
+<h3>1. 一个全局关系</h3>
+<p>一个次数为 9 的全局 zerocheck 约束每个有效 Poseidon2b 单元。它同时覆盖 <code>x^7</code> 关系、轮常量、全轮与部分轮线性层以及相邻状态之间的联系。Sumcheck 逐个消去布尔变量。其轮数为 <em>n</em>，因此增加置换槽位只会通过对数规模的槽位维度影响协议深度。</p>
+<p>这次归约的终端包含一个 <code>state</code> 的直接求值，以及 11 个轮次移位视图或状态分量投影视图的求值。这些视图正好表达全局关系使用的连接关系。</p>
+
+<h3>2. 把每个视图归约回承诺</h3>
+<p>第二个次数为 2 的 sumcheck 合并 11 个派生求值，并证明它们是原始三列的正确线性泛函。协议由此回到验证者新选点上的 <code>state</code>、<code>s_in</code> 和 <code>s_out</code> 直接求值。</p>
+<p>两次归约结束后，只剩 4 项点值声明：两项关于 <code>state</code>，一项关于 <code>s_in</code>，一项关于 <code>s_out</code>。随后，三个次数为 2 的批量求值论证为每个承诺列生成一项终端声明。多项式承诺方案打开的仍是最初三列。证明者选择的派生表不能取代已承诺的执行轨迹。</p>
+
 <div class="protocol-flow" aria-label="FROST-GKR 归约阶段">
-  <div class="flow-step"><small>承诺</small><strong>3 个轨迹列</strong><span>在关系挑战值产生之前固定见证数据</span></div>
+  <div class="flow-step"><small>承诺</small><strong>3 列轨迹</strong><span>在挑战值产生前固定全部计算</span></div>
   <div class="flow-arrow">→</div>
-  <div class="flow-step"><small>n 轮 · 次数 9</small><strong>全局零检验</strong><span>一次覆盖所有活动 Poseidon2b 单元</span></div>
+  <div class="flow-step"><small>n 轮，次数 9</small><strong>全局 zerocheck</strong><span>一次覆盖全部槽位、轮次和状态分量</span></div>
   <div class="flow-arrow">→</div>
-  <div class="flow-step"><small>n 轮 · 次数 2</small><strong>移位归约</strong><span>把派生视图归还到承诺列</span></div>
+  <div class="flow-step"><small>n 轮，次数 2</small><strong>移位归约</strong><span>把全部派生视图归约回承诺</span></div>
 </div>
-
-<h3>全局关系</h3>
-<p>一次次数为九的零检验同时约束每个有效槽位的 S-box、轮常数、完整与部分线性层以及相邻关系。对按槽位填充的批次，主 sumcheck 始终执行 <em>n</em> 轮；有效置换数量只通过对数级槽位维度影响轮数。</p>
-<p>终端包含一次对 <code>Z</code> 的直接求值，以及十一次移位视图或通道投影视图的求值。这十一个断言不能直接改写为 <code>S_in</code>、<code>S_out</code> 和 <code>Z</code> 的打开断言：递增二进制轮次索引并不是多线性变量的仿射变换。</p>
-
-<h3>移位视图归约</h3>
-<p>第二次二次 sumcheck 批量合并十一个线性泛函，并把它们归约为三个承诺多项式在新求值点上的直接求值。最终打开接口小而明确：<code>Z</code> 上有两个点断言，<code>S_in</code> 和 <code>S_out</code> 上各有一个。原生支持多点打开的多项式承诺可以直接处理这些断言；论文还描述了通用的三列终端批处理层。</p>
 
 <div class="result">
-  <strong>归约约束</strong>
-  <p>持久对象始终是承诺执行轨迹。关系使用的每个派生视图，都必须在协议结束前归约回该承诺。</p>
+  <strong>核心创新</strong>
+  <p>通常的 GKR 沿电路层逐层下降。FROST-GKR 始终保留同一条已承诺执行轨迹，并把每一项全局关系都归约为该轨迹的打开。</p>
 </div>
 
-<h2 id="composition">协议证明什么</h2>
-<p>内部关系证明每个活动槽位都是一次正确的 Poseidon2b 执行。应用仍须约束公开的输入行和输出行。它可以固定公开输入、令一个槽位的输出等于下一槽位的输入，或把最终输出绑定到公开摘要。这些端点等式使用同一个承诺状态列，因此顺序链、树和海绵构造可以组合，而无需重复内部置换关系。</p>
-<p>FROST-GKR 是代数归约层，以具备求值绑定性的多线性多项式承诺为参数。完整论证结合其内部归约、应用的端点关系以及所选 PCS；可靠性核算把这三项保持分离。</p>
+<h2 id="composition">置换引擎只证明一次，应用拓扑由端点描述</h2>
+<p>内部关系证明每个有效槽位都正确执行 Poseidon2b。<code>state</code> 列包含每个槽位的输入行和输出行。单独的端点关系定义这些执行在应用中的含义：</p>
+<ul>
+  <li>固定一次独立哈希调用的输入与输出；</li>
+  <li>对顺序链，把一个槽位的输出等同于下一个槽位的输入；</li>
+  <li>对 Merkle 树，把子节点输出连接到父节点输入；</li>
+  <li>对海绵结构或交互记录，连接吸收状态与挤出状态；</li>
+  <li>把端点绑定到钱包授权、状态或递归验证器数据。</li>
+</ul>
+<p>整个批次共享成本较高的置换语义。应用图变化时，只需要改变端点方程。因此，同一协议可以覆盖链、树和无关哈希，而不必为每种拓扑重建内部 Poseidon2b 证明。</p>
 
-<h2 id="soundness">可靠性与精确核算</h2>
-<p>对于含 <em>n</em> 个变量的轨迹，内部归约的交互式代数误差满足：</p>
-<div class="equation">ε<sub>FROST</sub> ≤ (18n + 14) / |F|</div>
-<p>在受测实例中，<em>n = 15</em> 且 <em>F = GF(2<sup>128</sup>)</em>，因此在计入端点关系与多项式承诺的可靠性误差之前，该项低于 2<sup>−119</sup>。当发送完整的轮多项式系数向量时，通用交互记录使用 <code>22n + 18</code> 个域元素。</p>
+<h2 id="measurement">具体收益</h2>
+<p>发布的复现实验把 FROST-GKR 与基准的逐置换乘积链构造进行比较。两者在同一个域和同一条交互记录通道上证明相同的 59 次 Poseidon2b 序列。计时前，测试程序会构造并验证两份诚实证明，直接检查终端多线性求值，并核对代数交互记录的精确大小。</p>
 
-<div class="table-wrap"><table>
-  <thead><tr><th>阶段</th><th>轮数</th><th>次数</th><th>终端结果</th></tr></thead>
-  <tbody>
-    <tr><td>承诺</td><td>—</td><td>—</td><td>三个已固定的见证多项式</td></tr>
-    <tr><td>全局关系</td><td>n</td><td>9</td><td>在 r′ 的 12 次求值</td></tr>
-    <tr><td>移位归约</td><td>n</td><td>2</td><td>在 r″ 的三个直接断言</td></tr>
-    <tr><td>通用终端批处理</td><td>3n</td><td>2</td><td>每个承诺列一个断言</td></tr>
-  </tbody>
-</table></div>
-
-<h2 id="measurement">59 次置换测量</h2>
-<p>配套实现把 FROST-GKR 与乘积链基线进行比较；该基线为每次置换分别运行一条代数归约序列。两种方案都证明同一批五十九次宽度为四的 Poseidon2b 置换。计时前，测试程序会构造诚实证明、验证两套协议、直接检查最终的多线性扩展（MLE）断言，并逐个域元素核对代数证明的大小。</p>
 <div class="metric-row">
   <div class="metric"><strong>472 → 2</strong><span>约束 sumcheck</span></div>
-  <div class="metric"><strong>287,712 → 5,568 B</strong><span>原始代数证明载荷</span></div>
-  <div class="metric"><strong>1,605.931 → 150.218 毫秒</strong><span>论文中的归约证明者中位数</span></div>
+  <div class="metric"><strong>51.67×</strong><span>代数交互记录缩小</span></div>
+  <div class="metric"><strong>10.69×</strong><span>归约证明者加速</span></div>
 </div>
+
 <div class="table-wrap"><table>
-  <thead><tr><th>指标</th><th>逐置换链</th><th>FROST-GKR</th><th>缩减倍数</th></tr></thead>
+  <thead><tr><th>指标</th><th>逐置换乘积链</th><th>FROST-GKR</th><th>改进</th></tr></thead>
   <tbody>
-    <tr><td>约束 sumcheck 轮数</td><td>4,248</td><td>30</td><td>141.60×</td></tr>
-    <tr><td>sumcheck 总轮数</td><td>4,263</td><td>75</td><td>56.84×</td></tr>
-    <tr><td>原始代数证明</td><td>287,712 B</td><td>5,568 B</td><td>51.67×</td></tr>
+    <tr><td>约束 sumcheck</td><td>472</td><td>2</td><td>减少 236.00 倍</td></tr>
+    <tr><td>约束 sumcheck 轮数</td><td>4,248</td><td>30</td><td>减少 141.60 倍</td></tr>
+    <tr><td>全部 sumcheck 轮数</td><td>4,263</td><td>75</td><td>减少 56.84 倍</td></tr>
+    <tr><td>原始代数交互记录</td><td>287,712 字节</td><td>5,568 字节</td><td>缩小 51.67 倍</td></tr>
+    <tr><td>归约证明者中位时间</td><td>1,605.931 毫秒</td><td>150.218 毫秒</td><td>加速 10.69 倍</td></tr>
+    <tr><td>归约验证者中位时间</td><td>984.269 毫秒</td><td>66.499 毫秒</td><td>加速 14.80 倍</td></tr>
   </tbody>
 </table></div>
-<p>论文报告的一次全新发布版复测中，旧方案中位数为 1,605.931 毫秒，FROST 为 150.218 毫秒。仓库另行保留了在 Intel Core i7-1365U 上得到的二十样本结果，二者分别为 1,495.629 与 142.475 毫秒。两组数据测量的都是归约层，而不是完整的简洁证明系统。</p>
 
 <div class="note">
   <strong>测量边界</strong>
-  <p>字节数只计算原始域元素，不含序列化附加字段、PCS 打开证明和 Merkle 认证路径。测试程序中的直接终端检查用于核验这项对比，不被描述为已经部署的承诺层。</p>
+  <p>字节数只统计代数归约中的原始域元素，不包含序列化框架、多项式承诺打开和 Merkle 认证路径。该对比隔离了 FROST-GKR 实际替换的证明系统部分。</p>
 </div>
 
-<h2 id="publication">论文与可复现实现</h2>
-<p>FROST-GKR 是 Parano1d Lab 的研究成果。论文作者为 Andrew Boyle，内容包括完整轨迹关系、组合定理、完备性与交互式可靠性论证、交互记录的精确核算和参考对比。</p>
-<p><a href="/papers/FROST_GKR.pdf">阅读完整论文（PDF）</a>，或查看<a href="https://github.com/ignotusnemo/parano1d/tree/main/research/frost_gkr">可复现测试环境</a>。</p>
+<h2 id="scaling">为何计算数量增加后优势依然存在</h2>
+<p>当 Poseidon2b 的宽度和轮次安排固定时，证明者执行 <em>O(N)</em> 次域运算，已承诺的见证包含 <em>3N</em> 个元素。两次结构归约使用 <em>2n</em> 轮 sumcheck。补齐后的置换槽位数翻倍时，只会增加一个布尔变量和两轮归约，不会复制整个协议。</p>
+<p>采用通用终端批处理时，完整代数交互记录在承诺打开和序列化之前包含 <em>22n + 18</em> 个域元素。验证者执行对数深度归约，无需重放每次置换的每一轮。</p>
+
+<h2 id="soundness">定理给出的结论</h2>
+<p>在使用具备求值绑定性质的多线性承诺，且交互式挑战值彼此独立采样时，内部代数错误上界为</p>
+<div class="equation">ε<sub>FROST</sub> ≤ (18n + 14) / |F|</div>
+<p>对论文中 GF(2<sup>128</sup>) 上的 15 变量实例，该项小于 2<sup>−119</sup>，尚未计入端点关系和多项式承诺的可靠性误差。定理证明置换语义、完备性、拓扑组合，并列出两次归约的全部错误事件。</p>
+
+<h2 id="production">FROST-GKR 在 Parano1d 中的作用</h2>
+<p>FROST-GKR 源自 Parano1d 证明系统，至今仍是重复 Poseidon2b 计算所共用的归约方式。实际部署代码同样只承诺三列见证，证明者与验证者分别根据固定安排导出公开选择器。交易体哈希、Merkle 认证、定长域哈希和递归验证分别在各自轨迹上使用这项归约，并在起始状态与终止状态处绑定应用声明。FRI-Binius/BaseFold 在无需可信设置的前提下打开最终多线性声明。</p>
+<p>随后把 9 个递归认证区域合并为一次有序遍历的工程工作，见<a href="/zh/research/single-global-walk/">《一次全局 Poseidon 遍历取代九次验证器遍历》</a>。</p>
+
+<h2 id="publication">论文与可复现实验</h2>
+<p><a href="/papers/FROST_GKR.pdf">FROST-GKR 论文</a>给出完整轨迹关系、组合定理、完备性与交互式可靠性证明，以及精确的交互记录计算。<a href="https://github.com/ignotusnemo/frost-gkr">独立复现实验仓库</a>可以重现 59 次置换的同条件对比。</p>
+<p>FROST-GKR 是 <strong>Parano1d Lab</strong> 的研究成果，也是 Parano1d 证明架构的实际部署组件。</p>

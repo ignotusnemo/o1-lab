@@ -41,9 +41,9 @@
   <meta property="article:section" content="Майнинг">
   <meta property="article:author" content="Parano1d Lab">
   <title>Один раз доказать блок, затем искать nonce · Parano1d Lab</title>
-  <link rel="stylesheet" href="/assets/site.css?v=ef75dc965770">
+  <link rel="stylesheet" href="/assets/site.css?v=400ff32ebeaa">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Один раз доказать блок, затем искать nonce","description":"Семантический ID заголовка с отдельным доменом фиксирует все поля консенсуса, кроме nonce, тогда как канонический ID блока включает и nonce. Майнер один раз доказывает полный переход, перебирает множество заголовков с разными nonce и связывает найденный вариант с доказательством посредством непосредственной проверки PoW и точных проверок границы.","datePublished":"2026-07-15","dateModified":"2026-07-15","mainEntityOfPage":"https://lab.parano1d.org/ru/research/prove-once-search-nonces/","inLanguage":"ru","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/prove-once-search-nonces.png","about":"Майнинг"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Один раз доказать блок, затем искать nonce","description":"Семантический ID заголовка с отдельным доменом фиксирует все поля консенсуса, кроме nonce. Канонический ID блока и хеш proof of work включают nonce, каждый в своём домене. Майнер один раз доказывает полный переход, перебирает множество заголовков с разными nonce и связывает найденный вариант с доказательством посредством непосредственной проверки PoW и точных проверок границы.","datePublished":"2026-07-15","dateModified":"2026-07-15","mainEntityOfPage":"https://lab.parano1d.org/ru/research/prove-once-search-nonces/","inLanguage":"ru","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/prove-once-search-nonces.png","about":"Майнинг"}</script>
 </head>
 <body class="locale-ru">
   <a class="skip-link" href="#content">К содержанию</a>
@@ -98,8 +98,8 @@
     <rect width="640" height="420" fill="#07120d"/>
     <rect width="640" height="420" fill="url(#halo-nonce)"/>
     <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-nonce)"/>
-    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
-    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">PROVE THE TEMPLATE ONCE · SEARCH THE NONCE</text>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 374V394H54M586 394H606V374"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="320" y="48" text-anchor="middle">PROVE THE TEMPLATE ONCE · SEARCH THE NONCE</text>
     <g class="diagram-panel diagram-panel--neutral" filter="url(#shadow-nonce)"><rect x="38" y="83" width="184" height="238" rx="15"/><text class="diagram-micro" x="60" y="111">FIXED BLOCK TEMPLATE</text><text class="diagram-value diagram-value--compact" x="60" y="145">SEMHDR__</text><g class="template-fields"><rect x="60" y="174" width="140" height="28" rx="6"/><rect x="60" y="211" width="140" height="28" rx="6"/><rect x="60" y="248" width="140" height="28" rx="6"/><text x="72" y="193">STATE ROOT</text><text x="72" y="230">TX COMMITMENT</text><text x="72" y="267">DIFFICULTY</text></g><text class="diagram-micro" x="60" y="301">NONCE EXCLUDED</text></g>
   <path class="diagram-arrow " d="M222 202H268" marker-end="url(#arrow-nonce)"/>
   <g class="diagram-panel diagram-panel--green" filter="url(#shadow-nonce)"><rect x="268" y="133" width="120" height="138" rx="15"/><text class="diagram-micro" x="328" y="160" text-anchor="middle">HISTORYSTEP</text><text class="diagram-number" x="328" y="207" text-anchor="middle">π</text><text class="diagram-label" x="328" y="237" text-anchor="middle">ONE PROOF</text></g>
@@ -110,21 +110,22 @@
     <g><rect x="444" y="208" width="154" height="49" rx="9"/><text x="460" y="229">NONCE D331</text><text class="diagram-micro" x="460" y="246">HASH 07…B4</text></g>
     <g class="winner"><rect x="444" y="270" width="154" height="58" rx="9"/><text x="460" y="292">NONCE F102</text><text class="diagram-micro" x="460" y="310">0000…A7 · WINNER</text><circle cx="576" cy="299" r="9"/><path d="M571 299 575 303 582 294"/></g>
   </g>
-    <text class="diagram-caption" x="42" y="390">The winning PoW nonce is reconnected to the already-proved immutable template</text>
+    <text class="diagram-caption" x="320" y="384" text-anchor="middle">The winning PoW nonce is reconnected to the already-proved immutable template</text>
   </svg></div>
     </header>
     <div class="article-layout">
       <aside class="article-toc" aria-label="В этой статье"><strong>В этой статье</strong><a href="#question">На каком этапе nonce должен входить в доказательство?</a><a href="#projection">Семантический заголовок без nonce</a><a href="#mining">Одно доказательство, множество попыток</a><a href="#security">Почему разделение не освобождает остальные поля</a><a href="#result">Результат</a></aside>
-      <article class="article-body"><div class="article-abstract"><span>Аннотация</span><p>Семантический ID заголовка с отдельным доменом фиксирует все поля консенсуса, кроме nonce, тогда как канонический ID блока включает и nonce. Майнер один раз доказывает полный переход, перебирает множество заголовков с разными nonce и связывает найденный вариант с доказательством посредством непосредственной проверки PoW и точных проверок границы.</p></div><h2 id="question">На каком этапе nonce должен входить в доказательство?</h2>
+      <article class="article-body"><div class="article-abstract"><span>Аннотация</span><p>Семантический ID заголовка с отдельным доменом фиксирует все поля консенсуса, кроме nonce. Канонический ID блока и хеш proof of work включают nonce, каждый в своём домене. Майнер один раз доказывает полный переход, перебирает множество заголовков с разными nonce и связывает найденный вариант с доказательством посредством непосредственной проверки PoW и точных проверок границы.</p></div><h2 id="question">На каком этапе nonce должен входить в доказательство?</h2>
 <p>State — аутентифицированный набор текущих непотраченных выходов и счётчиков консенсуса. HistoryStep — рекурсивное доказательство точного перехода блока от родительского State к дочернему. Оно подтверждает дорогостоящую семантическую работу, тогда как proof of work изменяет только 128-битный nonce — поле заголовка, которое майнер перебирает при поиске. Если включить nonce в рекурсивное утверждение, каждый кандидат изменит само утверждение, и дорогое доказательство нельзя будет подготовить заранее.</p>
 
 <h2 id="projection">Семантический заголовок без nonce</h2>
-<p>Конструкция определяет два идентификатора с разделением доменов:</p>
+<p>Конструкция определяет три хеша с разделением доменов:</p>
 <div class="table-wrap"><table>
   <thead><tr><th>Идентификатор</th><th>Домен</th><th>Поля</th><th>Назначение</th></tr></thead>
   <tbody>
     <tr><td>Семантический ID заголовка</td><td><code>SEMHDR__</code></td><td>Все поля заголовка консенсуса, кроме nonce</td><td>Утверждение HistoryStep</td></tr>
-    <tr><td>ID блока</td><td><code>BLOCKHDR</code></td><td>Все поля заголовка, включая nonce</td><td>PoW, связь с родителем и каноническая идентичность</td></tr>
+    <tr><td>ID блока</td><td><code>BLOCKHDR</code></td><td>Все поля заголовка, включая nonce</td><td>Связь с родителем и каноническая идентичность</td></tr>
+    <tr><td>Хеш proof of work</td><td><code>POWHDR__</code></td><td>Все поля заголовка, включая nonce</td><td>Сравнение с заявленным целевым значением майнинга</td></tr>
   </tbody>
 </table></div>
 <p>Семантическая проекция сохраняет точный порядок полей заголовка блока и пропускает только nonce. Мутационные тесты независимо изменяют каждое поле: изменение nonce обязано сохранять семантический ID, изменение любого другого поля — менять его.</p>
@@ -135,13 +136,13 @@
   <div class="flow-arrow">→</div>
   <div class="flow-step"><small>Доказательство</small><strong>Построить HistoryStep π</strong><span>Один раз привязать проекцию SEMHDR__</span></div>
   <div class="flow-arrow">→</div>
-  <div class="flow-step"><small>PoW</small><strong>Искать nonce</strong><span>Многократно хешировать BLOCKHDR</span></div>
+  <div class="flow-step"><small>PoW</small><strong>Искать nonce</strong><span>Многократно хешировать POWHDR__</span></div>
 </div>
 <p>Когда nonce удовлетворяет целевому значению PoW, узел выполняет одну нативную проверку и убеждается, что заголовок с найденным nonce указывает ту же доказанную границу между родительским и дочерним State, что и семантический шаблон. Затем полный блок и терминал фиксируются атомарно.</p>
 
 <h2 id="security">Почему разделение не освобождает остальные поля</h2>
 <p>Рекурсивное доказательство исключает nonce, но не целевое значение майнинга и не семантические поля перехода. Нативное правило принятия требует, чтобы семантический ID терминала и заголовок-кандидат совпадали по всем полям, кроме nonce. ID блока с nonce остаётся идентификатором связи в цепочке.</p>
-<p>Разделение доменов не позволяет интерпретировать одну последовательность поглощения данных одновременно как семантический и канонический ID блока.</p>
+<p>Разделение доменов не позволяет интерпретировать одну последовательность полей заголовка одновременно как семантическую проекцию, канонический ID блока или хеш proof of work.</p>
 
 <h2 id="result">Результат</h2>
 <div class="result">

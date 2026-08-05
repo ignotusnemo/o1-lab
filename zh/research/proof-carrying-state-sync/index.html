@@ -41,7 +41,7 @@
   <meta property="article:section" content="Proof-carrying State">
   <meta property="article:author" content="Parano1d Lab">
   <title>从携带证明的 State 启动同步 · Parano1d Lab</title>
-  <link rel="stylesheet" href="/assets/site.css?v=ef75dc965770">
+  <link rel="stylesheet" href="/assets/site.css?v=400ff32ebeaa">
   <link rel="stylesheet" href="/assets/katex.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"从携带证明的 State 启动同步","description":"新节点仍然验证工作量证明，也仍然下载当前 State；它不再需要下载全部历史交易体并从创世区块重放整条链。本文记录经过认证的快照边界、基于磁盘临时区的安装流程、保留后缀，以及常数级证明验证与必然随区块头数量或 Live State 大小增长的成本之间的区别。","datePublished":"2026-07-12","dateModified":"2026-07-12","mainEntityOfPage":"https://lab.parano1d.org/zh/research/proof-carrying-state-sync/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/proof-carrying-state-sync.png","about":"Proof-carrying State"}</script>
 </head>
@@ -98,8 +98,8 @@
     <rect width="640" height="420" fill="#07120d"/>
     <rect width="640" height="420" fill="url(#halo-state)"/>
     <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-state)"/>
-    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
-    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">PROOF-CARRYING SNAPSHOT INSTALL</text>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 374V394H54M586 394H606V374"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="320" y="48" text-anchor="middle">PROOF-CARRYING SNAPSHOT INSTALL</text>
     <g class="header-rail">
     <text class="diagram-micro" x="44" y="82">PERMANENT HEADER CHAIN</text>
     <path d="M44 112H596"/>
@@ -123,7 +123,7 @@
     <g class="state-segments"><rect x="368" y="263" width="48" height="39" rx="5"/><rect x="424" y="263" width="48" height="39" rx="5"/><rect x="480" y="263" width="48" height="39" rx="5"/><rect x="536" y="263" width="38" height="39" rx="5"/>
       <path d="M376 275H408M376 284H402M432 275H464M432 284H456M488 275H520M488 284H514M544 275H566M544 284H561"/></g>
   </g>
-    <text class="diagram-caption" x="42" y="390">Headers remain permanent · spent transaction bodies do not need historical replay</text>
+    <text class="diagram-caption" x="320" y="384" text-anchor="middle">Headers remain permanent · spent transaction bodies do not need historical replay</text>
   </svg></div>
     </header>
     <div class="article-layout">
@@ -152,7 +152,7 @@
 
 <h2 id="paths">两条同步路径</h2>
 <h3>短距离落后</h3>
-<p>每个完整节点保留最近十八个已经完整接纳的区块。仍处于该窗口内的落后对等节点会请求原子包，其中包含语义区块及匹配的 HistoryStep 终端证明。在具体化并写入之前，节点会检查区块头连续性、精确难度与时间戳规则、基于 Poseidon2b 的工作量证明哈希、交易与 State 承诺、递归有效性、分叉选择以及最终性。</p>
+<p>每个完整节点保留最近十八个已经完整接纳的区块。仍处于该窗口内的落后对等节点会请求由语义区块与对应 HistoryStep 终端证明组成的原子对象。写入 State 前，节点会检查区块头连续性、精确难度与时间戳规则、基于 Poseidon2b 的工作量证明哈希、交易与 State 承诺、递归有效性、分叉选择以及最终性。</p>
 
 <h3>深度落后</h3>
 <p>落后更远的对等节点会选择一个已达最终性的快照边界：</p>
@@ -168,19 +168,19 @@
 
 <h2 id="boundary">将每个对象绑定到同一边界</h2>
 <p>高度 <em>h</em> 的有效证明，不能认证来自 <em>h − 1</em> 的清单，也不能认证来自另一分支的分段集。因此，快照清单绑定边界高度、State 根、槽位几何、活动数量、分配计数器、分段标识、分段根及长度。递归终端证明、规范区块头与清单必须指向同一个边界。</p>
-<p>实现为区块头暂存、选定的证明会话、持久化证明任务和精确边界绑定使用不同类型。这并非网络层装饰；它防止对等节点把各自有效的对象拼接成无效的快照包。</p>
+<p>实现为区块头暂存、选定的证明会话、持久化证明任务和精确边界绑定使用不同类型。这些类型防止对等节点把各自有效的对象拼接成不一致的快照。</p>
 
 <h2 id="staging">以磁盘暂存形成共识边界</h2>
 <p>分段进入隔离的临时环境。活动数据库不会逐页更新。只有在每个分段、计数器、根、边界区块头与终端证明全部一致之后，节点才会原子替换已安装的 State。</p>
 <p>如果进程退出，下一次启动会删除未完成的暂存环境，并从最后一份规范数据库继续。这样便不会出现一种恢复模式：共识代码需要判断对等节点提供的快照中究竟哪一部分已经具有权威性。</p>
 <div class="note">
   <strong>有界内存</strong>
-  <p>区块头暂存与 State 安装均以磁盘为后盾，并限制内存分配。对等节点可以控制载荷字节，却不能操纵解码器进行无界分配，也不能强迫完整候选 State 全部进入内存。</p>
+  <p>区块头暂存与 State 安装均以磁盘为后盾，并限制内存分配。对等节点可以控制载荷字节，却不能操纵解码器进行无界分配，也不能强迫待安装的完整 State 全部驻留内存。</p>
 </div>
 
 <h2 id="peer">对等节点只是数据源</h2>
 <p>种子节点或提供快照的对等节点不会为 State 签名，也不会成为检查点权威。它只提供区块头、终端证明、清单与分段字节。新加入节点依据工作量证明自行确定规范链，并自行验证递归承诺与 State 承诺。</p>
-<p>这正是便利性快照与无信任快照的核心区别：对于后者，更换分发方不会改变验证者所接受的 State。</p>
+<p>这正是普通快照与无需信任的快照之间的核心区别。更换数据提供方不会改变节点所接受的 State。</p>
 
 <h2 id="finality">近期重组与最终性</h2>
 <p>最终性边界不可重组。分叉选择只考虑保留该边界的候选分支，可接受的回滚深度小于十八个区块。近期完整区块与撤销数据覆盖这段后缀。更深的竞争分支会被拒绝，而不是通过安装另一个快照来“修复”。</p>

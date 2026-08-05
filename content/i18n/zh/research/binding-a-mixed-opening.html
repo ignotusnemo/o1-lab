@@ -1,51 +1,59 @@
-<h2 id="gap">一致性不等于来源绑定</h2>
-<p>多项式承诺会在查询列值之前先固定一个或多个列。交错混合打开协议使用由此前全部协议消息导出的 Fiat–Shamir 挑战值 <em>γ</em>，一次回答多个已承诺列。紧凑 FRI 是这里采用的低次数检验，它证明组合多项式 <em>C</em> 在主求值点上具有声明值。这里的<em>预言机</em>是经过编码的表，验证者只抽查其中若干位置，而不读取整张表。构造研究有意把这项代数断言与另一项要求分开：组合预言机必须来源于原始承诺指定的列。</p>
-<p>它证明的是：</p>
-<div class="equation">∃ low-degree C such that C(r) = Σ γ<sup>i</sup> · v<sub>i</sub></div>
-<p>应用需要的是更强的断言：</p>
-<div class="equation">C(x) = Σ γ<sup>i</sup> · committed_col<sub>i</sub>(x)</div>
-<p>若一个候选构造只把值绑定到交互记录，却不认证其来源，它证明的是第一项而不是第二项。因此，下述 <em>A/A′</em> 测试是构造的验收门槛，而非部署后才发现的问题。</p>
+<h2 id="statement">混合打开证明必须证明什么</h2>
+<p>Parano1d 将多条执行轨迹列一起承诺，随后在同一个多线性点打开这些列。Fiat–Shamir 挑战值 <em>γ</em> 把各列的主要打开值合并为一个多项式：</p>
+<div class="equation">C(x) = Σ γ<sup>i</sup> · col<sub>i</sub>(x)</div>
+<p>紧凑 FRI 可以证明 <em>C</em> 接近规定的低次数码，并在打开点取得声明值。完整的多项式承诺陈述还必须把 <em>C</em> 连接到原始承诺所固定的列。这条连接就是来源绑定。</p>
 
-<h2 id="attack">承诺 A，从 A′ 打开</h2>
-<p>对抗性测试十分简洁：</p>
-<pre><code>commit A
-build all_openings and the compact FRI oracle from A′
-verify using Com(A)</code></pre>
-<p>如果打开协议只检查低次数预言机与组合后的声明值，验证者就没有查询级证据证明该预言机由 <em>A</em> 编码而来。恶意来源可以保持内部完全一致，却与调用方给出的承诺毫无关系。</p>
-<div class="failure">
-  <strong>安全结论</strong>
-  <p>向 Fiat–Shamir 交互记录继续吸收更多 Merkle 根或由这些根组成的紧凑列表，无法修复这项攻击。交互记录绑定只会在消息提交后固定挑战值，并不能证明一个承诺对象由另一个对象派生。</p>
+<h2 id="gap">A/A′ 检验</h2>
+<p>关键对抗测试先承诺一组列 <em>A</em>，再从另一组内部完全一致的列 <em>A′</em> 构造打开值与紧凑 FRI 预言机：</p>
+<pre><code>承诺 A
+从 A′ 导出打开值、C 与 FRI 预言机
+相对于 Com(A) 验证</code></pre>
+<p>如果验证器只检查声明值与预言机的低次数性质，就可能接受一份针对错误来源、但内部一致的证明。把预言机吸收到交互记录中只能固定它在消息序列中的位置。来源绑定还需要一条经过认证的路径，把抽样的预言机符号连接回 <code>Com(A)</code>。</p>
+
+<h2 id="commitment">实际部署的承诺</h2>
+<p>每条承诺列都由 GF(2<sup>128</sup>) 元素组成。实际部署的承诺从同一组列构造两种认证视图：</p>
+<ul>
+  <li>由原始列的交错行构成的 cap；</li>
+  <li>各列经过码率 1/4 的加性 Reed–Solomon 编码后所得的来源 cap。</li>
+</ul>
+<p>每个来源叶包含所有列的两个编码位置，这两个位置供第一次高变量张量折叠使用。Poseidon2b 叶哈希纳入专用域标签、行数的二进制对数、列数、叶索引及全部符号对。Merkle 节点与 cap 条目均使用完整的 32 字节 Poseidon2b 输出。</p>
+<pre><code>source_leaf = Poseidon2b(
+    domain, log_rows, n_cols, leaf_index,
+    col_0[pos0], col_0[pos1], …, col_n[pos0], col_n[pos1]
+)</code></pre>
+<p>因此，这份承诺同时固定执行列，以及之后回答紧凑打开查询所需的编码符号。</p>
+
+<h2 id="opening">从已承诺符号到 FRI 预言机</h2>
+<p>证明者先吸收全部声明的打开值并导出 <em>γ</em>，再从已承诺列构造 <em>C</em>。紧凑 FRI 通过折叠一组固定的高位变量来归约求值声明，剩余的小表记为 <em>H</em>。</p>
+<p>在抽取任何查询索引之前，交互记录先吸收 <em>H</em> 与所有经过认证的中间折叠根。验证器重建小表</p>
+<div class="equation">g = H · eq<sub>right</sub></div>
+<p>并要求 <code>Code(g)</code> 的 Merkle 根等于紧凑 FRI 证明的第零轮根。该等式使第零轮预言机由经过认证的来源唯一确定。</p>
+
+<div class="protocol-flow" aria-label="实际部署的来源绑定路径">
+  <div class="flow-step"><small>承诺</small><strong>Poseidon2b 来源 cap</strong><span>固定编码后的 GF(2<sup>128</sup>) 列符号对</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>绑定</small><strong>H 与折叠根</strong><span>在抽取查询前吸收</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>打开</small><strong>一组共享查询</strong><span>来源路径与紧凑 FRI 在第零轮汇合</span></div>
 </div>
 
-<h2 id="source-root">承诺编码源</h2>
-<p>完整构造为交错承诺增加一个覆盖编码列的源根。实验采用带域分离、截断至 128 位的 Blake3 Merkle 根。对于每个承诺列，每个源叶都包含同一个 FRI 索引会共同查询的一对码字位置：</p>
-<pre><code>leaf(log_rows, n_cols, index) =
-  H(domain || shape || index ||
-    col_0[pos0] || col_0[pos1] || ... || col_n[pos0] || col_n[pos1])</code></pre>
-<p>证明者状态同时保留编码列和来源树。这是一项有意承担的存储成本：若不保留编码来源，证明者日后便无法回答用于将 FRI 预言机绑定到承诺的共享查询。</p>
+<h2 id="queries">一组查询完成全部绑定</h2>
+<p>两项检查使用相同的 Fiat–Shamir 查询索引。在每个选中位置，一条批量 Merkle 路径认证每条来源列的编码符号对。验证器用相同的 <em>γ</em> 幂次合并这些符号对，执行规定的张量折叠，再把结果与 <code>Code(H)</code> 的对应符号比较。紧凑 FRI 随后从已经绑定到来源的小表根继续验证。</p>
+<p>大型单列形状直接认证所需的来源展开；较小形状则认证中间折叠层。两条实现路径维护同一不变量：每个被接受的第零轮符号都来自来源 cap 中已经承诺的符号。</p>
 
-<h2 id="shared-queries">使用同一组查询索引</h2>
-<p>来源绑定与紧凑 FRI 不会各自独立抽取查询。交互记录先吸收紧凑 FRI 的轮根和最终码字，再吸收来源绑定求值与折叠根，最后才抽取一组共享查询索引。两项验证都使用这组索引。</p>
-<div class="protocol-flow" aria-label="带来源绑定的混合打开协议交互记录">
-  <div class="flow-step"><small>承诺</small><strong>源根</strong><span>编码列已固定</span></div>
-  <div class="flow-arrow">→</div>
-  <div class="flow-step"><small>紧凑 FRI</small><strong>轮根 + 最终码字</strong><span>低次数预言机已固定</span></div>
-  <div class="flow-arrow">→</div>
-  <div class="flow-step"><small>一次抽取</small><strong>共享查询索引</strong><span>同时检查 FRI 与源路径</span></div>
+<h2 id="field-boundary">域边界</h2>
+<p>该构造中的承诺列、加性编码、混合打开批处理与 Poseidon2b 哈希均在 GF(2<sup>128</sup>) 上执行。每个 32 字节哈希以两个域元素吸收到交互记录中，因此完整输出都会进入记录。来源绑定负责认证紧凑 FRI 证明所使用的编码预言机。</p>
+
+<h2 id="scope">得到的陈述</h2>
+<p>对于主要打开点，在所声明的多项式承诺可靠性误差范围内，验证通过意味着每个返回值都是交错承诺所固定列的多线性扩展求值。验证路径是显式的：</p>
+<div class="equation">已承诺来源 → 认证符号 → H → 第零轮预言机 → 紧凑 FRI 打开</div>
+<p>次要声明由混合打开协议检查形状并绑定到交互记录。它们与其他求值点之间的关系由调用该协议的外层多点归约或切片归约提供。</p>
+
+<h2 id="tests">承诺边界上的测试</h2>
+<p>实际部署测试保持内部计算一致，同时改变与承诺绑定的数据。测试会拒绝完整的 <em>A/A′</em> 替换、来源符号与批量 Merkle 路径篡改、<em>H</em> 或中间折叠根篡改，以及 <code>Code(H · eq<sub>right</sub>)</code> 与紧凑 FRI 第零轮根之间的任何不一致。另有测试只翻转来源 cap 节点、认证路径兄弟节点或折叠根的第 16 至 31 字节，用于确认全部 256 个哈希位都参与验证。</p>
+
+<h2 id="result">结果</h2>
+<div class="result">
+  <strong>实际部署不变量</strong>
+  <p>每份紧凑混合打开证明都包含一条从原始交错承诺到 FRI 第零轮预言机的认证链，链的两端使用同一组由交互记录导出的查询索引。</p>
 </div>
-<p>在每个抽样位置，Merkle 认证路径打开编码来源中的符号。协议的张量折叠规则把这些符号合成为紧凑 FRI 所要求的值。折叠层根和成对位置的打开证明则把这项关系延伸到 FRI 各层。</p>
-
-<h2 id="statement">精确陈述</h2>
-<p>调用方按规范使用混合打开 API 时，验证通过意味着——除声明的可靠性误差外——每个返回的主点打开值都是交错承诺所固定列的多线性扩展（MLE）值。</p>
-<p>断言的边界很重要。独立定理只涉及主求值点。次级断言在混合打开协议中接受形状检查并绑定到交互记录，但它们与其他求值点的关系来自调用方外层的多点归约或切片归约。若文档声称多项式承诺方案（PCS）能单独证明任意次级打开断言，就会夸大该原语的保证。</p>
-
-<h2 id="tests">区分绑定与可满足性的测试</h2>
-<p>决定性测试对 <em>A</em> 作出承诺，再从 <em>A′</em> 构造其余证明，并要求验证者拒绝。其他变异会修改来源符号、折叠符号与 Merkle 路径。其中一些变异仍保留局部可满足的代数轨迹，只有把来源打开证明与原始承诺核对时才会失败。</p>
-<p>这种测试方式可以复用。证明系统不应只修改一项约束并观察失败；它还应修改承诺边界另一侧的对象，同时让内部计算保持自洽。否则，测试可能从未真正触及绑定定理。</p>
-
-<h2 id="cost">递归组合中的成本</h2>
-<p>完整构造增加了来源根、编码来源留存和批量认证路径。在递归验证器中重放这些路径，会向外层关系加入多组 Poseidon2b 认证族，由此产生了<a href="/zh/research/single-global-walk/">《一次全局 Poseidon 遍历取代九次验证器遍历》</a>所述的内存实验。来源证明有可测成本，但省略它会改变被证明的断言。</p>
-
-<h2 id="lesson">验证器必须闭合的边界</h2>
-<blockquote><p>交互记录可以把证明者绑定到其消息，而这些消息仍可能没有绑定到应用真正关心的承诺。</p></blockquote>
-<p>任何多项式承诺组合都需要一条显式路径：从终端求值断言出发，经过被查询的预言机，一直回到原始承诺来源。缺少这条路径时，额外的 Fiat–Shamir 吸收只能证明内部一致性，不能证明数据来源。</p>

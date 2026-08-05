@@ -2,12 +2,13 @@
 <p>State is the authenticated set of current unspent outputs and consensus counters. HistoryStep is the recursive proof of one block's exact transition from its parent State to its child State. It certifies the expensive semantic work, while proof of work changes only a 128-bit nonce—the header value miners vary during search. If the nonce is included in the recursive statement, every candidate changes that statement and the expensive proof cannot be prepared before search.</p>
 
 <h2 id="projection">A nonce-free semantic header</h2>
-<p>The construction defines two domain-separated identifiers:</p>
+<p>The construction defines three domain-separated hashes:</p>
 <div class="table-wrap"><table>
   <thead><tr><th>Identifier</th><th>Domain</th><th>Fields</th><th>Role</th></tr></thead>
   <tbody>
     <tr><td>Semantic header ID</td><td><code>SEMHDR__</code></td><td>Every consensus header field except nonce</td><td>HistoryStep statement</td></tr>
-    <tr><td>Block ID</td><td><code>BLOCKHDR</code></td><td>Every header field including nonce</td><td>PoW, parent link and canonical identity</td></tr>
+    <tr><td>Block ID</td><td><code>BLOCKHDR</code></td><td>Every header field including nonce</td><td>Parent link and canonical identity</td></tr>
+    <tr><td>PoW digest</td><td><code>POWHDR__</code></td><td>Every header field including nonce</td><td>Comparison with the declared mining target</td></tr>
   </tbody>
 </table></div>
 <p>The semantic projection preserves the exact block-header field order and skips only the nonce. Mutation tests change every field independently: changing nonce must preserve the semantic ID; changing any other field must change it.</p>
@@ -18,13 +19,13 @@
   <div class="flow-arrow">→</div>
   <div class="flow-step"><small>Proof</small><strong>Build HistoryStep π</strong><span>Bind SEMHDR__ projection once</span></div>
   <div class="flow-arrow">→</div>
-  <div class="flow-step"><small>PoW</small><strong>Search nonce</strong><span>Hash BLOCKHDR repeatedly</span></div>
+  <div class="flow-step"><small>PoW</small><strong>Search nonce</strong><span>Hash POWHDR__ repeatedly</span></div>
 </div>
 <p>When a nonce meets the target, the node performs one native PoW check and verifies that the nonce-bearing header names the same proved parent and child State boundary as the semantic template. It then commits the complete block and terminal atomically.</p>
 
 <h2 id="security">Why the split does not free other fields</h2>
 <p>The recursive proof omits the nonce, not the mining target or any semantic transition field. Native acceptance requires the terminal's semantic ID and the candidate header to agree on every non-nonce field. The nonce-bearing block ID remains the chain-link identity.</p>
-<p>Domain separation prevents the same absorb schedule from being interpreted interchangeably as a semantic ID and a canonical block ID.</p>
+<p>Domain separation prevents the same header schedule from being interpreted interchangeably as a semantic projection, canonical block ID or proof-of-work digest.</p>
 
 <h2 id="result">Result</h2>
 <div class="result">

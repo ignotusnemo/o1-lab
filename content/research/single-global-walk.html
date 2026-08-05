@@ -3,7 +3,7 @@
 <p>Algebraically, every family remained easy to inspect. Operationally, the full-graph benchmark showed memory growing with family count because every independent walk materialized another large set of trace columns. The complete nine-family shape exceeded a 30 GB machine, establishing that independent walks were not a viable composition topology.</p>
 <div class="failure">
   <strong>Composition result</strong>
-  <p>“One walk per family” is a useful reference construction, but its memory cost scales with the number of authentication families. Production composition therefore needed to share the expensive permutation walk.</p>
+  <p>“One walk per family” is a useful reference construction, but its memory cost scales with the number of authentication families. Production composition shares the expensive permutation walk.</p>
 </div>
 
 <h2 id="shared-object">Find the shared object</h2>
@@ -28,16 +28,15 @@
 <p>The minimal end-to-end experiment combined two genuinely different deep-chain families: a source-leaf chain and a Merkle path. It drove one state-transfer selection, one deep-chain walk and one combined polynomial identity—the sum of the localized family equations—through the outer polynomial commitment scheme (PCS) and public input/output boundary. The Merkle direction bits kept a separate booleanity sumcheck, but not a second permutation walk.</p>
 <p>The regression tests changed an input symbol or sibling while leaving a satisfiable trace. The altered committed column then failed at the opening boundary. This was important: the test demonstrated that the union was not merely capable of accepting its own assembled witness; it still bound each family back to its commitment.</p>
 
-<h2 id="nine-families">Full nine-family composition</h2>
-<p>The full experiment composed the source-binding graph: the source-tree family, source-leaf queries and one family of paired-symbol openings for each fold layer—nine family types in the measured shape. All of them shared:</p>
+<h2 id="nine-families">Production joint composition</h2>
+<p>Current HistoryStep composition places nine recursive regions in one joint transcript. Link contributes three groups and Block contributes six. All nine groups share:</p>
 <ul>
-  <li>one slot domain;</li>
-  <li>one state-transfer selection;</li>
-  <li>one Poseidon2b deep-chain walk;</li>
-  <li>one combined polynomial identity;</li>
-  <li>one real FRI low-degree-proof channel schedule.</li>
+  <li>one ordered ragged slot schedule;</li>
+  <li>one 66-layer Poseidon2b walk;</li>
+  <li>one batching challenge schedule;</li>
+  <li>one canonical set of terminal claims entering the outer PCS batch.</li>
 </ul>
-<p>The channel was driven once from absorption of the <em>Merkle cap</em>—the compact list of roots authenticating the commitment trees—through mixed-opening challenges, round roots, final codeword, source-binding roots and shared query indices. Those challenges fed both the algebra and the source-opening claims. Each family retained its own committed input columns, but did not instantiate its own verifier walk.</p>
+<p>The outer post-commit channel derives the three Link prefixes and seeds the Block child channel. The child processes the ordered nine-group walk and completes the six Block suffixes. Its terminal digest returns to the outer channel before the three Link suffixes complete. Each region keeps its own canonical committed columns, but no region instantiates an independent permutation walk.</p>
 
 <h2 id="memory-work">Orthogonal memory controls</h2>
 <p>The single global walk removed the dominant multiplicative factor. Separate experiments moved constraint matrices to compressed sparse row (CSR) storage, right-sized the two alternating work buffers used by the BaseFold polynomial-commitment verifier, bounded temporary storage for linear-constraint checks (<em>lincheck</em>), capped scratch space by bytes and dictionary-encoded repeated matrix coefficients.</p>

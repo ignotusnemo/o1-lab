@@ -41,9 +41,9 @@
   <meta property="article:section" content="Live State">
   <meta property="article:author" content="Parano1d Lab">
   <title>UTXO incarnations · Parano1d Lab</title>
-  <link rel="stylesheet" href="/assets/site.css?v=ef75dc965770">
+  <link rel="stylesheet" href="/assets/site.css?v=400ff32ebeaa">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Replacing a consensus quarantine with UTXO incarnations","description":"A 256-bucket reuse guard and packed UTXO incarnations were implemented against the same stale-opening threat: one physical slot can later hold an output with the same visible value but a different identity. Incarnations distinguish successive outputs, permit same-block reuse, reject old openings and remove the second guard root and its proof families. The identifier remains branch-local and composes with canonical history.","datePublished":"2026-07-10","dateModified":"2026-07-10","mainEntityOfPage":"https://lab.parano1d.org/research/utxo-incarnations/","inLanguage":"en","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/utxo-incarnations.png","about":"Live State"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Replacing a consensus quarantine with UTXO incarnations","description":"A 256-bucket reuse guard and packed UTXO incarnations were implemented against the same stale-opening threat: one physical slot can later hold an output with the same visible value but a different identity. Incarnations distinguish successive outputs, reject old openings and remove the second guard root and its proof families. Same-block physical-slot conflicts remain forbidden by the block-wide uniqueness rule. The identifier remains branch-local and composes with canonical history.","datePublished":"2026-07-10","dateModified":"2026-07-10","mainEntityOfPage":"https://lab.parano1d.org/research/utxo-incarnations/","inLanguage":"en","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/utxo-incarnations.png","about":"Live State"}</script>
 </head>
 <body class="locale-en">
   <a class="skip-link" href="#content">Skip to content</a>
@@ -98,17 +98,17 @@
     <rect width="640" height="420" fill="#07120d"/>
     <rect width="640" height="420" fill="url(#halo-incarnation)"/>
     <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-incarnation)"/>
-    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
-    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">ONE PHYSICAL SLOT · DISTINCT LOGICAL OUTPUTS</text>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 374V394H54M586 394H606V374"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="320" y="48" text-anchor="middle">ONE PHYSICAL SLOT · DISTINCT LOGICAL OUTPUTS</text>
     <g class="diagram-panel diagram-panel--neutral" filter="url(#shadow-incarnation)"><rect x="38" y="78" width="230" height="246" rx="15"/><text class="diagram-micro" x="60" y="105">SLOT 148 · INCARNATION 41</text><text class="diagram-value diagram-value--compact" x="60" y="143">50 NOID</text><path class="diagram-divider" d="M60 161H246"/><text class="diagram-label" x="60" y="190">OWNER</text><text class="diagram-value diagram-value--compact" x="246" y="190" text-anchor="end">A7…2C</text><text class="diagram-label" x="60" y="224">CREATION</text><text class="diagram-number" x="246" y="226" text-anchor="end">41</text><g class="leaf-hash"><rect x="60" y="252" width="186" height="43" rx="8"/><text class="diagram-micro" x="74" y="269">LEAF IDENTITY</text><text class="diagram-value diagram-value--compact" x="74" y="289">H(slot ∥ 41 ∥ value)</text></g></g>
   <g class="reuse-channel"><path d="M268 169H372" marker-end="url(#arrow-incarnation)"/><text class="diagram-micro" x="320" y="151" text-anchor="middle">SPEND → REUSE</text><path class="stale-cross" d="M301 232 339 270M339 232 301 270"/><text class="diagram-micro diagram-micro--coral" x="320" y="292" text-anchor="middle">STALE H₄₁</text></g>
   <g class="diagram-panel diagram-panel--green" filter="url(#shadow-incarnation)"><rect x="372" y="78" width="230" height="246" rx="15"/><text class="diagram-micro" x="394" y="105">SLOT 148 · INCARNATION 42</text><text class="diagram-value diagram-value--compact" x="394" y="143">50 NOID</text><path class="diagram-divider" d="M394 161H580"/><text class="diagram-label" x="394" y="190">OWNER</text><text class="diagram-value diagram-value--compact" x="580" y="190" text-anchor="end">A7…2C</text><text class="diagram-label" x="394" y="224">CREATION</text><text class="diagram-number" x="580" y="226" text-anchor="end">42</text><g class="leaf-hash leaf-hash--new"><rect x="394" y="252" width="186" height="43" rx="8"/><text class="diagram-micro" x="408" y="269">NEW LEAF IDENTITY</text><text class="diagram-value diagram-value--compact" x="408" y="289">H(slot ∥ 42 ∥ value)</text></g></g>
-    <text class="diagram-caption" x="42" y="390">The incarnation travels with value, so reuse needs no quarantine root or delay</text>
+    <text class="diagram-caption" x="320" y="384" text-anchor="middle">The incarnation travels with value, so reuse needs no quarantine root or delay</text>
   </svg></div>
     </header>
     <div class="article-layout">
       <aside class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#problem">The slot-reuse problem</a><a href="#quarantine">Experiment 1. Consensus quarantine</a><a href="#incarnation">Experiment 2. Put identity in the value</a><a href="#tests">Adversarial and boundary tests</a><a href="#scope">Scope</a><a href="#result">Result</a></aside>
-      <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>A 256-bucket reuse guard and packed UTXO incarnations were implemented against the same stale-opening threat: one physical slot can later hold an output with the same visible value but a different identity. Incarnations distinguish successive outputs, permit same-block reuse, reject old openings and remove the second guard root and its proof families. The identifier remains branch-local and composes with canonical history.</p></div><h2 id="problem">The slot-reuse problem</h2>
+      <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>A 256-bucket reuse guard and packed UTXO incarnations were implemented against the same stale-opening threat: one physical slot can later hold an output with the same visible value but a different identity. Incarnations distinguish successive outputs, reject old openings and remove the second guard root and its proof families. Same-block physical-slot conflicts remain forbidden by the block-wide uniqueness rule. The identifier remains branch-local and composes with canonical history.</p></div><h2 id="problem">The slot-reuse problem</h2>
 <p>A UTXO is an unspent transaction output. Parano1d stores current UTXOs in a bounded State whose <em>physical slots</em> are reusable indexes rather than permanent outpoint names. An exact-State opening is the Merkle proof that authenticates the complete leaf stored at one such slot. If the same slot later contains the same amount and owner, an old opening must not authenticate the new output. This is the classic A→B→A, or ABA, shape: the visible value returns to A while its logical identity has changed.</p>
 
 <h2 id="quarantine">Experiment 1. Consensus quarantine</h2>
@@ -117,7 +117,6 @@
 <ul>
   <li>an additional consensus State root and rollback domain;</li>
   <li>three proof components for guard buckets and State-root binding;</li>
-  <li>no spend-then-mint reuse of one physical slot inside a block;</li>
   <li>two transition paths that had to advance the guard identically.</li>
 </ul>
 <p>A prototype parity test deliberately exercised both transition paths and rejected a divergent guard-advance rule before design selection. The paths could be made identical, but maintaining that equivalence would remain a permanent proof obligation created by the second State machine.</p>
@@ -125,17 +124,16 @@
 <h2 id="incarnation">Experiment 2. Put identity in the value</h2>
 <p>The alternative packs the amount and a monotone creation identifier into the existing 128-bit value lane:</p>
 <div class="equation">packed_value = (creation_id &lt;&lt; 64) | amount</div>
-<p>Every minted output consumes the next branch-local <code>creation_id</code>. The exact-State leaf and input leaf therefore commit to logical incarnation as well as slot, owner and amount.</p>
+<p>Every ordinary minted output receives the next branch-local <code>creation_id</code>. The primary block reward also advances the allocation counter, but stores a height-tagged identifier from a separate namespace. The exact-State leaf and input leaf therefore commit to logical incarnation as well as slot, owner and amount.</p>
 
 <h2 id="tests">Adversarial and boundary tests</h2>
 <div class="table-wrap"><table>
   <thead><tr><th>Case</th><th>Expected property</th><th>Result</th></tr></thead>
   <tbody>
     <tr><td>Same slot, owner and amount; new ID</td><td>Old exact opening must fail</td><td>Distinct State and input leaf hashes</td></tr>
-    <tr><td>Spend → mint in one block</td><td>New output uses the next ID</td><td>Unambiguous</td></tr>
-    <tr><td>Mint → spend in one block</td><td>Child input names the minted ID</td><td>Unambiguous</td></tr>
+    <tr><td>One physical slot appears in two live actions in the same block</td><td>Reject before applying the transition</td><td><code>BlockSlotConflict</code></td></tr>
     <tr><td>Gapped, repeated or reordered IDs</td><td>Reject</td><td>Rejected</td></tr>
-    <tr><td><code>u64::MAX</code> counter</td><td>No wraparound</td><td>Consensus-invalid</td></tr>
+    <tr><td>Next allocator ID enters the reserved reward namespace or overflows <code>u64</code></td><td>No namespace overlap or wraparound</td><td>Consensus-invalid</td></tr>
   </tbody>
 </table></div>
 

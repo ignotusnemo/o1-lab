@@ -1,0 +1,360 @@
+<p>NIST Category 1 compares the resources required by an attack with exhaustive key search against AES-128. Its depth-aware model counts logical quantum gates, limits circuit depth and asks whether an attack can reach its target success probability inside that envelope.</p>
+
+<p>For Parano1d, the target event is acceptance of a terminal State outside the set produced by valid executions from genesis. The production proof profile meets the NIST Post-Quantum Cryptography Category 1 resource target. At the complete NIST envelope, the ideal quantum-random-oracle bound is <math-inline>0.053364140323608411</math-inline>. The dominant half-success gate-depth floor is <math-inline>2^{173.273866314232}</math-inline>, which is <math-inline>3.273866314232</math-inline> bits above the NIST <math-inline>2^{170}</math-inline> reference.</p>
+
+<div class="table-wrap"><table>
+  <thead><tr><th>Security statement</th><th>Production result</th></tr></thead>
+  <tbody>
+    <tr><td>Adversarial goal</td><td>Acceptance of an invalid terminal State</td></tr>
+    <tr><td>Reference primitive</td><td>AES-128 exhaustive key search</td></tr>
+    <tr><td>NIST gate-depth reference</td><td><math-inline>GD=2^{170}</math-inline></td></tr>
+    <tr><td>NIST MAXDEPTH values evaluated</td><td><math-inline>2^{40}</math-inline>, <math-inline>2^{64}</math-inline> and <math-inline>2^{96}</math-inline></td></tr>
+    <tr><td>Dominant half-success gate-depth floor</td><td><strong><math-inline>2^{173.273866314232}</math-inline></strong></td></tr>
+    <tr><td>Margin over the NIST reference</td><td><strong>3.273866314232 bits</strong></td></tr>
+    <tr><td>Complete ideal success bound at the NIST envelope</td><td><strong><math-inline>0.053364140323608411</math-inline></strong></td></tr>
+    <tr><td>Sufficient fixed-Poseidon2b condition</td><td><math-inline>\Delta_{\mathrm{P2b}}^{\mathrm{Cat1}} \lt 0.446635859676391589</math-inline></td></tr>
+    <tr><td>NIST Post-Quantum Cryptography category</td><td><strong>Category 1</strong></td></tr>
+  </tbody>
+</table></div>
+
+<h2 id="security-game">The security game</h2>
+
+<p>Every accepted Parano1d block carries a recursive proof called HistoryStep. It proves the block relation, the exact transition from the authenticated parent State to the child State and verification of the preceding HistoryStep proof. Wallet authorization proofs and the sidecar relations consumed by the block are part of the same statement.</p>
+
+<p>The public instance in the soundness game is the terminal HistoryStep State. One stateful quantum adversary wins when the production verifier accepts a State outside the set reached by valid executions from genesis. A failure in wallet authorization, the block relation, the parent link, the State transition, recursive verification or the claimed proof chain is therefore a win in the same game.</p>
+
+<p>All oracle interactions used to build the terminal proof and every adversarial ancestor share one resource budget. After the compressed-oracle database is measured, extraction and traversal of the proof graph are deterministic and make no further oracle queries. The theorem covers the complete accepted State, including every FRI opening and recursive dependency.</p>
+
+<h2 id="two-measures">Sequential queries and Category 1 resources</h2>
+
+<p>The production parameters support two complementary measurements. The sequential ideal-QROM theorem gives a boundary of <math-inline>64.707407428576</math-inline> query bits. It counts each oracle call as one query and covers the budgets for which the explicit upper bound remains below one half.</p>
+
+<p>The Category 1 theorem adds the reversible circuit required to answer each query. A coherent query to the production Poseidon2b transcript contains many binary-field multiplications. Parallelism reduces elapsed depth while total gate work remains in the resource ledger. The calculation keeps both quantities and derives a gate-depth lower floor directly.</p>
+
+<h2 id="production-instance">The production instance</h2>
+
+<p>The calculation is pinned to Parano1d revision <a href="https://github.com/ignotusnemo/parano1d/commit/afdce21b6125ae0487c71a9093ab089cb8e88d5a"><code>afdce21b6125ae0487c71a9093ab089cb8e88d5a</code></a>. The standalone <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/model/production.toml">production snapshot</a> records every security input, and the <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/parameter-provenance.md">provenance map</a> points each value back to its Rust definition.</p>
+
+<div class="table-wrap"><table>
+  <thead><tr><th>Input</th><th>Production value</th></tr></thead>
+  <tbody>
+    <tr><td>Wallet query count</td><td>65</td></tr>
+    <tr><td>History query count</td><td>133</td></tr>
+    <tr><td>Algebraic challenge support</td><td><math-inline>2^{255}</math-inline></td></tr>
+    <tr><td>Digest width</td><td>256 bits</td></tr>
+    <tr><td>History code rate</td><td>1/4</td></tr>
+    <tr><td>Initial History codeword</td><td><math-inline>2^{20}</math-inline> or <math-inline>2^{21}</math-inline></td></tr>
+    <tr><td>Joint sidecar groups</td><td>9</td></tr>
+    <tr><td>Poseidon2b</td><td><math-inline>t=4</math-inline>, rate 2, <math-inline>x^7</math-inline>, 8 full rounds, 58 partial rounds</td></tr>
+  </tbody>
+</table></div>
+
+<p>The two initial codeword lengths are the two production History geometries. B64 is used through 64 user-transaction pages and B255 from 65 through 255 pages. They prove the same HistoryStep relation with the same rate, query count, challenge distribution and local theorem. Only the trace length changes.</p>
+
+<p>Algebraic challenges lie in a trace-one affine subset of GF(2<sup>256</sup>) with exactly <math-inline>2^{255}</math-inline> elements. The 256-bit digest width is a separate input. Keeping them separate is essential: algebraic exceptional sets use denominator <math-inline>2^{255}</math-inline>, while global binding collisions use <math-inline>2^{256}</math-inline>.</p>
+
+<h2 id="local-theorem">The local soundness theorem</h2>
+
+<p>The analysis first replaces each Fiat–Shamir squeeze by its corresponding verifier coin and exposes authenticated arrays as ideal oracles. This gives the public-coin IOP on which local generalized round-by-round knowledge error is proved. The local theorem grants the prover the larger acceptance set obtained by omitting the proof-of-work nonce predicate, so mining difficulty contributes zero soundness credit.</p>
+
+<h3 id="wallet">Wallet authorization</h3>
+
+<p>The wallet has one query-position escape term and one union of algebraic bad coins:</p>
+
+<math-block>
+\kappa_{W,q}=\left(\frac{15}{64}\right)^{65},
+\qquad
+\kappa_{W,f}=\frac{29\,163\,918\,888}{2^{255}}.
+</math-block>
+
+<p>These belong to different verifier moves. Generalized round-by-round error takes the largest conditional escape probability:</p>
+
+<math-block>
+\kappa_W=\max\{\kappa_{W,q},\kappa_{W,f}\}.
+</math-block>
+
+<h3 id="history">HistoryStep</h3>
+
+<p>For an integer Johnson multiplicity <math-inline>m\ge3</math-inline>, define</p>
+
+<math-block>
+h=m+\frac12,
+\qquad
+\gamma=\frac{m-1}{2m},
+\qquad
+s_N=\frac{N-4}{2N}.
+</math-block>
+
+<p>At a rate-one-quarter Reed–Solomon layer of length <math-inline>N</math-inline>, the finite proximity envelope and strict initial-list bound are</p>
+
+<math-block>
+A_N(m)=\left\lfloor
+N\frac{2h^5+3h\gamma s_N^2}{3s_N^3}+\frac{h}{s_N}
+\right\rfloor,
+</math-block>
+
+<math-block>
+L_N(m)=\left\lceil\frac{h}{s_N}\right\rceil-1,
+\qquad
+L_{\max}(m)=\max\{L_{2^{20}}(m),L_{2^{21}}(m)\}.
+</math-block>
+
+<p>The <a href="https://eprint.iacr.org/2025/2055">list-correlated Reed–Solomon theorem</a> supplies <math-inline>A_N(m)</math-inline>. The <a href="https://eprint.iacr.org/2024/1571">BaseFold analysis</a> carries it through the production fold schedule. With 133 independent query positions, the remaining escape term is</p>
+
+<math-block>
+E_q(m)=\left(\frac{m+1}{2m}\right)^{133}.
+</math-block>
+
+<p>The 32 interleaved initial rows are packed into one extension-field Reed–Solomon word and share one finite initial list. Every nonexceptional fold restores a later candidate to correlated candidates in that same list. The later algebraic identities then take a union over the entire list, so candidate switching remains inside the bound.</p>
+
+<p>The largest ordinary algebraic identity has 127 roots per candidate. The joint nine-group sidecar identity has 36. Combining query escape, every production fold layer and candidate switching gives</p>
+
+<math-block>
+\begin{aligned}
+\kappa_H(m)=\max\{&E_q(m),
+\max_N A_N(m)/2^{255},\\
+&127L_{\max}(m)/2^{255},
+36L_{\max}(m)/2^{255}\}.
+\end{aligned}
+</math-block>
+
+<p>The proximity maximum ranges over <math-inline>N\in\{2^8,\ldots,2^{20}\}\cup\{2^9,\ldots,2^{21}\}</math-inline>, covering every folded layer of both production geometries.</p>
+
+<p>A straight-line extractor list-decodes the packed word, recovers the 32 base-field rows, inverts the additive NTT and retains candidates satisfying the exact History relation. Backward induction over the verifier schedule shows that a witnessless accepting transcript must cross one of the four events in <math-inline>\kappa_H(m)</math-inline>. This is the local knowledge theorem used by both the sequential and resource-aware analyses.</p>
+
+<p>The sequential optimum is <math-inline>m=861824</math-inline>. For Category 1, the exact resource-aware optimum is <math-inline>m=318983</math-inline> because one History query requires twelve sequential Poseidon2b permutations.</p>
+
+<h2 id="all-root">From local proofs to one invalid-State event</h2>
+
+<p>Typed, statement-keyed oracle namespaces absorb every transcript family and adaptive statement into one event. After the single compressed-oracle database <math-inline>D</math-inline> is measured, define <math-inline>\mathsf{BadAll}(D)</math-inline> as the existence of any represented accepting wallet or History root for which deterministic extraction fails.</p>
+
+<p>Two boundary events remain: a required child may be missing from the represented database, or a collision, ambiguous encoding or domain confusion may change the typed semantic graph. Therefore</p>
+
+<math-block>
+\mathsf{BadState}
+\subseteq
+\mathsf{BadAll}\cup\mathsf{MissRep}\cup\mathsf{BadTypedBind}.
+</math-block>
+
+<p>In the closed typed ideal compiler, canonical nested artifacts are represented in the same database, so <math-inline>\mathsf{MissRep}</math-inline> is false. Typed transcript and commitment binding are covered by the finite and collision terms below. Replacing the ideal interface with fixed Poseidon2b adds one production deviation term at the end.</p>
+
+<p>Once the database is classical, a deterministic worklist begins at the accepted terminal, checks every local relation, follows the unique lower-height History parent and appends the required wallet and sidecar obligations. The rank decreases at every recursive edge and terminates at genesis. Valid extracted witnesses then imply the exact native State transitions in reverse topological order.</p>
+
+<p>The all-root construction absorbs recursion into one probability event. Chain height changes deterministic extraction work, and a larger proof graph costs the adversary more resources, while every represented root remains inside one bad event and one total budget.</p>
+
+<h2 id="sequential-qrom">The sequential QROM cross-check</h2>
+
+<p>Let</p>
+
+<math-block>
+\kappa_*=\max\{\kappa_W,\kappa_H(861824)\}.
+</math-block>
+
+<p>Specializing the compressed-oracle lifting argument of <a href="https://eprint.iacr.org/2019/834">Chiesa, Manohar and Spooner</a>, together with the statement-keyed adaptive composition used by <a href="https://eprint.iacr.org/2019/1076">FRACTAL</a>, gives the complete sequential ideal-QROM bound</p>
+
+<math-block>
+\varepsilon_{\mathrm{ideal}}(T)=\min\left\{1,
+6T^2\left(\kappa_*+\frac{2T+1}{2^{255}}\right)
++\frac{6T^3}{2^{256}}
+\right\}.
+</math-block>
+
+<p>Exact integer search finds the last <math-inline>T</math-inline> for which this expression is below one half:</p>
+
+<div class="table-wrap"><table>
+  <thead><tr><th>Sequential boundary</th><th>Exact value</th></tr></thead>
+  <tbody>
+    <tr><td>Largest certified query budget</td><td>30,121,082,641,781,720,121</td></tr>
+    <tr><td>First budget at the half-success boundary</td><td>30,121,082,641,781,720,122</td></tr>
+    <tr><td>Descriptive logarithm</td><td>64.707407428576 bits</td></tr>
+    <tr><td>Bound at <math-inline>T=2^{64}</math-inline></td><td><math-inline>0.187528937938435742</math-inline></td></tr>
+  </tbody>
+</table></div>
+
+<p>The first uncovered budget marks exactly where this upper bound reaches one half. Category 1 replaces the unit query counter with the logical resources needed to implement those coherent responses.</p>
+
+<h2 id="nist-reference">The NIST Category 1 reference</h2>
+
+<p><a href="https://csrc.nist.gov/projects/post-quantum-cryptography/post-quantum-cryptography-standardization/evaluation-criteria/security-%28evaluation-criteria%29">NIST Section 4.A.5</a> defines Category 1 by attacks requiring resources comparable to or greater than AES-128 key search. Its depth-aware guidance assigns the AES-128 reference</p>
+
+<math-block>
+G=\frac{2^{170}}{D},
+\qquad
+GD=2^{170},
+</math-block>
+
+<p>where <math-inline>G</math-inline> is logical gate count and <math-inline>D</math-inline> is maximum circuit depth. NIST lists <math-inline>D=2^{40}</math-inline>, <math-inline>2^{64}</math-inline> and <math-inline>2^{96}</math-inline>. The certificate evaluates all three.</p>
+
+<h2 id="parallel-qrom">Typed parallel-QROM resources</h2>
+
+<p>For each typed bad-response event <math-inline>j</math-inline>, let <math-inline>\kappa_j</math-inline> be its local density, <math-inline>g_j</math-inline> the logical gates for one coherent response and <math-inline>d_j</math-inline> its logical depth. The parallel compressed-oracle transition bound of <a href="https://eprint.iacr.org/2020/1305">Chung, Fehr, Huang and Liao</a>, specialized to the all-root event, gives</p>
+
+<math-block>
+\Pr[\mathsf{BadState}]_{\mathrm{main}}
+\le 10GD\max_j\frac{\kappa_j}{g_jd_j}.
+</math-block>
+
+<p>The resource step also covers a parallel round containing several response types. If <math-inline>k_{s,j}</math-inline> is the number of type-<math-inline>j</math-inline> queries in round <math-inline>s</math-inline> and <math-inline>\delta_s=\max\{d_j:k_{s,j}\gt0\}</math-inline>, then</p>
+
+<math-block>
+\sum_{s,j}g_jk_{s,j}\le G,
+\qquad
+\sum_s\delta_s\le D.
+</math-block>
+
+<p>Weighted Cauchy–Schwarz applied to the compressed-oracle transition amplitude yields</p>
+
+<math-block>
+\begin{aligned}
+\Pr[\mathsf{BadState}]_{\mathrm{main}}
+&\le10\left(\sum_s\delta_s\right)
+\left(\sum_s\frac{\sum_j\kappa_jk_{s,j}}{\delta_s}\right)\\
+&\le10D\sum_{s,j}\frac{\kappa_jk_{s,j}}{d_j}\\
+&\le10GD\max_j\frac{\kappa_j}{g_jd_j}.
+\end{aligned}
+</math-block>
+
+<p>Adaptive statements and recursive roots share the same <math-inline>\mathsf{BadAll}</math-inline> event and its resource accounting.</p>
+
+<h2 id="coherent-cost">The coherent Poseidon2b response</h2>
+
+<p>The resource calculation uses a reversible GF(2<sup>128</sup>) Karatsuba multiplier schedule with the following logical costs:</p>
+
+<div class="table-wrap"><table>
+  <thead><tr><th>Resource</th><th>Count</th></tr></thead>
+  <tbody>
+    <tr><td>CNOT</td><td>29,340</td></tr>
+    <tr><td>One-qubit Clifford</td><td>4,374</td></tr>
+    <tr><td>T</td><td>15,309</td></tr>
+    <tr><td>Total logical gates</td><td>49,023</td></tr>
+    <tr><td>Logical depth</td><td>43</td></tr>
+  </tbody>
+</table></div>
+
+<p>The production Poseidon2b permutation contains</p>
+
+<math-block>
+4\cdot8+58=90
+</math-block>
+
+<p>S-boxes. The <math-inline>x^7</math-inline> S-box uses two sequential field multiplications; coherent computation and uncomputation use four. Full-round S-boxes run in parallel. One coherent permutation response therefore has</p>
+
+<math-block>
+g_0=90\cdot4\cdot49\,023=17\,648\,280,
+</math-block>
+
+<math-block>
+d_0=(8+58)\cdot4\cdot43=11\,352,
+</math-block>
+
+<math-block>
+g_0d_0=200\,343\,274\,560.
+</math-block>
+
+<p>A wallet query squeezes seven 128-bit lanes through a rate-two duplex and needs four sequential permutations. A History query needs twelve. Scalar responses use one.</p>
+
+<p>The Category 1 conclusion includes the explicit premise that an adversary obtaining the corresponding coherent production response pays at least these logical gate and depth costs. The schedule omits positive routing, linear and control work, which is conservative for this construction. The theorem states its use as a minimum-cost premise; a universal lower bound for every reversible circuit would require a separate result.</p>
+
+<h2 id="category-calculation">The Category 1 calculation</h2>
+
+<p>The resource theorem evaluates wallet query and field events together with History query, proximity, candidate-switching and joint-sidecar events. At the exact resource-aware optimum <math-inline>m=318983</math-inline>, the largest ratio <math-inline>\kappa_j/(g_jd_j)</math-inline> is the wallet query event.</p>
+
+<p>Solving the main term for success probability one half gives</p>
+
+<math-block>
+GD_{1/2}^{\mathrm{main}}
+=\frac{1}{20\max_j(\kappa_j/(g_jd_j))}.
+</math-block>
+
+<p>Its exact rational value has descriptive logarithm</p>
+
+<math-block>
+\log_2 GD_{1/2}^{\mathrm{main}}
+=173.273866314232\ldots
+</math-block>
+
+<p>At the NIST envelope <math-inline>GD=2^{170}</math-inline>, the main term is at most <math-inline>0.051693750450980417</math-inline>. Two finite terms still have to be added.</p>
+
+<p>For every NIST depth point, the calculator derives the maximum number of cheapest coherent responses and sequential rounds from</p>
+
+<math-block>
+G=2^{170}/D,
+\qquad
+N=\left\lfloor\frac{G}{g_0}\right\rfloor,
+\qquad
+R=\left\lfloor\frac{D}{d_0}\right\rfloor.
+</math-block>
+
+<p>The typed finite term covers extraction and transcript instability. The global collision term uses the complete parallel compressed-oracle collision amplitude and squares the whole positive expression, including its cross term. The worst finite envelope occurs at <math-inline>D=2^{40}</math-inline>.</p>
+
+<div class="table-wrap"><table>
+  <thead><tr><th>Category 1 term</th><th>Upper bound</th></tr></thead>
+  <tbody>
+    <tr><td>Typed main term</td><td><math-inline>0.051693750450980417</math-inline></td></tr>
+    <tr><td>Finite extraction and transcript term</td><td><math-inline>0.000199022715317804</math-inline></td></tr>
+    <tr><td>Global 256-bit collision term</td><td><math-inline>0.001471367157310191</math-inline></td></tr>
+    <tr><td><strong>Complete ideal envelope</strong></td><td><strong><math-inline>0.053364140323608411</math-inline></strong></td></tr>
+  </tbody>
+</table></div>
+
+<math-block>
+\boxed{
+\varepsilon_{\mathrm{ideal}}^{\mathrm{Cat1}}
+\le0.053364140323608411\lt\frac12.}
+</math-block>
+
+<h2 id="fixed-poseidon">The fixed Poseidon2b boundary</h2>
+
+<p>The ideal theorem models the typed transcript interface as quantum-accessible random oracles. Production uses the fixed public Poseidon2b permutation with exact framing and domain separation. Let <math-inline>\Delta_{\mathrm{P2b}}^{\mathrm{Cat1}}</math-inline> bound the increase in the complete compiler bad event when the ideal interface is replaced by that production construction. Then</p>
+
+<math-block>
+\Pr[\mathsf{BadState}]_{\mathrm{production}}
+\le
+\varepsilon_{\mathrm{ideal}}^{\mathrm{Cat1}}
++\Delta_{\mathrm{P2b}}^{\mathrm{Cat1}}.
+</math-block>
+
+<p>The available half-success headroom gives the sufficient production condition</p>
+
+<math-block>
+\boxed{
+\Delta_{\mathrm{P2b}}^{\mathrm{Cat1}}
+\lt0.446635859676391589.}
+</math-block>
+
+<p>This is an event-specific compiler deviation for the exact public Poseidon2b permutation, transcript framing and domain separation. The <a href="https://cic.iacr.org/p/2/4/15/pdf">Poseidon2b paper</a> supplies the fixed permutation parameters and their cryptanalysis; the inequality above states the additional quantum-instantiation condition used by the end-to-end theorem.</p>
+
+<h2 id="certificate">An executable, source-pinned certificate</h2>
+
+<p>The complete derivation and calculator are published in the <a href="https://github.com/ignotusnemo/parano1d-soundness">Parano1d soundness repository</a>. The repository embeds its production snapshot and pins the source revision. Parameter loading rejects a mismatch between wallet geometry and its ledger, History and BaseFold query counts, challenge support, both History rates, digest width or the fixed Poseidon2b profile.</p>
+
+<p>All normative probabilities and optimizer boundaries use arbitrary-size integers and reduced rational numbers. Upper bounds are rounded upward. Sufficient fixed-permutation headroom is rounded downward. Floating-point logarithms are descriptive and never decide the result.</p>
+
+<p>Clone the certificate and reproduce the production report:</p>
+
+<pre><code>git clone https://github.com/ignotusnemo/parano1d-soundness.git
+cd parano1d-soundness
+cargo run --release --locked</code></pre>
+
+<p>Print every reduced rational value and optimizer boundary:</p>
+
+<pre><code>cargo run --release --locked -- --exact</code></pre>
+
+<p>Run the snapshot, arithmetic and threshold regression suite:</p>
+
+<pre><code>cargo test --release --locked</code></pre>
+
+<p>The proof document, source-symbol map, exact calculator and tests form one certificate. The terminal category is the final comparison performed by that chain of evidence.</p>
+
+<h2 id="sources">Primary sources</h2>
+
+<ul>
+  <li><a href="https://csrc.nist.gov/projects/post-quantum-cryptography/post-quantum-cryptography-standardization/evaluation-criteria/security-%28evaluation-criteria%29">NIST Post-Quantum Cryptography Security Evaluation Criteria, Section 4.A.5</a>, for the Category 1 AES-128 reference and MAXDEPTH points.</li>
+  <li>Alessandro Chiesa, Peter Manohar and Nicholas Spooner, <a href="https://eprint.iacr.org/2019/834"><em>Succinct Arguments in the Quantum Random Oracle Model</em></a>, for the sequential compressed-oracle lifting argument.</li>
+  <li>Kai-Min Chung, Serge Fehr, Yu-Hsuan Huang and Tai-Ning Liao, <a href="https://eprint.iacr.org/2020/1305"><em>On the Compressed-Oracle Technique, and Post-Quantum Security of Proofs of Sequential Work</em></a>, for parallel transition and collision bounds.</li>
+  <li>Alessandro Chiesa, Dev Ojha and Nicholas Spooner, <a href="https://eprint.iacr.org/2019/1076"><em>FRACTAL: Post-Quantum and Transparent Recursive Proofs from Holography</em></a>, for statement-keyed adaptive composition.</li>
+  <li>Eli Ben-Sasson, Dan Carmon, Ulrich Haböck, Swastik Kopparty and Shubhangi Saraf, <a href="https://eprint.iacr.org/2025/2055"><em>On Proximity Gaps for Reed–Solomon Codes</em></a>, for the list-correlated proximity envelope.</li>
+  <li>Ulrich Haböck, <a href="https://eprint.iacr.org/2024/1571"><em>BaseFold in the List Decoding Regime</em></a>, for the production fold specialization.</li>
+  <li>Lorenzo Grassi, Dmitry Khovratovich, Katharina Koschatko, Christian Rechberger, Markus Schofnegger, Verena Schröppel and Zhuo Wu, <a href="https://cic.iacr.org/p/2/4/15/pdf"><em>Poseidon(2)b: Binary Field Versions of Poseidon/Poseidon2</em></a>.</li>
+  <li>Kyungbae Jang, Wonwoong Kim, Sejin Lim, Yeajun Kang, Yujin Yang, Hwajeong Seo and Ilsun You, <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10055756/"><em>Quantum Binary Field Multiplication with Optimized Toffoli Depth and Extension to Quantum Inversion</em></a>, for the reversible multiplier schedule.</li>
+</ul>

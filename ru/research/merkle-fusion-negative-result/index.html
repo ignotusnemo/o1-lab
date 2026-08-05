@@ -41,7 +41,7 @@
   <meta property="article:section" content="Инженерия доказательств">
   <meta property="article:author" content="Parano1d Lab">
   <title>Отклонённое объединение Merkle · Parano1d Lab</title>
-  <link rel="stylesheet" href="/assets/site.css?v=ef75dc965770">
+  <link rel="stylesheet" href="/assets/site.css?v=400ff32ebeaa">
   <link rel="stylesheet" href="/assets/katex.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Доказательство стало на 20% меньше и на 68% медленнее","description":"Смешанное доказательство Merkle с разделением доменов объединило путь непотраченного выхода и путь защиты от повторного использования слота в одном отношении. Размер доказательства снизился с 29,69 до 23,75 КБ, но построение замедлилось с 2,68 до 4,50 секунды, а проверка — с 450,82 до 612,96 миллисекунды. После измерений объединённая конструкция была удалена.","datePublished":"2026-06-25","dateModified":"2026-06-25","mainEntityOfPage":"https://lab.parano1d.org/ru/research/merkle-fusion-negative-result/","inLanguage":"ru","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/merkle-fusion-negative-result.png","about":"Инженерия доказательств"}</script>
 </head>
@@ -98,8 +98,8 @@
     <rect width="640" height="420" fill="#07120d"/>
     <rect width="640" height="420" fill="url(#halo-fusion)"/>
     <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-fusion)"/>
-    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
-    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">MERKLE FUSION · MEASURED TRADE-OFF</text>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 374V394H54M586 394H606V374"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="320" y="48" text-anchor="middle">MERKLE FUSION · MEASURED TRADE-OFF</text>
     <g class="chart-axis"><path d="M104 82V322H402"/><path d="M104 122H402M104 172H402M104 222H402M104 272H402"/><text x="93" y="326" text-anchor="end">0</text><text x="93" y="276" text-anchor="end">25</text><text x="93" y="226" text-anchor="end">50</text><text x="93" y="176" text-anchor="end">75</text><text x="93" y="126" text-anchor="end">100</text></g>
   <g class="fusion-bars">
     <text class="diagram-micro" x="125" y="346">PROOF BYTES</text><rect class="bar bar--base" x="126" y="142" width="72" height="180" rx="7"/><rect class="bar bar--good" x="211" y="178" width="72" height="144" rx="7"/><text x="162" y="132" text-anchor="middle">29.69 KiB</text><text x="247" y="168" text-anchor="middle">23.75 KiB</text>
@@ -107,7 +107,7 @@
   </g>
   <g class="fusion-legend"><circle cx="139" cy="370" r="4"/><text x="150" y="374">SEPARATE</text><circle class="good" cx="232" cy="370" r="4"/><text x="243" y="374">FUSED</text></g>
   <g class="fusion-metrics"><rect x="488" y="102" width="112" height="91" rx="12"/><text class="diagram-micro" x="506" y="128">SERIALIZED</text><text class="diagram-number" x="506" y="166">−20.0%</text><rect x="488" y="219" width="112" height="91" rx="12"/><text class="diagram-micro" x="506" y="245">PROVER</text><text class="diagram-number diagram-number--coral" x="506" y="283">+67.9%</text></g>
-    <text class="diagram-caption" x="42" y="390">Smaller serialization lost to a larger MLE and reduced prover parallelism</text>
+    <text class="diagram-caption" x="320" y="384" text-anchor="middle">Smaller serialization lost to a larger MLE and reduced prover parallelism</text>
   </svg></div>
     </header>
     <div class="article-layout">
@@ -130,7 +130,7 @@
 <p>Объединённая конструкция создала одно более крупное многолинейное продолжение (MLE) — полиномиальное представление общей трассы над булевой областью. Работа sumcheck выросла вместе с областью, тогда как два независимых доказательства раньше выполнялись параллельно. Экономия байтов возникла благодаря общей оболочке; потеря времени — из-за отказа от разделения доменов и параллелизма.</p>
 <div class="failure">
   <strong>Решение</strong>
-  <p>После измерений объединённое отношение было удалено. Для доказательства точного State сохранены два специализированных доказательства Merkle.</p>
+  <p>После измерений объединённое отношение было удалено. В той ревизии раздельная конструкция сохранила два специализированных доказательства Merkle. Последующие изменения State и рекурсивного доказательства не относятся к этому эксперименту.</p>
 </div>
 
 <h2 id="conclusion">Обобщаемый вывод</h2>

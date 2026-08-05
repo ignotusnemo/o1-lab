@@ -7,7 +7,6 @@
 <ul>
   <li>an additional consensus State root and rollback domain;</li>
   <li>three proof components for guard buckets and State-root binding;</li>
-  <li>no spend-then-mint reuse of one physical slot inside a block;</li>
   <li>two transition paths that had to advance the guard identically.</li>
 </ul>
 <p>A prototype parity test deliberately exercised both transition paths and rejected a divergent guard-advance rule before design selection. The paths could be made identical, but maintaining that equivalence would remain a permanent proof obligation created by the second State machine.</p>
@@ -15,17 +14,16 @@
 <h2 id="incarnation">Experiment 2. Put identity in the value</h2>
 <p>The alternative packs the amount and a monotone creation identifier into the existing 128-bit value lane:</p>
 <div class="equation">packed_value = (creation_id &lt;&lt; 64) | amount</div>
-<p>Every minted output consumes the next branch-local <code>creation_id</code>. The exact-State leaf and input leaf therefore commit to logical incarnation as well as slot, owner and amount.</p>
+<p>Every ordinary minted output receives the next branch-local <code>creation_id</code>. The primary block reward also advances the allocation counter, but stores a height-tagged identifier from a separate namespace. The exact-State leaf and input leaf therefore commit to logical incarnation as well as slot, owner and amount.</p>
 
 <h2 id="tests">Adversarial and boundary tests</h2>
 <div class="table-wrap"><table>
   <thead><tr><th>Case</th><th>Expected property</th><th>Result</th></tr></thead>
   <tbody>
     <tr><td>Same slot, owner and amount; new ID</td><td>Old exact opening must fail</td><td>Distinct State and input leaf hashes</td></tr>
-    <tr><td>Spend → mint in one block</td><td>New output uses the next ID</td><td>Unambiguous</td></tr>
-    <tr><td>Mint → spend in one block</td><td>Child input names the minted ID</td><td>Unambiguous</td></tr>
+    <tr><td>One physical slot appears in two live actions in the same block</td><td>Reject before applying the transition</td><td><code>BlockSlotConflict</code></td></tr>
     <tr><td>Gapped, repeated or reordered IDs</td><td>Reject</td><td>Rejected</td></tr>
-    <tr><td><code>u64::MAX</code> counter</td><td>No wraparound</td><td>Consensus-invalid</td></tr>
+    <tr><td>Next allocator ID enters the reserved reward namespace or overflows <code>u64</code></td><td>No namespace overlap or wraparound</td><td>Consensus-invalid</td></tr>
   </tbody>
 </table></div>
 

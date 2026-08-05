@@ -31,7 +31,7 @@
 <h2 id="recursion">Experiment 3. BaseFold verifier replay</h2>
 <p>Native verification time is not a sufficient PCS metric for a recursive system. Transcript absorption, sumcheck checks, folds, Merkle paths and terminal consistency all become witness and constraints in the successor proof.</p>
 <p>BaseFold is the polynomial-commitment and opening system selected for the recursive proof. Its verifier was expressed in FieldR1cs, the binary-field constraint representation used to replay native verifier operations inside a proof, and closed inside a fixed recursive class. This experiment measured a different property from the first two: whether the verifier trace, public input/output layout and authenticated matrix shape could verify a predecessor without increasing the next proof class.</p>
-<p>The resulting same-class construction is described in <a href="/research/recursive-fixed-point/">The recursive verifier had to fit inside itself</a>.</p>
+<p>The experiment established the fixed-class acceptance criterion directly. Production recursive acceptance now evaluates that criterion inside the complete HistoryStep relation.</p>
 
 <h2 id="comparison">Results across the three boundaries</h2>
 <div class="table-wrap"><table>

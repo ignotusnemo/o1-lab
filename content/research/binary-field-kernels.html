@@ -1,5 +1,5 @@
 <h2 id="why-binary">Why binary-field kernels dominate</h2>
-<p>Parano1d's proof machinery works over the binary extension field GF(2<sup>128</sup>), which contains 2<sup>128</sup> elements. Poseidon2b—the cryptographic permutation used by the proof stack and proof-of-work hash—is implemented over the same field. Addition is XOR. Multiplication is carry-less polynomial multiplication followed by reduction. That makes hardware carry-less multiply—not ordinary integer multiply—the key primitive for prover throughput, verifier throughput and proof-of-work hashing.</p>
+<p>Parano1d's committed traces use the binary extension field GF(2<sup>128</sup>), which contains 2<sup>128</sup> elements. Poseidon2b, the cryptographic permutation used by the proof stack and proof-of-work hash, is implemented over the same field. Addition is XOR. Multiplication is carry-less polynomial multiplication followed by reduction. That makes hardware carry-less multiply, rather than ordinary integer multiply, the key primitive for prover throughput, verifier throughput and proof-of-work hashing.</p>
 <p>The architectural constraint was stricter than “make the fast machine faster.” Proof shapes, witness layout and transcript bytes had to remain identical across machines. A backend specialized for one instruction-set architecture (ISA) may change execution, never the statement being proved.</p>
 
 <h2 id="dispatch">One layout, runtime dispatch</h2>
@@ -20,6 +20,10 @@
   <div class="metric"><strong>5.4×</strong><span>Poseidon2b batch-hashing speedup</span></div>
   <div class="metric"><strong>34.9 s</strong><span>2<sup>24</sup>-position proof before</span></div>
   <div class="metric"><strong>18.9 s</strong><span>2<sup>24</sup>-position proof after</span></div>
+</div>
+<div class="note">
+  <strong>Measurement scope</strong>
+  <p>The 34.9-second and 18.9-second proof measurements belong to the pinned implementation measured in this study. They establish the effect of the kernel change on that revision. They are not current full-HistoryStep timings. Runtime dispatch and the canonical field representation remain part of production.</p>
 </div>
 <p>The proof-time improvement is smaller than the isolated hashing speedup because the complete prover also performs witness assembly, polynomial-commitment (PCS) work and non-hash algebra. That difference is useful: it locates the next bottleneck instead of turning a microbenchmark into an end-to-end claim.</p>
 

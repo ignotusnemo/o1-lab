@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f3f2ed">
   <meta name="color-scheme" content="light">
-  <meta name="description" content="公开交易运算属于区块关系。即使一次花费包含 1,020 个输入，钱包也只证明一个私密事实——所有权。">
+  <meta name="description" content="一个所有者为一笔完整逻辑支出生成一份见证隐藏授权证明封装，HistoryStep 则证明透明的 State 转换。">
   <meta name="author" content="Parano1d Lab">
   <meta name="keywords" content="Parano1d, Parano1d Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺">
   <link rel="canonical" href="https://lab.parano1d.org/zh/research/owner-batched-authorization/">
@@ -25,7 +25,7 @@
   <meta property="og:locale:alternate" content="ru_RU">
   <meta property="og:url" content="https://lab.parano1d.org/zh/research/owner-batched-authorization/">
   <meta property="og:title" content="一个所有者，一份授权证明 · Parano1d Lab">
-  <meta property="og:description" content="公开交易运算属于区块关系。即使一次花费包含 1,020 个输入，钱包也只证明一个私密事实——所有权。">
+  <meta property="og:description" content="一个所有者为一笔完整逻辑支出生成一份见证隐藏授权证明封装，HistoryStep 则证明透明的 State 转换。">
   <meta property="og:image" content="https://lab.parano1d.org/assets/og/owner-batched-authorization.png">
   <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/owner-batched-authorization.png">
   <meta property="og:image:type" content="image/png">
@@ -34,16 +34,16 @@
   <meta property="og:image:alt" content="一个所有者，一份授权证明">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="一个所有者，一份授权证明 · Parano1d Lab">
-  <meta name="twitter:description" content="公开交易运算属于区块关系。即使一次花费包含 1,020 个输入，钱包也只证明一个私密事实——所有权。">
+  <meta name="twitter:description" content="一个所有者为一笔完整逻辑支出生成一份见证隐藏授权证明封装，HistoryStep 则证明透明的 State 转换。">
   <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/owner-batched-authorization.png">
   <meta name="twitter:image:alt" content="一个所有者，一份授权证明">
   <meta property="article:published_time" content="2026-06-24T00:00:00Z">
   <meta property="article:section" content="钱包授权">
   <meta property="article:author" content="Parano1d Lab">
   <title>一个所有者，一份授权证明 · Parano1d Lab</title>
-  <link rel="stylesheet" href="/assets/site.css?v=ef75dc965770">
+  <link rel="stylesheet" href="/assets/site.css?v=400ff32ebeaa">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"一个所有者，一份授权证明","description":"本研究比较两种钱包构造：一种同时证明公开逻辑与所有权；另一种只证明秘密知识。原生准入检查验证公开运算，HistoryStep 证明规范 State 转换，而按所有者批处理使单份授权证明封装从 1 个输入扩展到 1,020 个输入时仍几乎保持恒定。","datePublished":"2026-06-24","dateModified":"2026-06-24","mainEntityOfPage":"https://lab.parano1d.org/zh/research/owner-batched-authorization/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/owner-batched-authorization.png","about":"钱包授权"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"一个所有者，一份授权证明","description":"Parano1d 将私密所有权与公开交易逻辑分开。验证器导出的授权陈述绑定一个所有者、全部所选输入及完整逻辑 PagedSpend。即使一笔支出跨越 128 个物理页面并包含 1,020 个输入，钱包也只证明一次秘密知识。实际部署的授权证明封装使用 65 个 Fiat–Shamir 查询，规范序列化最坏情况上限为 92,696 字节；HistoryStep 负责证明公开算术与精确 State 转换。","datePublished":"2026-06-24","dateModified":"2026-06-24","mainEntityOfPage":"https://lab.parano1d.org/zh/research/owner-batched-authorization/","inLanguage":"zh-Hans","author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/owner-batched-authorization.png","about":"钱包授权"}</script>
 </head>
 <body class="locale-zh">
   <a class="skip-link" href="#content">跳到正文</a>
@@ -68,7 +68,7 @@
   </header>
     <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
     <header class="article-hero">
-      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>协议研究</span><span>钱包授权</span><time datetime="2026-06-24">2026年6月24日</time></div><h1>一个所有者，一份授权证明</h1><p class="article-dek">公开交易运算属于区块关系。即使一次花费包含 1,020 个输入，钱包也只证明一个私密事实——所有权。</p><div class="article-byline"><span>作者 Parano1d Lab</span><span>4 分钟阅读</span><span>经测量的协议研究</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/zh/research/owner-batched-authorization/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接" title="复制链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=%E4%B8%80%E4%B8%AA%E6%89%80%E6%9C%89%E8%80%85%EF%BC%8C%E4%B8%80%E4%BB%BD%E6%8E%88%E6%9D%83%E8%AF%81%E6%98%8E&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fowner-batched-authorization%2F" aria-label="将本文分享到 X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
+      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>协议设计</span><span>钱包授权</span><time datetime="2026-06-24">2026年6月24日</time></div><h1>一个所有者，一份授权证明</h1><p class="article-dek">一个所有者为一笔完整逻辑支出生成一份见证隐藏授权证明封装，HistoryStep 则证明透明的 State 转换。</p><div class="article-byline"><span>作者 Parano1d Lab</span><span>3 分钟阅读</span><span>实际部署协议</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/zh/research/owner-batched-authorization/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接" title="复制链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=%E4%B8%80%E4%B8%AA%E6%89%80%E6%9C%89%E8%80%85%EF%BC%8C%E4%B8%80%E4%BB%BD%E6%8E%88%E6%9D%83%E8%AF%81%E6%98%8E&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fowner-batched-authorization%2F" aria-label="将本文分享到 X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
       <div class="research-art art--authorization" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
     <defs>
     <pattern id="grid-authorization" width="24" height="24" patternUnits="userSpaceOnUse">
@@ -98,84 +98,69 @@
     <rect width="640" height="420" fill="#07120d"/>
     <rect width="640" height="420" fill="url(#halo-authorization)"/>
     <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-authorization)"/>
-    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 366V386H54M586 386H606V366"/>
-    <text class="diagram-kicker diagram-kicker--strong" x="42" y="48">OWNER-BATCHED AUTHORIZATION</text>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 374V394H54M586 394H606V374"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="320" y="48" text-anchor="middle">ONE OWNER · ONE AUTHORIZATION CAPSULE</text>
     <g class="diagram-panel diagram-panel--neutral" filter="url(#shadow-authorization)"><rect x="42" y="78" width="226" height="246" rx="15"/>
     <text class="diagram-micro" x="64" y="105">ONE OWNER · MANY INPUT PAGES</text><text class="diagram-number" x="64" y="147">1,020</text><text class="diagram-label" x="157" y="145">INPUTS</text>
     <g class="page-grid"><circle class="diagram-dot diagram-dot--accent" cx="66" cy="181" r="3.2"/><circle class="diagram-dot" cx="87" cy="181" r="3.2"/><circle class="diagram-dot" cx="108" cy="181" r="3.2"/><circle class="diagram-dot" cx="129" cy="181" r="3.2"/><circle class="diagram-dot" cx="150" cy="181" r="3.2"/><circle class="diagram-dot" cx="171" cy="181" r="3.2"/><circle class="diagram-dot" cx="192" cy="181" r="3.2"/><circle class="diagram-dot diagram-dot--accent" cx="213" cy="181" r="3.2"/><circle class="diagram-dot" cx="66" cy="202" r="3.2"/><circle class="diagram-dot" cx="87" cy="202" r="3.2"/><circle class="diagram-dot" cx="108" cy="202" r="3.2"/><circle class="diagram-dot" cx="129" cy="202" r="3.2"/><circle class="diagram-dot" cx="150" cy="202" r="3.2"/><circle class="diagram-dot" cx="171" cy="202" r="3.2"/><circle class="diagram-dot diagram-dot--accent" cx="192" cy="202" r="3.2"/><circle class="diagram-dot" cx="213" cy="202" r="3.2"/><circle class="diagram-dot" cx="66" cy="223" r="3.2"/><circle class="diagram-dot" cx="87" cy="223" r="3.2"/><circle class="diagram-dot" cx="108" cy="223" r="3.2"/><circle class="diagram-dot" cx="129" cy="223" r="3.2"/><circle class="diagram-dot" cx="150" cy="223" r="3.2"/><circle class="diagram-dot diagram-dot--accent" cx="171" cy="223" r="3.2"/><circle class="diagram-dot" cx="192" cy="223" r="3.2"/><circle class="diagram-dot" cx="213" cy="223" r="3.2"/><circle class="diagram-dot" cx="66" cy="244" r="3.2"/><circle class="diagram-dot" cx="87" cy="244" r="3.2"/><circle class="diagram-dot" cx="108" cy="244" r="3.2"/><circle class="diagram-dot" cx="129" cy="244" r="3.2"/><circle class="diagram-dot diagram-dot--accent" cx="150" cy="244" r="3.2"/><circle class="diagram-dot" cx="171" cy="244" r="3.2"/><circle class="diagram-dot" cx="192" cy="244" r="3.2"/><circle class="diagram-dot" cx="213" cy="244" r="3.2"/><circle class="diagram-dot" cx="66" cy="265" r="3.2"/><circle class="diagram-dot" cx="87" cy="265" r="3.2"/><circle class="diagram-dot" cx="108" cy="265" r="3.2"/><circle class="diagram-dot diagram-dot--accent" cx="129" cy="265" r="3.2"/><circle class="diagram-dot" cx="150" cy="265" r="3.2"/><circle class="diagram-dot" cx="171" cy="265" r="3.2"/><circle class="diagram-dot" cx="192" cy="265" r="3.2"/><circle class="diagram-dot" cx="213" cy="265" r="3.2"/></g>
     <path class="diagram-divider" d="M64 279H246"/><text class="diagram-label" x="64" y="303">128 PHYSICAL PAGES</text><text class="diagram-micro" x="246" y="303" text-anchor="end">SECRET K₀</text>
   </g>
   <path class="diagram-arrow " d="M268 201H315" marker-end="url(#arrow-authorization)"/>
-  <g class="diagram-panel diagram-panel--green" filter="url(#shadow-authorization)"><rect x="315" y="112" width="142" height="178" rx="16"/><text class="diagram-micro" x="386" y="140" text-anchor="middle">RANDOMIZED CAPSULE</text><circle class="proof-ring" cx="386" cy="191" r="35"/><text class="diagram-number" x="386" y="201" text-anchor="middle">π</text><text class="diagram-value diagram-value--compact" x="386" y="253" text-anchor="middle">≈56 KiB</text><text class="diagram-micro" x="386" y="272" text-anchor="middle">ONE OWNER PROOF</text></g>
+  <g class="diagram-panel diagram-panel--green" filter="url(#shadow-authorization)"><rect x="315" y="112" width="142" height="178" rx="16"/><text class="diagram-micro" x="386" y="140" text-anchor="middle">WITNESS-HIDING</text><circle class="proof-ring" cx="386" cy="187" r="32"/><text class="diagram-number" x="386" y="197" text-anchor="middle">π</text><text class="diagram-value diagram-value--compact" x="386" y="240" text-anchor="middle">≤92,696 B</text><text class="diagram-micro" x="386" y="261" text-anchor="middle">65 FS QUERIES</text><text class="diagram-micro" x="386" y="278" text-anchor="middle">ONE OWNER PROOF</text></g>
   <path class="diagram-arrow " d="M457 201H498" marker-end="url(#arrow-authorization)"/>
   <g class="diagram-panel diagram-panel--blue" filter="url(#shadow-authorization)"><rect x="498" y="91" width="100" height="220" rx="15"/><text class="diagram-micro" x="548" y="118" text-anchor="middle">BLOCK</text><g class="block-pages"><rect x="518" y="145" width="60" height="24" rx="4"/><rect x="518" y="178" width="60" height="24" rx="4"/><rect x="518" y="211" width="60" height="24" rx="4"/><rect x="518" y="244" width="60" height="24" rx="4"/></g><text class="diagram-label" x="548" y="291" text-anchor="middle">TRANSITION</text></g>
   <g class="diagram-tag"><rect x="291" y="327" width="190" height="30" rx="7"/><text x="386" y="347">PROOF COUNT = OWNERS</text></g>
-    <text class="diagram-caption" x="42" y="390">The proof count follows distinct owners, not the number of consumed pages</text>
+    <text class="diagram-caption" x="320" y="384" text-anchor="middle">Proof count follows owners · HistoryStep proves the public State transition</text>
   </svg></div>
     </header>
     <div class="article-layout">
-      <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#question">钱包究竟需要证明什么？</a><a href="#construction">分离式构造</a><a href="#auth-only">实验一：移除重复的公共证明</a><a href="#owner-batching">实验二：按所有者扩展，而不是按页面扩展</a><a href="#privacy">安全与隐私边界</a><a href="#result">结果</a></aside>
-      <article class="article-body"><div class="article-abstract"><span>摘要</span><p>本研究比较两种钱包构造：一种同时证明公开逻辑与所有权；另一种只证明秘密知识。原生准入检查验证公开运算，HistoryStep 证明规范 State 转换，而按所有者批处理使单份授权证明封装从 1 个输入扩展到 1,020 个输入时仍几乎保持恒定。</p></div><h2 id="question">钱包究竟需要证明什么？</h2>
-<p>公开交易体已经向原生验证逻辑提供余额、数量、槽位和输出算术。私有见证数据只补充一个交易体不能披露的事实：发送者知晓控制所选输入的秘密。</p>
-<p>这项实验检验：把两类职责分开后，能否移除钱包侧的公共逻辑证明，同时不削弱已接纳区块的 State 转换。</p>
-<p>早期基线要求钱包提交两份证明。可扩展透明知识论证（STARK）证明公开交易算术；另一份基于 Goldwasser–Kalai–Rothblum（GKR）协议的授权证明称为 <em>AuthGKR</em>，用于证明钱包知晓所有者秘密。区块证明随后还会重建同一套公开算术，因此这部分计算实际上被证明了两次。</p>
-<p>分离式设计把私有所有权证明放入<em>授权证明封装</em>：这是与交易及其所选输入绑定、并经过随机化的证明对象。</p>
+      <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#question">钱包需要证明什么？</a><a href="#statement">陈述由验证器导出</a><a href="#owner-batching">证明数量由所有者数量决定</a><a href="#production-profile">实际部署参数</a><a href="#acceptance">一条完整的验收链</a><a href="#privacy">安全与隐私边界</a><a href="#result">结果</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>摘要</span><p>Parano1d 将私密所有权与公开交易逻辑分开。验证器导出的授权陈述绑定一个所有者、全部所选输入及完整逻辑 PagedSpend。即使一笔支出跨越 128 个物理页面并包含 1,020 个输入，钱包也只证明一次秘密知识。实际部署的授权证明封装使用 65 个 Fiat–Shamir 查询，规范序列化最坏情况上限为 92,696 字节；HistoryStep 负责证明公开算术与精确 State 转换。</p></div><h2 id="question">钱包需要证明什么？</h2>
+<p>透明交易正文已经公开确定性验证所需的金额、所选槽位、输出算术和页面结构。私密见证只补充一个交易正文无法公开的事实：钱包知道控制所选输入的秘密。</p>
+<p>Parano1d 把这两类责任交给不同的验证层。钱包使用新的随机性生成一份见证隐藏授权证明封装。原生准入逻辑检查公开交易规则。HistoryStep 重建同一组公开事实，并证明规范 State 转换。</p>
 
-<div class="protocol-flow" aria-label="钱包授权设计对比">
-  <div class="flow-step"><small>合并式基线</small><strong>交易体 + 逻辑 STARK + AuthGKR</strong><span>公共算术先由钱包证明，再由区块重复证明</span></div>
+<div class="protocol-flow" aria-label="实际部署的钱包授权路径">
+  <div class="flow-step"><small>钱包</small><strong>一个所有者秘密</strong><span>新生成的见证隐藏授权证明封装</span></div>
   <div class="flow-arrow">→</div>
-  <div class="flow-step"><small>分离式设计</small><strong>交易体 + 授权证明封装</strong><span>原生公开检查；一个规范区块证明</span></div>
+  <div class="flow-step"><small>准入</small><strong>规范 PagedSpend</strong><span>检查结构、算术、边界与绑定</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><small>HistoryStep</small><strong>精确 State 转换</strong><span>公开逻辑在已接受区块中证明一次</span></div>
 </div>
 
-<h2 id="construction">分离式构造</h2>
-<p>State 是由当前未花费输出与共识计数器组成的认证集合。HistoryStep 是每个已接纳区块携带的递归证明；它验证区块从父 State 到子 State 的精确转换。</p>
-<ul>
-  <li>内存池准入从交易体导出并检查公开谓词；</li>
-  <li>钱包证明自己知晓所选认证输入的所有者秘密；</li>
-  <li>授权断言由验证者导出，不能替换为钱包自行选择的变体；</li>
-  <li>HistoryStep 按顺序重建公共逻辑，并证明由此产生的 State 转换。</li>
-</ul>
-<p>严格解码会拒绝尾随字节、未知变体，以及针对另一种交易形状的证明。变异测试分别修改交易体、所有者、秘密集合和证明字段，并要求所有变异均被拒绝。</p>
+<h2 id="statement">陈述由验证器导出</h2>
+<p>授权陈述从完整的逻辑 <code>PagedSpend</code> 导出。它绑定所有者、每个所选输入、逻辑交易标识符及规范交易形状。钱包提供见证与证明，但不能替换由验证器导出的陈述。</p>
+<p>严格解码会拒绝尾随字节、未知变体，以及编码几何与交易不一致的证明。变异测试分别修改交易正文、所有者、所选秘密、来源承诺和证明字段，并要求验证拒绝每一种修改。</p>
 
-<h2 id="auth-only">实验一：移除重复的公共证明</h2>
-<p>第一组基准覆盖一至八个输入的标准交易，以及二十五个输入的归集交易。计时只包含授权证明；在分离式设计中，钱包侧不再生成公开逻辑 STARK。</p>
-<div class="table-wrap"><table>
-  <thead><tr><th>场景</th><th>证明中位数</th><th>验证中位数</th><th>钱包包体</th></tr></thead>
-  <tbody>
-    <tr><td>标准交易：1 输入 / 2 输出</td><td>76.02 毫秒</td><td>15.93 毫秒</td><td>117.75 KiB</td></tr>
-    <tr><td>标准交易：4 输入 / 8 输出</td><td>78.90 毫秒</td><td>13.84 毫秒</td><td>120.85 KiB</td></tr>
-    <tr><td>归集交易：25 输入 / 2 输出</td><td>269.69 毫秒</td><td>40.27 毫秒</td><td>165.47 KiB</td></tr>
-  </tbody>
-</table></div>
-<p>这组基准采用的是受测的“仅授权”证明几何，而不是最终的 PagedSpend 线格式；后者把大型交易拆分成容量固定的物理页面。它的价值在于对比：删除冗余证明并没有删除公开验证，而是把这部分验证交给原生准入规则和规范区块证明。</p>
+<h2 id="owner-batching">证明数量由所有者数量决定</h2>
+<p>一个逻辑 <code>PagedSpend</code> 可以包含 1 至 128 个物理页面，最多 1,020 个输入和 256 个输出。当这些输入由同一个所有者秘密控制时，钱包为完整逻辑支出生成一份授权证明封装。页面数量改变公开正文，但不增加所有权证明的数量。</p>
+<p>这条边界对移动钱包尤其重要。大型归集仍需处理和序列化更多本地输入，但不会让密码学证明随物理页面数量成倍增长。</p>
 
-<h2 id="owner-batching">实验二：按所有者扩展，而不是按页面扩展</h2>
-<p>由同一主秘密派生的输入被归入一个逻辑授权断言。PagedSpend 可以表示 1–128 个物理页面、最多 1,020 个输入和 256 个输出，而钱包只为该所有者构造一份重新随机化的授权证明封装；该证明对象表明所有者秘密控制全部所选输入。</p>
-<p>表中 <code>p50</code> 表示测量中位数，<code>p95</code> 表示第 95 百分位数。</p>
-<div class="table-wrap"><table>
-  <thead><tr><th>输入</th><th>页面</th><th>证明封装 p50 / p95</th><th>完整本地路径 p50 / p95</th></tr></thead>
-  <tbody>
-    <tr><td>1</td><td>1</td><td>218.99 / 341.71 毫秒</td><td>228.30 / 352.47 毫秒</td></tr>
-    <tr><td>100</td><td>13</td><td>204.43 / 243.58 毫秒</td><td>217.32 / 255.46 毫秒</td></tr>
-    <tr><td>1,020</td><td>128</td><td>199.98 / 250.82 毫秒</td><td>233.06 / 285.81 毫秒</td></tr>
-  </tbody>
-</table></div>
-<p>由于公开输入的聚合规模增长，交易意图数据（intent）从约 56.81 KiB 增至 96.50 KiB。授权证明封装维持在约 56 KiB，构造时间也保持在实测样本的波动范围内。证明成本随不同所有者的数量增长，而不是随交易的物理页面数增长。</p>
+<h2 id="production-profile">实际部署参数</h2>
+<p>当前见证隐藏授权证明封装使用 65 个 Fiat–Shamir 查询位置，规范序列化最坏情况上限为 92,696 字节。解码器在证明验证前强制执行该上限，同一陈述几何也会在递归区块验收中重放。</p>
+<p>每份证明封装都使用新的随机性。同一所有者与交易的两份证明不会复用来源承诺，非活动槽位使用的规范虚设来源承诺也不能被活动证明复用。</p>
+
+<h2 id="acceptance">一条完整的验收链</h2>
+<ol>
+  <li>钱包导出完整的 <code>PagedSpend</code> 陈述，并证明自己知道控制秘密。</li>
+  <li>内存池准入检查授权证明封装及确定性的公开交易谓词。</li>
+  <li>矿工把逻辑支出保持为一个不可拆分的交易组。</li>
+  <li>HistoryStep 验证所选授权，并证明由此得到的 State 转换。</li>
+</ol>
+<p>公开算术在准入阶段预先检查，随后只在允许接受新 State 的 HistoryStep 中证明一次。钱包证明只处理依赖秘密的关系。</p>
 
 <h2 id="privacy">安全与隐私边界</h2>
-<p>授权证明封装隐藏支出秘密，并为每份证明重新随机化。它不是机密交易证明：只要交易体可用，所有者、金额、槽位和交易结构仍然公开。公开算术保持透明，因为将其隐藏只会增加证明成本，并不会改变所有权安全性。</p>
+<p>授权证明封装隐藏支出秘密，并为每份证明使用新的随机性。交易正文可用期间，所有者、金额、槽位与交易结构仍然公开。这项构造提供授权证明，但不提供交易机密性。</p>
 
 <h2 id="result">结果</h2>
 <div class="result">
-  <strong>确立的设计原则</strong>
-  <p>每位所有者的私有知识只证明一次。透明交易逻辑在准入时由原生代码检查，并在规范区块转换中证明一次。</p>
+  <strong>实际部署规则</strong>
+  <p>一个所有者为一笔完整逻辑支出生成一份授权证明封装。HistoryStep 证明透明交易逻辑与精确 State 转换。</p>
 </div>
-<p>同样的分离原则也适用于该钱包之外：零知识证明应覆盖依赖秘密的关系，而不应重复执行规范区块证明无论如何都必须重建的确定性检查。</p>
 </article>
     </div>
-    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">研究记录</p><h2 id="evidence-title">证据与产物</h2><p>以下链接保存了支撑本文的实现、测量或推导。</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/539107f7" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>仅证明授权的转账</strong></span></span><span aria-hidden="true">↗</span></a>
-<a href="https://github.com/ignotusnemo/parano1d/commit/4462a209" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>按所有者批处理的断言</strong></span></span><span aria-hidden="true">↗</span></a>
-<a href="https://github.com/ignotusnemo/parano1d/commit/25a1887f" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>PagedSpend 授权证明封装</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">研究记录</p><h2 id="evidence-title">证据与产物</h2><p>以下链接保存了支撑本文的实现、测量或推导。</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/blob/afdce21b6125ae0487c71a9093ab089cb8e88d5a/noid_gkr/src/wallet_authorization.rs" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>代码</small><strong>实际部署的授权陈述</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/blob/afdce21b6125ae0487c71a9093ab089cb8e88d5a/noid_gkr/src/zk_authorization.rs" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>代码</small><strong>见证隐藏授权证明封装</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d/blob/afdce21b6125ae0487c71a9093ab089cb8e88d5a/noid_tx/src/paged_spend.rs" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>代码</small><strong>PagedSpend 共识几何</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
     <nav class="article-next" aria-label="相邻研究"><a href="/zh/research/binding-a-mixed-opening/"><small>较早</small><strong>共享查询的来源绑定</strong><span>←</span></a><a href="/zh/research/merkle-fusion-negative-result/"><small>较新</small><strong>被否决的 Merkle 融合</strong><span>→</span></a></nav>
   </main>
     <footer class="site-footer">

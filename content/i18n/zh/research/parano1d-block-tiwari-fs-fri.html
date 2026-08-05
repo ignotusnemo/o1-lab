@@ -1,4 +1,8 @@
-<p>在 Block 与 Tiwari 的比较中，每组 FRI 配置对应三个数值：声明的目标、可证明的 Fiat–Shamir 估计，以及采用猜想 1 时的估计。下表前八行来自其论文；最后一行按相同定义和整数位展示方式计算 History B64/B255。</p>
+<p>Fiat–Shamir 把交互式 FRI 中验证者的随机币替换为随机预言机输出。恶意证明者可以反复查询该预言机以寻找有利的交互记录，因此伪造的具体成本取决于完整的预言机查询预算。Block 与 Tiwari 将这一成本定义为：在全部正整数查询预算中，成功伪造所需期望随机预言机工作量的最小值。</p>
+
+<p>Parano1d 为每个已接受区块附加一个名为 HistoryStep 的递归证明。它证明把该区块应用于此前已验证的 State 会得到新的 State，并在同一关系内验证前一个 HistoryStep 证明。当前证明由此延续已经验证的 State 转换序列。本文按照 Block–Tiwari 指标评估这一递归 State 证明中的 FS-FRI 部分。</p>
+
+<p>下表前八行由 Block 与 Tiwari 发布；Parano1d 一行采用相同公式、相同的 256 位随机预言机设置以及相同的整位表示方式。</p>
 
 <div class="table-wrap comparison-table"><table>
   <thead><tr><th>组织</th><th>仓库或配置</th><th>目标 FRI 安全性</th><th>可证明 FS-FRI 安全性</th><th>基于猜想的 FS-FRI 安全性</th></tr></thead>
@@ -11,31 +15,27 @@
     <tr><td>Lambda Class</td><td>lambdaworks</td><td>80 / 100 / 128</td><td>81 / 99 / 127</td><td>81 / 101 / 129</td></tr>
     <tr><td>RISC Zero</td><td>RISC Zero</td><td>100</td><td>37</td><td>99</td></tr>
     <tr><td>Matter Labs</td><td>era-boojum</td><td>100</td><td>50</td><td>99</td></tr>
-    <tr><td><b>Parano1d</b></td><td>History B64 / B255</td><td><b>128</b></td><td><b>92</b></td><td><b>126</b></td></tr>
+    <tr><td><b>Parano1d</b></td><td>Recursive State proof (HistoryStep)</td><td><b>128</b></td><td><b>127</b></td><td><b>127</b></td></tr>
   </tbody>
 </table></div>
 
 <div class="note">
-  <strong>如何解读 Parano1d 一行</strong>
-  <p>128 位为目标值。92 位由已证明的 History RBR 界推出；126 位则采用 Block–Tiwari 猜想 1。与原表一致，两项指数均向下取整为整数位；精确证书见后文。</p>
+  <strong>Parano1d 一行</strong>
+  <p>在已证明 RBR 前提下，精确期望工作量指数为 <math-inline>127.194502224322\ldots</math-inline> 位；采用 Block–Tiwari 猜想 1 时为 <math-inline>127.207518749639\ldots</math-inline> 位。两个精确值都位于 <math-inline>[127,128)</math-inline>，因此两列均显示 127 位。</p>
 </div>
 
-<h2 id="metric">Fiat–Shamir 为何改变安全性计算</h2>
+<h2 id="metric">Block–Tiwari 指标</h2>
 
-<p>在交互式 FRI 中，验证者为一份交互记录抽取新的随机挑战。采用 Fiat–Shamir 后，挑战由随机预言机生成，恶意证明者可以反复查询预言机，寻找有利的交互记录。因此，攻击成本必须按证明者的全部预言机查询预算计算，而不能只看一次证明中的 FRI 查询数。</p>
-
-<p>Block 与 Tiwari 在 <a href="https://eprint.iacr.org/2024/1161"><em>On the Concrete Security of Non-interactive FRI</em></a> 中将这一成本形式化。他们从交互式协议的逐轮（round-by-round，RBR）可靠性误差出发，应用 Fiat–Shamir 编译器界，再对所有查询预算最小化预期的预言机工作量。</p>
-
-<p>设恶意证明者至多向下列随机预言机发出 <math-inline>Q</math-inline> 次经典查询：</p>
+<p>设经典敌手至多向随机预言机发出 <math-inline>Q</math-inline> 次查询：</p>
 
 <math-block>
 H:\{0,1\}^{*}\longrightarrow\{0,1\}^{\kappa}.
 </math-block>
 
-<p>若底层交互式协议的 RBR 可靠性误差为 <math-inline>\varepsilon_{\mathrm{RBR}}</math-inline>，Block 与 Tiwari 的引理 1 给出如下自适应非交互式随机预言机证明（NIROP）误差：</p>
+<p>若底层交互式协议的逐轮可靠性误差为 <math-inline>\varepsilon_{\mathrm{RBR}}</math-inline>，<a href="https://eprint.iacr.org/2024/1161">Block 与 Tiwari</a> 的引理 1 给出如下自适应非交互式随机预言机证明误差：</p>
 
 <math-block>
-\varepsilon_{\mathrm{BT}}(Q,\kappa)
+\varepsilon_{\mathrm{BT}}(Q)
 =\min\!\left\{
 1,\;
 Q\varepsilon_{\mathrm{RBR}}
@@ -43,108 +43,192 @@ Q\varepsilon_{\mathrm{RBR}}
 \right\}.
 </math-block>
 
-<p>第一项把交互式 RBR 误差计入 <math-inline>Q</math-inline> 次预言机尝试。二次项是通过 Fiat–Shamir 编译公币协议所付出的有限代价。外层最小值把成功概率截断在一以内。</p>
+<p>第一项把交互式 RBR 误差计入敌手的全部预言机尝试。二次项是 Fiat–Shamir 编译器的有限成本。外层最小值把成功概率截断在一以内。</p>
 
-<p>定义 2 衡量的是工作量，而不是某个选定预算下一次尝试的成功概率。一次包含 <math-inline>Q</math-inline> 次查询、成功概率为 <math-inline>\varepsilon_{\mathrm{BT}}(Q,\kappa)</math-inline> 的攻击，经重复后要以接近一的概率得到伪造，所需随机预言机查询的期望数为</p>
+<p>包含 <math-inline>Q</math-inline> 次查询的一次攻击，其成功概率至多为 <math-inline>\varepsilon_{\mathrm{BT}}(Q)</math-inline>。重复攻击直至得到一次成功伪造，所需预言机查询的期望数为</p>
 
 <math-block>
-W(Q)=\frac{Q}{\varepsilon_{\mathrm{BT}}(Q,\kappa)}.
+W(Q)=\frac{Q}{\varepsilon_{\mathrm{BT}}(Q)}
 </math-block>
 
-<p>因此，具体安全性指数为</p>
+<p>因此，定义 1 与定义 2 给出的具体安全性指数为</p>
 
 <math-block>
 \lambda_{\mathrm{BT}}
 =\log_2\!\left(
-\min_{Q\in\mathbb Z_{\ge1}} W(Q)
+\min_{Q\in\mathbb Z_{>0}}W(Q)
 \right).
 </math-block>
 
-<p>按照该定义，协议具有 <math-inline>\lambda</math-inline> 位安全性，当且仅当对每个正整数 <math-inline>Q</math-inline> 都有 <math-inline>W(Q)\ge2^\lambda</math-inline>。对 <math-inline>Q</math-inline> 的最小化本身就是指标的一部分，不能只选择一个方便的敌手查询预算。</p>
+<p>最终整位结果是满足下述条件的最大整数 <math-inline>k</math-inline>：对每个正整数 <math-inline>Q</math-inline> 都有 <math-inline>W(Q)\ge2^k</math-inline>。对 <math-inline>Q</math-inline> 的最小化本身就是定义的一部分。</p>
 
-<h2 id="inputs">History B64/B255 参数</h2>
+<h2 id="production-instance">实际部署参数</h2>
 
-<p>协议输入已与 Parano1d 版本 <a href="https://github.com/ignotusnemo/parano1d/commit/2cce53fc31a0bc173661bf5e07efaa56d8dc661b"><code>2cce53fc31a0bc173661bf5e07efaa56d8dc661b</code></a> 核对。HistoryStep 是区块从父 State 到子 State 的精确转换所对应的递归证明。B64 与 B255 验证同一转换关系，容量分别覆盖最多 64 页和 255 页用户交易。两类 BaseFold 码字分别包含 <math-inline>2^{20}</math-inline> 和 <math-inline>2^{21}</math-inline> 个位置，但采用相同码率与查询数。</p>
+<p>可执行计算发布在 <a href="https://github.com/ignotusnemo/parano1d-soundness">Parano1d 可靠性证书仓库</a>中。其独立的<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/model/production.toml">实际部署参数快照</a>固定到 Parano1d 版本 <a href="https://github.com/ignotusnemo/parano1d/commit/afdce21b6125ae0487c71a9093ab089cb8e88d5a"><code>afdce21b6125ae0487c71a9093ab089cb8e88d5a</code></a>。<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/parameter-provenance.md">参数来源映射</a>记录每个导入值在实际部署源码中的符号。</p>
 
-<p>下文计算所用的精确算术、定理说明和回归测试均发布在 <a href="https://github.com/ignotusnemo/parano1d-qrom">Parano1d QROM 研究仓库</a>中。</p>
+<p>整个实际部署区块容量范围使用同一个安全性计算，只有执行轨迹规模随容量改变。在源代码中，B64 表示最多 64 页用户交易所使用的几何，B255 表示 65 至 255 页所使用的几何。两者以相同码率、查询数和挑战分布证明 HistoryStep 关系，因此得到同一个 Block–Tiwari 结果。</p>
+
+<p>133 个查询位置以放回方式独立均匀采样。它们访问同一个原子向量响应中互不重叠的窗口，因此所有被查询窗口都留在可接受一致集合中的概率，正是下文使用的 133 次幂。</p>
 
 <div class="table-wrap"><table>
-  <thead><tr><th>Block–Tiwari 输入</th><th>取值</th><th>在计算中的作用</th></tr></thead>
+  <thead><tr><th>输入</th><th>实际部署值</th></tr></thead>
   <tbody>
-    <tr><td>域</td><td>GF(2<sup>128</sup>)</td><td>猜想 1 中的域大小分支</td></tr>
-    <tr><td>FRI 码率 <math-inline>\rho</math-inline></td><td>1/4</td><td>一致率与基于猜想的 RBR 项</td></tr>
-    <tr><td>FRI 查询数 <math-inline>\ell</math-inline></td><td>125</td><td>最终查询漏检概率</td></tr>
-    <tr><td>随机预言机输出长度 <math-inline>\kappa</math-inline></td><td>256 位</td><td>Fiat–Shamir 编译器项</td></tr>
-    <tr><td>表中目标</td><td>128 位</td><td>比较表的目标列</td></tr>
-    <tr><td>查询前工作量搜索计入</td><td>无</td><td>该行直接采用 Block–Tiwari 的查询工作量计算</td></tr>
+    <tr><td>执行轨迹规模</td><td>B64：初始码字为 2<sup>20</sup>，定理分层从 2<sup>8</sup> 至 2<sup>20</sup>。B255：初始码字为 2<sup>21</sup>，定理分层从 2<sup>9</sup> 至 2<sup>21</sup>。</td></tr>
+    <tr><td>码率 <math-inline>\rho</math-inline></td><td>1/4</td></tr>
+    <tr><td>BaseFold 查询数 <math-inline>\ell</math-inline></td><td>133</td></tr>
+    <tr><td>承诺执行轨迹所在域</td><td>GF(2<sup>128</sup>)</td></tr>
+    <tr><td>代数挑战支撑集</td><td>GF(2<sup>256</sup>) 中迹为 1 的子集，基数为 2<sup>255</sup></td></tr>
+    <tr><td>随机预言机输出长度 <math-inline>\kappa</math-inline></td><td>256 位</td></tr>
+    <tr><td>单个列表候选的最大代数根数</td><td>127</td></tr>
+    <tr><td>单个列表候选的联合 sidecar 根数</td><td>36</td></tr>
   </tbody>
 </table></div>
 
-<p>域大小与 <math-inline>\kappa</math-inline> 是两个不同输入。GF(2<sup>128</sup>) 决定下文的 <math-inline>2^{-128}</math-inline> 域大小分支；256 位摘要决定含 <math-inline>2^{-256}</math-inline> 的 Fiat–Shamir 项。Block 与 Tiwari 在比较不同域大小的协议时，同样固定 <math-inline>\kappa=256</math-inline>。</p>
+<p>挑战支撑集与摘要长度是两个不同输入。代数坏响应概率的分母为 <math-inline>2^{255}</math-inline>，Fiat–Shamir 编译器项的分母为 <math-inline>2^{256}</math-inline>。最终的工作量证明 nonce 谓词不会降低 RBR 上界。</p>
 
-<h2 id="rbr-premises">同一参数集的两种 RBR 前提</h2>
+<h2 id="provable-rbr">已证明的 RBR 前提</h2>
 
-<h3 id="proved-rbr">已证明的 History RBR 界</h3>
+<p>RBR 定理针对去除 Merkle 承诺与 grinding 的公开随机币 IOP。令 <math-inline>m\ge3</math-inline> 为 Johnson 列表译码的整数重数，并定义</p>
 
-<p><a href="https://github.com/ignotusnemo/parano1d-qrom/blob/main/docs/history-rbrk-theorem.md">History RBR 定理</a>分析 GF(2<sup>128</sup>) 上的公币 IOP，其中承诺已替换为对预言机的直接访问。在相对距离 <math-inline>2/5</math-inline> 下，任何保留到最终查询动作的候选，与初始 32 列预言机的一致位置比例至多为 <math-inline>3/5</math-inline>；唯一例外是此前某个验证者挑战值落入已明确计数的异常集合。</p>
+<math-block>
+h=m+\frac12,
+\qquad
+\gamma=\frac{m-1}{2m},
+\qquad
+s_N=\frac{N-4}{2N}.
+</math-block>
 
-<p>32 列被打包成固定的 32 次扩域上的一个 Reed–Solomon 码字。重数为 5 的列表译码至多留下 11 个初始候选。列表相关一致性（list-correlated agreement）把后续折叠产生的每个候选追溯到这份固定列表。若在代数挑战处切换候选，界中会计入各候选根集合的并集，而不假设候选始终固定。单个候选的最大代数次数为 127。</p>
+<p>对于长度为 <math-inline>N</math-inline>、码率为四分之一的 Reed–Solomon 分层，在列表相关一致性定理采用的次数约定下，约化码率为</p>
+
+<math-block>
+\rho_N=\frac{N/4-1}{N}=\frac14-\frac1N.
+</math-block>
+
+<p>直接展开可得 <math-inline>s_N^2\lt\rho_N</math-inline>。所需重数条件在每个实际部署分层上均成立：</p>
+
+<math-block>
+\left\lceil
+\frac{\sqrt{\rho_N}}
+{1-\sqrt{\rho_N}-\gamma}
+\right\rceil\le m.
+</math-block>
+
+<p>将严格有理下界 <math-inline>s_N\lt\sqrt{\rho_N}</math-inline> 代入 <a href="https://eprint.iacr.org/2025/2055">Ben-Sasson、Carmon、Haböck、Kopparty 与 Saraf</a> 的定理 4.6，可得异常挑战数的整数上界</p>
+
+<math-block>
+A_N(m)=\left\lfloor
+N\frac{2h^5+3h\gamma s_N^2}{3s_N^3}
++\frac{h}{s_N}
+\right\rfloor.
+</math-block>
+
+<p>初始码字对应的严格列表大小界为</p>
+
+<math-block>
+L_N(m)=\left\lceil\frac{h}{s_N}\right\rceil-1,
+\qquad
+L_{\max}(m)=\max\!\left\{
+L_{2^{20}}(m),L_{2^{21}}(m)
+\right\}.
+</math-block>
+
+<p>对 133 个独立采样的查询位置，列表译码的查询逃逸项为</p>
+
+<math-block>
+E_q(m)=\left(\frac{m+1}{2m}\right)^{133}.
+</math-block>
+
+<p>合并查询逃逸、两组分层调度中的全部接近度异常、候选切换以及联合 sidecar 关系，得到</p>
+
+<math-block>
+\begin{aligned}
+\kappa_H(m)=\max\{&
+E_q(m),\\
+&\max_{N\in\mathcal N_{64}\cup\mathcal N_{255}}
+\frac{A_N(m)}{2^{255}},\\
+&\frac{127L_{\max}(m)}{2^{255}},
+\frac{36L_{\max}(m)}{2^{255}}
+\}.
+\end{aligned}
+</math-block>
+
+<p>其中 <math-inline>\mathcal N_{64}=\{2^8,\ldots,2^{20}\}</math-inline>、<math-inline>\mathcal N_{255}=\{2^9,\ldots,2^{21}\}</math-inline>，每个集合都包含其范围内连续的 2 的幂。</p>
+
+<h3 id="candidate-switching">候选切换为何已计入</h3>
+
+<p>32 行交错的初始数据被打包成固定 32 次扩域上的一个 Reed–Solomon 码字。该打包保持列 Hamming 距离，并产生一份大小至多为 <math-inline>L_{\max}(m)</math-inline> 的固定初始列表。在每个非异常的行批折叠或位置折叠中，列表相关一致性定理把选定的折叠后候选关联到同一加权一致集合上的相关折叠前候选。加性 NTT 蝶形是可逆的，因此 <a href="https://eprint.iacr.org/2024/1571">Haböck</a> 给出的加性 FFT BaseFold 归约可用于实际部署的折叠调度。</p>
+
+<p>每个恢复出的候选与已承诺的基域行在超过 <math-inline>N/2</math-inline> 个位置上一致，而其次数低于 <math-inline>N/4</math-inline>。Frobenius 共轭与多项式唯一性迫使分解后的各行属于嵌入的 GF(2<sup>128</sup>) 子域。后续每个错误恒等式都是下一个验证者挑战上的非零多项式。对完整初始列表取根集合的并，得到上式中的 127 根项与 36 根项。整个论证不假设证明者始终保留同一候选。</p>
+
+<p>分组 Merkle 轮次只会收缩确定性的折叠路径，不引入未经检查的步骤。加权反向图把单次查询剩余的可接受比例限制为 <math-inline>(m+1)/(2m)</math-inline>；133 个位置的独立性给出 <math-inline>E_q(m)</math-inline>。</p>
+
+<p>实际部署验证器的完整根数清单如下：</p>
 
 <div class="table-wrap"><table>
-  <thead><tr><th>RBR 动作类别</th><th>B64 界</th><th>B255 界</th></tr></thead>
+  <thead><tr><th>验证器步骤</th><th>单个候选的最大根数</th></tr></thead>
   <tbody>
-    <tr><td>折叠的列表相关异常</td><td>28,150,638,096 / 2<sup>128</sup></td><td>56,300,954,059 / 2<sup>128</sup></td></tr>
-    <tr><td>代数候选切换</td><td colspan="2">11 · 127 / 2<sup>128</sup></td></tr>
-    <tr><td>联合 sidecar 关系</td><td colspan="2">11 · 24 / 2<sup>128</sup></td></tr>
-    <tr><td>125 条完整查询路径</td><td colspan="2">(3/5)<sup>125</sup></td></tr>
+    <tr><td>公共输入压缩</td><td>7</td></tr>
+    <tr><td>sidecar 多线性点</td><td>19</td></tr>
+    <tr><td>九组联合 sidecar 批处理</td><td>36</td></tr>
+    <tr><td>ragged-walk sumcheck 轮次</td><td>8</td></tr>
+    <tr><td>zerocheck 坐标压缩</td><td>18</td></tr>
+    <tr><td>zerocheck 插值挑战</td><td>127</td></tr>
+    <tr><td>延迟内部坐标</td><td>63</td></tr>
+    <tr><td>其他 sumcheck 轮次</td><td>2</td></tr>
+    <tr><td>联合 lincheck 或 PCS 声明批处理</td><td>1</td></tr>
   </tbody>
 </table></div>
 
-<p>对两个类别而言，完整路径项都是这四个量中的最大值。因此，广义 RBR 知识可靠性误差为</p>
+<p>直线提取器对打包后的初始码字进行列表译码，把每个候选分解为 32 行基域数据，执行加性 NTT 的逆变换，并且只在精确 History 关系成立时保留候选。对不可能产生有效见证的交互前缀做反向归纳，可以证明：任何无见证但最终被接受的交互记录，都必须通过 <math-inline>\kappa_H(m)</math-inline> 中四类事件之一离开该集合。因此这里得到的是广义逐轮知识界，而不只是终端接受概率估计。</p>
+
+<h3 id="multiplicity">精确重数优化</h3>
+
+<p>随着 <math-inline>m</math-inline> 增大，<math-inline>E_q(m)</math-inline> 递减，而接近度项与列表大小项不递减。两类项只有一次交叉，因此只需比较相邻的两个重数。精确整数二分查找与一次有理数比较选出</p>
 
 <math-block>
-\varepsilon_{\mathrm{RBR}}^{\mathrm{proved}}
-=\max\!\left\{
-\frac{U_5(n)}{2^{128}},
-\frac{11\cdot127}{2^{128}},
-\frac{11\cdot24}{2^{128}},
-\left(\frac35\right)^{125}
-\right\}
-=\left(\frac35\right)^{125}.
+m_*=861824,
+\qquad
+L_{\max}(m_*)=1723655.
 </math-block>
 
-<p>在这些坏响应事件之外，提取器会返回有效的 History 见证。因此，如果验证者接受错误陈述，提取器必然已经失败；同一数值也就可以作为 Block–Tiwari 编译器的 RBR 可靠性前提：</p>
+<p>在 <math-inline>m_*</math-inline> 处，四项精确值为：</p>
 
-<math-block>
-\boxed{
-\varepsilon_{\mathrm{RBR}}^{\mathrm{proved}}
-=\left(\frac35\right)^{125}.}
-</math-block>
+<div class="table-wrap"><table>
+  <thead><tr><th>RBR 项</th><th>精确值</th></tr></thead>
+  <tbody>
+    <tr><td>查询逃逸</td><td><math-inline>(861825/1723648)^{133}</math-inline></td></tr>
+    <tr><td>最大分层接近度异常</td><td><math-inline>5317717993529868433397264455583323037/2^{255}</math-inline></td></tr>
+    <tr><td>候选切换</td><td><math-inline>218904185/2^{255}</math-inline></td></tr>
+    <tr><td>联合 sidecar</td><td><math-inline>62051580/2^{255}</math-inline></td></tr>
+  </tbody>
+</table></div>
 
-<h3 id="conjectured-rbr">猜想 1 前提</h3>
-
-<p>在基于猜想的列中，Block 与 Tiwari 假定目前已知的最佳信息论 FRI 攻击是最优的。相应的 RBR 前提为</p>
-
-<math-block>
-\varepsilon_{\mathrm{RBR}}^{\mathrm{conj}}
-=\max\!\left\{\frac1{|\mathbb F|},\rho^\ell\right\}.
-</math-block>
-
-<p>代入域、码率和查询数，得到</p>
+<p>精确比较表明查询逃逸项最大。因此，输入 Block–Tiwari 编译器的已证明 RBR 前提为</p>
 
 <math-block>
 \boxed{
-\varepsilon_{\mathrm{RBR}}^{\mathrm{conj}}
-=\max\!\left\{2^{-128},(1/4)^{125}\right\}
-=\max\!\left\{2^{-128},2^{-250}\right\}
-=2^{-128}.}
+\varepsilon_{\mathrm{RBR}}^{\mathrm{provable}}
+=\left(\frac{861825}{1723648}\right)^{133}.}
 </math-block>
 
-<p>最大值由域大小分支决定。因此，两类 History 在后续计算中具有相同的已证明取值，也具有相同的猜想取值。</p>
+<h2 id="conjectured-rbr">猜想 1 前提</h2>
 
-<h2 id="optimizer">全局优化为何只需检查两个整数</h2>
+<p>在基于猜想的列中，Block 与 Tiwari 假定目前已知的最佳信息论 FRI 攻击是最优的。此处应使用代数挑战支撑集的基数，而不是承诺执行轨迹所在域的名义大小。代入实际部署的码率、查询数与支撑集基数，得到</p>
 
-<p>记 <math-inline>a=\varepsilon_{\mathrm{RBR}}</math-inline>、<math-inline>b=3/2^{256}</math-inline>。在概率达到截断值之前，</p>
+<math-block>
+\begin{aligned}
+\varepsilon_{\mathrm{RBR}}^{\mathrm{conjectured}}
+&=\max\!\left\{2^{-255},(1/4)^{133}\right\}\\
+&=\max\!\left\{2^{-255},2^{-266}\right\}\\
+&=2^{-255}.
+\end{aligned}
+</math-block>
+
+<p>已证明前提与基于猜想的前提是两个不同的精确概率。接下来它们进入同一个 Fiat–Shamir 编译器与同一个期望工作量优化器。</p>
+
+<h2 id="optimizer">精确全局优化器</h2>
+
+<p>记 <math-inline>a=\varepsilon_{\mathrm{RBR}}</math-inline>、<math-inline>b=3/2^{256}</math-inline>。在编译器误差达到截断值之前，</p>
 
 <math-block>
 W(Q)
@@ -152,130 +236,89 @@ W(Q)
 =\frac1{a+b(Q+1/Q)}.
 </math-block>
 
-<p>对正整数 <math-inline>Q</math-inline>，<math-inline>Q+1/Q</math-inline> 单调不减，因此 <math-inline>W(Q)</math-inline> 在未截断区间单调不增。误差达到一之后，<math-inline>W(Q)=Q</math-inline> 严格递增。全局最小值必然位于相邻的两个整数之一：未截断误差仍小于一的最大 <math-inline>Q_0</math-inline>，或首个被截断的点 <math-inline>Q_1=Q_0+1</math-inline>。</p>
-
-<p>该论证覆盖所有正整数查询预算。用精确整数二分查找定位边界，再做一次有理数比较即可选出两者中的最小值。</p>
-
-<h2 id="calculations">两个安全性列的精确计算</h2>
+<p>对正整数 <math-inline>Q</math-inline>，<math-inline>Q+1/Q</math-inline> 单调不减，所以 <math-inline>W(Q)</math-inline> 在未截断区间单调不增。误差截断为一之后，<math-inline>W(Q)=Q</math-inline> 严格递增。因此全局最小值只能位于最后一个未截断整数或第一个截断整数。精确二分查找确定边界，再用一次有理数比较选出较小者。</p>
 
 <h3 id="provable-calculation">可证明 FS-FRI 安全性</h3>
 
-<p>对 <math-inline>a=(3/5)^{125}</math-inline>，定义</p>
+<pre><code>最后一个未截断 Q = 194697534987145646766651744479049925879
+第一个截断 Q       = 194697534987145646766651744479049925880
+全局最小值位于最后一个未截断 Q</code></pre>
+
+<p>代入已证明 RBR 分数并做精确交叉相乘，得到</p>
 
 <math-block>
-D=5^{125}2^{256},
-\qquad
-N(Q)=Q3^{125}2^{256}+3(Q^2+1)5^{125}.
+2^{127}
+\le
+\min_{Q\in\mathbb Z_{>0}}W_{\mathrm{provable}}(Q)
+\lt
+2^{128}.
 </math-block>
 
-<p>未截断误差精确等于 <math-inline>N(Q)/D</math-inline>。整数比较给出唯一截断边界：</p>
-
-<pre><code>Q0 = 5,383,859,304,820,033,230,077,561,761   且 N(Q0) &lt; D
-Q1 = 5,383,859,304,820,033,230,077,561,762   且 N(Q1) ≥ D</code></pre>
-
-<p>在 <math-inline>Q_0</math-inline> 处，</p>
-
-<pre><code>epsilon_BT(Q0) = 0.999999999999999999999999999827291815635045301984…
-W(Q0)          = 5,383,859,304,820,033,230,077,561,761.929836565411835132…</code></pre>
-
-<p>精确有理数比较证明 <math-inline>W(Q_0)\lt Q_1</math-inline>，并且</p>
+<p>精确有理数最小值的十进制对数为</p>
 
 <math-block>
-2^{92}\le W(Q_0)\lt2^{93}.
-</math-block>
-
-<p>因此 <math-inline>Q_0</math-inline> 是全局最小点，经认证的整数位数为 92；其十进制指数为</p>
-
-<math-block>
-\boxed{\lambda_{\mathrm{BT}}^{\mathrm{proved}}
-=92.120699270775770802\ldots\ \text{位}.}
+\boxed{
+\lambda_{\mathrm{BT}}^{\mathrm{provable}}
+=127.194502224322\ldots\ \text{位}.}
 </math-block>
 
 <h3 id="conjectured-calculation">基于猜想的 FS-FRI 安全性</h3>
 
-<p>对 <math-inline>a=2^{-128}</math-inline>，未截断误差具有如下精确整数形式：</p>
+<pre><code>最后一个未截断 Q = 196462116142286827589391637123844718210
+第一个截断 Q       = 196462116142286827589391637123844718211
+全局最小值位于第一个截断 Q</code></pre>
+
+<p>基于猜想的最小值恰好等于第一个截断查询预算。精确整数比较给出</p>
 
 <math-block>
-\varepsilon_{\mathrm{BT}}^{\mathrm{conj}}(Q)
-=\frac{Q2^{128}+3(Q^2+1)}{2^{256}}.
+2^{127}
+\le
+\min_{Q\in\mathbb Z_{>0}}W_{\mathrm{conjectured}}(Q)
+\lt
+2^{128},
 </math-block>
 
-<p>截断边界两侧的相邻整数为</p>
-
-<pre><code>Q0 = 147,770,525,858,126,068,760,353,057,306,253,383,503
-Q1 = 147,770,525,858,126,068,760,353,057,306,253,383,504
-
-Q0·2^128 + 3(Q0^2+1) &lt;  2^256
-Q1·2^128 + 3(Q1^2+1) ≥ 2^256</code></pre>
-
-<p>未截断候选仍给出更小的工作量：</p>
-
-<pre><code>epsilon_BT(Q0) = 0.999999999999999999999999999999999999995931834736…
-W(Q0)          = 147,770,525,858,126,068,760,353,057,306,253,383,503.601154920268…</code></pre>
-
-<p>精确比较得到 <math-inline>W(Q_0)\lt Q_1</math-inline>，并且</p>
+<p>对应的十进制指数为</p>
 
 <math-block>
-2^{126}\le W(Q_0)\lt2^{127}.
+\boxed{
+\lambda_{\mathrm{BT}}^{\mathrm{conjectured}}
+=127.207518749639\ldots\ \text{位}.}
 </math-block>
 
-<p>经认证的整数位数为 126；其十进制指数为</p>
+<p>两项整位结果由精确的 2 的幂不等式认证，而不是由十进制对数的舍入结果决定。</p>
 
-<math-block>
-\boxed{\lambda_{\mathrm{BT}}^{\mathrm{conj}}
-=126.796626145577656957\ldots\ \text{位}.}
-</math-block>
+<h2 id="comparison">如何解读比较结果</h2>
 
-<h2 id="interpretation">两列数值说明了什么</h2>
+<p>Parano1d 的可证明值与 Block–Tiwari 已发布表格中的最高可证明整位值相同。其基于猜想的值比 Miden 128 位配置低一位，比 lambdaworks 128 位配置低两位。Parano1d 的两项结果都比设定的 128 位目标低一整位。</p>
 
-<p>在 Block 与 Tiwari 的比较中，Parano1d 的可证明数值高于除 lambdaworks 之外的所有数值，包括 Miden 128 位配置的 67。在三组 lambdaworks 参数中，它高于 80 位配置，低于 100 位和 128 位配置。Block 与 Tiwari 特别指出，lambdaworks 是其比较中唯一一个所有可证明数值都接近对应目标的系统族。</p>
+<p>Parano1d 两列显示相同，并不意味着已证明前提与猜想 1 相同。两者的 RBR 概率和精确期望工作量最小值仍然不同。256 位随机预言机碰撞项使两个最小值落入同一个整位区间。</p>
 
-<p>Parano1d 基于猜想的指数比 128 位目标低 <math-inline>1.203373854422\ldots</math-inline> 位，向下取整后显示为 126。两个 Parano1d 精确指数之差为</p>
+<h2 id="reproduction">复现证书</h2>
 
-<math-block>
-126.796626145577\ldots
--92.120699270775\ldots
-=34.675926874802\ldots\ \text{位}.
-</math-block>
+<p>独立仓库包含参数快照、定理特化、精确优化器以及回归测试。版本 <a href="https://github.com/ignotusnemo/parano1d-soundness/commit/bfd5b1742ba8906167de90bf06a683f5639ca667"><code>bfd5b1742ba8906167de90bf06a683f5639ca667</code></a> 可复现本文：</p>
 
-<p>在该方法中，这一差值具有明确含义：把已证明的 RBR 前提 <math-inline>(3/5)^{125}</math-inline> 替换为猜想 1 的 <math-inline>2^{-128}</math-inline> 前提时，具体 FS-FRI 安全性增加了这么多。它不是取整造成的误差，也没有被隐藏在目标列中。</p>
+<pre><code>git clone https://github.com/ignotusnemo/parano1d-soundness.git
+cd parano1d-soundness
+git checkout bfd5b1742ba8906167de90bf06a683f5639ca667
 
-<h2 id="reproduction">复现整数证书</h2>
+cargo run --release --locked
+cargo run --release --locked -- --exact
+cargo test --release --locked</code></pre>
 
-<p>公开仓库中的精确优化器位于 <a href="https://github.com/ignotusnemo/parano1d-qrom/tree/main/crates/block-tiwari-rom"><code>crates/block-tiwari-rom</code></a>，两项结果均由回归测试验证：</p>
+<p>普通运行输出三个整位结果。带 <code>--exact</code> 的运行输出两个 RBR 分数、选定重数、两组截断边界、两个最小化查询预算以及两个精确期望工作量分数。测试固定 W65/H133 参数，覆盖两种实际部署执行轨迹规模，拒绝不一致的参数快照对应关系，并使用任意精度整数或有理数算术检查每一项 2 的幂证书。</p>
 
-<pre><code>git clone https://github.com/ignotusnemo/parano1d-qrom.git
-cd parano1d-qrom
-
-cargo test --release --locked --workspace
-cargo run --release --locked -p scenarios -- block-tiwari-rom</code></pre>
-
-<p>两个发布位数的判定均不依赖浮点数。复现只需任意精度整数与四个步骤：</p>
-
-<ol>
-  <li>根据选定的 RBR 前提写出未截断误差的分子；</li>
-  <li>用二分查找求出分子仍小于分母的最大正整数 <math-inline>Q_0</math-inline>；</li>
-  <li>以精确有理数比较 <math-inline>W(Q_0)</math-inline> 与 <math-inline>Q_0+1</math-inline>；</li>
-  <li>把较小的有理数与相邻的 2 的幂比较。</li>
-</ol>
-
-<p>对已证明的前提，两次二次幂检验无需除法即可写为</p>
-
-<math-block>
-2^{92}N(Q_0)\le Q_0D\lt2^{93}N(Q_0).
-</math-block>
-
-<p>对基于猜想的前提，把 <math-inline>D</math-inline> 替换为 <math-inline>2^{256}</math-inline>，把 <math-inline>N(Q)</math-inline> 替换为 <math-inline>Q2^{128}+3(Q^2+1)</math-inline>。上文给出的边界整数足以作为独立 SageMath、Rust、Python 或其他计算机代数实现的回归向量。<a href="https://github.com/alexander-r-block/FRI-Parameter-Testing-Sagemath">作者的 SageMath 仓库</a>提供了其更完整参数研究的参考实现。</p>
+<p>完整推导见 <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/block-tiwari.md"><code>docs/block-tiwari.md</code></a>。精确实现分为两部分：<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/src/local.rs"><code>src/local.rs</code></a> 实现 RBR 定理，<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/src/block_tiwari.rs"><code>src/block_tiwari.rs</code></a> 实现 Block–Tiwari 优化器。</p>
 
 <h2 id="references">主要原始资料</h2>
 
 <ul>
-  <li><a href="https://github.com/ignotusnemo/parano1d-qrom">Ignotus Nemo，Parano1d QROM 研究仓库</a>：精确算术、定理说明、参数与回归测试。</li>
-  <li><a href="https://eprint.iacr.org/2024/1161">Alexander R. Block 与 Pratyush Ranjan Tiwari，<em>On the Concrete Security of Non-interactive FRI</em></a>，重点参见定义 1–2、引理 1、猜想 1、第 4 节与表 1。</li>
+  <li><a href="https://github.com/ignotusnemo/parano1d-soundness">Ignotus Nemo，Parano1d 可靠性证书</a>：固定的实际部署参数快照、定理特化、精确算术与回归测试。</li>
+  <li><a href="https://eprint.iacr.org/2024/1161">Alexander R. Block 与 Pratyush Ranjan Tiwari，<em>On the Concrete Security of Non-interactive FRI</em></a>，重点参见定义 1 与定义 2、引理 1、猜想 1、第 4 节和表 1。</li>
   <li><a href="https://github.com/alexander-r-block/FRI-Parameter-Testing-Sagemath">Block 与 Tiwari，FRI Parameter Testing in SageMath</a>。</li>
-  <li><a href="https://eprint.iacr.org/2023/1071">Block、Garreta、Tiwari 与 Zając，<em>Fiat–Shamir Security of FRI and Related SNARKs</em></a>。</li>
-  <li><a href="https://github.com/ignotusnemo/parano1d/commit/2cce53fc31a0bc173661bf5e07efaa56d8dc661b">这些计算所用的 Parano1d 版本</a>。</li>
-  <li><a href="/zh/research/parano1d-soundness-industry-metrics/">行业指标下的 Parano1d 可靠性</a>：采用其他已公开口径研究同一组 History 配置的前一篇文章。</li>
+  <li><a href="https://eprint.iacr.org/2023/1071">Alexander R. Block、Albert Garreta、Jonathan Katz、Justin Thaler、Pratyush Ranjan Tiwari 与 Michał Zając，<em>Fiat–Shamir Security of FRI and Related SNARKs</em></a>。</li>
+  <li><a href="https://eprint.iacr.org/2025/2055">Eli Ben-Sasson、Dan Carmon、Ulrich Haböck、Swastik Kopparty 与 Shubhangi Saraf，<em>On Proximity Gaps for Reed–Solomon Codes</em></a>，定理 4.6。</li>
+  <li><a href="https://eprint.iacr.org/2024/1571">Ulrich Haböck，<em>BaseFold in the List Decoding Regime</em></a>。</li>
 </ul>
 
 <p><em>Ignotus Nemo</em></p>

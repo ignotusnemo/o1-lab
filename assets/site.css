@@ -480,14 +480,6 @@ img, svg { max-width: 100%; }
 .art--frost .trace-callout path { fill: none; stroke: rgba(102,184,215,.62); }
 .art--frost .trace-callout rect { fill: #0b2022; stroke: rgba(102,184,215,.45); }
 
-/* Authenticated proof classes */
-.art--classes .cadence-ruler path { fill: none; stroke: rgba(47,233,133,.48); }
-.art--classes .cadence-ruler circle { fill: #2fe985; stroke: #b6f8d3; }
-.art--classes .cadence-ruler--blue path { stroke: rgba(102,184,215,.62); }
-.art--classes .cadence-ruler--blue circle { fill: #66b8d7; stroke: #d5f4ff; }
-.art--classes .class-bridge path { stroke: rgba(216,245,45,.5); }
-.art--classes .class-bridge circle { fill: #d8f52d; stroke: #f2ffc0; }
-
 /* Binary-field kernels */
 .art--kernel .kernel-register rect, .art--kernel .kernel-digest rect { fill: #0c1c15; stroke: rgba(47,233,133,.42); }
 .art--kernel .kernel-register path { stroke: rgba(115,155,134,.3); }
@@ -513,11 +505,6 @@ img, svg { max-width: 100%; }
 .art--walk .round-column rect { fill: #092129; stroke: rgba(102,184,215,.58); }
 .art--walk .round-column > path { stroke: rgba(102,184,215,.48); }
 .art--walk .round-column circle { fill: #66b8d7; stroke: #d2f1fb; }
-
-/* Recursive fixed point */
-.art--recursion .fixed-loop path { fill: none; stroke: rgba(216,245,45,.65); stroke-width: 1.4; }
-.art--recursion .proof-core { fill: rgba(255,255,255,.035); stroke: rgba(161,201,180,.3); }
-.art--recursion .proof-step .proof-core + text { fill: #b7d5c4; font: 11px "Lab Mono", monospace; }
 
 /* Owner-batched authorization */
 .art--authorization .page-grid circle { filter: url(#glow-authorization); }
@@ -595,48 +582,12 @@ img, svg { max-width: 100%; }
 .art--nonce .nonce-list .winner circle { fill: #2fe985; stroke: #c8ffe0; }
 .art--nonce .nonce-list .winner path { fill: none; stroke: #07351f; stroke-width: 1.5; }
 
-/* Soundness metrology instrument */
-.art--soundness .sound-bench path,
-.art--soundness .sound-bench circle { fill: none; stroke: rgba(91,146,116,.12); stroke-width: 1; }
-.art--soundness .sound-bench .sound-bench-rail { stroke-dasharray: 2 8; }
-.art--soundness .sound-bench .sound-bench-rail--minor { stroke: rgba(102,184,215,.08); stroke-dasharray: 1 10; }
-.art--soundness .sound-calibration-bed { fill: rgba(5,21,14,.98); stroke: rgba(74,129,99,.42); stroke-width: 1.2; }
-.art--soundness .sound-calibration-bezel { fill: rgba(11,34,23,.96); stroke: rgba(135,182,156,.34); stroke-width: 1; }
-.art--soundness .sound-calibration-tick { fill: none; stroke: rgba(132,175,152,.35); stroke-width: .75; }
-.art--soundness .sound-calibration-tick--major { stroke: rgba(195,224,208,.58); stroke-width: 1.15; }
-.art--soundness .sound-calibration-arc { fill: none; stroke-width: 3.2; stroke-linecap: round; filter: url(#glow-soundness); }
-.art--soundness .sound-calibration-arc--blue { stroke: #66b8d7; }
-.art--soundness .sound-calibration-arc--violet { stroke: #c976d6; }
-.art--soundness .sound-calibration-arc--green { stroke: #2fe985; }
-.art--soundness .sound-calibration-glass { fill: rgba(8,31,22,.88); stroke: rgba(169,217,190,.38); stroke-width: 1; }
-.art--soundness .sound-calibration-inner { fill: rgba(8,42,27,.72); stroke: rgba(47,233,133,.22); }
-.art--soundness .sound-calibration-needle { fill: none; stroke: #d9f7e7; stroke-width: 1.6; stroke-linecap: round; filter: url(#glow-soundness); }
-.art--soundness .sound-calibration-pin { fill: #2fe985; stroke: #c8ffe0; stroke-width: 1.5; }
-.art--soundness .sound-feed path,
-.art--soundness .sound-output path { fill: none; stroke-width: 1.35; stroke-linecap: round; }
-.art--soundness .sound-feed path { stroke: rgba(216,245,45,.5); }
-.art--soundness .sound-feed circle { fill: #d8f52d; stroke: rgba(255,255,210,.8); }
-.art--soundness .sound-output--blue path { stroke: rgba(102,184,215,.66); }
-.art--soundness .sound-output--blue circle { fill: #66b8d7; }
-.art--soundness .sound-output--violet path { stroke: rgba(201,118,214,.65); }
-.art--soundness .sound-output--violet circle { fill: #c976d6; }
-.art--soundness .sound-output--green path { stroke: rgba(47,233,133,.68); }
-.art--soundness .sound-output--green circle { fill: #2fe985; }
-.art--soundness .sound-readout rect { fill: rgba(10,25,18,.98); stroke: rgba(131,170,149,.34); stroke-width: 1; }
-.art--soundness .sound-readout--input rect { fill: rgba(26,31,12,.97); stroke: rgba(216,245,45,.42); }
-.art--soundness .sound-readout--blue rect { stroke: rgba(102,184,215,.5); }
-.art--soundness .sound-readout--violet rect { stroke: rgba(201,118,214,.47); }
-.art--soundness .sound-readout--green rect { stroke: rgba(47,233,133,.55); }
-.art--soundness .sound-readout-kind { fill: #789582; font: 6.8px/1 "Lab Mono", monospace; letter-spacing: .66px; }
-.art--soundness .sound-readout-name { fill: #dcece3; font: 700 10px/1 "Lab Sans", sans-serif; letter-spacing: .1px; }
-.art--soundness .sound-readout-detail { fill: #dceb7b; font: 7px/1 "Lab Mono", monospace; letter-spacing: .35px; }
-.art--soundness .sound-readout-value { fill: #f0fff7; font: 700 20px/1 "Lab Sans", sans-serif; letter-spacing: -.5px; }
-.art--soundness .sound-readout > path { fill: none; stroke: rgba(167,202,183,.35); }
-.art--soundness .sound-game-key text { fill: #718c7d; font: 6.8px/1 "Lab Mono", monospace; letter-spacing: .45px; }
-.art--soundness .sound-game-key > path { stroke: rgba(129,167,147,.24); }
-.art--soundness .sound-game-key--blue { fill: #66b8d7; }
-.art--soundness .sound-game-key--violet { fill: #c976d6; }
-.art--soundness .sound-game-key--green { fill: #2fe985; }
+/* NIST Category 1 quantum-state sphere */
+.art--categoryone .categoryone-states text {
+  fill: #fff;
+  font-family: KaTeX_Main, "Times New Roman", serif;
+  font-size: 25px;
+}
 
 .focus-list { border-top: 1px solid var(--line-dark); }
 .focus-list > a { min-height: 118px; display: grid; grid-template-columns: 70px 1fr auto; align-items: center; gap: 25px; border-bottom: 1px solid var(--line-dark); text-decoration: none; transition: background .18s ease, padding .18s ease, box-shadow .18s ease; }
