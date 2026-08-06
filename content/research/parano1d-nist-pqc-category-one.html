@@ -33,7 +33,7 @@
 
 <h2 id="production-instance">The production instance</h2>
 
-<p>The calculation is pinned to Parano1d revision <a href="https://github.com/ignotusnemo/parano1d/commit/afdce21b6125ae0487c71a9093ab089cb8e88d5a"><code>afdce21b6125ae0487c71a9093ab089cb8e88d5a</code></a>. The standalone <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/model/production.toml">production snapshot</a> records every security input, and the <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/parameter-provenance.md">provenance map</a> points each value back to its Rust definition.</p>
+<p>The calculation is pinned to Parano1d revision <a href="https://github.com/ignotusnemo/parano1d/commit/39626b22d53cf2f2c480a7e28446c197dca68043"><code>39626b22d53cf2f2c480a7e28446c197dca68043</code></a>. The standalone <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/model/production.toml">production snapshot</a> records every security input, and the <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/parameter-provenance.md">provenance map</a> points each value back to its Rust definition.</p>
 
 <div class="table-wrap"><table>
   <thead><tr><th>Input</th><th>Production value</th></tr></thead>
@@ -43,13 +43,13 @@
     <tr><td>Algebraic challenge support</td><td><math-inline>2^{255}</math-inline></td></tr>
     <tr><td>Digest width</td><td>256 bits</td></tr>
     <tr><td>History code rate</td><td>1/4</td></tr>
-    <tr><td>Initial History codeword</td><td><math-inline>2^{20}</math-inline> or <math-inline>2^{21}</math-inline></td></tr>
+    <tr><td>Initial History codeword</td><td><math-inline>2^{19}</math-inline> or <math-inline>2^{21}</math-inline></td></tr>
     <tr><td>Joint sidecar groups</td><td>9</td></tr>
     <tr><td>Poseidon2b</td><td><math-inline>t=4</math-inline>, rate 2, <math-inline>x^7</math-inline>, 8 full rounds, 58 partial rounds</td></tr>
   </tbody>
 </table></div>
 
-<p>The two initial codeword lengths are the two production History geometries. B64 is used through 64 user-transaction pages and B255 from 65 through 255 pages. They prove the same HistoryStep relation with the same rate, query count, challenge distribution and local theorem. Only the trace length changes.</p>
+<p>The two initial codeword lengths are the two production History geometries. B25 covers up to 25 effective page positions and B255 covers 26 through 255. They prove the same HistoryStep relation with the same rate, query count, challenge distribution and local theorem. Only the trace length changes.</p>
 
 <p>Algebraic challenges lie in a trace-one affine subset of GF(2<sup>256</sup>) with exactly <math-inline>2^{255}</math-inline> elements. The 256-bit digest width is a separate input. Keeping them separate is essential: algebraic exceptional sets use denominator <math-inline>2^{255}</math-inline>, while global binding collisions use <math-inline>2^{256}</math-inline>.</p>
 
@@ -96,7 +96,7 @@ N\frac{2h^5+3h\gamma s_N^2}{3s_N^3}+\frac{h}{s_N}
 <math-block>
 L_N(m)=\left\lceil\frac{h}{s_N}\right\rceil-1,
 \qquad
-L_{\max}(m)=\max\{L_{2^{20}}(m),L_{2^{21}}(m)\}.
+L_{\max}(m)=\max\{L_{2^{19}}(m),L_{2^{21}}(m)\}.
 </math-block>
 
 <p>The <a href="https://eprint.iacr.org/2025/2055">list-correlated Reed–Solomon theorem</a> supplies <math-inline>A_N(m)</math-inline>. The <a href="https://eprint.iacr.org/2024/1571">BaseFold analysis</a> carries it through the production fold schedule. With 133 independent query positions, the remaining escape term is</p>
@@ -118,7 +118,7 @@ E_q(m)=\left(\frac{m+1}{2m}\right)^{133}.
 \end{aligned}
 </math-block>
 
-<p>The proximity maximum ranges over <math-inline>N\in\{2^8,\ldots,2^{20}\}\cup\{2^9,\ldots,2^{21}\}</math-inline>, covering every folded layer of both production geometries.</p>
+<p>The proximity maximum ranges over <math-inline>N\in\{2^7,\ldots,2^{19}\}\cup\{2^9,\ldots,2^{21}\}</math-inline>, covering every folded layer of both production geometries.</p>
 
 <p>A straight-line extractor list-decodes the packed word, recovers the 32 base-field rows, inverts the additive NTT and retains candidates satisfying the exact History relation. Backward induction over the verifier schedule shows that a witnessless accepting transcript must cross one of the four events in <math-inline>\kappa_H(m)</math-inline>. This is the local knowledge theorem used by both the sequential and resource-aware analyses.</p>
 

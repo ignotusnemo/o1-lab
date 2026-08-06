@@ -64,16 +64,16 @@ W(Q)=\frac{Q}{\varepsilon_{\mathrm{BT}}(Q)}
 
 <h2 id="production-instance">Штатные параметры</h2>
 
-<p>Исполняемый расчёт опубликован в <a href="https://github.com/ignotusnemo/parano1d-soundness">репозитории сертификата корректности Parano1d</a>. Самодостаточный <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/model/production.toml">снимок штатных параметров</a> зафиксирован на версии Parano1d <a href="https://github.com/ignotusnemo/parano1d/commit/afdce21b6125ae0487c71a9093ab089cb8e88d5a"><code>afdce21b6125ae0487c71a9093ab089cb8e88d5a</code></a>. <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/parameter-provenance.md">Карта происхождения параметров</a> указывает исходный символ рабочей реализации для каждого значения.</p>
+<p>Исполняемый расчёт опубликован в <a href="https://github.com/ignotusnemo/parano1d-soundness">репозитории сертификата корректности Parano1d</a>. Самодостаточный <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/model/production.toml">снимок штатных параметров</a> зафиксирован на версии Parano1d <a href="https://github.com/ignotusnemo/parano1d/commit/39626b22d53cf2f2c480a7e28446c197dca68043"><code>39626b22d53cf2f2c480a7e28446c197dca68043</code></a>. <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/parameter-provenance.md">Карта происхождения параметров</a> указывает исходный символ рабочей реализации для каждого значения.</p>
 
-<p>Расчёт безопасности одинаков для всего штатного диапазона вместимости блока. Меняется только размер трассы. В исходном коде B64 обозначает геометрию для блоков вместимостью до 64 пользовательских страниц транзакций, а B255 обозначает геометрию для блоков от 65 до 255 страниц. Обе доказывают отношение HistoryStep с одинаковой скоростью кода, числом запросов и распределением вызовов, поэтому дают один результат по Block–Tiwari.</p>
+<p>Расчёт безопасности одинаков для всего штатного диапазона вместимости блока. Меняется только размер трассы. B25 охватывает до 25 эффективных позиций страниц, а B255 охватывает от 26 до 255. Оба класса доказывают отношение HistoryStep с одинаковой скоростью кода, числом запросов и распределением вызовов, поэтому дают один результат по Block–Tiwari.</p>
 
 <p>Сто тридцать три позиции запросов выбираются независимо и равномерно с возвращением. Они обращаются к непересекающимся окнам одного атомарного векторного ответа, поэтому вероятность того, что все проверенные окна останутся внутри принимаемого множества совпадений, является 133-й степенью, используемой ниже.</p>
 
 <div class="table-wrap"><table>
   <thead><tr><th>Параметр</th><th>Штатное значение</th></tr></thead>
   <tbody>
-    <tr><td>Размер трассы</td><td>B64: исходное кодовое слово 2<sup>20</sup>, слои теоремы от 2<sup>8</sup> до 2<sup>20</sup>. B255: исходное кодовое слово 2<sup>21</sup>, слои теоремы от 2<sup>9</sup> до 2<sup>21</sup>.</td></tr>
+    <tr><td>Размер трассы</td><td>B25: исходное кодовое слово 2<sup>19</sup>, слои теоремы от 2<sup>7</sup> до 2<sup>19</sup>. B255: исходное кодовое слово 2<sup>21</sup>, слои теоремы от 2<sup>9</sup> до 2<sup>21</sup>.</td></tr>
     <tr><td>Скорость кода <math-inline>\rho</math-inline></td><td>1/4</td></tr>
     <tr><td>Число запросов BaseFold <math-inline>\ell</math-inline></td><td>133</td></tr>
     <tr><td>Поле зафиксированной трассы</td><td>GF(2<sup>128</sup>)</td></tr>
@@ -128,7 +128,7 @@ N\frac{2h^5+3h\gamma s_N^2}{3s_N^3}
 L_N(m)=\left\lceil\frac{h}{s_N}\right\rceil-1,
 \qquad
 L_{\max}(m)=\max\!\left\{
-L_{2^{20}}(m),L_{2^{21}}(m)
+L_{2^{19}}(m),L_{2^{21}}(m)
 \right\}.
 </math-block>
 
@@ -144,7 +144,7 @@ E_q(m)=\left(\frac{m+1}{2m}\right)^{133}.
 \begin{aligned}
 \kappa_H(m)=\max\{&
 E_q(m),\\
-&\max_{N\in\mathcal N_{64}\cup\mathcal N_{255}}
+&\max_{N\in\mathcal N_{25}\cup\mathcal N_{255}}
 \frac{A_N(m)}{2^{255}},\\
 &\frac{127L_{\max}(m)}{2^{255}},
 \frac{36L_{\max}(m)}{2^{255}}
@@ -152,7 +152,7 @@ E_q(m),\\
 \end{aligned}
 </math-block>
 
-<p>Здесь <math-inline>\mathcal N_{64}=\{2^8,\ldots,2^{20}\}</math-inline> и <math-inline>\mathcal N_{255}=\{2^9,\ldots,2^{21}\}</math-inline>, причём в каждом множестве берутся последовательные степени двойки.</p>
+<p>Здесь <math-inline>\mathcal N_{25}=\{2^7,\ldots,2^{19}\}</math-inline> и <math-inline>\mathcal N_{255}=\{2^9,\ldots,2^{21}\}</math-inline>, причём в каждом множестве берутся последовательные степени двойки.</p>
 
 <h3 id="candidate-switching">Как учитывается переключение кандидатов</h3>
 
@@ -296,12 +296,10 @@ W(Q)
 
 <h2 id="reproduction">Воспроизведение сертификата</h2>
 
-<p>Самодостаточный репозиторий содержит снимок параметров, специализацию теоремы, точный оптимизатор и регрессионные тесты. Версия <a href="https://github.com/ignotusnemo/parano1d-soundness/commit/bfd5b1742ba8906167de90bf06a683f5639ca667"><code>bfd5b1742ba8906167de90bf06a683f5639ca667</code></a> воспроизводит эту статью:</p>
+<p>Самодостаточный репозиторий содержит снимок параметров, специализацию теоремы, точный оптимизатор и регрессионные тесты. Воспроизведите расчёт так:</p>
 
 <pre><code>git clone https://github.com/ignotusnemo/parano1d-soundness.git
 cd parano1d-soundness
-git checkout bfd5b1742ba8906167de90bf06a683f5639ca667
-
 cargo run --release --locked
 cargo run --release --locked -- --exact
 cargo test --release --locked</code></pre>

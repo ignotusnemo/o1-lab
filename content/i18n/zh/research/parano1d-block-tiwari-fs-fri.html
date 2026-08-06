@@ -64,16 +64,16 @@ W(Q)=\frac{Q}{\varepsilon_{\mathrm{BT}}(Q)}
 
 <h2 id="production-instance">实际部署参数</h2>
 
-<p>可执行计算发布在 <a href="https://github.com/ignotusnemo/parano1d-soundness">Parano1d 可靠性证书仓库</a>中。其独立的<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/model/production.toml">实际部署参数快照</a>固定到 Parano1d 版本 <a href="https://github.com/ignotusnemo/parano1d/commit/afdce21b6125ae0487c71a9093ab089cb8e88d5a"><code>afdce21b6125ae0487c71a9093ab089cb8e88d5a</code></a>。<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/parameter-provenance.md">参数来源映射</a>记录每个导入值在实际部署源码中的符号。</p>
+<p>可执行计算发布在 <a href="https://github.com/ignotusnemo/parano1d-soundness">Parano1d 可靠性证书仓库</a>中。其独立的<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/model/production.toml">实际部署参数快照</a>固定到 Parano1d 版本 <a href="https://github.com/ignotusnemo/parano1d/commit/39626b22d53cf2f2c480a7e28446c197dca68043"><code>39626b22d53cf2f2c480a7e28446c197dca68043</code></a>。<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/parameter-provenance.md">参数来源映射</a>记录每个导入值在实际部署源码中的符号。</p>
 
-<p>整个实际部署区块容量范围使用同一个安全性计算，只有执行轨迹规模随容量改变。在源代码中，B64 表示最多 64 页用户交易所使用的几何，B255 表示 65 至 255 页所使用的几何。两者以相同码率、查询数和挑战分布证明 HistoryStep 关系，因此得到同一个 Block–Tiwari 结果。</p>
+<p>整个实际部署区块容量范围使用同一个安全性计算，只有执行轨迹规模随容量改变。在源代码中，B25 表示最多 25 个有效页面位置所使用的几何，B255 表示 26 至 255 个有效页面位置所使用的几何。两者以相同码率、查询数和挑战分布证明 HistoryStep 关系，因此得到同一个 Block–Tiwari 结果。</p>
 
 <p>133 个查询位置以放回方式独立均匀采样。它们访问同一个原子向量响应中互不重叠的窗口，因此所有被查询窗口都留在可接受一致集合中的概率，正是下文使用的 133 次幂。</p>
 
 <div class="table-wrap"><table>
   <thead><tr><th>输入</th><th>实际部署值</th></tr></thead>
   <tbody>
-    <tr><td>执行轨迹规模</td><td>B64：初始码字为 2<sup>20</sup>，定理分层从 2<sup>8</sup> 至 2<sup>20</sup>。B255：初始码字为 2<sup>21</sup>，定理分层从 2<sup>9</sup> 至 2<sup>21</sup>。</td></tr>
+    <tr><td>执行轨迹规模</td><td>B25：初始码字为 2<sup>19</sup>，定理分层从 2<sup>7</sup> 至 2<sup>19</sup>。B255：初始码字为 2<sup>21</sup>，定理分层从 2<sup>9</sup> 至 2<sup>21</sup>。</td></tr>
     <tr><td>码率 <math-inline>\rho</math-inline></td><td>1/4</td></tr>
     <tr><td>BaseFold 查询数 <math-inline>\ell</math-inline></td><td>133</td></tr>
     <tr><td>承诺执行轨迹所在域</td><td>GF(2<sup>128</sup>)</td></tr>
@@ -128,7 +128,7 @@ N\frac{2h^5+3h\gamma s_N^2}{3s_N^3}
 L_N(m)=\left\lceil\frac{h}{s_N}\right\rceil-1,
 \qquad
 L_{\max}(m)=\max\!\left\{
-L_{2^{20}}(m),L_{2^{21}}(m)
+L_{2^{19}}(m),L_{2^{21}}(m)
 \right\}.
 </math-block>
 
@@ -144,7 +144,7 @@ E_q(m)=\left(\frac{m+1}{2m}\right)^{133}.
 \begin{aligned}
 \kappa_H(m)=\max\{&
 E_q(m),\\
-&\max_{N\in\mathcal N_{64}\cup\mathcal N_{255}}
+&\max_{N\in\mathcal N_{25}\cup\mathcal N_{255}}
 \frac{A_N(m)}{2^{255}},\\
 &\frac{127L_{\max}(m)}{2^{255}},
 \frac{36L_{\max}(m)}{2^{255}}
@@ -152,7 +152,7 @@ E_q(m),\\
 \end{aligned}
 </math-block>
 
-<p>其中 <math-inline>\mathcal N_{64}=\{2^8,\ldots,2^{20}\}</math-inline>、<math-inline>\mathcal N_{255}=\{2^9,\ldots,2^{21}\}</math-inline>，每个集合都包含其范围内连续的 2 的幂。</p>
+<p>其中 <math-inline>\mathcal N_{25}=\{2^7,\ldots,2^{19}\}</math-inline>、<math-inline>\mathcal N_{255}=\{2^9,\ldots,2^{21}\}</math-inline>，每个集合都包含其范围内连续的 2 的幂。</p>
 
 <h3 id="candidate-switching">候选切换为何已计入</h3>
 
@@ -296,12 +296,10 @@ W(Q)
 
 <h2 id="reproduction">复现证书</h2>
 
-<p>独立仓库包含参数快照、定理特化、精确优化器以及回归测试。版本 <a href="https://github.com/ignotusnemo/parano1d-soundness/commit/bfd5b1742ba8906167de90bf06a683f5639ca667"><code>bfd5b1742ba8906167de90bf06a683f5639ca667</code></a> 可复现本文：</p>
+<p>独立仓库包含参数快照、定理特化、精确优化器以及回归测试。以下命令可复现本文：</p>
 
 <pre><code>git clone https://github.com/ignotusnemo/parano1d-soundness.git
 cd parano1d-soundness
-git checkout bfd5b1742ba8906167de90bf06a683f5639ca667
-
 cargo run --release --locked
 cargo run --release --locked -- --exact
 cargo test --release --locked</code></pre>

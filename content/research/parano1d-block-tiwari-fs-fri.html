@@ -64,16 +64,16 @@ W(Q)=\frac{Q}{\varepsilon_{\mathrm{BT}}(Q)}
 
 <h2 id="production-instance">Production parameters</h2>
 
-<p>The executable calculation is published in the <a href="https://github.com/ignotusnemo/parano1d-soundness">Parano1d soundness repository</a>. Its standalone <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/model/production.toml">production snapshot</a> is pinned to Parano1d revision <a href="https://github.com/ignotusnemo/parano1d/commit/afdce21b6125ae0487c71a9093ab089cb8e88d5a"><code>afdce21b6125ae0487c71a9093ab089cb8e88d5a</code></a>. The <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/parameter-provenance.md">parameter provenance map</a> records the production source symbol for every imported value.</p>
+<p>The executable calculation is published in the <a href="https://github.com/ignotusnemo/parano1d-soundness">Parano1d soundness repository</a>. Its standalone <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/model/production.toml">production snapshot</a> is pinned to Parano1d revision <a href="https://github.com/ignotusnemo/parano1d/commit/39626b22d53cf2f2c480a7e28446c197dca68043"><code>39626b22d53cf2f2c480a7e28446c197dca68043</code></a>. The <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/parameter-provenance.md">parameter provenance map</a> records the production source symbol for every imported value.</p>
 
-<p>The security calculation is identical across the full production block-capacity range. Only the trace size changes. In the source, B64 names the geometry used through 64 user-transaction pages, while B255 names the geometry used from 65 through 255 pages. Both prove the HistoryStep relation with the same code rate, query count and challenge distribution, so they produce one Block–Tiwari result.</p>
+<p>The security calculation is identical across the full production block-capacity range. Only the trace size changes. B25 covers up to 25 effective page positions, while B255 covers 26 through 255. Both prove the HistoryStep relation with the same code rate, query count and challenge distribution, so they produce one Block–Tiwari result.</p>
 
 <p>The 133 query positions are sampled independently and uniformly with replacement. They address disjoint windows of one atomic vector response, so the probability that every queried window remains inside the accepting agreement set is the 133rd power used below.</p>
 
 <div class="table-wrap"><table>
   <thead><tr><th>Input</th><th>Production value</th></tr></thead>
   <tbody>
-    <tr><td>Trace size</td><td>B64: initial codeword 2<sup>20</sup>, theorem layers 2<sup>8</sup> through 2<sup>20</sup>. B255: initial codeword 2<sup>21</sup>, theorem layers 2<sup>9</sup> through 2<sup>21</sup>.</td></tr>
+    <tr><td>Trace size</td><td>B25: initial codeword 2<sup>19</sup>, theorem layers 2<sup>7</sup> through 2<sup>19</sup>. B255: initial codeword 2<sup>21</sup>, theorem layers 2<sup>9</sup> through 2<sup>21</sup>.</td></tr>
     <tr><td>Code rate <math-inline>\rho</math-inline></td><td>1/4</td></tr>
     <tr><td>BaseFold queries <math-inline>\ell</math-inline></td><td>133</td></tr>
     <tr><td>Committed trace field</td><td>GF(2<sup>128</sup>)</td></tr>
@@ -128,7 +128,7 @@ N\frac{2h^5+3h\gamma s_N^2}{3s_N^3}
 L_N(m)=\left\lceil\frac{h}{s_N}\right\rceil-1,
 \qquad
 L_{\max}(m)=\max\!\left\{
-L_{2^{20}}(m),L_{2^{21}}(m)
+L_{2^{19}}(m),L_{2^{21}}(m)
 \right\}.
 </math-block>
 
@@ -144,7 +144,7 @@ E_q(m)=\left(\frac{m+1}{2m}\right)^{133}.
 \begin{aligned}
 \kappa_H(m)=\max\{&
 E_q(m),\\
-&\max_{N\in\mathcal N_{64}\cup\mathcal N_{255}}
+&\max_{N\in\mathcal N_{25}\cup\mathcal N_{255}}
 \frac{A_N(m)}{2^{255}},\\
 &\frac{127L_{\max}(m)}{2^{255}},
 \frac{36L_{\max}(m)}{2^{255}}
@@ -152,7 +152,7 @@ E_q(m),\\
 \end{aligned}
 </math-block>
 
-<p>Here <math-inline>\mathcal N_{64}=\{2^8,\ldots,2^{20}\}</math-inline> and <math-inline>\mathcal N_{255}=\{2^9,\ldots,2^{21}\}</math-inline>, with consecutive powers of two in each set.</p>
+<p>Here <math-inline>\mathcal N_{25}=\{2^7,\ldots,2^{19}\}</math-inline> and <math-inline>\mathcal N_{255}=\{2^9,\ldots,2^{21}\}</math-inline>, with consecutive powers of two in each set.</p>
 
 <h3 id="candidate-switching">Why candidate switching is included</h3>
 
@@ -296,12 +296,10 @@ global minimizer = first capped Q</code></pre>
 
 <h2 id="reproduction">Reproducing the certificate</h2>
 
-<p>The standalone repository contains the snapshot, theorem specialization, exact optimizer and regression tests. Revision <a href="https://github.com/ignotusnemo/parano1d-soundness/commit/bfd5b1742ba8906167de90bf06a683f5639ca667"><code>bfd5b1742ba8906167de90bf06a683f5639ca667</code></a> reproduces this article:</p>
+<p>The standalone repository contains the snapshot, theorem specialization, exact optimizer and regression tests. Reproduce the calculation with:</p>
 
 <pre><code>git clone https://github.com/ignotusnemo/parano1d-soundness.git
 cd parano1d-soundness
-git checkout bfd5b1742ba8906167de90bf06a683f5639ca667
-
 cargo run --release --locked
 cargo run --release --locked -- --exact
 cargo test --release --locked</code></pre>

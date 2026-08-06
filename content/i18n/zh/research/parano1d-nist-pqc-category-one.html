@@ -33,7 +33,7 @@
 
 <h2 id="production-instance">实际部署参数</h2>
 
-<p>计算固定到 Parano1d 修订版 <a href="https://github.com/ignotusnemo/parano1d/commit/afdce21b6125ae0487c71a9093ab089cb8e88d5a"><code>afdce21b6125ae0487c71a9093ab089cb8e88d5a</code></a>。独立的<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/model/production.toml">实际部署参数快照</a>记录全部安全输入，<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/parameter-provenance.md">参数来源映射</a>则把每个值关联到对应的 Rust 定义。</p>
+<p>计算固定到 Parano1d 修订版 <a href="https://github.com/ignotusnemo/parano1d/commit/39626b22d53cf2f2c480a7e28446c197dca68043"><code>39626b22d53cf2f2c480a7e28446c197dca68043</code></a>。独立的<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/model/production.toml">实际部署参数快照</a>记录全部安全输入，<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/parameter-provenance.md">参数来源映射</a>则把每个值关联到对应的 Rust 定义。</p>
 
 <div class="table-wrap"><table>
   <thead><tr><th>输入</th><th>实际部署值</th></tr></thead>
@@ -43,13 +43,13 @@
     <tr><td>代数挑战值取值集合大小</td><td><math-inline>2^{255}</math-inline></td></tr>
     <tr><td>摘要位宽</td><td>256 比特</td></tr>
     <tr><td>History 码率</td><td>1/4</td></tr>
-    <tr><td>初始 History 码字</td><td><math-inline>2^{20}</math-inline> 或 <math-inline>2^{21}</math-inline></td></tr>
+    <tr><td>初始 History 码字</td><td><math-inline>2^{19}</math-inline> 或 <math-inline>2^{21}</math-inline></td></tr>
     <tr><td>联合 sidecar 关系组数</td><td>9</td></tr>
     <tr><td>Poseidon2b</td><td><math-inline>t=4</math-inline>、速率 2、<math-inline>x^7</math-inline>、8 个全轮、58 个部分轮</td></tr>
   </tbody>
 </table></div>
 
-<p>两种初始码字长度对应两种实际部署 History 轨迹规模。B64 用于不超过 64 个用户交易页面的区块，B255 用于 65 至 255 个页面。二者证明同一个 HistoryStep 关系，使用相同的码率、查询数、挑战值分布与局部定理，仅执行轨迹长度不同。</p>
+<p>两种初始码字长度对应两种实际部署 History 轨迹规模。B25 用于不超过 25 个有效页面位置的区块，B255 用于 26 至 255 个有效页面位置。二者证明同一个 HistoryStep 关系，使用相同的码率、查询数、挑战值分布与局部定理，仅执行轨迹长度不同。</p>
 
 <p>代数挑战值位于 GF(2<sup>256</sup>) 中迹为 1 的仿射子集，该集合恰有 <math-inline>2^{255}</math-inline> 个元素。256 比特摘要位宽是另一项独立输入。必须区分两者：代数例外集合使用分母 <math-inline>2^{255}</math-inline>，全局绑定性碰撞使用分母 <math-inline>2^{256}</math-inline>。</p>
 
@@ -96,7 +96,7 @@ N\frac{2h^5+3h\gamma s_N^2}{3s_N^3}+\frac{h}{s_N}
 <math-block>
 L_N(m)=\left\lceil\frac{h}{s_N}\right\rceil-1,
 \qquad
-L_{\max}(m)=\max\{L_{2^{20}}(m),L_{2^{21}}(m)\}.
+L_{\max}(m)=\max\{L_{2^{19}}(m),L_{2^{21}}(m)\}.
 </math-block>
 
 <p><a href="https://eprint.iacr.org/2025/2055">列表相关 Reed–Solomon 定理</a>给出 <math-inline>A_N(m)</math-inline>，<a href="https://eprint.iacr.org/2024/1571">BaseFold 分析</a>把它带入实际部署折叠序列。对于 133 个独立查询位置，剩余逃逸项为</p>
@@ -118,7 +118,7 @@ E_q(m)=\left(\frac{m+1}{2m}\right)^{133}.
 \end{aligned}
 </math-block>
 
-<p>邻近性最大值遍历 <math-inline>N\in\{2^8,\ldots,2^{20}\}\cup\{2^9,\ldots,2^{21}\}</math-inline>，覆盖两种实际部署轨迹规模的全部折叠层。</p>
+<p>邻近性最大值遍历 <math-inline>N\in\{2^7,\ldots,2^{19}\}\cup\{2^9,\ldots,2^{21}\}</math-inline>，覆盖两种实际部署轨迹规模的全部折叠层。</p>
 
 <p>无需重绕的提取器对打包码字进行列表译码，恢复 32 条基域行，执行加性 NTT 的逆变换，并保留满足精确 History 关系的候选。沿验证流程作逆向归纳可知，无见证的接受交互记录必然落入 <math-inline>\kappa_H(m)</math-inline> 中的四类事件之一。顺序分析和考虑资源成本的分析都使用这条局部知识提取定理。</p>
 
