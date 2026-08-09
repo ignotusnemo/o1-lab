@@ -40,14 +40,18 @@ async function loadArticles(locale) {
           evidence: base.evidence.map((entry, index) => ({ ...entry, label: overlay.evidence[index] }))
         }
       : base;
+    const sourceExtension = base.format === "markdown" ? "md" : "html";
     const sourcePath = locale.code === defaultLocale.code
-      ? `content/research/${base.slug}.html`
-      : `content/i18n/${locale.code}/research/${base.slug}.html`;
+      ? `content/research/${base.slug}.${sourceExtension}`
+      : `content/i18n/${locale.code}/research/${base.slug}.${sourceExtension}`;
     const source = await readFile(join(root, sourcePath), "utf8");
-    return { ...item, schemaType: base.kind === "Paper" ? "ScholarlyArticle" : "TechArticle", body: renderMath(source, sourcePath) };
+    const body = base.format === "markdown"
+      ? renderFlagshipMarkdown(source, item, sourcePath)
+      : source;
+    return { ...item, schemaType: base.kind === "Paper" ? "ScholarlyArticle" : "TechArticle", body: renderMath(body, sourcePath) };
   }));
 
-  return articles.sort((a, b) => b.date.localeCompare(a.date));
+  return articles.sort((a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)) || b.date.localeCompare(a.date));
 }
 
 const articleSets = new Map(await Promise.all(
@@ -61,6 +65,252 @@ function esc(value = "") {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+function markdownInline(source) {
+  const tokens = [];
+  const stash = (html) => {
+    const token = `\u0000${tokens.length}\u0000`;
+    tokens.push(html);
+    return token;
+  };
+
+  let text = source
+    .replace(/`([^`]+)`/g, (_, code) => stash(`<code>${esc(code)}</code>`))
+    .replace(/\\\((.+?)\\\)/g, (_, tex) => stash(`<math-inline>${esc(tex)}</math-inline>`))
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, (_, label, href) =>
+      stash(`<a href="${esc(href)}">${esc(label)}</a>`)
+    );
+
+  text = esc(text)
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+
+  return text.replace(/\u0000(\d+)\u0000/g, (_, index) => tokens[Number(index)]);
+}
+
+function flagshipDiagramInline(source) {
+  return esc(source)
+    .replace(/([SπB])_\(h-1\)/g, "$1<sub>h−1</sub>")
+    .replace(/([SπB])_h/g, "$1<sub>h</sub>")
+    .replace(/Delta_P2b\^C1/g, "Δ<sub>P2b</sub><sup>C1</sup>")
+    .replace(/2\^([0-9.]+)/g, "2<sup>$1</sup>");
+}
+
+function flagshipDiagramNode(label, className = "") {
+  return `<div class="diagram-node${className ? ` ${className}` : ""}">${flagshipDiagramInline(label)}</div>`;
+}
+
+function flagshipDiagramArrow() {
+  return '<span class="diagram-arrow" aria-hidden="true"></span>';
+}
+
+function flagshipDiagramSteps(source) {
+  return source
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line && line !== "|" && line !== "v" && line !== "+");
+}
+
+function renderFlagshipDiagram(index, source) {
+  const steps = flagshipDiagramSteps(source);
+  const aria = esc(source.replace(/\s+/g, " ").trim());
+  const figure = (type, body) => `<figure class="flagship-diagram flagship-diagram--${type}" aria-label="${aria}">${body}</figure>`;
+  const flow = (items, modifier = "") => figure(
+    `flow${modifier ? ` ${modifier}` : ""}`,
+    `<div class="diagram-flow">${items.map((item, itemIndex) => `${flagshipDiagramNode(item)}${itemIndex < items.length - 1 ? flagshipDiagramArrow() : ""}`).join("")}</div>`
+  );
+
+  if (index === 0) {
+    const obligations = source.split(/\n\s*\n/).map((entry) => entry.replace(/^\s*\d+\.\s*/, "").replace(/\s+/g, " ").trim());
+    return figure("obligations", `<ol class="diagram-obligations">${obligations.map((item) => `<li><span>${flagshipDiagramInline(item)}</span></li>`).join("")}</ol>`);
+  }
+
+  if (index === 1) return flow(steps, "flagship-diagram--transition");
+
+  if (index === 2) {
+    const rows = source.split(/\n\s*\n/).map((line, rowIndex) => {
+      const match = line.trim().match(/^(.*?)\s+-{4,}>$/);
+      const label = match?.[1] ?? line.trim();
+      return `<div class="diagram-track-row"><span class="diagram-track-label">${flagshipDiagramInline(label)}</span><span class="diagram-track"><span style="--track-fill:${rowIndex === 0 ? "100%" : "72%"}"></span></span><span class="diagram-track-tip" aria-hidden="true"></span></div>`;
+    });
+    return figure("tracks", `<div class="diagram-tracks">${rows.join("")}</div>`);
+  }
+
+  if (index === 3) {
+    const [result, expression = ""] = source.split("=").map((part) => part.trim());
+    const parts = expression.split("+").map((part) => part.trim());
+    return figure("equation", `<div class="diagram-equation">${flagshipDiagramNode(result, "diagram-node--result")}<span class="diagram-equation-symbol">=</span><div class="diagram-equation-pair">${parts.map((part, partIndex) => `${flagshipDiagramNode(part)}${partIndex < parts.length - 1 ? '<span class="diagram-equation-symbol">+</span>' : ""}`).join("")}</div></div>`);
+  }
+
+  if (index === 4) {
+    return figure("questions", `<div class="diagram-questions">${steps.map((item, itemIndex) => `<div class="diagram-question"><span>${String(itemIndex + 1).padStart(2, "0")}</span><strong>${flagshipDiagramInline(item)}</strong></div>`).join("")}</div>`);
+  }
+
+  if (index === 5 || index === 6) {
+    return figure("assertion", `<div class="diagram-assertion"><span class="diagram-assertion-mark" aria-hidden="true"></span><strong>${flagshipDiagramInline(steps[0])}</strong></div>`);
+  }
+
+  if (index === 7) return flow(steps, "flagship-diagram--receipt");
+
+  if (index === 8) {
+    const rows = steps.map((line) => line.split("->").map((part) => part.trim()));
+    return figure("responsibilities", `<div class="diagram-responsibilities">${rows.map(([sourceLabel, question]) => `<div class="diagram-responsibility">${flagshipDiagramNode(sourceLabel, "diagram-node--key")}${flagshipDiagramArrow()}<div class="diagram-responsibility-copy">${flagshipDiagramInline(question)}</div></div>`).join("")}</div>`);
+  }
+
+  if (index === 9) return flow(steps, "flagship-diagram--production-short");
+
+  if (index === 10) {
+    return figure("requirements", `<ol class="diagram-requirements">${steps.map((item) => `<li><span>${flagshipDiagramInline(item)}</span></li>`).join("")}</ol>`);
+  }
+
+  if (index === 11) {
+    const values = source.trim().replace(/^\{|\}$/g, "").split(",").map((item) => item.trim());
+    return figure("atomic", `<div class="diagram-atomic"><span class="diagram-brace" aria-hidden="true">{</span>${values.map((item, itemIndex) => `${flagshipDiagramNode(item)}${itemIndex < values.length - 1 ? '<span class="diagram-atomic-link" aria-hidden="true">+</span>' : ""}`).join("")}<span class="diagram-brace" aria-hidden="true">}</span></div>`);
+  }
+
+  if (index === 12) {
+    const inputs = steps.slice(0, 3);
+    const pipeline = steps.slice(3);
+    return figure("production", `<div class="diagram-input-cluster">${inputs.map((item, itemIndex) => `${flagshipDiagramNode(item)}${itemIndex < inputs.length - 1 ? '<span aria-hidden="true">+</span>' : ""}`).join("")}</div>${flagshipDiagramArrow()}<ol class="diagram-timeline">${pipeline.map((item) => `<li><span class="diagram-timeline-index" aria-hidden="true"></span><strong>${flagshipDiagramInline(item)}</strong></li>`).join("")}</ol>`);
+  }
+
+  if (index === 13) {
+    const axes = source.split("×").map((item) => item.trim());
+    return figure("axes", `<div class="diagram-axes">${axes.map((item, itemIndex) => `${flagshipDiagramNode(item)}${itemIndex < axes.length - 1 ? '<span class="diagram-axis-symbol" aria-hidden="true">×</span>' : ""}`).join("")}</div>`);
+  }
+
+  if (index === 14) {
+    return figure("coverage", `<ol class="diagram-coverage">${steps.map((item) => `<li><span>${flagshipDiagramInline(item)}</span></li>`).join("")}</ol>`);
+  }
+
+  if (index === 15) {
+    return figure("security-pair", `<div class="diagram-security-pair">${steps.map((item) => {
+      const match = item.match(/^(\d+)\s+(.+)$/);
+      return `<div class="diagram-security-metric"><strong>${esc(match?.[1] ?? item)}</strong>${match ? `<span>${esc(match[2])}</span>` : ""}</div>`;
+    }).join("")}</div>`);
+  }
+
+  if (index >= 16) {
+    return figure(`bound diagram-bound--${index}`, `<div class="diagram-bound-value">${flagshipDiagramInline(source.trim())}</div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div>`);
+  }
+
+  return flow(steps);
+}
+
+function renderFlagshipMarkdown(source, item, sourcePath) {
+  const lines = source.replace(/\r\n/g, "\n").split("\n");
+  const sectionIds = item.sectionIds ?? [];
+  const output = [`<div class="flagship-lede"><p class="flagship-opening-question">${esc(item.dek)}</p>`];
+  let paragraph = [];
+  let sectionIndex = -1;
+  let sectionOpen = false;
+  let ledeOpen = true;
+  let codeIndex = 0;
+  let tableIndex = 0;
+
+  const flushParagraph = () => {
+    if (!paragraph.length) return;
+    const raw = paragraph.join(" ").trim();
+    paragraph = [];
+    if (!raw) return;
+    const strongOnly = raw.match(/^\*\*(.+)\*\*$/s);
+    const linkOnly = raw.match(/^\[([^\]]+)\]\((https?:\/\/[^)]+)\)$/);
+    if (strongOnly && ledeOpen) {
+      output.push(`<p>${markdownInline(strongOnly[1])}</p>`);
+    } else if (strongOnly) {
+      output.push(`<p class="flagship-claim"><strong>${markdownInline(strongOnly[1])}</strong></p>`);
+    } else if (linkOnly && sectionIndex === sectionIds.length - 1) {
+      output.push(`<p class="flagship-destination"><a href="${esc(linkOnly[2])}">${esc(linkOnly[1])}<span aria-hidden="true">↗</span></a></p>`);
+    } else {
+      output.push(`<p>${markdownInline(raw)}</p>`);
+    }
+  };
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+
+    if (index === 0 && /^#\s+/.test(line)) continue;
+    if (index === 2 && /^###\s+/.test(line)) continue;
+
+    if (line.startsWith("```")) {
+      flushParagraph();
+      const code = [];
+      index += 1;
+      while (index < lines.length && !lines[index].startsWith("```")) {
+        code.push(lines[index]);
+        index += 1;
+      }
+      const value = code.join("\n").replace(/\s+$/, "");
+      output.push(renderFlagshipDiagram(codeIndex, value));
+      codeIndex += 1;
+      continue;
+    }
+
+    if (/^\|/.test(line)) {
+      flushParagraph();
+      const rows = [];
+      while (index < lines.length && /^\|/.test(lines[index])) {
+        rows.push(lines[index].split("|").slice(1, -1).map((cell) => cell.trim()));
+        index += 1;
+      }
+      index -= 1;
+      if (rows.length < 2 || !rows[1].every((cell) => /^:?-{3,}:?$/.test(cell))) {
+        throw new Error(`Invalid Markdown table in ${sourcePath}`);
+      }
+      const header = rows[0];
+      const body = rows.slice(2);
+      const plainHeader = header.map((cell) => cell.replaceAll("`", "").replaceAll("*", ""));
+      const tableRole = plainHeader.includes("Terminal")
+        ? " flagship-table--performance"
+        : ["Parameter", "Параметр", "参数"].includes(plainHeader[0])
+          ? " flagship-table--profile"
+          : "";
+      const tableRows = body.map((row) => {
+        const isSubheading = /^\*\*[^*]+\*\*$/.test(row[0]) && row.slice(1).every((cell) => !cell);
+        if (isSubheading) {
+          return `<tr class="flagship-table-subheading"><th colspan="${header.length}" scope="rowgroup">${markdownInline(row[0])}</th></tr>`;
+        }
+        return `<tr>${row.map((cell, cellIndex) => `<td data-label="${esc(plainHeader[cellIndex])}">${markdownInline(cell)}</td>`).join("")}</tr>`;
+      }).join("");
+      output.push(`<div class="table-wrap flagship-table flagship-table--${tableIndex}${tableRole}"><table><thead><tr>${header.map((cell) => `<th>${markdownInline(cell)}</th>`).join("")}</tr></thead><tbody>${tableRows}</tbody></table></div>`);
+      tableIndex += 1;
+      continue;
+    }
+
+    const heading = line.match(/^##\s+(.+)$/);
+    if (heading) {
+      flushParagraph();
+      if (ledeOpen) {
+        output.push("</div>");
+        ledeOpen = false;
+      }
+      if (sectionOpen) output.push("</section>");
+      sectionIndex += 1;
+      const id = sectionIds[sectionIndex];
+      if (!id) throw new Error(`${sourcePath}: missing section id ${sectionIndex + 1}`);
+      const finalClass = sectionIndex === sectionIds.length - 1 ? " flagship-section--final" : "";
+      const sectionNumber = String(sectionIndex + 1).padStart(2, "0");
+      output.push(`<section class="flagship-section${finalClass}" data-section="${sectionNumber}"><h2 id="${esc(id)}" data-section="${sectionNumber}">${markdownInline(heading[1])}</h2>`);
+      sectionOpen = true;
+      continue;
+    }
+
+    if (!line.trim()) {
+      flushParagraph();
+      continue;
+    }
+
+    paragraph.push(line.trim());
+  }
+
+  flushParagraph();
+  if (ledeOpen) output.push("</div>");
+  if (sectionOpen) output.push("</section>");
+  if (sectionIndex + 1 !== sectionIds.length) {
+    throw new Error(`${sourcePath}: expected ${sectionIds.length} sections, found ${sectionIndex + 1}`);
+  }
+  return output.join("\n");
 }
 
 function githubIcon(className = "button-icon") {
@@ -188,6 +438,11 @@ function readingTime(html, locale) {
 function artMarkup(kind, compact = false) {
   const diagram = artDiagrams[kind] ?? artDiagrams.frost;
   return `<div class="research-art art--${esc(kind)}${compact ? " research-art--compact" : ""}" aria-hidden="true">${diagram}</div>`;
+}
+
+function articleArtMarkup(item, compact = false) {
+  if (!item.heroImage) return artMarkup(item.art, compact);
+  return `<div class="research-image${compact ? " research-image--compact" : ""}" aria-hidden="true"><img src="${esc(item.heroImage)}" alt="" loading="${compact ? "lazy" : "eager"}" decoding="async"></div>`;
 }
 
 function languageSwitcher(locale, basePath) {
@@ -367,9 +622,9 @@ function articleCard(item, locale, { large = false } = {}) {
   const t = ui[locale.code];
   const href = pathFor(locale, `/research/${item.slug}/`);
   return `<article class="research-card${large ? " research-card--large" : ""}" data-topic="${esc(item.topic)}">
-    <a class="card-art-link" href="${href}" tabindex="-1" aria-hidden="true">${artMarkup(item.art, true)}</a>
+    <a class="card-art-link" href="${href}" tabindex="-1" aria-hidden="true">${articleArtMarkup(item, true)}</a>
     <div class="card-body">
-      <div class="card-meta"><span>${esc(item.kind)}</span><time datetime="${item.date}">${formatDate(item.date, locale)}</time></div>
+      <div class="card-meta">${item.pinned ? `<span class="editorial-pin">${esc(item.pinnedLabel)}</span>` : ""}<span>${esc(item.kind)}</span><time datetime="${item.date}">${formatDate(item.date, locale)}</time></div>
       <h3><a href="${href}">${esc(item.title)}</a></h3>
       <p>${esc(item.dek)}</p>
       <div class="card-foot"><span>${readingTime(item.body, locale)} ${esc(t.minutesRead)}</span><a class="text-link" href="${href}">${esc(t.read)} <span aria-hidden="true">↗</span></a></div>
@@ -379,8 +634,10 @@ function articleCard(item, locale, { large = false } = {}) {
 
 function homePage(locale, newestFirst) {
   const t = ui[locale.code];
-  const latest = newestFirst[0];
-  const remaining = newestFirst.slice(1, 7);
+  const latest = newestFirst.find((item) => item.pinned) ?? newestFirst[0];
+  const remaining = newestFirst.filter((item) => item.slug !== latest.slug);
+  const pageSize = 6;
+  const pageCount = Math.max(1, Math.ceil(remaining.length / pageSize));
   const featured = newestFirst.filter((item) => item.featured).slice(0, 4);
   const body = `<main id="content">
     <section class="home-hero">
@@ -400,15 +657,26 @@ function homePage(locale, newestFirst) {
     <section class="latest-section section" id="latest">
       <div class="section-heading"><div><p class="section-index">01 · ${esc(t.sectionLatest)}</p><h2>${esc(t.latestResearch)}</h2></div><a class="text-link" href="${pathFor(locale, "/research/")}">${esc(t.allResearch)} <span aria-hidden="true">↗</span></a></div>
       <article class="lead-story">
-        <div class="lead-story-art">${artMarkup(latest.art)}</div>
+        <div class="lead-story-art">${articleArtMarkup(latest)}</div>
         <div class="lead-story-copy">
-          <div class="story-meta"><span>${esc(latest.kind)}</span><time datetime="${latest.date}">${formatDate(latest.date, locale)}</time></div>
+          <div class="story-meta">${latest.pinned ? `<span class="editorial-pin">${esc(latest.pinnedLabel)}</span>` : ""}<span>${esc(latest.kind)}</span><time datetime="${latest.date}">${formatDate(latest.date, locale)}</time></div>
           <h3><a href="${pathFor(locale, `/research/${latest.slug}/`)}">${esc(latest.title)}</a></h3>
           <p>${esc(latest.abstract)}</p>
           <div class="story-actions"><a class="button button--primary" href="${pathFor(locale, `/research/${latest.slug}/`)}">${esc(t.readResearch)}</a>${latest.evidence[0] ? `<a class="button button--quiet" href="${esc(latest.evidence[0].href)}">${buttonContent(latest.evidence[0].href, latest.evidence[0].label)}</a>` : ""}</div>
         </div>
       </article>
-      <div class="research-grid">${remaining.map((item) => articleCard(item, locale)).join("\n")}</div>
+      <div class="research-grid" data-home-research-grid data-page-size="${pageSize}">${remaining.map((item) => articleCard(item, locale)).join("\n")}</div>
+      <div class="research-list-footer">
+        <div class="research-pager-shell" data-home-research-pager hidden>
+          <span class="research-page-counter" data-home-research-counter aria-live="polite"><span data-home-research-current>01</span><span aria-hidden="true"> / </span><span data-home-research-total>${String(pageCount).padStart(2, "0")}</span></span>
+          <nav class="research-pagination" aria-label="${esc(t.researchPagination)}">
+            <button class="research-page-direction" type="button" data-home-research-action="previous" aria-label="${esc(t.previousPage)}"><span aria-hidden="true">←</span></button>
+            <div class="research-page-numbers">${Array.from({ length: pageCount }, (_, index) => `<button type="button" data-home-research-page="${index + 1}" aria-label="${esc(t.pageLabel)} ${index + 1}">${String(index + 1).padStart(2, "0")}</button>`).join("")}</div>
+            <button class="research-page-direction" type="button" data-home-research-action="next" aria-label="${esc(t.nextPage)}"><span aria-hidden="true">→</span></button>
+          </nav>
+        </div>
+        <a class="text-link research-archive-link" href="${pathFor(locale, "/research/")}">${esc(t.allResearch)} <span aria-hidden="true">↗</span></a>
+      </div>
     </section>
 
     <section class="focus-section section">
@@ -443,7 +711,7 @@ function archivePage(locale, newestFirst) {
       <div class="filter-bar" role="group" aria-label="${esc(t.filterByTopic)}"><button class="filter-chip is-active" type="button" data-filter="all">${esc(t.filterAll)} <span>${newestFirst.length}</span></button>${topics.map((topic) => `<button class="filter-chip" type="button" data-filter="${esc(topic)}">${esc(topic)}</button>`).join("")}</div>
       <div class="archive-list">${newestFirst.map((item, index) => `<article class="archive-row" data-topic="${esc(item.topic)}">
         <a class="archive-index" href="${pathFor(locale, `/research/${item.slug}/`)}">${String(index + 1).padStart(2, "0")}</a>
-        <div class="archive-copy"><div class="card-meta"><span>${esc(item.kind)}</span><time datetime="${item.date}">${formatDate(item.date, locale)}</time></div><h2><a href="${pathFor(locale, `/research/${item.slug}/`)}">${esc(item.title)}</a></h2><p>${esc(item.dek)}</p><div class="archive-tags"><span>${esc(item.topic)}</span><span>${esc(item.status)}</span><span>${readingTime(item.body, locale)} ${esc(t.minutesShort)}</span></div></div>
+        <div class="archive-copy"><div class="card-meta">${item.pinned ? `<span class="editorial-pin">${esc(item.pinnedLabel)}</span>` : ""}<span>${esc(item.kind)}</span><time datetime="${item.date}">${formatDate(item.date, locale)}</time></div><h2><a href="${pathFor(locale, `/research/${item.slug}/`)}">${esc(item.title)}</a></h2><p>${esc(item.dek)}</p><div class="archive-tags"><span>${esc(item.topic)}</span><span>${esc(item.status)}</span><span>${readingTime(item.body, locale)} ${esc(t.minutesShort)}</span></div></div>
         <a class="archive-arrow" href="${pathFor(locale, `/research/${item.slug}/`)}" aria-label="${esc(t.readArticle)}: ${esc(item.title)}">↗</a>
       </article>`).join("\n")}</div>
       <p class="filter-empty" hidden>${esc(t.filterEmpty)}</p>
@@ -473,9 +741,10 @@ function shareControls(item, locale, basePath) {
 
 function tocFor(html, locale) {
   const t = ui[locale.code];
-  const entries = [...html.matchAll(/<h2 id="([^"]+)">([^<]+)<\/h2>/g)];
+  const entries = [...html.matchAll(/<h2 id="([^"]+)"[^>]*>([\s\S]*?)<\/h2>/g)]
+    .map(([, id, text]) => [id, text.replace(/<[^>]+>/g, "")]);
   if (entries.length < 2) return "";
-  return `<aside class="article-toc" aria-label="${esc(t.onThisPage)}"><strong>${esc(t.onThisPage)}</strong>${entries.map(([, id, text]) => `<a href="#${esc(id)}">${esc(text)}</a>`).join("")}</aside>`;
+  return `<aside class="article-toc" aria-label="${esc(t.onThisPage)}"><strong>${esc(t.onThisPage)}</strong>${entries.map(([id, text]) => `<a href="#${esc(id)}">${text}</a>`).join("")}</aside>`;
 }
 
 function articlePage(item, index, locale, newestFirst) {
@@ -501,14 +770,22 @@ function articlePage(item, index, locale, newestFirst) {
     image: absolute(imagePath),
     about: item.topic
   };
-  const body = `<div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
-    <header class="article-hero">
+  const flagship = item.layout === "flagship";
+  const hero = flagship
+    ? `<header class="article-hero article-hero--flagship">
+      <div class="flagship-hero-media" aria-hidden="true"><img src="${esc(item.heroImage)}" alt="" fetchpriority="high" decoding="async"></div>
+      <div class="flagship-hero-shade" aria-hidden="true"></div>
       <div class="article-hero-copy"><a class="back-link" href="${pathFor(locale, "/research/")}">← ${esc(t.backResearch)}</a><div class="article-meta"><span>${esc(item.kind)}</span><span>${esc(item.topic)}</span><time datetime="${item.date}">${formatDate(item.date, locale)}</time></div><h1>${esc(item.title)}</h1><p class="article-dek">${esc(item.dek)}</p><div class="article-byline"><span>${esc(t.by)} ${item.authors.map(esc).join(" · ")}</span><span>${readingTime(item.body, locale)} ${esc(t.minutesRead)}</span><span>${esc(item.status)}</span></div>${shareControls(item, locale, basePath)}</div>
-      ${artMarkup(item.art)}
-    </header>
-    <div class="article-layout">
+    </header>`
+    : `<header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="${pathFor(locale, "/research/")}">← ${esc(t.backResearch)}</a><div class="article-meta"><span>${esc(item.kind)}</span><span>${esc(item.topic)}</span><time datetime="${item.date}">${formatDate(item.date, locale)}</time></div><h1>${esc(item.title)}</h1><p class="article-dek">${esc(item.dek)}</p><div class="article-byline"><span>${esc(t.by)} ${item.authors.map(esc).join(" · ")}</span><span>${readingTime(item.body, locale)} ${esc(t.minutesRead)}</span><span>${esc(item.status)}</span></div>${shareControls(item, locale, basePath)}</div>
+      ${articleArtMarkup(item)}
+    </header>`;
+  const body = `<div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page${flagship ? " article-page--flagship" : ""}">
+    ${hero}
+    <div class="article-layout${flagship ? " article-layout--flagship" : ""}">
       ${tocFor(item.body, locale)}
-      <article class="article-body"><div class="article-abstract"><span>${esc(t.abstract)}</span><p>${esc(item.abstract)}</p></div>${item.body}</article>
+      <article class="article-body${flagship ? " article-body--flagship" : ""}">${flagship ? "" : `<div class="article-abstract"><span>${esc(t.abstract)}</span><p>${esc(item.abstract)}</p></div>`}${item.body}</article>
     </div>
     ${evidenceList(item, locale)}
     <nav class="article-next" aria-label="${esc(t.adjacent)}">${older ? `<a href="${pathFor(locale, `/research/${older.slug}/`)}"><small>${esc(t.earlier)}</small><strong>${esc(older.shortTitle)}</strong><span>←</span></a>` : "<span></span>"}${newer ? `<a href="${pathFor(locale, `/research/${newer.slug}/`)}"><small>${esc(t.later)}</small><strong>${esc(newer.shortTitle)}</strong><span>→</span></a>` : "<span></span>"}</nav>

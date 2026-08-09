@@ -8,8 +8,9 @@ const repositoryGateCopy = {
     eyebrow: "Source code",
     title: "Code opens before launch.",
     body: "The core repository remains private during the final preparation stage. The code for the upcoming release will be published before the public network launches.",
-    launch: "Public network launch · August 2026",
+    launch: "Public network launch · Aug 12, 2026",
     contact: "Contact developer",
+    github: "GitHub",
     dismiss: "Close"
   },
   ru: {
@@ -18,8 +19,9 @@ const repositoryGateCopy = {
     eyebrow: "Исходный код",
     title: "Код откроется перед запуском.",
     body: "Основной репозиторий остаётся закрытым на финальном этапе подготовки. Код будущего релиза будет опубликован перед запуском публичной сети.",
-    launch: "Запуск публичной сети · август 2026",
+    launch: "Запуск публичной сети · 12 августа 2026",
     contact: "Связаться с разработчиком",
+    github: "GitHub",
     dismiss: "Закрыть"
   },
   zh: {
@@ -28,8 +30,9 @@ const repositoryGateCopy = {
     eyebrow: "源代码",
     title: "代码将在网络启动前公开。",
     body: "核心代码仓库将在最终准备阶段保持私有。即将发布版本的代码将在公共网络启动前公开。",
-    launch: "公共网络启动 · 2026 年 8 月",
+    launch: "公共网络启动 · 2026 年 8 月 12 日",
     contact: "联系开发者",
+    github: "GitHub",
     dismiss: "关闭"
   }
 };
@@ -68,6 +71,7 @@ repositoryGate.innerHTML = `
     <div class="repository-gate-meta">
       <p>${repositoryGateText.launch}</p>
       <p>${repositoryGateText.contact} · <a href="mailto:dev@parano1d.org">dev@parano1d.org</a></p>
+      <p>${repositoryGateText.github} · <a href="https://github.com/ignotusnemo" target="_blank" rel="noopener noreferrer">github.com/ignotusnemo</a></p>
     </div>
     <button class="repository-gate-dismiss" type="button">${repositoryGateText.dismiss}</button>
   </div>`;
@@ -151,6 +155,67 @@ document.addEventListener("click", (event) => {
   nav.classList.remove("is-open");
   navToggle?.setAttribute("aria-expanded", "false");
 });
+
+const homeResearchGrid = document.querySelector("[data-home-research-grid]");
+const homeResearchPager = document.querySelector("[data-home-research-pager]");
+
+if (homeResearchGrid && homeResearchPager) {
+  const cards = [...homeResearchGrid.querySelectorAll(":scope > .research-card")];
+  const pageSize = Math.max(1, Number(homeResearchGrid.dataset.pageSize) || 6);
+  const pageCount = Math.max(1, Math.ceil(cards.length / pageSize));
+  const pageButtons = [...homeResearchPager.querySelectorAll("[data-home-research-page]")];
+  const previousButton = homeResearchPager.querySelector('[data-home-research-action="previous"]');
+  const nextButton = homeResearchPager.querySelector('[data-home-research-action="next"]');
+  const currentOutput = homeResearchPager.querySelector("[data-home-research-current]");
+  const totalOutput = homeResearchPager.querySelector("[data-home-research-total]");
+  let currentPage = 1;
+
+  const pageFromLocation = () => {
+    const value = Number(new URL(window.location.href).searchParams.get("research-page"));
+    return Number.isInteger(value) && value >= 1 && value <= pageCount ? value : 1;
+  };
+
+  const renderPage = (page, { scroll = false, updateHistory = false } = {}) => {
+    currentPage = Math.min(pageCount, Math.max(1, page));
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    cards.forEach((card, index) => { card.hidden = index < start || index >= end; });
+    pageButtons.forEach((button) => {
+      const active = Number(button.dataset.homeResearchPage) === currentPage;
+      if (active) button.setAttribute("aria-current", "page");
+      else button.removeAttribute("aria-current");
+    });
+    if (previousButton) previousButton.disabled = currentPage === 1;
+    if (nextButton) nextButton.disabled = currentPage === pageCount;
+    if (currentOutput) currentOutput.textContent = String(currentPage).padStart(2, "0");
+    if (totalOutput) totalOutput.textContent = String(pageCount).padStart(2, "0");
+
+    if (updateHistory) {
+      const url = new URL(window.location.href);
+      if (currentPage === 1) url.searchParams.delete("research-page");
+      else url.searchParams.set("research-page", String(currentPage));
+      url.hash = "latest";
+      history.pushState({ researchPage: currentPage }, "", url);
+    }
+
+    if (scroll) {
+      homeResearchGrid.scrollIntoView({
+        block: "start",
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
+      });
+    }
+  };
+
+  pageButtons.forEach((button) => button.addEventListener("click", () => {
+    renderPage(Number(button.dataset.homeResearchPage), { scroll: true, updateHistory: true });
+  }));
+  previousButton?.addEventListener("click", () => renderPage(currentPage - 1, { scroll: true, updateHistory: true }));
+  nextButton?.addEventListener("click", () => renderPage(currentPage + 1, { scroll: true, updateHistory: true }));
+  window.addEventListener("popstate", () => renderPage(pageFromLocation()));
+
+  homeResearchPager.hidden = pageCount <= 1;
+  renderPage(pageFromLocation());
+}
 
 const filters = [...document.querySelectorAll("[data-filter]")];
 const rows = [...document.querySelectorAll(".archive-row[data-topic]")];

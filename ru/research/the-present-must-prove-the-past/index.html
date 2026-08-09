@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Может ли блокчейн проверить своё текущее состояние, не воспроизводя всю историю исполнения от genesis?">
+  <meta name="author" content="Parano1d Lab">
+  <meta name="keywords" content="Parano1d, Parano1d Lab, доказательства с нулевым разглашением, системы доказательств, криптография, рекурсивные доказательства, бинарные поля, полиномиальные обязательства">
+  <link rel="canonical" href="https://lab.parano1d.org/ru/research/the-present-must-prove-the-past/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/the-present-must-prove-the-past/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/the-present-must-prove-the-past/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/the-present-must-prove-the-past/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/the-present-must-prove-the-past/">
+  <link rel="alternate" type="application/rss+xml" title="Исследования Parano1d Lab" href="https://lab.parano1d.org/ru/feed.xml">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Исследования Parano1d Lab">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:url" content="https://lab.parano1d.org/ru/research/the-present-must-prove-the-past/">
+  <meta property="og:title" content="The Present Must Prove the Past · Parano1d Lab">
+  <meta property="og:description" content="Может ли блокчейн проверить своё текущее состояние, не воспроизводя всю историю исполнения от genesis?">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og/the-present-must-prove-the-past.png">
+  <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/the-present-must-prove-the-past.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The Present Must Prove the Past">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Present Must Prove the Past · Parano1d Lab">
+  <meta name="twitter:description" content="Может ли блокчейн проверить своё текущее состояние, не воспроизводя всю историю исполнения от genesis?">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/the-present-must-prove-the-past.png">
+  <meta name="twitter:image:alt" content="The Present Must Prove the Past">
+  <meta property="article:published_time" content="2026-08-09T00:00:00Z">
+  <meta property="article:section" content="Proof-carrying State">
+  <meta property="article:author" content="Ignotus Nemo">
+  <title>The Present Must Prove the Past · Parano1d Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=55204535da76">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"The Present Must Prove the Past","description":"Parano1d перенёс источник валидности текущего состояния из накопленной истории исполнения в само настоящее. Весь путь валидности от genesis до текущего состояния покрыт исполнимой теоремой о сквозной постквантовой корректности на ресурсном пороге NIST Category 1.","datePublished":"2026-08-09","dateModified":"2026-08-09","mainEntityOfPage":"https://lab.parano1d.org/ru/research/the-present-must-prove-the-past/","inLanguage":"ru","author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/the-present-must-prove-the-past.png","about":"Proof-carrying State"}</script>
+</head>
+<body class="locale-ru">
+  <a class="skip-link" href="#content">К содержанию</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/ru/" aria-label="Главная ParanO(1)d Lab">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>ParanO(1)d Lab</strong><small>Исследования</small></span>
+    </a>
+    <div class="header-controls">
+      <details class="language-switcher"><summary aria-label="Выбрать язык"><span>RU</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="Язык"><a href="/research/the-present-must-prove-the-past/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/the-present-must-prove-the-past/" lang="ru" hreflang="ru" aria-current="true"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/the-present-must-prove-the-past/" lang="zh-Hans" hreflang="zh-Hans"><span>中文</span><strong>简体中文</strong></a></div></details>
+      <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
+        <a href="/ru/#latest">Новое</a>
+        <a aria-current="page" href="/ru/research/">Все исследования</a>
+        <span class="nav-rule" aria-hidden="true"></span>
+        <a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">Документация <span aria-hidden="true">↗</span></a>
+        <a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">Parano1d <span aria-hidden="true">↗</span></a>
+        <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="Parano1d на GitHub" target="_blank" rel="noopener noreferrer"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      </nav>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    </div>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page article-page--flagship">
+    <header class="article-hero article-hero--flagship">
+      <div class="flagship-hero-media" aria-hidden="true"><img src="/assets/the-present-must-prove-the-past-hero.webp" alt="" fetchpriority="high" decoding="async"></div>
+      <div class="flagship-hero-shade" aria-hidden="true"></div>
+      <div class="article-hero-copy"><a class="back-link" href="/ru/research/">← Все исследования</a><div class="article-meta"><span>Архитектура протокола</span><span>Proof-carrying State</span><time datetime="2026-08-09">09 авг. 2026 г.</time></div><h1>The Present Must Prove the Past</h1><p class="article-dek">Может ли блокчейн проверить своё текущее состояние, не воспроизводя всю историю исполнения от genesis?</p><div class="article-byline"><span>Автор Ignotus Nemo</span><span>13 мин чтения</span><span>Рабочая архитектура</span></div><div class="article-share" aria-label="Поделиться исследованием"><span class="article-share-label">Поделиться</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/ru/research/the-present-must-prove-the-past/" data-copy-default="Копировать ссылку" data-copy-success="Скопировано" data-copy-failure="Не удалось скопировать" aria-label="Скопировать ссылку на статью" title="Копировать ссылку"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">Копировать ссылку</span></button><a class="share-action" href="https://x.com/intent/post?text=The%20Present%20Must%20Prove%20the%20Past&amp;url=https%3A%2F%2Flab.parano1d.org%2Fru%2Fresearch%2Fthe-present-must-prove-the-past%2F" aria-label="Поделиться статьёй в X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Поделиться в X</span></a></div></div>
+    </header>
+    <div class="article-layout article-layout--flagship">
+      <aside class="article-toc" aria-label="В этой статье"><strong>В этой статье</strong><a href="#validity-forward">Перенести валидность вперёд</a><a href="#history">Что тогда остаётся от истории?</a><a href="#live-state">Текущее состояние тоже не обязано быть историей</a><a href="#ordering">Если валидность уже установлена, кто выбирает порядок?</a><a href="#proving">Теперь всё упирается в proving</a><a href="#cryptography">На какой криптографии будет держаться настоящее?</a><a href="#parano1d">Новая архитектура стала Parano1d</a><a href="#performance">Как я довёл recursive proving до 10.7 секунды на обычном ноутбуке</a><a href="#post-quantum">Что означает сквозная постквантовая корректность от genesis?</a><a href="#result">Главный результат Parano1d</a></aside>
+      <article class="article-body article-body--flagship"><div class="flagship-lede"><p class="flagship-opening-question">Может ли блокчейн проверить своё текущее состояние, не воспроизводя всю историю исполнения от genesis?</p>
+<p>Новой ноде можно передать безупречно сформированный snapshot блокчейна. Каждая запись будет корректно декодироваться. Все commitments будут совпадать с данными. По всем очевидным признакам данные будут внутренне согласованы.</p>
+<p>Но это не отвечает на главный вопрос:</p>
+<p>Почему это состояние следует принять как результат работы цепочки?</p>
+<p>Bitcoin отвечает, самостоятельно восстанавливая этот результат. Нода начинает с genesis, проверяет цепочку, исполняет каждую транзакцию и получает текущий набор UTXO.</p>
+<p>Доказательство настоящего находится в прошлом.</p>
+<p>Snapshots могут ускорить этот процесс. Checkpoints могут перенести его начальную точку. Специализированная инфраструктура может выполнить историческую работу в другом месте и передать результат.</p>
+<p>Но ни один из этих подходов не меняет саму зависимость. Состояние перед вами по-прежнему не доказывает, что было получено из genesis через валидную последовательность переходов.</p>
+<p>Именно эту зависимость я хотел перевернуть.</p>
+<p>Вопрос был не просто в том, можно ли сжать историю блокчейна в рекурсивное доказательство. Он звучал иначе:</p>
+<p>Что, если консенсус будет переносить вперёд саму валидность текущего состояния?</p>
+<p>Тогда новая нода сможет получить текущее состояние вместе с доказательством валидного пути, который к нему привёл. Чтобы понять, почему настоящее валидно, ей не придётся заново исполнять всю историю работы сети.</p>
+<p>Трудоёмкость проверки состояния больше не будет расти лишь потому, что цепочка становится старше. Чтобы удостовериться в подлинности настоящего, ноде нужно будет работать с тем, что существует сейчас, а не со всеми транзакциями за всю жизнь сети.</p>
+</div>
+<section class="flagship-section" data-section="01"><h2 id="validity-forward" data-section="01">Перенести валидность вперёд</h2>
+<p>Пусть <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mi>h</mi></msub></mrow><annotation encoding="application/x-tex">S_h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">h</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> обозначает состояние после блока <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi></mrow><annotation encoding="application/x-tex">h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">h</span></span></span></span></span>, а <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>h</mi></msub></mrow><annotation encoding="application/x-tex">\pi_h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">h</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> обозначает доказательство, связанное с этим состоянием.</p>
+<p>Для каждого нового блока proof должен установить два факта:</p>
+<figure class="flagship-diagram flagship-diagram--obligations" aria-label="1. π_(h-1) валидно 2. применение блока B_h к состоянию S_(h-1) приводит в точности к состоянию S_h"><ol class="diagram-obligations"><li><span>π<sub>h−1</sub> валидно</span></li><li><span>применение блока B<sub>h</sub> к состоянию S<sub>h−1</sub> приводит в точности к состоянию S<sub>h</sub></span></li></ol></figure>
+<p>Результатом становится новое доказательство <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>h</mi></msub></mrow><annotation encoding="application/x-tex">\pi_h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">h</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>:</p>
+<figure class="flagship-diagram flagship-diagram--flow flagship-diagram--transition" aria-label="(S_(h-1), π_(h-1)) + B_h | v доказать переход | v (S_h, π_h)"><div class="diagram-flow"><div class="diagram-node">(S<sub>h−1</sub>, π<sub>h−1</sub>) + B<sub>h</sub></div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-node">доказать переход</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-node">(S<sub>h</sub>, π<sub>h</sub>)</div></div></figure>
+<p>Каждое доказательство проверяет предыдущее и добавляет ещё один переход. На высоте десять миллионов proof не содержит десять миллионов отдельных proofs. Его форма не растёт вместе с высотой цепочки. Валидность переходов переносится вперёд рекурсивно.</p>
+<p>Теперь возникает важный вопрос для консенсуса:</p>
+<p class="flagship-claim"><strong>когда доказательство становится основанием для принятия состояния?</strong></p>
+<p>Если именно <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>h</mi></msub></mrow><annotation encoding="application/x-tex">\pi_h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">h</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> является причиной принять <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mi>h</mi></msub></mrow><annotation encoding="application/x-tex">S_h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">h</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> как валидное состояние, proof не может быть дополнительным сертификатом, который появится когда-нибудь после блока. Причина принять состояние должна существовать уже в тот момент, когда оно входит в консенсус.</p>
+<p>Иначе у протокола появляются две независимые точки прогресса:</p>
+<figure class="flagship-diagram flagship-diagram--tracks" aria-label="принятые блоки ---------------&gt; доказанные состояния ----------&gt;"><div class="diagram-tracks"><div class="diagram-track-row"><span class="diagram-track-label">принятые блоки</span><span class="diagram-track"><span style="--track-fill:100%"></span></span><span class="diagram-track-tip" aria-hidden="true"></span></div><div class="diagram-track-row"><span class="diagram-track-label">доказанные состояния</span><span class="diagram-track"><span style="--track-fill:72%"></span></span><span class="diagram-track-tip" aria-hidden="true"></span></div></div></figure>
+<p>Тогда пришлось бы отдельно определять, что означает ещё не доказанная вершина, какая из двух точек является главной, что сохраняется после сбоя и откуда должно продолжиться proving.</p>
+<p>Гораздо чище определить атомарную единицу принятия:</p>
+<figure class="flagship-diagram flagship-diagram--equation" aria-label="accepted block = block + recursive proof"><div class="diagram-equation"><div class="diagram-node diagram-node--result">accepted block</div><span class="diagram-equation-symbol">=</span><div class="diagram-equation-pair"><div class="diagram-node">block</div><span class="diagram-equation-symbol">+</span><div class="diagram-node">recursive proof</div></div></div></figure>
+<p>Новое состояние входит в консенсус вместе с доказательством перехода, который его создал. State и proof движутся вместе, поэтому у консенсуса остаётся одна точка прогресса.</p>
+<p>Рекурсивный proof теперь не является отдельным сертификатом об истории.</p>
+<p class="flagship-claim"><strong>Он переносит саму причину валидности из одного состояния в следующее.</strong></p>
+<p>И если историческое исполнение больше не выполняет эту роль, меняется и роль самой истории.</p>
+</section>
+<section class="flagship-section" data-section="02"><h2 id="history" data-section="02">Что тогда остаётся от истории?</h2>
+<p>Если текущее состояние уже несёт рекурсивное доказательство своего валидного происхождения, старые тела блоков больше не нужны новому узлу для того, чтобы установить валидность настоящего.</p>
+<p>Но прошлое не перестаёт быть важным. Иногда нас интересует не сегодняшний State, а <strong>конкретное событие в прошлом</strong>.</p>
+<p>Представим, что я кому-то заплатил и спустя время должен доказать, что сеть действительно приняла эту транзакцию. Я могу сохранить саму транзакцию и её Merkle path. По ним можно восстановить <code>transaction root</code> блока и доказать, что транзакция действительно входила в этот блок.</p>
+<p>Но одного факта всё ещё не хватает.</p>
+<p>Блок мог быть полностью валидным, распространяться по сети и всё же проиграть конкурирующей ветви. Включение в блок ещё не означает включение в каноническую цепочку.</p>
+<p>Поэтому доказательство платежа должно отвечать на два вопроса:</p>
+<figure class="flagship-diagram flagship-diagram--questions" aria-label="эта транзакция входила в этот блок? этот блок входил в каноническую цепочку?"><div class="diagram-questions"><div class="diagram-question"><span>01</span><strong>эта транзакция входила в этот блок?</strong></div><div class="diagram-question"><span>02</span><strong>этот блок входил в каноническую цепочку?</strong></div></div></figure>
+<p>На первый вопрос отвечают транзакция и её Merkle path.</p>
+<p>Можно было бы заставить рекурсивный proof фиксировать аутентифицированную историю блоков с возможностью открыть любую высоту. Но нет причины возлагать на него ещё и эту задачу.</p>
+<p class="flagship-claim"><strong>Заголовки блоков достаточно компактны, чтобы хранить их постоянно. Цепочка заголовков сохраняет канонический spine и позволяет узлу определить, входит ли в него конкретный блок.</strong></p>
+<p>Теперь у двух частей разные роли.</p>
+<p>Транзакция и Merkle path доказывают:</p>
+<figure class="flagship-diagram flagship-diagram--assertion" aria-label="эта транзакция входила в этот блок"><div class="diagram-assertion"><span class="diagram-assertion-mark" aria-hidden="true"></span><strong>эта транзакция входила в этот блок</strong></div></figure>
+<p>Проверенная цепочка заголовков доказывает:</p>
+<figure class="flagship-diagram flagship-diagram--assertion" aria-label="этот блок входит в текущую каноническую цепочку"><div class="diagram-assertion"><span class="diagram-assertion-mark" aria-hidden="true"></span><strong>этот блок входит в текущую каноническую цепочку</strong></div></figure>
+<p>Вместе они образуют небольшое переносимое доказательство платежа, <strong>payment receipt</strong>.</p>
+<figure class="flagship-diagram flagship-diagram--flow flagship-diagram--receipt" aria-label="transaction + Merkle path | v transaction root | v block header | v canonical header chain"><div class="diagram-flow"><div class="diagram-node">transaction + Merkle path</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-node">transaction root</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-node">block header</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-node">canonical header chain</div></div></figure>
+<p>Полное тело блока для проверки такого платежа больше не требуется.</p>
+<p>Каждому узлу не нужно вечно хранить все транзакции только ради того, чтобы когда-нибудь доказать одну из них. Тот, кому важен конкретный платёж, сохраняет receipt этого платежа.</p>
+<p>Недавнее прошлое устроено иначе. Около вершины каноническая ветвь ещё может измениться, поэтому узлу нужен ограниченный суффикс последних полных блоков для обработки конкурирующих ветвей и неглубоких реорганизаций. Это рабочее окно, а не вся жизнь сети.</p>
+<p>Теперь разные данные выполняют разные задачи:</p>
+<div class="table-wrap flagship-table flagship-table--0"><table><thead><tr><th>Что сохраняется</th><th>Зачем</th></tr></thead><tbody><tr><td data-label="Что сохраняется">Текущее состояние + recursive proof</td><td data-label="Зачем">Установить валидность текущего состояния от genesis</td></tr><tr><td data-label="Что сохраняется">Постоянные компактные заголовки</td><td data-label="Зачем">Сохранить канонический spine и исторические anchors</td></tr><tr><td data-label="Что сохраняется">Последние полные блоки</td><td data-label="Зачем">Обрабатывать недавние конкурирующие ветви</td></tr><tr><td data-label="Что сохраняется">Receipt конкретного платежа</td><td data-label="Зачем">Доказать транзакцию без полного тела блока</td></tr></tbody></table></div>
+<p>История не исчезла. Её задачи разделились. Узлу больше не нужно обращаться со всей историей исполнения сети как с одним огромным объектом, который необходимо вечно хранить и воспроизводить целиком.</p>
+</section>
+<section class="flagship-section" data-section="03"><h2 id="live-state" data-section="03">Текущее состояние тоже не обязано быть историей</h2>
+<p>Та же логика меняет представление активного состояния.</p>
+<p>В UTXO-системе для проверки нового перехода не нужны все outputs, которые когда-либо существовали. Нужны только те, которые существуют и могут быть потрачены <strong>сейчас</strong>.</p>
+<p>Поэтому активное состояние может содержать именно live UTXOs. Потраченные outputs покидают его. Освободившуюся capacity можно использовать снова, а пустые области не обязаны занимать физическое место.</p>
+<p class="flagship-claim"><strong>Размер состояния, которое обязан хранить узел, определяется текущим использованием сети, а не накопленной историей.</strong></p>
+<p>Он зависит от live set и той capacity, которая нужна сети сейчас, а не от общего числа транзакций за всё время её существования.</p>
+<p>Возраст цепочки больше не означает, что придётся воспроизводить всё больше исторического исполнения или продолжать хранить всё больше мёртвого состояния.</p>
+<p>Но остаётся ещё одна фундаментальная задача блокчейна.</p>
+</section>
+<section class="flagship-section" data-section="04"><h2 id="ordering" data-section="04">Если валидность уже установлена, кто выбирает порядок?</h2>
+<p>Рекурсивный proof может установить, что переход состояния валиден.</p>
+<p>Но он не может выбрать между двумя валидными переходами.</p>
+<p>Представим, что два producer построили разные дочерние состояния от одного parent. Оба перехода корректны. Оба блока несут валидные proofs.</p>
+<p>Какой из них становится каноническим?</p>
+<p>Это задача порядка, а не валидности.</p>
+<p class="flagship-claim"><strong>Именно для этого нужен proof of work.</strong></p>
+<p>Proof уже установил валидность. PoW даёт конкурирующим валидным ветвям объективно сравнимую накопленную работу и позволяет сети сойтись на одной канонической цепочке.</p>
+<p>Разделение получается простым:</p>
+<figure class="flagship-diagram flagship-diagram--responsibilities" aria-label="proof -&gt; валиден ли этот transition? PoW -&gt; какой валидный transition станет canonical?"><div class="diagram-responsibilities"><div class="diagram-responsibility"><div class="diagram-node diagram-node--key">proof</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-responsibility-copy">валиден ли этот transition?</div></div><div class="diagram-responsibility"><div class="diagram-node diagram-node--key">PoW</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-responsibility-copy">какой валидный transition станет canonical?</div></div></div></figure>
+<p>Из этого разделения меняется и порядок производства блока.</p>
+<p>Сначала строится transition. Затем доказывается его корректность. Когда всё значимое для консенсуса, кроме nonce, зафиксировано, начинается поиск nonce.</p>
+<figure class="flagship-diagram flagship-diagram--flow flagship-diagram--production-short" aria-label="построить transition | v доказать transition | v зафиксировать block template | v искать nonce"><div class="diagram-flow"><div class="diagram-node">построить transition</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-node">доказать transition</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-node">зафиксировать block template</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-node">искать nonce</div></div></figure>
+<p>Nonce намеренно исключён из утверждения, которое покрывает рекурсивный proof. Майнинг может менять nonce, не затрагивая ничего из уже доказанного.</p>
+<p>Победивший nonce завершает тот же block template, валидность перехода которого уже установлена.</p>
+<p>Hashpower не способен превратить неправильный state transition в правильный. Он не исправляет невалидную транзакцию. Он не делает сломанный proof валидным.</p>
+<p class="flagship-claim"><strong>Hashpower определяет канонический порядок между уже корректными переходами.</strong></p>
+<p>Этот канонический выбор записывается в постоянную цепочку заголовков, которая также даёт payment receipts их канонический anchor.</p>
+<p>Так block production отделяется от raw hashing, но proving остаётся частью производства блока.</p>
+<p><strong>Block producer и есть prover.</strong> Он должен хранить текущее состояние, построить следующий transition и создать рекурсивный proof до того, как начнётся поиск nonce. Отдельного prover, который сертифицирует блок позже, не существует.</p>
+<p>В production path только механический поиск nonce можно вынести в отдельную делегируемую роль. Внешние workers, pools и специализированное оборудование могут получить неизменяемый уже доказанный block template и искать для него nonce. Они не могут изменить transition, исправить невалидный блок или создать другое состояние.</p>
+<p class="flagship-claim"><strong>Producer доказывает transition. Hashpower только конкурирует за то, чтобы получившийся блок стал каноническим.</strong></p>
+</section>
+<section class="flagship-section" data-section="05"><h2 id="proving" data-section="05">Теперь всё упирается в proving</h2>
+<p>До сих пор задача была в основном архитектурной.</p>
+<p>Когда рекурсивный proof становится обязательным для каждого блока, задача становится вычислительной. Это не редкий checkpoint и не сертификат, который строится постфактум. Без proof следующее состояние вообще не может войти в консенсус.</p>
+<p>Практический вопрос уже не в том, можно ли построить такой proof теоретически.</p>
+<p class="flagship-claim"><strong>Для proof-native block production узким местом становится proving, а не verification.</strong></p>
+<p>Если каждый блок требует рекурсивного proof, независимый майнер должен успевать построить его в пределах block interval на обычном оборудовании. Если для производства блока нужен дорогой proving cluster, мы просто перенесли централизацию в другое место.</p>
+<p>Дешёвой проверки недостаточно. Producer строит proof на критическом пути каждого блока, а требования к памяти не должны превращать независимое производство в задачу только для дата-центра.</p>
+<p>Это ограничение определяет, как приходится строить proof system. Но прежде чем оптимизировать prover, нужно сделать более фундаментальный выбор: на каких криптографических предпосылках будет держаться валидность цепочки от genesis?</p>
+</section>
+<section class="flagship-section" data-section="06"><h2 id="cryptography" data-section="06">На какой криптографии будет держаться настоящее?</h2>
+<p>Архитектура уже сильно сузила пространство выбора. Proof system должна поддерживать recursion. Форма proof не должна расти вместе с высотой цепочки. Proving должен быть достаточно быстрым и экономным по памяти для независимого производства блоков на обычном оборудовании. Проверка рекурсивного proof должна оставаться практичной независимо от возраста сети.</p>
+<p>Здесь я хочу явно зафиксировать ещё два требования.</p>
+<p>Первое требование: transparency.</p>
+<p class="flagship-claim"><strong>No trusted setup.</strong></p>
+<p>Второе требование строже:</p>
+<p class="flagship-claim"><strong>сквозная постквантовая корректность от genesis.</strong></p>
+<p>Именно рекурсивный proof позволяет узлу принять текущее состояние как результат валидной цепочки переходов от genesis. Поэтому важное для нас свойство гораздо шире, чем постквантовая безопасность отдельных компонентов.</p>
+<p>Квантовый противник может попытаться подделать авторизацию, переход, proof одного из предков или сам terminal. Утверждение о корректности должно охватывать весь путь и итоговое событие принятия: может ли любая из этих подделок заставить узел принять недопустимый текущий <code>State</code> как имеющий валидный путь от genesis?</p>
+<p>Именно это является требованием.</p>
+<figure class="flagship-diagram flagship-diagram--requirements" aria-label="recursive from genesis fixed proof shape as the chain grows practical proving on commodity hardware low enough memory for independent block production practical verification transparent, no trusted setup end-to-end post-quantum soundness from genesis"><ol class="diagram-requirements"><li><span>recursive from genesis</span></li><li><span>fixed proof shape as the chain grows</span></li><li><span>practical proving on commodity hardware</span></li><li><span>low enough memory for independent block production</span></li><li><span>practical verification</span></li><li><span>transparent, no trusted setup</span></li><li><span>end-to-end post-quantum soundness from genesis</span></li></ol></figure>
+<p>Эти ограничения и определили криптографический стек.</p>
+<p>Committed arithmetic работает над бинарными полями, прежде всего над <code>GF(2^128)</code>. Security-critical challenges и recursive authentication используют <code>GF(2^256)</code>. Общей permutation для consensus proof system стала Poseidon2b.</p>
+<p class="flagship-claim"><strong>Минимальный размер proof не является целью.</strong></p>
+<p>Рекурсивные системы, основанные на группах эллиптических кривых и предположении о сложности дискретного логарифмирования, могут давать гораздо меньшие proofs. Это разумный инженерный выбор, когда сквозная постквантовая корректность от genesis не требуется.</p>
+<p>Но они не могут обеспечить сквозную постквантовую корректность рекурсивного пути валидности от genesis. Если какая-либо часть этого пути опирается на криптографию на эллиптических кривых, то отказаться от неё позже можно будет, только заменив сами основы recursion вместе с commitments и consensus relations, построенными на этой основе.</p>
+<p class="flagship-claim"><strong>Такой криптографический долг был неприемлем для нас с самого первого блока.</strong></p>
+</section>
+<section class="flagship-section" data-section="07"><h2 id="parano1d" data-section="07">Новая архитектура стала Parano1d</h2>
+<p><strong>Parano1d</strong> представляет собой proof-native Layer 1, построенный вокруг этой архитектуры. Текущее состояние консенсуса в протоколе называется State и представляет собой точный разреженный вектор live UTXOs вместе с consensus counters. Рекурсивный proof каждого блока называется HistoryStep. Каждый HistoryStep доказывает точный переход своего блока и проверяет предыдущий HistoryStep внутри той же relation.</p>
+<p>Блок принимается только вместе с соответствующим terminal:</p>
+<figure class="flagship-diagram flagship-diagram--atomic" aria-label="{block, HistoryStep}"><div class="diagram-atomic"><span class="diagram-brace" aria-hidden="true">{</span><div class="diagram-node">block</div><span class="diagram-atomic-link" aria-hidden="true">+</span><div class="diagram-node">HistoryStep</div><span class="diagram-brace" aria-hidden="true">}</span></div></figure>
+<p>Узел хранит текущий <code>State</code>, постоянную компактную цепочку заголовков и ограниченный суффикс последних полных блоков. Рекурсивный proof устанавливает валидность переходов, а порядок PoW и накопленную работу узел проверяет по цепочке заголовков. Старые тела блоков не участвуют в активной проверке.</p>
+<p>Платёж можно сохранить как переносимый receipt. Потраченная capacity возвращается в использование, а пустые области не требуют постоянного физического хранения.</p>
+<p>Поиск nonce начинается только после завершения nonce-independent block proof.</p>
+<p>Production path выглядит так:</p>
+<figure class="flagship-diagram flagship-diagram--production" aria-label="current State + transactions + previous HistoryStep | v prove exact transition | v new HistoryStep | v immutable block template | v nonce search | v {block, HistoryStep} | v full nodes verify | v materialize proven writes"><div class="diagram-input-cluster"><div class="diagram-node">current State</div><span aria-hidden="true">+</span><div class="diagram-node">transactions</div><span aria-hidden="true">+</span><div class="diagram-node">previous HistoryStep</div></div><span class="diagram-arrow" aria-hidden="true"></span><ol class="diagram-timeline"><li><span class="diagram-timeline-index" aria-hidden="true"></span><strong>prove exact transition</strong></li><li><span class="diagram-timeline-index" aria-hidden="true"></span><strong>new HistoryStep</strong></li><li><span class="diagram-timeline-index" aria-hidden="true"></span><strong>immutable block template</strong></li><li><span class="diagram-timeline-index" aria-hidden="true"></span><strong>nonce search</strong></li><li><span class="diagram-timeline-index" aria-hidden="true"></span><strong>{block, HistoryStep}</strong></li><li><span class="diagram-timeline-index" aria-hidden="true"></span><strong>full nodes verify</strong></li><li><span class="diagram-timeline-index" aria-hidden="true"></span><strong>materialize proven writes</strong></li></ol></figure>
+<div class="table-wrap flagship-table flagship-table--1 flagship-table--profile"><table><thead><tr><th>Параметр</th><th>Значение</th></tr></thead><tbody><tr><td data-label="Параметр">Поле зафиксированных трасс</td><td data-label="Значение"><code>GF(2^128)</code></td></tr><tr><td data-label="Параметр">Поле проверочных вызовов</td><td data-label="Значение"><code>GF(2^256)</code></td></tr><tr><td data-label="Параметр">Мощность множества вызовов</td><td data-label="Значение"><code>2^255</code></td></tr><tr><td data-label="Параметр">Poseidon2b</td><td data-label="Значение">ширина 4 · rate 2 · <code>x^7</code> · 8 полных раундов · 58 частичных раундов</td></tr><tr><td data-label="Параметр">Запросы кошелька</td><td data-label="Значение">65</td></tr><tr><td data-label="Параметр">Запросы HistoryStep / BaseFold</td><td data-label="Значение">133</td></tr><tr class="flagship-table-subheading"><th colspan="2" scope="rowgroup"><strong>Классы proof</strong></th></tr><tr><td data-label="Параметр">Геометрия B25</td><td data-label="Значение"><code>m = 22</code> · до 25 позиций</td></tr><tr><td data-label="Параметр">Кодовое слово B25</td><td data-label="Значение"><code>2^19</code> при rate <code>1/4</code></td></tr><tr><td data-label="Параметр">Геометрия B255</td><td data-label="Значение"><code>m = 24</code> · до 255 позиций</td></tr><tr><td data-label="Параметр">Кодовое слово B255</td><td data-label="Значение"><code>2^21</code> при rate <code>1/4</code></td></tr></tbody></table></div>
+</section>
+<section class="flagship-section" data-section="08"><h2 id="performance" data-section="08">Как я довёл recursive proving до 10.7 секунды на обычном ноутбуке</h2>
+<p>Средний block target Parano1d составляет <strong>15 секунд</strong>. Поэтому proving time становится ограничением уровня консенсуса: независимый producer должен успевать построить рекурсивный proof и оставаться конкурентоспособным без отдельного proving cluster.</p>
+<p>Одним из главных источников стоимости в prover оказался Poseidon2b.</p>
+<p>Одна и та же permutation используется в <code>State</code> commitments, Merkle relations, transaction commitments, proof transcripts и recursive verification. Если доказывать каждый вызов отдельной цепочкой constraints, prover тысячи раз повторяет почти одну и ту же алгебраическую работу.</p>
+<p>Inputs меняются. Связи между вызовами меняются. Сама permutation остаётся прежней.</p>
+<p>Поэтому я изменил представление.</p>
+<p>Вместо множества отдельных копий я поместил все исполнения Poseidon2b в одну глобальную трассу с тремя координатами:</p>
+<figure class="flagship-diagram flagship-diagram--axes" aria-label="permutation slot × round × state lane"><div class="diagram-axes"><div class="diagram-node">permutation slot</div><span class="diagram-axis-symbol" aria-hidden="true">×</span><div class="diagram-node">round</div><span class="diagram-axis-symbol" aria-hidden="true">×</span><div class="diagram-node">state lane</div></div></figure>
+<p>Proof устанавливает корректность permutation сразу для всего набора. Отдельные relations связывают каждый вызов с теми местами, где нужны его входы и выходы.</p>
+<p>Я назвал эту конструкцию <strong>FROST-GKR, Frobenius Reduction over Shifted Tables</strong>.</p>
+<p>На контрольной нагрузке из 59 исполнений Poseidon2b:</p>
+<div class="table-wrap flagship-table flagship-table--2"><table><thead><tr><th>Метрика</th><th>Прежняя конструкция</th><th>FROST-GKR</th></tr></thead><tbody><tr><td data-label="Метрика">Проверки sumcheck для ограничений</td><td data-label="Прежняя конструкция">472</td><td data-label="FROST-GKR">2</td></tr><tr><td data-label="Метрика">Алгебраический транскрипт</td><td data-label="Прежняя конструкция">287,712 bytes</td><td data-label="FROST-GKR">5,568 bytes</td></tr><tr><td data-label="Метрика">Ускорение reduction prover</td><td data-label="Прежняя конструкция">1.00×</td><td data-label="FROST-GKR">10.69×</td></tr></tbody></table></div>
+<p>Это результаты уровня reduction, а не утверждение об ускорении <code>HistoryStep</code> целиком в 10.69 раза. Полные границы benchmark и журнал измерений опубликованы в <a href="https://lab.parano1d.org/papers/FROST_GKR.pdf" target="_blank" rel="noopener noreferrer">статье FROST-GKR</a> и <a href="https://github.com/ignotusnemo/frost-gkr" target="_blank" rel="noopener noreferrer">reference artifact</a>.</p>
+<p>В production используются два класса proof. B25 является стандартным профилем производства блоков. B255 использует более крупную аутентифицированную матрицу и другую геометрию блока. Оба класса допустимы для консенсуса и обрабатываются одним production verifier.</p>
+<p>С этой конструкцией production prover показывает следующие результаты <code>HistoryStep</code>:</p>
+<div class="table-wrap flagship-table flagship-table--3 flagship-table--performance"><table><thead><tr><th>Машина</th><th>Класс</th><th>Proving time</th><th>Статистика</th><th>Terminal</th></tr></thead><tbody><tr><td data-label="Машина">AVX2 laptop, 12 threads</td><td data-label="Класс">B25</td><td data-label="Proving time">10.734 s</td><td data-label="Статистика">p50 из 3 запусков</td><td data-label="Terminal">971,732 bytes</td></tr><tr><td data-label="Машина">AVX2 laptop, 12 threads</td><td data-label="Класс">B255</td><td data-label="Proving time">34.938 s</td><td data-label="Статистика">1 изолированный запуск</td><td data-label="Terminal">1,081,108 bytes</td></tr><tr><td data-label="Машина">AVX-512 PC, 24 threads</td><td data-label="Класс">B25</td><td data-label="Proving time">6.905 s</td><td data-label="Статистика">p50 из 3 запусков</td><td data-label="Terminal">971,732 bytes</td></tr><tr><td data-label="Машина">AVX-512 PC, 24 threads</td><td data-label="Класс">B255</td><td data-label="Proving time">21.053 s</td><td data-label="Статистика">p50 из 3 запусков</td><td data-label="Terminal">1,081,108 bytes</td></tr></tbody></table></div>
+<p>Для стандартного production path важен результат B25 на ноутбуке: <strong>10.734 секунды p50 на обычном оборудовании при среднем block target 15 секунд.</strong></p>
+<p>Benchmark измеряет построение <code>HistoryStep</code>, а не полную задержку майнинга. Точная граница измерения и методика воспроизведения опубликованы в <a href="https://docs.parano1d.org/ru/reference/performance.html" target="_blank" rel="noopener noreferrer">performance record</a>.</p>
+</section>
+<section class="flagship-section" data-section="09"><h2 id="post-quantum" data-section="09">Что означает сквозная постквантовая корректность от genesis?</h2>
+<p>Назвать несколько primitives постквантовыми ещё не означает доказать сквозную корректность всей системы.</p>
+<p>Вопрос безопасности здесь конкретен:</p>
+<p class="flagship-claim"><strong>может ли квантовый противник подделать валидность в любой точке истории, представленной рекурсивным proof, и заставить узел принять недопустимый текущий <code>State</code> как имеющий валидный путь от genesis?</strong></p>
+<p>Это и есть failure event.</p>
+<p>Атака не обязана быть направлена на последний <code>HistoryStep</code>. Она может начаться глубже в истории, представленной рекурсивным proof, и попытаться перенести ложное утверждение вперёд через следующие proofs. Поэтому теорема должна охватывать каждый компонент, от которого зависит окончательное принятие:</p>
+<figure class="flagship-diagram flagship-diagram--coverage" aria-label="transaction authorization block relation parent continuity exact State transition recursive verification proof commitments Fiat-Shamir challenges represented ancestors"><ol class="diagram-coverage"><li><span>transaction authorization</span></li><li><span>block relation</span></li><li><span>parent continuity</span></li><li><span>exact State transition</span></li><li><span>recursive verification</span></li><li><span>proof commitments</span></li><li><span>Fiat-Shamir challenges</span></li><li><span>represented ancestors</span></li></ol></figure>
+<p>Утверждение не ограничено одной подписью, одним hash, одним компонентом proof или одной высотой цепочки.</p>
+<p>Оно относится к <strong>текущему <code>State</code>, который сеть принимает как валидный от genesis</strong>.</p>
+<p>Для production profile опубликованы два отдельных анализа, и они отвечают на разные вопросы.</p>
+<p>Классический <a href="https://lab.parano1d.org/research/parano1d-block-tiwari-fs-fri/" target="_blank" rel="noopener noreferrer">анализ FS-FRI по Block и Tiwari</a> даёт:</p>
+<figure class="flagship-diagram flagship-diagram--security-pair" aria-label="127 provable bits 127 conjectured bits"><div class="diagram-security-pair"><div class="diagram-security-metric"><strong>127</strong><span>provable bits</span></div><div class="diagram-security-metric"><strong>127</strong><span>conjectured bits</span></div></div></figure>
+<p>при target 128 bits.</p>
+<p><a href="https://lab.parano1d.org/research/parano1d-nist-pqc-category-one/" target="_blank" rel="noopener noreferrer">Отдельная исполняемая теорема в quantum random-oracle model</a> рассматривает всю invalid-<code>State</code> game от genesis против одного stateful quantum adversary. Все представленные предки учитываются в рамках единого бюджета ресурсов противника.</p>
+<p>Вывод о достижении Category 1 для production profile имеет две явные предпосылки. Для фиксированного production compiler Poseidon2b должно выполняться:</p>
+<figure class="flagship-diagram flagship-diagram--bound diagram-bound--16" aria-label="Delta_P2b^C1 &lt; 0.446635859676391589"><div class="diagram-bound-value">Δ<sub>P2b</sub><sup>C1</sup> &lt; 0.446635859676391589</div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
+<p>Также должна выполняться заявленная нижняя граница стоимости coherent oracle responses по числу логических вентилей и глубине.</p>
+<p>В идеальной модели доминирующая граница произведения числа вентилей на глубину для успеха с вероятностью <code>1/2</code> составляет:</p>
+<figure class="flagship-diagram flagship-diagram--bound diagram-bound--17" aria-label="2^173.273866314232"><div class="diagram-bound-value">2<sup>173.273866314232</sup></div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
+<p><a href="https://csrc.nist.gov/projects/post-quantum-cryptography/post-quantum-cryptography-standardization/evaluation-criteria/security-%28evaluation-criteria%29" target="_blank" rel="noopener noreferrer">Ресурсный ориентир NIST для AES-128 Category 1</a> в той же модели с учётом глубины составляет:</p>
+<figure class="flagship-diagram flagship-diagram--bound diagram-bound--18" aria-label="2^170"><div class="diagram-bound-value">2<sup>170</sup></div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
+<p>Полная граница вероятности успеха в идеальной модели внутри Category 1 envelope:</p>
+<figure class="flagship-diagram flagship-diagram--bound diagram-bound--19" aria-label="0.053364140323608411 &lt; 1/2"><div class="diagram-bound-value">0.053364140323608411 &lt; 1/2</div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
+<p>При выполнении двух предпосылок запас для фиксированного Poseidon2b сохраняет полную вероятность успешной атаки на production profile ниже <code>1/2</code> во всей ресурсной области Category 1. Полная теорема, предпосылки, production parameters и исполняемая арифметика опубликованы в <a href="https://github.com/ignotusnemo/parano1d-soundness" target="_blank" rel="noopener noreferrer">soundness certificate</a>.</p>
+<p>Важны не только числа, но и область утверждения.</p>
+<p>Не отдельная подпись.</p>
+<p>Не отдельный hash.</p>
+<p>Не один компонент proof.</p>
+<p>Не одна точка цепочки.</p>
+<p class="flagship-claim"><strong>А всё текущее состояние, которое сеть принимает как валидное от genesis блока.</strong></p>
+<p>Это здесь и означает end-to-end.</p>
+</section>
+<section class="flagship-section flagship-section--final" data-section="10"><h2 id="result" data-section="10">Главный результат Parano1d</h2>
+<p>Parano1d перенёс источник валидности текущего состояния из накопленной истории исполнения в само настоящее.</p>
+<p>Весь путь валидности от genesis до текущего состояния покрыт исполнимой теоремой о сквозной постквантовой корректности на ресурсном пороге NIST Category 1.</p>
+<p>Мы изменили роль истории в блокчейне.</p>
+<p class="flagship-claim"><strong>The present must prove the past.</strong></p>
+<p class="flagship-claim"><strong>Now it does.</strong></p>
+<p class="flagship-destination"><a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">parano1d.org<span aria-hidden="true">↗</span></a></p>
+</section></article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Материалы исследования</p><h2 id="evidence-title">Доказательства и артефакты</h2><p>Здесь сохранены реализации, измерения и выводы, на которых основана статья.</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Код</small><strong>Исходный код Parano1d</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d-soundness" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Code and proofs</small><strong>Исполнимый сертификат корректности</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/reference/performance.html" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Данные</small><strong>Измерения рабочей производительности</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="/papers/FROST_GKR.pdf"><span class="evidence-entry"><span><small>PDF</small><strong>Статья FROST-GKR</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/frost-gkr" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Код</small><strong>Воспроизводимый эксперимент FROST-GKR</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://eprint.iacr.org/2024/1161" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Статья</small><strong>Конкретная безопасность неинтерактивного FRI</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://csrc.nist.gov/projects/post-quantum-cryptography/post-quantum-cryptography-standardization/evaluation-criteria/security-%28evaluation-criteria%29" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Standardization criteria</small><strong>Категории безопасности NIST PQC</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Соседние исследования"><a href="/ru/research/parano1d-nist-pqc-category-one/"><small>Ранее</small><strong>NIST PQC Category 1</strong><span>←</span></a><span></span></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>ParanO(1)d Lab</strong><p>Исследования протокола ParanO(1)d.</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>Исследования</strong><a href="/ru/research/">Архив</a><a href="/ru/feed.xml">RSS-лента</a></div>
+      <div><strong>Проект</strong><a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">Сайт</a><a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">Документация</a><a href="https://github.com/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer">Исходный код</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 ParanO(1)d Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=93522528a74e" defer></script>
+</body>
+</html>

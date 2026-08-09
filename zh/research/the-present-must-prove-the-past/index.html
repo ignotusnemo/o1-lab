@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="区块链能否在不从创世区块开始重放全部执行历史的情况下，验证当前状态？">
+  <meta name="author" content="Parano1d Lab">
+  <meta name="keywords" content="Parano1d, Parano1d Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺">
+  <link rel="canonical" href="https://lab.parano1d.org/zh/research/the-present-must-prove-the-past/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/the-present-must-prove-the-past/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/the-present-must-prove-the-past/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/the-present-must-prove-the-past/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/the-present-must-prove-the-past/">
+  <link rel="alternate" type="application/rss+xml" title="Parano1d Lab 研究" href="https://lab.parano1d.org/zh/feed.xml">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Parano1d Lab 研究">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:url" content="https://lab.parano1d.org/zh/research/the-present-must-prove-the-past/">
+  <meta property="og:title" content="当下必须证明过去 · Parano1d Lab">
+  <meta property="og:description" content="区块链能否在不从创世区块开始重放全部执行历史的情况下，验证当前状态？">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og/the-present-must-prove-the-past.png">
+  <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/the-present-must-prove-the-past.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="当下必须证明过去">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="当下必须证明过去 · Parano1d Lab">
+  <meta name="twitter:description" content="区块链能否在不从创世区块开始重放全部执行历史的情况下，验证当前状态？">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/the-present-must-prove-the-past.png">
+  <meta name="twitter:image:alt" content="当下必须证明过去">
+  <meta property="article:published_time" content="2026-08-09T00:00:00Z">
+  <meta property="article:section" content="Proof-carrying State">
+  <meta property="article:author" content="Ignotus Nemo">
+  <title>当下必须证明过去 · Parano1d Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=55204535da76">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"当下必须证明过去","description":"Parano1d 已将当前状态有效性的依据从不断累积的执行历史移到了当下本身。从创世区块到当前状态的整条有效性路径，都由一条可执行的端到端后量子可靠性定理支撑，并达到 NIST Category 1 的资源阈值。","datePublished":"2026-08-09","dateModified":"2026-08-09","mainEntityOfPage":"https://lab.parano1d.org/zh/research/the-present-must-prove-the-past/","inLanguage":"zh-Hans","author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/the-present-must-prove-the-past.png","about":"Proof-carrying State"}</script>
+</head>
+<body class="locale-zh">
+  <a class="skip-link" href="#content">跳到正文</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/zh/" aria-label="ParanO(1)d Lab 首页">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>ParanO(1)d Lab</strong><small>研究</small></span>
+    </a>
+    <div class="header-controls">
+      <details class="language-switcher"><summary aria-label="切换语言"><span>中文</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="语言"><a href="/research/the-present-must-prove-the-past/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/the-present-must-prove-the-past/" lang="ru" hreflang="ru"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/the-present-must-prove-the-past/" lang="zh-Hans" hreflang="zh-Hans" aria-current="true"><span>中文</span><strong>简体中文</strong></a></div></details>
+      <nav class="site-nav" id="site-nav" aria-label="主导航">
+        <a href="/zh/#latest">最新</a>
+        <a aria-current="page" href="/zh/research/">全部研究</a>
+        <span class="nav-rule" aria-hidden="true"></span>
+        <a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">文档 <span aria-hidden="true">↗</span></a>
+        <a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">Parano1d <span aria-hidden="true">↗</span></a>
+        <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="GitHub 上的 Parano1d" target="_blank" rel="noopener noreferrer"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+      </nav>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    </div>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page article-page--flagship">
+    <header class="article-hero article-hero--flagship">
+      <div class="flagship-hero-media" aria-hidden="true"><img src="/assets/the-present-must-prove-the-past-hero.webp" alt="" fetchpriority="high" decoding="async"></div>
+      <div class="flagship-hero-shade" aria-hidden="true"></div>
+      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>协议架构</span><span>Proof-carrying State</span><time datetime="2026-08-09">2026年8月09日</time></div><h1>当下必须证明过去</h1><p class="article-dek">区块链能否在不从创世区块开始重放全部执行历史的情况下，验证当前状态？</p><div class="article-byline"><span>作者 Ignotus Nemo</span><span>15 分钟阅读</span><span>实际部署架构</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/zh/research/the-present-must-prove-the-past/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接" title="复制链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=%E5%BD%93%E4%B8%8B%E5%BF%85%E9%A1%BB%E8%AF%81%E6%98%8E%E8%BF%87%E5%8E%BB&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fthe-present-must-prove-the-past%2F" aria-label="将本文分享到 X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
+    </header>
+    <div class="article-layout article-layout--flagship">
+      <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#validity-forward">让有效性随状态向前传递</a><a href="#history">历史还用来做什么？</a><a href="#live-state">状态只需表示此刻存在的内容</a><a href="#ordering">有效性无法选出胜者</a><a href="#proving">真正困难的是生成证明</a><a href="#cryptography">当下应当建立在怎样的密码学基础上？</a><a href="#parano1d">这套新架构最终成为 Parano1d</a><a href="#performance">我如何把笔记本上的递归证明时间降到 10.7 秒</a><a href="#post-quantum">端到端后量子可靠性究竟覆盖什么？</a><a href="#result">Parano1d 的核心成果</a></aside>
+      <article class="article-body article-body--flagship"><div class="flagship-lede"><p class="flagship-opening-question">区块链能否在不从创世区块开始重放全部执行历史的情况下，验证当前状态？</p>
+<p>一个新节点拿到的，完全可以是一份格式无误的区块链快照。每条记录都能正确解码，每项承诺都能对应，数据从任何直观角度看都可以自洽。</p>
+<p>可这些都没有回答真正重要的问题：</p>
+<p>为什么应当认定这个状态就是这条链演化至今的结果？</p>
+<p>Bitcoin 的做法是亲自重建这个结果：从创世区块出发，验证整条链，执行每一笔交易，最终自行推导出当前的 UTXO 集合。</p>
+<p>支撑当下状态的证据存在于过去。</p>
+<p>快照可以让这个过程更快，检查点可以把起点向前移动，专用基础设施也可以在别处完成历史工作，再把结果分发给节点。</p>
+<p>但这些办法都没有改变底层关系。摆在你面前的状态仍然无法自行证明，它确实是从创世区块出发，沿着一系列有效状态转换演化而来的。</p>
+<p>我想颠倒的，正是这层关系。</p>
+<p>真正值得问的，不只是能否把区块链历史压缩成一个递归证明，而是：</p>
+<p>如果共识向前传递的内容，本身就包括当前状态的有效性呢？</p>
+<p>这样一来，新节点就可以同时取得当前状态和产生它的有效路径证明。它不必重放网络整个生命周期内的执行历史，才弄清为什么当下是有效的。</p>
+<p>状态验证中最昂贵的部分，不会再仅仅因为链越来越老而不断增长。认证当下所需的工作，将由此刻真实存在的内容决定，而不是由网络有史以来处理过的每一笔交易决定。</p>
+</div>
+<section class="flagship-section" data-section="01"><h2 id="validity-forward" data-section="01">让有效性随状态向前传递</h2>
+<p>用 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mi>h</mi></msub></mrow><annotation encoding="application/x-tex">S_h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">h</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 表示区块 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi></mrow><annotation encoding="application/x-tex">h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">h</span></span></span></span></span> 之后的状态，用 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>h</mi></msub></mrow><annotation encoding="application/x-tex">\pi_h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">h</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 表示与该状态对应的证明。</p>
+<p>每产生一个新区块，证明都必须确认两件事：</p>
+<figure class="flagship-diagram flagship-diagram--obligations" aria-label="1. π_(h-1) 有效 2. 将区块 B_h 应用于状态 S_(h-1) 得到的结果恰好是状态 S_h"><ol class="diagram-obligations"><li><span>π<sub>h−1</sub> 有效</span></li><li><span>将区块 B<sub>h</sub> 应用于状态 S<sub>h−1</sub> 得到的结果恰好是状态 S<sub>h</sub></span></li></ol></figure>
+<p>由此产生新的证明 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>h</mi></msub></mrow><annotation encoding="application/x-tex">\pi_h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">h</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>：</p>
+<figure class="flagship-diagram flagship-diagram--flow flagship-diagram--transition" aria-label="(S_(h-1), π_(h-1)) + B_h | v 证明状态转换 | v (S_h, π_h)"><div class="diagram-flow"><div class="diagram-node">(S<sub>h−1</sub>, π<sub>h−1</sub>) + B<sub>h</sub></div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-node">证明状态转换</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-node">(S<sub>h</sub>, π<sub>h</sub>)</div></div></figure>
+<p>每个证明都会验证前一个证明，并纳入一次新的状态转换。即使区块高度达到一千万，证明中也不会塞入一千万份独立证明。随着链不断增长，证明的形状仍然保持固定。状态转换的有效性以递归方式一路向前传递。</p>
+<p>这会引出一个重要的共识问题：</p>
+<p class="flagship-claim"><strong>证明何时才成为共识接受状态的依据？</strong></p>
+<p>如果接受 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mi>h</mi></msub></mrow><annotation encoding="application/x-tex">S_h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">h</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 的理由正是 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>h</mi></msub></mrow><annotation encoding="application/x-tex">\pi_h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">h</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>，那么这份证明就不能只是区块产生后某个时刻才补上的附加证书。状态进入共识的那一刻，接受它的依据就必须已经存在。</p>
+<p>否则，协议会出现两条彼此独立的进度线：</p>
+<figure class="flagship-diagram flagship-diagram--tracks" aria-label="已接受区块的链尖 ---------------&gt; 已证明状态的链尖 ----------&gt;"><div class="diagram-tracks"><div class="diagram-track-row"><span class="diagram-track-label">已接受区块的链尖</span><span class="diagram-track"><span style="--track-fill:100%"></span></span><span class="diagram-track-tip" aria-hidden="true"></span></div><div class="diagram-track-row"><span class="diagram-track-label">已证明状态的链尖</span><span class="diagram-track"><span style="--track-fill:72%"></span></span><span class="diagram-track-tip" aria-hidden="true"></span></div></div></figure>
+<p>两者之间的空档还需要另一套规则来解释。尚未证明的链尖意味着什么？哪一个链尖才具有权威性？发生崩溃后应保留什么？证明工作又该从哪里恢复？</p>
+<p>更干净的规则是原子化接受：</p>
+<figure class="flagship-diagram flagship-diagram--equation" aria-label="已接受区块 = 区块 + 递归证明"><div class="diagram-equation"><div class="diagram-node diagram-node--result">已接受区块</div><span class="diagram-equation-symbol">=</span><div class="diagram-equation-pair"><div class="diagram-node">区块</div><span class="diagram-equation-symbol">+</span><div class="diagram-node">递归证明</div></div></div></figure>
+<p>新状态与生成它的状态转换证明一起进入共识。状态和证明同步推进，共识因此只有一种进度。</p>
+<p>递归证明不再是一张独立附着在历史上的证书。</p>
+<p class="flagship-claim"><strong>它把状态为何有效的理由，从一个区块传递到下一个区块。</strong></p>
+<p>当历史执行不再承担这项职责时，历史本身的角色也开始改变。</p>
+</section>
+<section class="flagship-section" data-section="02"><h2 id="history" data-section="02">历史还用来做什么？</h2>
+<p>如果当前状态已经携带一份递归证明，能够证明它沿着一条有效路径演化而来，那么新节点就不再需要旧区块的完整区块体来确认当前状态有效。</p>
+<p>这并不意味着过去失去了意义。有时真正重要的是，<strong>过去发生过的某一个具体事件</strong>。</p>
+<p>假设我完成了一笔付款，之后需要证明网络确实接受了它。我可以保存这笔交易及其 Merkle 路径。两者结合，就能重建该区块的 <code>transaction root</code>，并证明这笔交易被纳入了那个区块。</p>
+<p>但还缺少一个事实。</p>
+<p>一个区块可以完全有效，也可以在网络中正常传播，却仍然输给另一条竞争分支。交易被纳入某个区块，不等于它被纳入了规范链。</p>
+<p>因此，一份支付证明必须回答两个问题：</p>
+<figure class="flagship-diagram flagship-diagram--questions" aria-label="这笔交易是否被纳入了这个区块？ 这个区块是否属于规范链？"><div class="diagram-questions"><div class="diagram-question"><span>01</span><strong>这笔交易是否被纳入了这个区块？</strong></div><div class="diagram-question"><span>02</span><strong>这个区块是否属于规范链？</strong></div></div></figure>
+<p>交易本身和它的 Merkle 路径回答第一个问题。</p>
+<p>我们也可以让递归证明承诺一份经过认证的区块历史，并支持在任意高度打开其中的记录，但没有必要把这项任务也交给递归证明。</p>
+<p class="flagship-claim"><strong>区块头足够紧凑，可以永久保存。区块头链保留了规范链的主干，也让节点能够判断某个区块是否属于这条主干。</strong></p>
+<p>这两部分各自承担不同的职责。</p>
+<p>交易和 Merkle 路径证明：</p>
+<figure class="flagship-diagram flagship-diagram--assertion" aria-label="这笔交易被纳入了这个区块"><div class="diagram-assertion"><span class="diagram-assertion-mark" aria-hidden="true"></span><strong>这笔交易被纳入了这个区块</strong></div></figure>
+<p>经过验证的区块头链确认：</p>
+<figure class="flagship-diagram flagship-diagram--assertion" aria-label="这个区块属于当前规范链"><div class="diagram-assertion"><span class="diagram-assertion-mark" aria-hidden="true"></span><strong>这个区块属于当前规范链</strong></div></figure>
+<p>两者合在一起，就构成一份紧凑、可独立携带的支付证明，也就是一张<strong>支付收据</strong>。</p>
+<figure class="flagship-diagram flagship-diagram--flow flagship-diagram--receipt" aria-label="交易 + Merkle 路径 | v transaction root | v 区块头 | v 规范区块头链"><div class="diagram-flow"><div class="diagram-node">交易 + Merkle 路径</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-node">transaction root</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-node">区块头</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-node">规范区块头链</div></div></figure>
+<p>验证这笔付款时，不再需要完整的区块体。</p>
+<p>没有必要让每个节点永远保存每一笔交易，只为将来可能有人需要证明其中某一笔。谁需要保留某笔付款的证据，谁就保存那笔付款的收据。</p>
+<p>靠近链尖的近期历史有所不同。规范分支在这里仍可能变化，因此节点需要保留一个长度受限的近期完整区块窗口，用来处理竞争分支和浅层重组。这是一个运行时工作集，而不是网络一生的全部历史。</p>
+<p>不同数据由此各司其职：</p>
+<div class="table-wrap flagship-table flagship-table--0"><table><thead><tr><th>保留的数据</th><th>用途</th></tr></thead><tbody><tr><td data-label="保留的数据">当前状态 + 递归证明</td><td data-label="用途">确认当前状态由创世区块沿有效路径演化而来</td></tr><tr><td data-label="保留的数据">永久保存的紧凑区块头</td><td data-label="用途">保留规范链主干和历史锚点</td></tr><tr><td data-label="保留的数据">近期完整区块</td><td data-label="用途">处理近期竞争分支</td></tr><tr><td data-label="保留的数据">支付收据</td><td data-label="用途">无需完整区块体即可证明某一笔交易</td></tr></tbody></table></div>
+<p>历史没有消失，只是按照用途被拆开了。验证者不再需要把网络一生的全部执行记录视为一个必须永久保存、永久重放的庞大整体。</p>
+</section>
+<section class="flagship-section" data-section="03"><h2 id="live-state" data-section="03">状态只需表示此刻存在的内容</h2>
+<p>同样的思路也改变了活动状态的表示方式。</p>
+<p>UTXO 系统在验证下一次状态转换时，并不需要知道每一个曾经存在过的输出。它只需要知道那些<strong>此刻</strong>仍然存在、仍可花费的输出。</p>
+<p>因此，活动状态可以只表示现存的 UTXO 集合。已经花费的输出会离开这个集合，释放出来的容量可以再次使用，空白区域也无需占用实际存储空间。</p>
+<p class="flagship-claim"><strong>节点必须维护的状态大小，取决于网络当前的实际使用量，而不是不断累积的历史。</strong></p>
+<p>它取决于现存集合和网络此刻所需的容量，而不是网络一生中处理过多少笔交易。</p>
+<p>链变老，不再必然意味着需要重放更多历史执行，也不再意味着必须保留更多已经失效的状态。</p>
+<p>但区块链还有一个根本问题没有解决。</p>
+</section>
+<section class="flagship-section" data-section="04"><h2 id="ordering" data-section="04">有效性无法选出胜者</h2>
+<p>递归证明可以确认一次状态转换有效。</p>
+<p>但如果两次状态转换都有效，它无法在二者之间作出选择。</p>
+<p>假设两个区块生产者基于同一个父状态构造了不同的子状态。两次转换都正确，两个区块也都携带有效证明。</p>
+<p>哪一个应当成为规范区块？</p>
+<p>这是排序问题，不是有效性问题。</p>
+<p class="flagship-claim"><strong>这正是工作量证明要解决的问题。</strong></p>
+<p>证明已经确认了有效性。PoW 为相互竞争的有效分支提供一个可以客观比较的累计工作量，让网络最终收敛到同一条规范链。</p>
+<p>两者的分工很简单：</p>
+<figure class="flagship-diagram flagship-diagram--responsibilities" aria-label="证明 -&gt; 这次状态转换是否有效？ PoW -&gt; 哪一次有效转换成为规范结果？"><div class="diagram-responsibilities"><div class="diagram-responsibility"><div class="diagram-node diagram-node--key">证明</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-responsibility-copy">这次状态转换是否有效？</div></div><div class="diagram-responsibility"><div class="diagram-node diagram-node--key">PoW</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-responsibility-copy">哪一次有效转换成为规范结果？</div></div></div></figure>
+<p>这种分工也改变了区块的生产方式。</p>
+<p>先构造状态转换，再为它生成证明。除 nonce 之外，所有与共识有关的内容都固定以后，才开始搜索 nonce。</p>
+<figure class="flagship-diagram flagship-diagram--flow flagship-diagram--production-short" aria-label="构造状态转换 | v 证明状态转换 | v 固定区块模板 | v 搜索 nonce"><div class="diagram-flow"><div class="diagram-node">构造状态转换</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-node">证明状态转换</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-node">固定区块模板</div><span class="diagram-arrow" aria-hidden="true"></span><div class="diagram-node">搜索 nonce</div></div></figure>
+<p>nonce 被刻意排除在递归证明所覆盖的命题之外。挖矿可以不断改变 nonce，而不会改动任何已经得到证明的内容。</p>
+<p>找到满足目标的 nonce 后，同一份已经证明状态转换有效的区块模板才算完成。</p>
+<p>算力无法把无效的状态转换变成有效转换，无法修复无效交易，也无法挽救一个错误的证明。</p>
+<p class="flagship-claim"><strong>算力只负责在已经有效的状态转换之间确定规范顺序。</strong></p>
+<p>这个规范选择会记录在永久区块头链中，同时也为支付收据提供规范链锚点。</p>
+<p>这把区块生产与单纯的哈希计算区分开来，却没有把证明工作从区块生产中剥离出去。</p>
+<p><strong>区块生产者就是证明者。</strong> 它必须跟踪当前状态，构造下一次状态转换，并在搜索 nonce 之前生成递归证明。不存在另一个独立证明者，可以事后再为区块出具证明。</p>
+<p>在实际部署路径中，只有机械式的 nonce 搜索可以交给独立角色执行。外部工作节点、矿池或专用硬件可以收到一份不可变且已经完成证明的区块模板，然后为它搜索 nonce。它们不能修改状态转换，不能修复无效区块，也不能生成不同的状态。</p>
+<p class="flagship-claim"><strong>生产者证明状态转换，算力只竞争一件事：让由此产生的区块成为规范区块。</strong></p>
+</section>
+<section class="flagship-section" data-section="05"><h2 id="proving" data-section="05">真正困难的是生成证明</h2>
+<p>到这里为止，问题主要还是架构问题。</p>
+<p>一旦每个区块都必须携带递归证明，问题就变成了计算问题。这份证明不是偶尔产生一次的检查点，也不是事后补上的证书。没有它，下一个状态就无法进入共识。</p>
+<p>真正的工程问题，不再是递归证明在理论上能否实现。</p>
+<p class="flagship-claim"><strong>在证明原生架构中，区块生产的瓶颈是生成证明，而不是验证证明。</strong></p>
+<p>如果每个区块都需要递归证明，独立矿工就必须能在一个出块间隔内，使用普通硬件完成证明。假如区块生产必须依赖昂贵的证明集群，我们不过是把中心化问题搬到了另一个地方。</p>
+<p>验证便宜还不够。生产者必须在每个区块的关键路径上生成证明，内存占用也不能高到让独立生产区块变成只能在数据中心完成的工作。</p>
+<p>这项性能约束决定了证明系统的工程设计。但在优化证明者之前，还有一个更根本的选择：从创世区块开始，整条链的有效性究竟应当建立在怎样的密码学假设之上？</p>
+</section>
+<section class="flagship-section" data-section="06"><h2 id="cryptography" data-section="06">当下应当建立在怎样的密码学基础上？</h2>
+<p>前面的架构已经大幅缩小了选择范围。证明系统必须支持递归，证明形状不能随区块高度增长。生成证明必须足够快，内存效率也必须足够高，普通硬件才能独立生产区块。无论网络运行多久，递归验证都必须始终可行。</p>
+<p>除此之外，我还要明确提出两个要求。</p>
+<p>第一个是透明性：</p>
+<p class="flagship-claim"><strong>无需可信设置。</strong></p>
+<p>第二个要求更强：</p>
+<p class="flagship-claim"><strong>覆盖从创世区块到当前状态整条有效性路径的端到端后量子可靠性。</strong></p>
+<p>递归证明让节点能够认定：当前状态是从创世区块出发，经过一连串有效状态转换后得到的结果。因此，真正相关的安全性质远不只是各个组件是否分别具备后量子安全性。</p>
+<p>量子对手可以尝试伪造授权、状态转换、某个祖先证明，甚至终端证明本身。可靠性结论必须覆盖整条路径以及最终的接受事件：对手能否利用其中任意一种伪造，让节点把一个无效的当前状态接受为从创世区块开始有效演化而来的状态？</p>
+<p>这才是要求。</p>
+<figure class="flagship-diagram flagship-diagram--requirements" aria-label="从创世区块开始递归延续 链增长时证明形状保持固定 普通硬件上能够实际生成证明 内存占用足够低，允许独立生产区块 验证成本保持可行 透明，无需可信设置 覆盖从创世区块到当前状态整条有效性路径的端到端后量子可靠性"><ol class="diagram-requirements"><li><span>从创世区块开始递归延续</span></li><li><span>链增长时证明形状保持固定</span></li><li><span>普通硬件上能够实际生成证明</span></li><li><span>内存占用足够低，允许独立生产区块</span></li><li><span>验证成本保持可行</span></li><li><span>透明，无需可信设置</span></li><li><span>覆盖从创世区块到当前状态整条有效性路径的端到端后量子可靠性</span></li></ol></figure>
+<p>这些约束最终决定了密码学技术栈。</p>
+<p>承诺执行轨迹中的算术采用二元域，主要运行在 <code>GF(2^128)</code> 上。涉及安全性的关键挑战值和递归认证使用 <code>GF(2^256)</code>。Poseidon2b 是整个共识证明系统共用的置换。</p>
+<p class="flagship-claim"><strong>把证明压到最小并不是目标。</strong></p>
+<p>基于椭圆曲线群和离散对数假设的递归系统，确实可以生成小得多的证明。如果不要求覆盖从创世区块到当前状态整条路径的端到端后量子可靠性，这是一种完全合理的工程选择。</p>
+<p>但它们无法为从创世区块到当前状态的递归有效性路径提供端到端后量子可靠性。只要这条路径内部仍建立在椭圆曲线假设之上，日后要移除这些假设，就必须连同递归体系本身的根基，以及围绕它构建的承诺和共识关系一起更换。</p>
+<p class="flagship-claim"><strong>从第一个区块开始，我们就无法接受这种密码学技术债。</strong></p>
+</section>
+<section class="flagship-section" data-section="07"><h2 id="parano1d" data-section="07">这套新架构最终成为 Parano1d</h2>
+<p><strong>Parano1d</strong> 是一条围绕这套架构构建的证明原生 Layer 1。在协议中，当前共识状态称为 State，它是一个由现存 UTXO 和共识计数器组成的精确稀疏向量。每个区块的递归证明称为 HistoryStep。每个 HistoryStep 都在同一条关系中证明本区块的精确状态转换，并验证前一个 HistoryStep。</p>
+<p>区块只有与对应的终端证明一起出现时才会被接受：</p>
+<figure class="flagship-diagram flagship-diagram--atomic" aria-label="{区块, HistoryStep}"><div class="diagram-atomic"><span class="diagram-brace" aria-hidden="true">{</span><div class="diagram-node">区块</div><span class="diagram-atomic-link" aria-hidden="true">+</span><div class="diagram-node">HistoryStep</div><span class="diagram-brace" aria-hidden="true">}</span></div></figure>
+<p>节点保存当前 <code>State</code>、永久保存的紧凑区块头链，以及长度受限的近期完整区块后缀。递归证明确认状态转换有效，节点则通过区块头链验证工作量证明排序和累计工作量。更早的区块体不再参与当前验证。</p>
+<p>付款可以保存为可独立携带的收据，已经花费的容量可以再次使用，空白区域不需要占用持久存储。</p>
+<p>只有与 nonce 无关的区块证明完成以后，才会开始搜索 nonce。</p>
+<p>实际部署路径如下：</p>
+<figure class="flagship-diagram flagship-diagram--production" aria-label="当前 State + 交易 + 前一个 HistoryStep | v 证明精确转换 | v 新的 HistoryStep | v 不可变区块模板 | v 搜索 nonce | v {区块, HistoryStep} | v 全节点验证 | v 物化经过证明的写入"><div class="diagram-input-cluster"><div class="diagram-node">当前 State</div><span aria-hidden="true">+</span><div class="diagram-node">交易</div><span aria-hidden="true">+</span><div class="diagram-node">前一个 HistoryStep</div></div><span class="diagram-arrow" aria-hidden="true"></span><ol class="diagram-timeline"><li><span class="diagram-timeline-index" aria-hidden="true"></span><strong>证明精确转换</strong></li><li><span class="diagram-timeline-index" aria-hidden="true"></span><strong>新的 HistoryStep</strong></li><li><span class="diagram-timeline-index" aria-hidden="true"></span><strong>不可变区块模板</strong></li><li><span class="diagram-timeline-index" aria-hidden="true"></span><strong>搜索 nonce</strong></li><li><span class="diagram-timeline-index" aria-hidden="true"></span><strong>{区块, HistoryStep}</strong></li><li><span class="diagram-timeline-index" aria-hidden="true"></span><strong>全节点验证</strong></li><li><span class="diagram-timeline-index" aria-hidden="true"></span><strong>物化经过证明的写入</strong></li></ol></figure>
+<div class="table-wrap flagship-table flagship-table--1 flagship-table--profile"><table><thead><tr><th>参数</th><th>取值</th></tr></thead><tbody><tr><td data-label="参数">已承诺执行轨迹域</td><td data-label="取值"><code>GF(2^128)</code></td></tr><tr><td data-label="参数">扩展挑战值域</td><td data-label="取值"><code>GF(2^256)</code></td></tr><tr><td data-label="参数">挑战值集合基数</td><td data-label="取值"><code>2^255</code></td></tr><tr><td data-label="参数">Poseidon2b</td><td data-label="取值">宽度 4 · 速率 2 · <code>x^7</code> · 8 个完整轮 · 58 个部分轮</td></tr><tr><td data-label="参数">钱包查询</td><td data-label="取值">65</td></tr><tr><td data-label="参数">HistoryStep / BaseFold 查询</td><td data-label="取值">133</td></tr><tr class="flagship-table-subheading"><th colspan="2" scope="rowgroup"><strong>证明类别</strong></th></tr><tr><td data-label="参数">B25 几何参数</td><td data-label="取值"><code>m = 22</code> · 最多 25 个位置</td></tr><tr><td data-label="参数">B25 码字</td><td data-label="取值"><code>2^19</code> · 码率 <code>1/4</code></td></tr><tr><td data-label="参数">B255 几何参数</td><td data-label="取值"><code>m = 24</code> · 最多 255 个位置</td></tr><tr><td data-label="参数">B255 码字</td><td data-label="取值"><code>2^21</code> · 码率 <code>1/4</code></td></tr></tbody></table></div>
+</section>
+<section class="flagship-section" data-section="08"><h2 id="performance" data-section="08">我如何把笔记本上的递归证明时间降到 10.7 秒</h2>
+<p>Parano1d 的目标平均出块间隔为 <strong>15 秒</strong>。因此，证明时间成为一项共识级工程约束：独立生产者必须足够快地完成递归证明，才能在不依赖专用证明集群的情况下保持竞争力。</p>
+<p>证明者的一项主要成本来自 Poseidon2b。</p>
+<p>同一个置换反复出现在 <code>State</code> 承诺、Merkle 关系、交易承诺、证明交互记录和递归验证中。如果每次调用都用一条独立的约束链来证明，证明者就会把本质相同的代数工作重复成千上万次。</p>
+<p>输入会变化，调用之间的连接会变化，但置换本身不会变化。</p>
+<p>于是，我改变了它的表示方式。</p>
+<p>我不再把这些执行视为许多相互独立的副本，而是把同一批次中的所有 Poseidon2b 执行放进一条全局执行轨迹，并使用三个索引维度：</p>
+<figure class="flagship-diagram flagship-diagram--axes" aria-label="置换槽位 × 轮次 × 状态元素"><div class="diagram-axes"><div class="diagram-node">置换槽位</div><span class="diagram-axis-symbol" aria-hidden="true">×</span><div class="diagram-node">轮次</div><span class="diagram-axis-symbol" aria-hidden="true">×</span><div class="diagram-node">状态元素</div></div></figure>
+<p>证明一次性确认整批执行都符合置换语义，其他关系再把每次执行连接回真正使用其输入和输出的位置。</p>
+<p>我把这套构造命名为 <strong>FROST-GKR</strong>，全称是 <strong>Frobenius Reduction over Shifted Tables</strong>。</p>
+<p>在一组包含 59 次 Poseidon2b 置换的参考工作负载上：</p>
+<div class="table-wrap flagship-table flagship-table--2"><table><thead><tr><th>指标</th><th>原有构造</th><th>FROST-GKR</th></tr></thead><tbody><tr><td data-label="指标">约束 sumcheck 数量</td><td data-label="原有构造">472</td><td data-label="FROST-GKR">2</td></tr><tr><td data-label="指标">原始代数交互记录</td><td data-label="原有构造">287,712 字节</td><td data-label="FROST-GKR">5,568 字节</td></tr><tr><td data-label="指标">归约阶段证明者加速比</td><td data-label="原有构造">1.00×</td><td data-label="FROST-GKR">10.69×</td></tr></tbody></table></div>
+<p>这些是归约阶段的结果，并不意味着端到端 <code>HistoryStep</code> 获得了 10.69 倍加速。<a href="https://lab.parano1d.org/papers/FROST_GKR.pdf" target="_blank" rel="noopener noreferrer">FROST-GKR 论文</a>与<a href="https://github.com/ignotusnemo/frost-gkr" target="_blank" rel="noopener noreferrer">参考实现</a>给出了完整的基准边界和测量记录。</p>
+<p>Parano1d 有两个实际部署证明类别。B25 是标准区块生产配置。B255 使用更大的认证矩阵和更大的区块几何结构。两者都符合共识规则，并由同一个实际部署验证器处理。</p>
+<p>将这套构造用于实际部署的证明者后，测得的 <code>HistoryStep</code> 时间如下：</p>
+<div class="table-wrap flagship-table flagship-table--3"><table><thead><tr><th>主机</th><th>类别</th><th>证明时间</th><th>统计方式</th><th>终端证明</th></tr></thead><tbody><tr><td data-label="主机">12 线程 AVX2 笔记本电脑</td><td data-label="类别">B25</td><td data-label="证明时间">10.734 秒</td><td data-label="统计方式">3 次运行的 p50</td><td data-label="终端证明">971,732 字节</td></tr><tr><td data-label="主机">12 线程 AVX2 笔记本电脑</td><td data-label="类别">B255</td><td data-label="证明时间">34.938 秒</td><td data-label="统计方式">1 次独立运行</td><td data-label="终端证明">1,081,108 字节</td></tr><tr><td data-label="主机">24 线程 AVX-512 PC</td><td data-label="类别">B25</td><td data-label="证明时间">6.905 秒</td><td data-label="统计方式">3 次运行的 p50</td><td data-label="终端证明">971,732 字节</td></tr><tr><td data-label="主机">24 线程 AVX-512 PC</td><td data-label="类别">B255</td><td data-label="证明时间">21.053 秒</td><td data-label="统计方式">3 次运行的 p50</td><td data-label="终端证明">1,081,108 字节</td></tr></tbody></table></div>
+<p>对默认实际部署路径而言，真正重要的是笔记本电脑上的 B25 结果：<strong>普通硬件上的 p50 为 10.734 秒，而平均出块目标是 15 秒。</strong></p>
+<p>这项基准测量的是 <code>HistoryStep</code> 的构造时间，不是完整的挖矿延迟。精确的计时边界与复现方法发布在<a href="https://docs.parano1d.org/zh/reference/performance.html" target="_blank" rel="noopener noreferrer">性能记录</a>中。</p>
+</section>
+<section class="flagship-section" data-section="09"><h2 id="post-quantum" data-section="09">端到端后量子可靠性究竟覆盖什么？</h2>
+<p>这里的端到端后量子可靠性，覆盖从创世区块到当前 <code>State</code> 的整条有效性路径。仅仅把一组密码学原语称为后量子，并不能证明这条路径具备端到端可靠性。</p>
+<p>这里的安全问题非常具体：</p>
+<p class="flagship-claim"><strong>量子对手能否在递归证明所表示的历史链上任意一处伪造有效性，并最终让节点把一个无效的当前 <code>State</code> 接受为由创世区块沿有效路径演化而来的状态？</strong></p>
+<p>这就是失败事件。</p>
+<p>攻击目标不一定是最新的 <code>HistoryStep</code>。攻击可以从递归证明所表示历史中的更深位置开始，再尝试通过后续递归证明把虚假断言一路传到当前状态。因此，定理必须覆盖最终接受所依赖的每一个组件：</p>
+<figure class="flagship-diagram flagship-diagram--coverage" aria-label="交易授权 区块关系 父子连续性 精确 State 转换 递归验证 证明承诺 Fiat-Shamir 挑战值 递归链中表示的祖先"><ol class="diagram-coverage"><li><span>交易授权</span></li><li><span>区块关系</span></li><li><span>父子连续性</span></li><li><span>精确 State 转换</span></li><li><span>递归验证</span></li><li><span>证明承诺</span></li><li><span>Fiat-Shamir 挑战值</span></li><li><span>递归链中表示的祖先</span></li></ol></figure>
+<p>这项结论不局限于某一种签名方案、某一个哈希函数、某一个证明组件，也不局限于某一个区块高度。</p>
+<p>它覆盖的是：<strong>网络最终接受的、从创世区块有效演化而来的当前 <code>State</code>。</strong></p>
+<p>针对实际部署配置，已经发布了两项分析，它们回答的是不同问题。</p>
+<p><a href="https://lab.parano1d.org/research/parano1d-block-tiwari-fs-fri/" target="_blank" rel="noopener noreferrer">Block 与 Tiwari 的经典 FS-FRI 分析</a>给出：</p>
+<figure class="flagship-diagram flagship-diagram--security-pair" aria-label="127 位可证明安全性 127 位基于猜想的安全性"><div class="diagram-security-pair"><div class="diagram-security-metric"><strong>127</strong><span>位可证明安全性</span></div><div class="diagram-security-metric"><strong>127</strong><span>位基于猜想的安全性</span></div></div></figure>
+<p>目标安全性为 128 位。</p>
+<p><a href="https://lab.parano1d.org/research/parano1d-nist-pqc-category-one/" target="_blank" rel="noopener noreferrer">另一项可执行定理则在量子随机预言机模型中</a>，针对一个有状态量子对手，分析从创世区块开始、使验证者接受无效 <code>State</code> 的完整安全游戏，并在同一个对手资源预算下计入递归证明所表示的全部祖先。</p>
+<p>这项定理要得出实际部署配置达到 Category 1 的结论，需要两个明确前提。固定的实际部署 Poseidon2b 编译实现必须满足：</p>
+<figure class="flagship-diagram flagship-diagram--bound diagram-bound--16" aria-label="Delta_P2b^C1 &lt; 0.446635859676391589"><div class="diagram-bound-value">Δ<sub>P2b</sub><sup>C1</sup> &lt; 0.446635859676391589</div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
+<p>同时，定理给出的相干预言机响应所需逻辑门数量与电路深度成本下界也必须成立。</p>
+<p>在理想模型中，成功概率达到二分之一所需的主导门数与深度乘积下界为：</p>
+<figure class="flagship-diagram flagship-diagram--bound diagram-bound--17" aria-label="2^173.273866314232"><div class="diagram-bound-value">2<sup>173.273866314232</sup></div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
+<p>在同一套考虑电路深度的模型中，<a href="https://csrc.nist.gov/projects/post-quantum-cryptography/post-quantum-cryptography-standardization/evaluation-criteria/security-%28evaluation-criteria%29" target="_blank" rel="noopener noreferrer">NIST AES-128 Category 1 参考值</a>为：</p>
+<figure class="flagship-diagram flagship-diagram--bound diagram-bound--18" aria-label="2^170"><div class="diagram-bound-value">2<sup>170</sup></div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
+<p>Category 1 资源范围内，理想模型给出的完整成功概率上界为：</p>
+<figure class="flagship-diagram flagship-diagram--bound diagram-bound--19" aria-label="0.053364140323608411 &lt; 1/2"><div class="diagram-bound-value">0.053364140323608411 &lt; 1/2</div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
+<p>在上述两个前提成立时，为固定 Poseidon2b 预留的余量仍足以保证：在整个 Category 1 资源范围内，攻击实际部署系统的总成功概率都低于 <code>1/2</code>。完整定理、全部前提、实际部署参数与可执行算术均发布在<a href="https://github.com/ignotusnemo/parano1d-soundness" target="_blank" rel="noopener noreferrer">可靠性证书</a>中。</p>
+<p>数字很重要。</p>
+<p>结论覆盖的范围更重要。</p>
+<p>不是某一种签名。</p>
+<p>不是某一个哈希。</p>
+<p>不是某一个证明组件。</p>
+<p>不是链上的某一个位置。</p>
+<p class="flagship-claim"><strong>而是网络最终接受的、从创世区块有效演化而来的当前状态。</strong></p>
+<p>这就是这里所说的端到端。</p>
+</section>
+<section class="flagship-section flagship-section--final" data-section="10"><h2 id="result" data-section="10">Parano1d 的核心成果</h2>
+<p>Parano1d 已将当前状态有效性的依据从不断累积的执行历史移到了当下本身。</p>
+<p>从创世区块到当前状态的整条有效性路径，都由一条可执行的端到端后量子可靠性定理支撑，并达到 NIST Category 1 的资源阈值。</p>
+<p>我们改变了历史在区块链中的角色。</p>
+<p class="flagship-claim"><strong>当下必须证明过去。</strong></p>
+<p class="flagship-claim"><strong>现在，它做到了。</strong></p>
+<p class="flagship-destination"><a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">parano1d.org<span aria-hidden="true">↗</span></a></p>
+</section></article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">研究记录</p><h2 id="evidence-title">证据与产物</h2><p>以下链接保存了支撑本文的实现、测量或推导。</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>代码</small><strong>Parano1d 源代码</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/parano1d-soundness" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Code and proofs</small><strong>可执行可靠性证书</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/reference/performance.html" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>数据</small><strong>实际部署性能记录</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="/papers/FROST_GKR.pdf"><span class="evidence-entry"><span><small>PDF</small><strong>FROST-GKR 论文</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/ignotusnemo/frost-gkr" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>代码</small><strong>FROST-GKR 参考实现</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://eprint.iacr.org/2024/1161" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>论文</small><strong>非交互式 FRI 的具体安全性</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://csrc.nist.gov/projects/post-quantum-cryptography/post-quantum-cryptography-standardization/evaluation-criteria/security-%28evaluation-criteria%29" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Standardization criteria</small><strong>NIST PQC 安全类别</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="相邻研究"><a href="/zh/research/parano1d-nist-pqc-category-one/"><small>较早</small><strong>Parano1d 达到 NIST PQC Category 1</strong><span>←</span></a><span></span></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>ParanO(1)d Lab</strong><p>ParanO(1)d 背后的协议研究。</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>研究</strong><a href="/zh/research/">归档</a><a href="/zh/feed.xml">RSS 订阅</a></div>
+      <div><strong>项目</strong><a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">网站</a><a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">技术文档</a><a href="https://github.com/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer">源代码</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 ParanO(1)d Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=93522528a74e" defer></script>
+</body>
+</html>

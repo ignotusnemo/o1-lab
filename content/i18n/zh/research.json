@@ -1,4 +1,15 @@
 {
+  "the-present-must-prove-the-past": {
+    "kind": "协议架构",
+    "topic": "Proof-carrying State",
+    "status": "实际部署架构",
+    "pinnedLabel": "置顶",
+    "title": "当下必须证明过去",
+    "shortTitle": "当下证明过去",
+    "dek": "区块链能否在不从创世区块开始重放全部执行历史的情况下，验证当前状态？",
+    "abstract": "Parano1d 已将当前状态有效性的依据从不断累积的执行历史移到了当下本身。从创世区块到当前状态的整条有效性路径，都由一条可执行的端到端后量子可靠性定理支撑，并达到 NIST Category 1 的资源阈值。",
+    "evidence": ["Parano1d 源代码", "可执行可靠性证书", "实际部署性能记录", "FROST-GKR 论文", "FROST-GKR 参考实现", "非交互式 FRI 的具体安全性", "NIST PQC 安全类别"]
+  },
   "parano1d-nist-pqc-category-one": {
     "kind": "安全性分析",
     "topic": "后量子可靠性",
