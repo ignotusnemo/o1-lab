@@ -46,6 +46,7 @@ jobs:
             favicon-32.png \
             favicon-48.png \
             favicon.ico \
+            feed.xml \
             index.html \
             robots.txt \
             sitemap.xml \

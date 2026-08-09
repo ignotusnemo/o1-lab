@@ -21,7 +21,7 @@
     "evidence": [
       {"label": "Parano1d source", "href": "https://github.com/ignotusnemo/parano1d", "type": "Code"},
       {"label": "Executable soundness certificate", "href": "https://github.com/ignotusnemo/parano1d-soundness", "type": "Code and proofs"},
-      {"label": "Production performance record", "href": "https://docs.parano1d.org/reference/performance.html", "type": "Data"},
+      {"label": "Production performance record", "href": "https://docs.parano1d.org/reference/performance", "type": "Data"},
       {"label": "FROST-GKR paper", "href": "/papers/FROST_GKR.pdf", "type": "PDF"},
       {"label": "FROST-GKR reference artifact", "href": "https://github.com/ignotusnemo/frost-gkr", "type": "Code"},
       {"label": "Concrete security of non-interactive FRI", "href": "https://eprint.iacr.org/2024/1161", "type": "Paper"},

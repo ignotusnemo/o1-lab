@@ -394,7 +394,7 @@ Proof устанавливает корректность permutation сразу
 
 Для стандартного production path важен результат B25 на ноутбуке: **10.734 секунды p50 на обычном оборудовании при среднем block target 15 секунд.**
 
-Benchmark измеряет построение `HistoryStep`, а не полную задержку майнинга. Точная граница измерения и методика воспроизведения опубликованы в [performance record](https://docs.parano1d.org/ru/reference/performance.html).
+Benchmark измеряет построение `HistoryStep`, а не полную задержку майнинга. Точная граница измерения и методика воспроизведения опубликованы в [performance record](https://docs.parano1d.org/ru/reference/performance).
 
 ## Что означает сквозная постквантовая корректность от genesis?
 

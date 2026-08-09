@@ -394,7 +394,7 @@ Parano1d 有两个实际部署证明类别。B25 是标准区块生产配置。B
 
 对默认实际部署路径而言，真正重要的是笔记本电脑上的 B25 结果：**普通硬件上的 p50 为 10.734 秒，而平均出块目标是 15 秒。**
 
-这项基准测量的是 `HistoryStep` 的构造时间，不是完整的挖矿延迟。精确的计时边界与复现方法发布在[性能记录](https://docs.parano1d.org/zh/reference/performance.html)中。
+这项基准测量的是 `HistoryStep` 的构造时间，不是完整的挖矿延迟。精确的计时边界与复现方法发布在[性能记录](https://docs.parano1d.org/zh/reference/performance)中。
 
 ## 端到端后量子可靠性究竟覆盖什么？
 

@@ -394,7 +394,7 @@ With that construction in the production prover, the measured `HistoryStep` time
 
 The B25 laptop result is the one that matters for the default production path: **10.734 seconds p50 on commodity hardware against a 15-second mean block target.**
 
-The benchmark measures `HistoryStep` construction, not complete mining latency. The exact timing boundary and reproduction methodology are published in the [performance record](https://docs.parano1d.org/reference/performance.html).
+The benchmark measures `HistoryStep` construction, not complete mining latency. The exact timing boundary and reproduction methodology are published in the [performance record](https://docs.parano1d.org/reference/performance).
 
 ## What does end-to-end post-quantum soundness from genesis mean?
 
