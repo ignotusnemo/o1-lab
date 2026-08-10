@@ -349,11 +349,27 @@ previous HistoryStep
 | B255 geometry | `m = 24` · up to 255 positions |
 | B255 codeword | `2^21` at rate `1/4` |
 
-## How I got recursive proving down to 10.7 seconds on a laptop
+## Proving State validity from genesis in 10.7 seconds on a laptop
 
 Parano1d targets a mean block interval of **15 seconds**. That makes proving time a consensus-level engineering constraint: an independent producer has to construct the recursive proof quickly enough to stay competitive without relying on a dedicated proving cluster.
 
-One of the largest costs in the prover was Poseidon2b.
+**Each new `HistoryStep` is a complete proof of `State` validity from genesis through the current block.**
+
+Past transitions are not rebuilt. The new proof recursively verifies the preceding `HistoryStep` and directly proves everything introduced by the current block. In a single proving pass, the producer:
+
+- decodes and binds the preceding terminal, recursively verifies the previous `HistoryStep`, and carries the entire proven transition path from genesis forward;
+- proves the canonical block-body structure: every consensus-derived system record, the complete physical page stream, and its grouping into logical `PagedSpend` transactions;
+- verifies the fresh authorization capsule for every logical user transaction, binding its transaction ID and input owner;
+- proves the inclusion of every logical transaction and its epoch anchor in the fixed 256-leaf Merkle tree, then binds the `transaction root` to the nonce-independent block template;
+- proves that every input matches a live UTXO in the parent `State`, every output targets an empty slot, and no conflicts exist among inputs and outputs inside the block;
+- proves value conservation and the complete monetary arithmetic: minimum fees, deterministic burn, claimable fees, and the miner reward;
+- proves the exact spend and mint actions, deterministic slot allocation, the active-slot count, and the allocation counter;
+- proves any permitted `State` growth, every affected segment root, and the resulting global `State` root, then binds the child header and accumulator to the parent boundary;
+- produces the next terminal, which every full node verifies together with the block.
+
+Only after that complete block transition has been proved does nonce search begin.
+
+Within this full construction, one of the largest costs was Poseidon2b.
 
 The same permutation appears throughout `State` commitments, Merkle relations, transaction commitments, proof transcripts, and recursive verification. If every invocation is proved as a separate constraint chain, the prover repeats essentially the same algebraic work thousands of times.
 

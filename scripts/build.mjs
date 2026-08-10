@@ -278,6 +278,18 @@ function renderFlagshipMarkdown(source, item, sourcePath) {
       continue;
     }
 
+    if (/^[-*]\s+/.test(line)) {
+      flushParagraph();
+      const items = [];
+      while (index < lines.length && /^[-*]\s+/.test(lines[index])) {
+        items.push(lines[index].replace(/^[-*]\s+/, "").trim());
+        index += 1;
+      }
+      index -= 1;
+      output.push(`<ol class="flagship-scope-list">${items.map((entry) => `<li>${markdownInline(entry)}</li>`).join("")}</ol>`);
+      continue;
+    }
+
     const heading = line.match(/^##\s+(.+)$/);
     if (heading) {
       flushParagraph();

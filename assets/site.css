@@ -1338,6 +1338,32 @@ body.repository-gate-open { overflow: hidden; }
   letter-spacing: -.012em;
 }
 .article-body--flagship .flagship-claim strong { color: inherit; }
+.article-body--flagship .flagship-scope-list {
+  margin: 7px 0 20px;
+  padding: 0;
+  counter-reset: flagship-scope;
+  border-top: 1px solid #ccd5cf;
+  list-style: none;
+}
+.article-body--flagship .flagship-scope-list li {
+  position: relative;
+  margin: 0;
+  padding: 11px 0 11px 43px;
+  counter-increment: flagship-scope;
+  border-bottom: 1px solid #d7ded9;
+  color: #28312c;
+  font-size: 16px;
+  line-height: 1.58;
+}
+.article-body--flagship .flagship-scope-list li::before {
+  content: counter(flagship-scope, decimal-leading-zero);
+  position: absolute;
+  top: 16px;
+  left: 1px;
+  color: var(--green-dark);
+  font: 700 9px/1 "Lab Mono", monospace;
+  letter-spacing: .08em;
+}
 .flagship-section { margin: 0 0 88px; }
 .flagship-section > h2 {
   position: relative;
@@ -1847,6 +1873,9 @@ body.repository-gate-open { overflow: hidden; }
   .article-body--flagship .flagship-lede { margin-bottom: 62px; padding-bottom: 41px; }
   .article-body--flagship .flagship-opening-question { margin-bottom: 19px; font-size: 21px; line-height: 1.46; }
   .article-body--flagship .flagship-claim { margin-block: 18px 20px; font-size: 18px; line-height: 1.5; }
+  .article-body--flagship .flagship-scope-list { margin-block: 5px 18px; }
+  .article-body--flagship .flagship-scope-list li { padding: 10px 0 10px 37px; font-size: 15px; line-height: 1.55; }
+  .article-body--flagship .flagship-scope-list li::before { top: 15px; }
   .flagship-section { margin-bottom: 70px; }
   .flagship-section > h2 { margin-bottom: 23px; padding-top: 29px; font-size: 34px; line-height: 1.07; }
   .article-body--flagship .flagship-diagram { margin-block: 21px 24px; padding: 18px; border-radius: 11px; }
