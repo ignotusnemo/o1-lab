@@ -33,7 +33,7 @@
 
 <h2 id="production-instance">实际部署参数</h2>
 
-<p>计算固定到 Parano1d 修订版 <a href="https://github.com/ignotusnemo/parano1d/commit/39626b22d53cf2f2c480a7e28446c197dca68043"><code>39626b22d53cf2f2c480a7e28446c197dca68043</code></a>。独立的<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/model/production.toml">实际部署参数快照</a>记录全部安全输入，<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/parameter-provenance.md">参数来源映射</a>则把每个值关联到对应的 Rust 定义。</p>
+<p>该证书已经集成在 Parano1d 中。<a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_soundness/src/parameters.rs"><code>ProductionParameters::load</code></a> 直接从实际部署的证明器和验证器所使用的 crates 中导入钱包参数登记表与轨迹规模、两套 History PCS 配置、BaseFold 查询数、宽挑战值取值集合以及固定的 Poseidon2b 配置。<a href="https://github.com/ignotusnemo/parano1d/releases/tag/v1.0.1">当前主网版本</a>包含这份与实际部署源码直接关联的证书。</p>
 
 <div class="table-wrap"><table>
   <thead><tr><th>输入</th><th>实际部署值</th></tr></thead>
@@ -324,27 +324,34 @@ R=\left\lfloor\frac{D}{d_0}\right\rfloor.
 
 <p>这是针对公开固定 Poseidon2b 置换、精确交互记录帧编码与域分离的事件级编译器偏差。<a href="https://cic.iacr.org/p/2/4/15/pdf">Poseidon2b 论文</a>给出固定置换参数与相应密码分析；上式则陈述端到端定理采用的附加量子实例化条件。</p>
 
-<h2 id="certificate">可执行、绑定源码的证书</h2>
+<h2 id="current-poseidon2b-cryptanalysis">当前 Poseidon2b 密码分析</h2>
 
-<p>完整推导与计算器发布在 <a href="https://github.com/ignotusnemo/parano1d-soundness">Parano1d 可靠性分析仓库</a>中。仓库内嵌实际部署参数快照并固定源码修订版。若钱包轨迹规模及其参数登记表、History 与 BaseFold 查询数、挑战值取值集合、两种 History 码率、摘要位宽或固定 Poseidon2b 配置不一致，参数加载会直接拒绝执行。</p>
+<p>Merz 与 Rodríguez García 在 <a href="https://eprint.iacr.org/2026/306">ePrint 2026/306</a> 中给出了针对 Poseidon2 和 Poseidon2b 的改进代数攻击。其中的宽张量轮跳过攻击适用于宽度 12、16、20 和 24。Parano1d 使用宽度 4，此时外部层就是二进制 MDS 矩阵 <code>M4</code> 本身，因此该攻击族以及论文中的宽实例表不适用于实际部署的置换。</p>
+
+<p>附录 A 适用于实际部署 Merkle 树所使用的二对一前馈压缩。代入 <code>GF(2^128)</code>、<math-inline>t=4</math-inline>、<math-inline>x^7</math-inline>、<math-inline>R_F=8</math-inline> 和 <math-inline>R_P=58</math-inline> 后，得到轮跳过 <math-inline>(1,[1,7])</math-inline>，以及约为 <math-inline>2^{409.873818620410}</math-inline> 的描述性经典专用攻击工作量估计。该估计不替代上文针对固定 Poseidon2b 的 QROM 前提；它记录的是当前论文中适用于确切实际部署模式的攻击。</p>
+
+<h2 id="certificate">与实际部署源码直接关联的可执行证书</h2>
+
+<p>完整推导与计算器发布在 Parano1d 仓库内的 <a href="https://github.com/ignotusnemo/parano1d/tree/main/noid_soundness"><code>noid_soundness</code> crate</a> 中。证书从证明器和验证器所使用的同一组 Rust crates 中读取实际部署参数。若钱包轨迹规模及其参数登记表、History 与 BaseFold 查询数、挑战值取值集合、两种 History 码率、摘要位宽或固定 Poseidon2b 配置不一致，参数加载会直接拒绝执行。</p>
 
 <p>所有用于结论判定的概率与优化阈值均使用任意精度整数和既约有理数计算。上界向上取整，固定置换的充分余量向下取整。浮点对数只用于展示，不参与结果判定。</p>
 
-<p>克隆证书仓库并复现实际部署报告：</p>
+<p>克隆当前主网版本并复现实际部署报告：</p>
 
-<pre><code>git clone https://github.com/ignotusnemo/parano1d-soundness.git
-cd parano1d-soundness
-cargo run --release --locked</code></pre>
+<pre><code>git clone https://github.com/ignotusnemo/parano1d.git
+cd parano1d
+git checkout v1.0.1
+cargo run --release --locked -p noid_soundness</code></pre>
 
 <p>输出全部既约有理数与优化阈值：</p>
 
-<pre><code>cargo run --release --locked -- --exact</code></pre>
+<pre><code>cargo run --release --locked -p noid_soundness -- --exact</code></pre>
 
-<p>运行参数快照、精确算术与规范阈值回归测试：</p>
+<p>运行源码对应关系、精确算术与规范阈值回归测试：</p>
 
-<pre><code>cargo test --release --locked</code></pre>
+<pre><code>cargo test --release --locked -p noid_soundness</code></pre>
 
-<p>证明文档、源码符号映射、精确计算器与测试共同组成可复核的证据链，Category 1 结论由其中最后一次资源比较得到。</p>
+<p>证明文档、与源码关联的参数加载器、精确计算器与测试共同组成一份可复核证书，Category 1 结论由其中最后一次资源比较得到。</p>
 
 <h2 id="sources">主要来源</h2>
 
@@ -356,5 +363,6 @@ cargo run --release --locked</code></pre>
   <li>Eli Ben-Sasson、Dan Carmon、Ulrich Haböck、Swastik Kopparty 与 Shubhangi Saraf，<a href="https://eprint.iacr.org/2025/2055"><em>On Proximity Gaps for Reed–Solomon Codes</em></a>，列表相关邻近性上界。</li>
   <li>Ulrich Haböck，<a href="https://eprint.iacr.org/2024/1571"><em>BaseFold in the List Decoding Regime</em></a>，实际部署折叠序列的专门化。</li>
   <li>Lorenzo Grassi、Dmitry Khovratovich、Katharina Koschatko、Christian Rechberger、Markus Schofnegger、Verena Schröppel 与 Zhuo Wu，<a href="https://cic.iacr.org/p/2/4/15/pdf"><em>Poseidon(2)b: Binary Field Versions of Poseidon/Poseidon2</em></a>。</li>
+  <li>Simon-Philipp Merz 与 Àlex Rodríguez García，<a href="https://eprint.iacr.org/2026/306"><em>Skipping Class: Algebraic Attacks exploiting weak matrices and operation modes of Poseidon2(b)</em></a>，重点参见第 3.4 节、定理 5.1 与附录 A。</li>
   <li>Kyungbae Jang、Wonwoong Kim、Sejin Lim、Yeajun Kang、Yujin Yang、Hwajeong Seo 与 Ilsun You，<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10055756/"><em>Quantum Binary Field Multiplication with Optimized Toffoli Depth and Extension to Quantum Inversion</em></a>，可逆二进制域乘法器电路。</li>
 </ul>

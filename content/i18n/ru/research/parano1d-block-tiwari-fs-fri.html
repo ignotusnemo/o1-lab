@@ -64,7 +64,7 @@ W(Q)=\frac{Q}{\varepsilon_{\mathrm{BT}}(Q)}
 
 <h2 id="production-instance">Штатные параметры</h2>
 
-<p>Исполняемый расчёт опубликован в <a href="https://github.com/ignotusnemo/parano1d-soundness">репозитории сертификата корректности Parano1d</a>. Самодостаточный <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/model/production.toml">снимок штатных параметров</a> зафиксирован на версии Parano1d <a href="https://github.com/ignotusnemo/parano1d/commit/39626b22d53cf2f2c480a7e28446c197dca68043"><code>39626b22d53cf2f2c480a7e28446c197dca68043</code></a>. <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/parameter-provenance.md">Карта происхождения параметров</a> указывает исходный символ рабочей реализации для каждого значения.</p>
+<p>Исполняемый расчёт встроен в Parano1d как crate <a href="https://github.com/ignotusnemo/parano1d/tree/main/noid_soundness"><code>noid_soundness</code></a>. Его <a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_soundness/src/parameters.rs">загрузчик штатных параметров</a> напрямую импортирует все входные значения анализа стойкости из тех же crates, что prover и verifier, и отклоняет нарушение соответствия между компонентами. <a href="https://github.com/ignotusnemo/parano1d/releases/tag/v1.0.1">Текущий mainnet-релиз</a> содержит тот же связанный с исходным кодом расчёт.</p>
 
 <p>Расчёт безопасности одинаков для всего штатного диапазона вместимости блока. Меняется только размер трассы. B25 охватывает до 25 эффективных позиций страниц, а B255 охватывает от 26 до 255. Оба класса доказывают отношение HistoryStep с одинаковой скоростью кода, числом запросов и распределением вызовов, поэтому дают один результат по Block–Tiwari.</p>
 
@@ -296,22 +296,23 @@ W(Q)
 
 <h2 id="reproduction">Воспроизведение сертификата</h2>
 
-<p>Самодостаточный репозиторий содержит снимок параметров, специализацию теоремы, точный оптимизатор и регрессионные тесты. Воспроизведите расчёт так:</p>
+<p>Репозиторий Parano1d содержит связанные с исходным кодом параметры, специализацию теоремы, точный оптимизатор и регрессионные тесты. Воспроизведите расчёт из текущего mainnet-релиза:</p>
 
-<pre><code>git clone https://github.com/ignotusnemo/parano1d-soundness.git
-cd parano1d-soundness
-cargo run --release --locked
-cargo run --release --locked -- --exact
-cargo test --release --locked</code></pre>
+<pre><code>git clone https://github.com/ignotusnemo/parano1d.git
+cd parano1d
+git checkout v1.0.1
+cargo run --release --locked -p noid_soundness
+cargo run --release --locked -p noid_soundness -- --exact
+cargo test --release --locked -p noid_soundness</code></pre>
 
-<p>Обычный запуск выводит три значения в целых битах. Запуск с <code>--exact</code> выводит обе RBR-дроби, выбранную кратность, обе границы отсечения, оба минимизирующих бюджета запросов и обе точные дроби ожидаемой работы. Тесты фиксируют параметры W65/H133, покрывают оба штатных размера трассы, отклоняют несогласованный снимок параметров и проверяют каждый сертификат степеней двойки в целой или рациональной арифметике произвольной точности.</p>
+<p>Обычный запуск выводит три значения в целых битах. Запуск с <code>--exact</code> выводит обе RBR-дроби, выбранную кратность, обе границы отсечения, оба минимизирующих бюджета запросов и обе точные дроби ожидаемой работы. Тесты фиксируют параметры W65/H133, покрывают оба штатных размера трассы, отклоняют несогласованные межкомпонентные параметры и проверяют каждый сертификат степеней двойки в целой или рациональной арифметике произвольной точности.</p>
 
-<p>Полный вывод находится в <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/block-tiwari.md"><code>docs/block-tiwari.md</code></a>. Точная реализация разделена между <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/src/local.rs"><code>src/local.rs</code></a> с RBR-теоремой и <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/src/block_tiwari.rs"><code>src/block_tiwari.rs</code></a> с оптимизатором Block–Tiwari.</p>
+<p>Полный вывод находится в <a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_soundness/docs/block-tiwari.md"><code>noid_soundness/docs/block-tiwari.md</code></a>. Точная реализация разделена между <a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_soundness/src/local.rs"><code>src/local.rs</code></a> с RBR-теоремой и <a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_soundness/src/block_tiwari.rs"><code>src/block_tiwari.rs</code></a> с оптимизатором Block–Tiwari.</p>
 
 <h2 id="references">Первоисточники</h2>
 
 <ul>
-  <li><a href="https://github.com/ignotusnemo/parano1d-soundness">Ignotus Nemo, сертификат корректности Parano1d</a>: зафиксированный снимок штатных параметров, специализация теоремы, точная арифметика и регрессионные тесты.</li>
+  <li><a href="https://github.com/ignotusnemo/parano1d/tree/main/noid_soundness">Ignotus Nemo, встроенный сертификат корректности Parano1d</a>: связанные с исходным кодом штатные параметры, специализация теоремы, точная арифметика и регрессионные тесты.</li>
   <li><a href="https://eprint.iacr.org/2024/1161">Alexander R. Block и Pratyush Ranjan Tiwari, <em>On the Concrete Security of Non-interactive FRI</em></a>, в особенности Определения 1 и 2, Лемма 1, Гипотеза 1, Раздел 4 и Таблица 1.</li>
   <li><a href="https://github.com/alexander-r-block/FRI-Parameter-Testing-Sagemath">Block и Tiwari, FRI Parameter Testing in SageMath</a>.</li>
   <li><a href="https://eprint.iacr.org/2023/1071">Alexander R. Block, Albert Garreta, Jonathan Katz, Justin Thaler, Pratyush Ranjan Tiwari и Michał Zając, <em>Fiat–Shamir Security of FRI and Related SNARKs</em></a>.</li>

@@ -33,7 +33,7 @@
 
 <h2 id="production-instance">Штатные параметры</h2>
 
-<p>Расчёт привязан к ревизии Parano1d <a href="https://github.com/ignotusnemo/parano1d/commit/39626b22d53cf2f2c480a7e28446c197dca68043"><code>39626b22d53cf2f2c480a7e28446c197dca68043</code></a>. Отдельный <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/model/production.toml">снимок штатных параметров</a> содержит все исходные параметры анализа стойкости, а <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/parameter-provenance.md">карта происхождения параметров</a> связывает каждое значение с его определением в Rust.</p>
+<p>Сертификат встроен в Parano1d. <a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_soundness/src/parameters.rs"><code>ProductionParameters::load</code></a> напрямую импортирует реестр и геометрию кошелька, оба PCS-профиля History, число запросов BaseFold, пространство широких вызовов и фиксированный профиль Poseidon2b из тех же crates, которые использует штатная реализация prover и verifier. <a href="https://github.com/ignotusnemo/parano1d/releases/tag/v1.0.1">Текущий mainnet-релиз</a> содержит этот напрямую связанный с исходным кодом сертификат.</p>
 
 <div class="table-wrap"><table>
   <thead><tr><th>Параметр</th><th>Штатное значение</th></tr></thead>
@@ -324,27 +324,34 @@ R=\left\lfloor\frac{D}{d_0}\right\rfloor.
 
 <p>Величина <math-inline>\Delta_{\mathrm{P2b}}^{\mathrm{Cat1}}</math-inline> описывает отклонение для этого события при использовании точной публичной перестановки Poseidon2b, форматирования транскрипта и разделения доменов. <a href="https://cic.iacr.org/p/2/4/15/pdf">Статья о Poseidon2b</a> задаёт параметры фиксированной перестановки и содержит анализ её криптографической стойкости. Неравенство выше формулирует дополнительное условие реализации случайного оракула в квантовой модели, используемое сквозной теоремой.</p>
 
-<h2 id="certificate">Исполняемый сертификат с привязкой к исходному коду</h2>
+<h2 id="current-poseidon2b-cryptanalysis">Текущий криптоанализ Poseidon2b</h2>
 
-<p>Полный вывод и калькулятор опубликованы в <a href="https://github.com/ignotusnemo/parano1d-soundness">репозитории анализа корректности Parano1d</a>. Репозиторий содержит снимок штатных параметров и фиксирует ревизию исходного кода. Загрузка параметров отклоняет несоответствие между параметрами кошелька и их реестром, числом запросов History и BaseFold, пространством алгебраических вызовов, кодовой скоростью обоих классов History, разрядностью хеша или фиксированным профилем Poseidon2b.</p>
+<p>Merz и Rodríguez García представили улучшенные алгебраические атаки на Poseidon2 и Poseidon2b в <a href="https://eprint.iacr.org/2026/306">ePrint 2026/306</a>. Их wide tensor round skips применимы к ширинам 12, 16, 20 и 24. Parano1d использует ширину 4, где внешний слой является самой бинарной MDS-матрицей <code>M4</code>, поэтому это семейство атак и таблицы wide instances из статьи к штатной перестановке не относятся.</p>
+
+<p>Приложение A применимо к feed-forward сжатию два-в-один, которое используется в штатных деревьях Merkle. Подстановка <code>GF(2^128)</code>, <math-inline>t=4</math-inline>, <math-inline>x^7</math-inline>, <math-inline>R_F=8</math-inline> и <math-inline>R_P=58</math-inline> даёт пропуск раундов <math-inline>(1,[1,7])</math-inline> и описательную классическую оценку специализированной атаки примерно <math-inline>2^{409.873818620410}</math-inline>. Эта оценка не заменяет предпосылку о фиксированной Poseidon2b в QROM, сформулированную выше. Она фиксирует ту атаку из текущей статьи, которая применима к точному штатному режиму.</p>
+
+<h2 id="certificate">Исполняемый сертификат, напрямую связанный с исходным кодом</h2>
+
+<p>Полный вывод и калькулятор опубликованы в crate <a href="https://github.com/ignotusnemo/parano1d/tree/main/noid_soundness"><code>noid_soundness</code></a> внутри репозитория Parano1d. Сертификат читает штатные параметры из тех же Rust crates, что prover и verifier. Загрузка параметров отклоняет несоответствие между параметрами кошелька и их реестром, числом запросов History и BaseFold, пространством алгебраических вызовов, кодовой скоростью обоих классов History, разрядностью хеша или фиксированным профилем Poseidon2b.</p>
 
 <p>Все вероятности и пороги оптимизации, от которых зависит вывод, вычисляются с помощью целых чисел произвольной разрядности и несократимых рациональных чисел. Верхние границы округляются вверх. Достаточный запас для фиксированной перестановки округляется вниз. Логарифмы с плавающей точкой используются только для представления результата и не влияют на итоговое сравнение.</p>
 
-<p>Склонируйте репозиторий сертификата и воспроизведите штатный отчёт:</p>
+<p>Склонируйте текущий mainnet-релиз и воспроизведите штатный отчёт:</p>
 
-<pre><code>git clone https://github.com/ignotusnemo/parano1d-soundness.git
-cd parano1d-soundness
-cargo run --release --locked</code></pre>
+<pre><code>git clone https://github.com/ignotusnemo/parano1d.git
+cd parano1d
+git checkout v1.0.1
+cargo run --release --locked -p noid_soundness</code></pre>
 
 <p>Выведите все несократимые рациональные значения и точные пороги оптимизации:</p>
 
-<pre><code>cargo run --release --locked -- --exact</code></pre>
+<pre><code>cargo run --release --locked -p noid_soundness -- --exact</code></pre>
 
-<p>Запустите проверки снимка параметров, точной арифметики и пороговых значений:</p>
+<p>Запустите проверки соответствия исходному коду, точной арифметики и пороговых значений:</p>
 
-<pre><code>cargo test --release --locked</code></pre>
+<pre><code>cargo test --release --locked -p noid_soundness</code></pre>
 
-<p>Документ с доказательством, карта соответствия исходному коду, точный калькулятор и тесты образуют единый воспроизводимый сертификат. Вывод о Category 1 следует из последнего сравнения ресурсов в этой цепочке доказательств.</p>
+<p>Документ с доказательством, загрузчик связанных с исходным кодом параметров, точный калькулятор и тесты образуют единый воспроизводимый сертификат. Вывод о Category 1 следует из последнего сравнения ресурсов в этой цепочке доказательств.</p>
 
 <h2 id="sources">Первоисточники</h2>
 
@@ -356,5 +363,6 @@ cargo run --release --locked</code></pre>
   <li>Eli Ben-Sasson, Dan Carmon, Ulrich Haböck, Swastik Kopparty и Shubhangi Saraf, <a href="https://eprint.iacr.org/2025/2055"><em>On Proximity Gaps for Reed–Solomon Codes</em></a>, оценка близости с корреляцией по списку.</li>
   <li>Ulrich Haböck, <a href="https://eprint.iacr.org/2024/1571"><em>BaseFold in the List Decoding Regime</em></a>, специализация штатной последовательности свёрток.</li>
   <li>Lorenzo Grassi, Dmitry Khovratovich, Katharina Koschatko, Christian Rechberger, Markus Schofnegger, Verena Schröppel и Zhuo Wu, <a href="https://cic.iacr.org/p/2/4/15/pdf"><em>Poseidon(2)b: Binary Field Versions of Poseidon/Poseidon2</em></a>.</li>
+  <li>Simon-Philipp Merz и Àlex Rodríguez García, <a href="https://eprint.iacr.org/2026/306"><em>Skipping Class: Algebraic Attacks exploiting weak matrices and operation modes of Poseidon2(b)</em></a>, в особенности Раздел 3.4, Теорема 5.1 и Приложение A.</li>
   <li>Kyungbae Jang, Wonwoong Kim, Sejin Lim, Yeajun Kang, Yujin Yang, Hwajeong Seo и Ilsun You, <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10055756/"><em>Quantum Binary Field Multiplication with Optimized Toffoli Depth and Extension to Quantum Inversion</em></a>, обратимая схема умножителя в двоичном поле.</li>
 </ul>

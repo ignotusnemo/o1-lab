@@ -33,7 +33,7 @@
 
 <h2 id="production-instance">The production instance</h2>
 
-<p>The calculation is pinned to Parano1d revision <a href="https://github.com/ignotusnemo/parano1d/commit/39626b22d53cf2f2c480a7e28446c197dca68043"><code>39626b22d53cf2f2c480a7e28446c197dca68043</code></a>. The standalone <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/model/production.toml">production snapshot</a> records every security input, and the <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/parameter-provenance.md">provenance map</a> points each value back to its Rust definition.</p>
+<p>The certificate is integrated into Parano1d. <a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_soundness/src/parameters.rs"><code>ProductionParameters::load</code></a> imports the wallet ledger and geometry, both History PCS profiles, the BaseFold query count, the wide-challenge support and the fixed Poseidon2b profile directly from the crates used by the production prover and verifier. The <a href="https://github.com/ignotusnemo/parano1d/releases/tag/v1.0.1">current mainnet release</a> contains this source-linked certificate.</p>
 
 <div class="table-wrap"><table>
   <thead><tr><th>Input</th><th>Production value</th></tr></thead>
@@ -324,27 +324,34 @@ R=\left\lfloor\frac{D}{d_0}\right\rfloor.
 
 <p>This is an event-specific compiler deviation for the exact public Poseidon2b permutation, transcript framing and domain separation. The <a href="https://cic.iacr.org/p/2/4/15/pdf">Poseidon2b paper</a> supplies the fixed permutation parameters and their cryptanalysis; the inequality above states the additional quantum-instantiation condition used by the end-to-end theorem.</p>
 
-<h2 id="certificate">An executable, source-pinned certificate</h2>
+<h2 id="current-poseidon2b-cryptanalysis">Current Poseidon2b cryptanalysis</h2>
 
-<p>The complete derivation and calculator are published in the <a href="https://github.com/ignotusnemo/parano1d-soundness">Parano1d soundness repository</a>. The repository embeds its production snapshot and pins the source revision. Parameter loading rejects a mismatch between wallet geometry and its ledger, History and BaseFold query counts, challenge support, both History rates, digest width or the fixed Poseidon2b profile.</p>
+<p>Merz and Rodríguez García give improved algebraic attacks on Poseidon2 and Poseidon2b in <a href="https://eprint.iacr.org/2026/306">ePrint 2026/306</a>. Their wide tensor round skips apply to widths 12, 16, 20 and 24. Parano1d uses width 4, where the external layer is the binary MDS matrix <code>M4</code> itself, so that attack family and the paper's wide-instance tables do not apply to the production permutation.</p>
+
+<p>Appendix A does apply to the two-to-one feed-forward compression used by production Merkle trees. Specializing it to <code>GF(2^128)</code>, <math-inline>t=4</math-inline>, <math-inline>x^7</math-inline>, <math-inline>R_F=8</math-inline> and <math-inline>R_P=58</math-inline> gives the round skip <math-inline>(1,[1,7])</math-inline> and a descriptive classical dedicated-attack projection of approximately <math-inline>2^{409.873818620410}</math-inline>. This projection does not replace the fixed-Poseidon2b QROM premise above; it records the attack from the current paper that applies to the exact production mode.</p>
+
+<h2 id="certificate">An executable, source-linked certificate</h2>
+
+<p>The complete derivation and calculator are published in the <a href="https://github.com/ignotusnemo/parano1d/tree/main/noid_soundness"><code>noid_soundness</code> crate</a> inside the Parano1d repository. The certificate reads production parameters from the same Rust crates as the prover and verifier. Parameter loading rejects a mismatch between wallet geometry and its ledger, History and BaseFold query counts, challenge support, both History rates, digest width or the fixed Poseidon2b profile.</p>
 
 <p>All normative probabilities and optimizer boundaries use arbitrary-size integers and reduced rational numbers. Upper bounds are rounded upward. Sufficient fixed-permutation headroom is rounded downward. Floating-point logarithms are descriptive and never decide the result.</p>
 
-<p>Clone the certificate and reproduce the production report:</p>
+<p>Clone the current mainnet release and reproduce the production report:</p>
 
-<pre><code>git clone https://github.com/ignotusnemo/parano1d-soundness.git
-cd parano1d-soundness
-cargo run --release --locked</code></pre>
+<pre><code>git clone https://github.com/ignotusnemo/parano1d.git
+cd parano1d
+git checkout v1.0.1
+cargo run --release --locked -p noid_soundness</code></pre>
 
 <p>Print every reduced rational value and optimizer boundary:</p>
 
-<pre><code>cargo run --release --locked -- --exact</code></pre>
+<pre><code>cargo run --release --locked -p noid_soundness -- --exact</code></pre>
 
-<p>Run the snapshot, arithmetic and threshold regression suite:</p>
+<p>Run the source-correspondence, arithmetic and threshold regression suite:</p>
 
-<pre><code>cargo test --release --locked</code></pre>
+<pre><code>cargo test --release --locked -p noid_soundness</code></pre>
 
-<p>The proof document, source-symbol map, exact calculator and tests form one certificate. The terminal category is the final comparison performed by that chain of evidence.</p>
+<p>The proof document, source-linked parameter loader, exact calculator and tests form one certificate. The terminal category is the final comparison performed by that chain of evidence.</p>
 
 <h2 id="sources">Primary sources</h2>
 
@@ -356,5 +363,6 @@ cargo run --release --locked</code></pre>
   <li>Eli Ben-Sasson, Dan Carmon, Ulrich Haböck, Swastik Kopparty and Shubhangi Saraf, <a href="https://eprint.iacr.org/2025/2055"><em>On Proximity Gaps for Reed–Solomon Codes</em></a>, for the list-correlated proximity envelope.</li>
   <li>Ulrich Haböck, <a href="https://eprint.iacr.org/2024/1571"><em>BaseFold in the List Decoding Regime</em></a>, for the production fold specialization.</li>
   <li>Lorenzo Grassi, Dmitry Khovratovich, Katharina Koschatko, Christian Rechberger, Markus Schofnegger, Verena Schröppel and Zhuo Wu, <a href="https://cic.iacr.org/p/2/4/15/pdf"><em>Poseidon(2)b: Binary Field Versions of Poseidon/Poseidon2</em></a>.</li>
+  <li>Simon-Philipp Merz and Àlex Rodríguez García, <a href="https://eprint.iacr.org/2026/306"><em>Skipping Class: Algebraic Attacks exploiting weak matrices and operation modes of Poseidon2(b)</em></a>, especially Section 3.4, Theorem 5.1 and Appendix A.</li>
   <li>Kyungbae Jang, Wonwoong Kim, Sejin Lim, Yeajun Kang, Yujin Yang, Hwajeong Seo and Ilsun You, <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10055756/"><em>Quantum Binary Field Multiplication with Optimized Toffoli Depth and Extension to Quantum Inversion</em></a>, for the reversible multiplier schedule.</li>
 </ul>

@@ -2,29 +2,15 @@
 
 ### *Can a blockchain validate its current state without replaying the entire execution history from genesis?*
 
-A new node can be handed a perfectly well-formed snapshot of a blockchain. Every record may decode correctly. Every commitment may match. The data can be internally consistent in every obvious way.
+A new node can be handed a perfectly well-formed snapshot of a blockchain. Every record may decode correctly, every commitment may match, and the data may be internally consistent in every obvious way. None of that answers the question that matters: **why should this state be accepted as the result of the chain?**
 
-None of that answers the question that matters:
+Bitcoin answers by reconstructing it. Start at genesis, verify the chain, execute every transaction, and derive the current UTXO set yourself. The evidence for the present lives in the past. Snapshots can make that process faster, checkpoints can move the starting point, and specialized infrastructure can perform the historical work elsewhere. But the state in front of you still does not prove that it was reached through a valid sequence of transitions from genesis.
 
-**Why should this state be accepted as the result of the chain?**
-
-Bitcoin answers by reconstructing it. Start at genesis, verify the chain, execute every transaction, and derive the current UTXO set yourself.
-
-**The evidence for the present lives in the past.**
-
-Snapshots can make that process faster. Checkpoints can move the starting point. Specialized infrastructure can perform the historical work elsewhere and distribute the result.
-
-But none of those changes the underlying relationship. The state you have in front of you still does not prove that it was reached through a valid sequence of transitions from genesis.
-
-That was the relationship I wanted to invert.
-
-The interesting question was not simply whether blockchain history could be compressed into a recursive proof. It was this:
+That was the relationship I wanted to invert. The interesting question was not simply whether blockchain history could be compressed into a recursive proof. It was this:
 
 **What if the validity of the current state were itself something consensus carried forward?**
 
-Then a new node could receive the current state together with proof of the valid path that produced it. It would not need to replay the network's lifetime execution just to establish why the present is valid.
-
-The expensive part of state validation would no longer grow simply because the chain had grown older. The work required to authenticate the present would be tied to what exists now, rather than to every transaction the network has ever processed.
+Then a new node could receive the current state together with proof of the valid path that produced it. It would not need to replay the network's lifetime execution just to establish why the present is valid. The expensive part of state validation would no longer grow simply because the chain had grown older. The work required to authenticate the present would be tied to what exists now, rather than to every transaction the network has ever processed.
 
 ## Carrying validity forward
 
@@ -351,7 +337,7 @@ previous HistoryStep
 
 ## Proving State validity from genesis in 10.7 seconds on a laptop
 
-Parano1d targets a mean block interval of **15 seconds**. That makes proving time a consensus-level engineering constraint: an independent producer has to construct the recursive proof quickly enough to stay competitive without relying on a dedicated proving cluster.
+Parano1d targets a mean block interval of **20 seconds**. That makes proving time a consensus-level engineering constraint: an independent producer has to construct the recursive proof quickly enough to stay competitive without relying on a dedicated proving cluster.
 
 **Each new `HistoryStep` is a complete proof of `State` validity from genesis through the current block.**
 
@@ -408,7 +394,7 @@ With that construction in the production prover, the measured `HistoryStep` time
 | 24-thread AVX-512 PC | B25 | 6.905 s | p50 of 3 runs | 971,732 bytes |
 | 24-thread AVX-512 PC | B255 | 21.053 s | p50 of 3 runs | 1,081,108 bytes |
 
-The B25 laptop result is the one that matters for the default production path: **10.734 seconds p50 on commodity hardware against a 15-second mean block target.**
+The B25 laptop result is the one that matters for the default production path: **10.734 seconds p50 on commodity hardware against a 20-second mean block target.**
 
 The benchmark measures `HistoryStep` construction, not complete mining latency. The exact timing boundary and reproduction methodology are published in the [performance record](https://docs.parano1d.org/reference/performance).
 
@@ -478,7 +464,7 @@ The complete ideal success bound inside the Category 1 envelope is:
 0.053364140323608411 < 1/2
 ```
 
-Under the two stated premises, adding the fixed-Poseidon2b headroom keeps the complete production success probability below `1/2` throughout the Category 1 resource envelope. The full theorem, assumptions, production parameters, and executable arithmetic are published in the [soundness certificate](https://github.com/ignotusnemo/parano1d-soundness).
+Under the two stated premises, adding the fixed-Poseidon2b headroom keeps the complete production success probability below `1/2` throughout the Category 1 resource envelope. The full theorem, assumptions, source-linked production parameters, and executable arithmetic are published in the [`noid_soundness` certificate](https://github.com/ignotusnemo/parano1d/tree/main/noid_soundness) inside the Parano1d repository.
 
 The numbers matter.
 The scope matters more.

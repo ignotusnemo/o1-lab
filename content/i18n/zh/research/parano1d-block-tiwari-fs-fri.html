@@ -64,7 +64,7 @@ W(Q)=\frac{Q}{\varepsilon_{\mathrm{BT}}(Q)}
 
 <h2 id="production-instance">实际部署参数</h2>
 
-<p>可执行计算发布在 <a href="https://github.com/ignotusnemo/parano1d-soundness">Parano1d 可靠性证书仓库</a>中。其独立的<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/model/production.toml">实际部署参数快照</a>固定到 Parano1d 版本 <a href="https://github.com/ignotusnemo/parano1d/commit/39626b22d53cf2f2c480a7e28446c197dca68043"><code>39626b22d53cf2f2c480a7e28446c197dca68043</code></a>。<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/parameter-provenance.md">参数来源映射</a>记录每个导入值在实际部署源码中的符号。</p>
+<p>可执行计算已作为 <a href="https://github.com/ignotusnemo/parano1d/tree/main/noid_soundness"><code>noid_soundness</code> crate</a> 集成在 Parano1d 中。其<a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_soundness/src/parameters.rs">实际部署参数加载器</a>直接从证明器和验证器所使用的 crates 中导入全部安全输入，并拒绝被破坏的跨组件对应关系。<a href="https://github.com/ignotusnemo/parano1d/releases/tag/v1.0.1">当前主网版本</a>包含同一份与源码直接关联的计算。</p>
 
 <p>整个实际部署区块容量范围使用同一个安全性计算，只有执行轨迹规模随容量改变。在源代码中，B25 表示最多 25 个有效页面位置所使用的几何，B255 表示 26 至 255 个有效页面位置所使用的几何。两者以相同码率、查询数和挑战分布证明 HistoryStep 关系，因此得到同一个 Block–Tiwari 结果。</p>
 
@@ -296,22 +296,23 @@ W(Q)
 
 <h2 id="reproduction">复现证书</h2>
 
-<p>独立仓库包含参数快照、定理特化、精确优化器以及回归测试。以下命令可复现本文：</p>
+<p>Parano1d 仓库包含与源码关联的参数、定理特化、精确优化器以及回归测试。以下命令可从当前主网版本复现本文：</p>
 
-<pre><code>git clone https://github.com/ignotusnemo/parano1d-soundness.git
-cd parano1d-soundness
-cargo run --release --locked
-cargo run --release --locked -- --exact
-cargo test --release --locked</code></pre>
+<pre><code>git clone https://github.com/ignotusnemo/parano1d.git
+cd parano1d
+git checkout v1.0.1
+cargo run --release --locked -p noid_soundness
+cargo run --release --locked -p noid_soundness -- --exact
+cargo test --release --locked -p noid_soundness</code></pre>
 
-<p>普通运行输出三个整位结果。带 <code>--exact</code> 的运行输出两个 RBR 分数、选定重数、两组截断边界、两个最小化查询预算以及两个精确期望工作量分数。测试固定 W65/H133 参数，覆盖两种实际部署执行轨迹规模，拒绝不一致的参数快照对应关系，并使用任意精度整数或有理数算术检查每一项 2 的幂证书。</p>
+<p>普通运行输出三个整位结果。带 <code>--exact</code> 的运行输出两个 RBR 分数、选定重数、两组截断边界、两个最小化查询预算以及两个精确期望工作量分数。测试固定 W65/H133 参数，覆盖两种实际部署执行轨迹规模，拒绝不一致的跨组件参数，并使用任意精度整数或有理数算术检查每一项 2 的幂证书。</p>
 
-<p>完整推导见 <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/docs/block-tiwari.md"><code>docs/block-tiwari.md</code></a>。精确实现分为两部分：<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/src/local.rs"><code>src/local.rs</code></a> 实现 RBR 定理，<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/main/src/block_tiwari.rs"><code>src/block_tiwari.rs</code></a> 实现 Block–Tiwari 优化器。</p>
+<p>完整推导见 <a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_soundness/docs/block-tiwari.md"><code>noid_soundness/docs/block-tiwari.md</code></a>。精确实现分为两部分：<a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_soundness/src/local.rs"><code>src/local.rs</code></a> 实现 RBR 定理，<a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_soundness/src/block_tiwari.rs"><code>src/block_tiwari.rs</code></a> 实现 Block–Tiwari 优化器。</p>
 
 <h2 id="references">主要原始资料</h2>
 
 <ul>
-  <li><a href="https://github.com/ignotusnemo/parano1d-soundness">Ignotus Nemo，Parano1d 可靠性证书</a>：固定的实际部署参数快照、定理特化、精确算术与回归测试。</li>
+  <li><a href="https://github.com/ignotusnemo/parano1d/tree/main/noid_soundness">Ignotus Nemo，Parano1d 内置可靠性证书</a>：与实际部署源码关联的参数、定理特化、精确算术与回归测试。</li>
   <li><a href="https://eprint.iacr.org/2024/1161">Alexander R. Block 与 Pratyush Ranjan Tiwari，<em>On the Concrete Security of Non-interactive FRI</em></a>，重点参见定义 1 与定义 2、引理 1、猜想 1、第 4 节和表 1。</li>
   <li><a href="https://github.com/alexander-r-block/FRI-Parameter-Testing-Sagemath">Block 与 Tiwari，FRI Parameter Testing in SageMath</a>。</li>
   <li><a href="https://eprint.iacr.org/2023/1071">Alexander R. Block、Albert Garreta、Jonathan Katz、Justin Thaler、Pratyush Ranjan Tiwari 与 Michał Zając，<em>Fiat–Shamir Security of FRI and Related SNARKs</em></a>。</li>
