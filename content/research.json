@@ -29,6 +29,31 @@
     ]
   },
   {
+    "slug": "poseidon2b-is-secure",
+    "date": "2026-09-02",
+    "kind": "Security analysis",
+    "topic": "Poseidon2b cryptanalysis",
+    "status": "Source-pinned production audit",
+    "featured": true,
+    "title": "Poseidon2b Is Secure!",
+    "shortTitle": "The exact Poseidon2b instance",
+    "dek": "Security belongs to an exact instance. Fix GF(2^128), width four, the matrices, 8+58 rounds and feed-forward mode, then apply the published attacks.",
+    "abstract": "This source-pinned review fixes the complete Poseidon2b instance used by Parano1d, separates the inapplicable wide-state round-skipping results in ePrint 2026/306 from the Appendix A feed-forward attack that does apply, and makes that specialization executable. The applicable classical algebraic projection is approximately 2^409.8738 work in the paper's model. That number is not a security level; it records that this published attack gives no route below the intended 128-bit target for the exact production instance.",
+    "authors": ["Ignotus Nemo"],
+    "art": "poseidon",
+    "heroImage": "/assets/poseidon2b-is-secure-hero.webp",
+    "keywords": ["Poseidon2b", "Poseidon2", "algebraic cryptanalysis", "binary fields", "GF(2^128)", "Skipping Class", "Merkle compression", "Parano1d"],
+    "evidence": [
+      {"label": "Poseidon2b Is Secure discussion", "href": "https://ethresear.ch/t/poseidon2b-is-secure/25865", "type": "Analysis"},
+      {"label": "Skipping Class algebraic attacks", "href": "https://eprint.iacr.org/2026/306", "type": "Paper"},
+      {"label": "Executable Poseidon2b cryptanalysis audit", "href": "https://github.com/ignotusnemo/parano1d-soundness/blob/c3ea3342fbe27111c84046613010f14f13b917c6/src/poseidon2b_cryptanalysis.rs", "type": "Code and tests"},
+      {"label": "Exact derivation and scope", "href": "https://github.com/ignotusnemo/parano1d-soundness/blob/c3ea3342fbe27111c84046613010f14f13b917c6/docs/category-one.md#current-poseidon2b-cryptanalysis", "type": "Proof"},
+      {"label": "Pinned production implementation", "href": "https://github.com/ignotusnemo/parano1d/tree/fedbe6e3c0ddf8b8372546017bb9bc341acb8ab0/noid_poseidon2b", "type": "Code"},
+      {"label": "Reference Binius benchmark", "href": "https://github.com/Poseidon-Hash/Poseidon2b#benchmark-results", "type": "Data"},
+      {"label": "Open source-pinned cryptanalysis task", "href": "https://noid.network/research/poseidon2b-attack", "type": "Source"}
+    ]
+  },
+  {
     "slug": "parano1d-nist-pqc-category-one",
     "date": "2026-08-05",
     "kind": "Security analysis",

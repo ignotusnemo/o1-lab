@@ -1,0 +1,137 @@
+<p><strong>“Poseidon2b 是安全的”这句话故意只说了一半。</strong></p>
+
+<p>在密码学里，算法名称从来不是安全性结论。只有把底层域、状态宽度、速率、容量、摘要长度、S 盒、轮数、线性层、工作模式和攻击模型全部固定下来，“安全”二字才有明确对象。</p>
+
+<p>本文要检验的是一个可以被反驳的具体命题：</p>
+
+<blockquote><p>截至目前公开的代数攻击，无法攻破 Parano1d 实际部署的这组 Poseidon2b 参数。</p></blockquote>
+
+<p>这不等于宣称未来不会出现更好的攻击。它只表示：我们把最新论文中的攻击条件逐项对照到了实际源码，而不是拿一个算法族名称替代分析。</p>
+
+<h2 id="fix-the-instance">先把实例钉死</h2>
+
+<p>Parano1d 使用定义在二元扩域上的四字 Poseidon2b 置换。实际部署参数如下：</p>
+
+<div class="table-wrap"><table>
+  <thead><tr><th>参数</th><th>实际部署值</th></tr></thead>
+  <tbody>
+    <tr><td>有限域</td><td><code>GF(2^128)</code></td></tr>
+    <tr><td>状态宽度</td><td><math-inline>t=4</math-inline></td></tr>
+    <tr><td>速率</td><td><math-inline>r=2</math-inline></td></tr>
+    <tr><td>容量</td><td><math-inline>c=2</math-inline></td></tr>
+    <tr><td>摘要</td><td>2 个域元素，共 256 位</td></tr>
+    <tr><td>S 盒</td><td><math-inline>x^7</math-inline></td></tr>
+    <tr><td>全轮</td><td><math-inline>R_F=8</math-inline></td></tr>
+    <tr><td>部分轮</td><td><math-inline>R_P=58</math-inline></td></tr>
+  </tbody>
+</table></div>
+
+<p>矩阵同样属于安全参数。宽度为四时，二元 <code>M4</code> 就是完整的外部 MDS 线性层，并不是某个宽状态张量矩阵中的重复小块。内部线性层也由源码中的固定矩阵给出。</p>
+
+<p>Merkle 节点采用二对一前馈压缩，而不是泛泛的海绵调用。设两个 256 位子节点为 <math-inline>a=(a_0,a_1)</math-inline> 与 <math-inline>b=(b_0,b_1)</math-inline>，置换输入为</p>
+
+<math-block>
+x=(a_0,a_1,b_0+\mathsf{IV}_0,b_1+\mathsf{IV}_1),
+</math-block>
+
+<p>输出取 <math-inline>P(x)+x</math-inline> 的前两个域元素：</p>
+
+<math-block>
+\operatorname{Tr}_2(P(x)+x).
+</math-block>
+
+<p>固定的容量标签只是一次仿射平移。它不会把该构造变成另一张攻击表中的宽状态海绵。</p>
+
+<h2 id="what-skipping-class-attacks">Skipping Class 攻击覆盖了什么</h2>
+
+<p>Merz 与 Rodríguez García 在 <a href="https://eprint.iacr.org/2026/306">ePrint 2026/306</a> 中改进了 Poseidon2 和 Poseidon2b 的代数攻击。论文结果本身没有问题，问题通常出在脱离参数引用结论。</p>
+
+<p>论文主体的跳轮方法利用宽状态外部矩阵的张量结构，并明确处理</p>
+
+<math-block>
+t\in\{12,16,20,24\}.
+</math-block>
+
+<p>实际部署的 <math-inline>t=4</math-inline> 不在其中。这里的 <code>M4</code> 已经是完整 MDS 层，宽状态方法所需的重复张量结构并不存在。</p>
+
+<p>经常被单独转述的 <math-inline>2^{106}</math-inline> 改进也属于另一组参数：</p>
+
+<math-block>
+(n,t,c,d)=(32,24,8,8),\qquad R_P=15.
+</math-block>
+
+<p>那是宽度 24、容量 8、15 个部分轮的二元海绵。把该数字贴到宽度 4、容量 2、58 个部分轮的前馈压缩上，没有密码分析意义。</p>
+
+<h2 id="the-part-that-does-apply">真正命中的部分在附录 A</h2>
+
+<p>不能因为主体攻击不适用就停止阅读。附录 A 单独研究了采用 MDS 的二对一前馈压缩，这正是生产 Merkle 树使用的模式。</p>
+
+<p>将 <math-inline>t=4</math-inline> 和 <math-inline>\alpha=7</math-inline> 代入后，跳轮形式为</p>
+
+<math-block>
+(1,[1]+[7]^{t/2-1})=(1,[1,7]).
+</math-block>
+
+<p>再用摘要宽度 <math-inline>d=2</math-inline>、跳过一个全轮且不跳过部分轮，定理 5.1 给出</p>
+
+<math-block>
+\begin{aligned}
+d_I
+&\le 7^{d(R_F-r_F)+(R_P-r_P)}\prod_i\delta_i\\
+&=7^{2(8-1)+58}\cdot7\\
+&=7^{73}.
+\end{aligned}
+</math-block>
+
+<p>按照论文采用的二次 Gröbner 基工作量投影 <math-inline>\omega=2</math-inline>，得到</p>
+
+<math-block>
+\log_2(d_I^2)=409.873818620410\ldots
+</math-block>
+
+<div class="note">
+  <strong>409.87 不是安全位数</strong>
+  <p>它是由 ideal degree 上界推得的某一种经典代数攻击的描述性工作量。它不能排除其他攻击，也不能替代端到端 QROM 定理中关于固定 Poseidon2b 的独立前提。这里能够得到的结论只有一个：针对这组固定参数，该公开攻击没有给出低于 128 位目标的路径。</p>
+</div>
+
+<h2 id="why-poseidon2b">为什么在二元域里选择 Poseidon2b</h2>
+
+<p>Parano1d 不是只优化一次证明生成。矿工为每个区块生成一份递归 HistoryStep，随后所有全节点都要验证它。新节点同步当前 State 时，也会经过同一条验证路径。这是一套“生成一次、处处验证”的网络。</p>
+
+<p><a href="https://github.com/Poseidon-Hash/Poseidon2b#benchmark-results">Poseidon2b 的 Binius 参考基准</a>展示了这种取舍。在 AMD Ryzen 9 7900X 上，表中的 Keccak-f 电路多线程证明更快，证明也更小；但 <code>n=128, t=4</code> 的 Poseidon2b 电路验证明显更快：</p>
+
+<div class="table-wrap"><table>
+  <thead><tr><th>完整基准电路</th><th>证明大小</th><th>多线程证明</th><th>多线程验证</th></tr></thead>
+  <tbody>
+    <tr><td>Keccak-f</td><td>438 KiB</td><td>0.425 秒</td><td>46.59 毫秒</td></tr>
+    <tr><td>Poseidon2b，<code>n=128, t=4</code></td><td>507 KiB</td><td>0.564 秒</td><td>6.52 毫秒</td></tr>
+  </tbody>
+</table></div>
+
+<p>这是同一 Binius 软件栈中两套完整电路实现的测量，不是“Poseidon2b 永远快于 Keccak”的定理。电路实现质量与算术化方式都包含在数字里。对于实际系统，这并非隐藏偏差，而是成本本身。</p>
+
+<p>Parano1d 的工作负载也恰好适合四字状态。两个 256 位 Merkle 子节点装入四条 128 位通道，一次置换输出一个 256 位摘要。PCS 数值和 Fiat–Shamir 挑战本来就在 <code>GF(2^128)</code> 通道上，递归验证不必切换算术表示。</p>
+
+<p>Keccak 仍然是二元证明系统中的真实备选。BLAKE2 的 ARX 加法需要额外表达进位，因此不占优势。最终选择依据不是品牌，而是某个确定运算在确定算术化下的完整代价。</p>
+
+<h2 id="executable-correspondence">让参数变化自动推翻旧审计</h2>
+
+<p>一份只写在文章里的审计很容易失效。<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/c3ea3342fbe27111c84046613010f14f13b917c6/src/poseidon2b_cryptanalysis.rs">可执行密码分析对照</a>会先读取冻结的生产参数，再计算附录 A 的专门化结果。</p>
+
+<p>检查项包括域宽、状态宽度、速率、摘要长度、S 盒、完整轮数、两层线性矩阵和 Merkle 压缩模式。审计还钉住了所审论文版本及其 PDF 哈希。任何一项发生变化，旧审计都会直接失败，不会继续把旧结论显示在新原语旁边。</p>
+
+<p>完整推导见 <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/c3ea3342fbe27111c84046613010f14f13b917c6/docs/category-one.md#current-poseidon2b-cryptanalysis">Category 1 文档</a>，对应的生产实现保存在<a href="https://github.com/ignotusnemo/parano1d/tree/fedbe6e3c0ddf8b8372546017bb9bc341acb8ab0/noid_poseidon2b">固定源码版本</a>中。</p>
+
+<h2 id="the-claim">本文的结论</h2>
+
+<p>我没有声称所有 Poseidon2b 参数都安全，也没有把 <math-inline>2^{409.87}</math-inline> 包装成安全等级，更没有声称不会再出现新的密码分析。</p>
+
+<p>可检验的结论是：</p>
+
+<blockquote><p><strong>截至目前公开的代数攻击，无法攻破这组精确的 Poseidon2b 实例。</strong></p></blockquote>
+
+<p>参数、矩阵、工作模式、推导和代码全部公开。<a href="https://noid.network/research/poseidon2b-attack">源码版本固定的公开研究任务</a>接受更低成本的攻击、在生产输入路径中可达的碰撞或原像，以及论文与实现对应关系中的错误。</p>
+
+<p>不要攻击一个算法族名称。</p>
+
+<p><strong>请攻击这个精确实例。</strong></p>

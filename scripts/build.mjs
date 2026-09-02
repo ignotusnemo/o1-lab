@@ -537,6 +537,7 @@ function shell({
   locale,
   title,
   description,
+  keywords,
   basePath,
   body,
   active = "",
@@ -548,6 +549,9 @@ function shell({
   indexable = true
 }) {
   const t = ui[locale.code];
+  const keywordContent = Array.isArray(keywords) && keywords.length
+    ? [...new Set([...keywords, "Parano1d", "Parano1d Lab"])].join(", ")
+    : t.keywords;
   const pagePath = pathFor(locale, basePath);
   const canonical = absolute(pagePath);
   const fullTitle = title === "Parano1d Lab" ? t.siteTitle : `${title} · Parano1d Lab`;
@@ -604,7 +608,7 @@ function shell({
   <meta name="color-scheme" content="light">
   <meta name="description" content="${esc(description)}">
   <meta name="author" content="Parano1d Lab">
-  <meta name="keywords" content="${esc(t.keywords)}">
+  <meta name="keywords" content="${esc(keywordContent)}">
   ${discoveryMeta}
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
@@ -775,8 +779,14 @@ function articlePage(item, index, locale, newestFirst) {
     description: item.abstract,
     datePublished: item.date,
     dateModified: item.date,
+    url: canonical,
     mainEntityOfPage: canonical,
     inLanguage: locale.htmlLang,
+    isAccessibleForFree: true,
+    ...(item.keywords?.length ? { keywords: item.keywords } : {}),
+    ...(item.evidence.some((entry) => entry.type === "Paper")
+      ? { citation: item.evidence.filter((entry) => entry.type === "Paper").map((entry) => entry.href) }
+      : {}),
     author: item.authors.map((name) => ({ "@type": name === "Parano1d Lab" ? "Organization" : "Person", name })),
     publisher: { "@type": "Organization", name: "Parano1d Lab", url: siteUrl },
     image: absolute(imagePath),
@@ -805,6 +815,7 @@ function articlePage(item, index, locale, newestFirst) {
   return shell({
     title: seoTitle,
     description: seoDescription,
+    keywords: item.keywords,
     locale,
     basePath,
     body,

@@ -1,0 +1,142 @@
+<p><strong>“Poseidon2b is secure” is deliberately an incomplete sentence.</strong></p>
+
+<p>A hash-family name is not a security claim. The claim begins only after fixing the field, state width, rate, capacity, digest width, S-box, round schedule, linear layers, operation mode and attack model. Change one of them and the object under analysis changes with it.</p>
+
+<p>The statement examined here is narrower and testable:</p>
+
+<blockquote><p>The current published algebraic attacks do not break the exact Poseidon2b instance used by Parano1d.</p></blockquote>
+
+<p>That is not a promise that no better attack can exist. It is a correspondence between one production implementation and the best relevant published cryptanalysis currently available.</p>
+
+<h2 id="fix-the-instance">Fix the instance first</h2>
+
+<p>Parano1d uses a width-four Poseidon2b permutation over a binary extension field. The production tuple is:</p>
+
+<div class="table-wrap"><table>
+  <thead><tr><th>Parameter</th><th>Production value</th></tr></thead>
+  <tbody>
+    <tr><td>Field</td><td><code>GF(2^128)</code></td></tr>
+    <tr><td>State width</td><td><math-inline>t=4</math-inline></td></tr>
+    <tr><td>Rate</td><td><math-inline>r=2</math-inline></td></tr>
+    <tr><td>Capacity</td><td><math-inline>c=2</math-inline></td></tr>
+    <tr><td>Digest</td><td>2 field elements, 256 bits</td></tr>
+    <tr><td>S-box</td><td><math-inline>x^7</math-inline></td></tr>
+    <tr><td>Full rounds</td><td><math-inline>R_F=8</math-inline></td></tr>
+    <tr><td>Partial rounds</td><td><math-inline>R_P=58</math-inline></td></tr>
+  </tbody>
+</table></div>
+
+<p>The matrices matter as much as the tuple. At width four, the binary <code>M4</code> matrix is the complete external MDS layer. The internal layer is the fixed diagonal-plus-ones construction from the production source. Merkle nodes use two-to-one feed-forward compression, not a generic sponge call.</p>
+
+<p>For children <math-inline>a=(a_0,a_1)</math-inline> and <math-inline>b=(b_0,b_1)</math-inline>, the node input is</p>
+
+<math-block>
+x=(a_0,a_1,b_0+\mathsf{IV}_0,b_1+\mathsf{IV}_1),
+</math-block>
+
+<p>and the output is the first two lanes of <math-inline>P(x)+x</math-inline>:</p>
+
+<math-block>
+\operatorname{Tr}_2(P(x)+x).
+</math-block>
+
+<p>The fixed capacity tag is an affine shift. It does not turn this construction into one of the wide sponge instances from a different attack table.</p>
+
+<h2 id="what-skipping-class-attacks">What the Skipping Class paper actually reaches</h2>
+
+<p>Merz and Rodríguez García introduced improved algebraic attacks against Poseidon2 and Poseidon2b in <a href="https://eprint.iacr.org/2026/306">ePrint 2026/306</a>. The result is real. Its scope is also precise.</p>
+
+<p>The paper's main round-skipping family exploits the tensor structure of wide, non-MDS external matrices. Section 3.4 applies that construction to widths <math-inline>t\in\{12,16,20,24\}</math-inline>. It does not include <math-inline>t=4</math-inline>. In the production instance, <code>M4</code> is not a repeated sub-block inside that wide construction. It is the entire external MDS layer.</p>
+
+<p>The often repeated <math-inline>2^{106}</math-inline> improvement is not a result for this configuration either. It belongs to the binary sponge parameter set</p>
+
+<math-block>
+(n,t,c,d)=(32,24,8,8),\qquad R_P=15.
+</math-block>
+
+<p>Transferring that number to a width-four feed-forward compressor discards the very parameters on which the attack depends.</p>
+
+<h2 id="the-part-that-does-apply">The part that does apply</h2>
+
+<p>Ignoring an inapplicable headline attack would be easy. It would also be incomplete. Appendix A of the same paper analyzes MDS two-to-one feed-forward compression, which is exactly the operation mode used by the production Merkle construction.</p>
+
+<p>For <math-inline>t=4</math-inline> and <math-inline>\alpha=7</math-inline>, the Appendix A round skip is</p>
+
+<math-block>
+(1,[1]+[7]^{t/2-1})=(1,[1,7]).
+</math-block>
+
+<p>Specializing Theorem 5.1 with digest width <math-inline>d=2</math-inline>, one skipped full round and no skipped partial round gives</p>
+
+<math-block>
+\begin{aligned}
+d_I
+&\le 7^{d(R_F-r_F)+(R_P-r_P)}\prod_i\delta_i\\
+&=7^{2(8-1)+58}\cdot7\\
+&=7^{73}.
+\end{aligned}
+</math-block>
+
+<p>Using the paper's quadratic Gröbner-basis work projection, <math-inline>\omega=2</math-inline>, gives</p>
+
+<math-block>
+\log_2(d_I^2)=146\log_2 7
+=409.873818620410\ldots
+</math-block>
+
+<div class="note">
+  <strong>Read the number correctly</strong>
+  <p>This is not a claim of 409-bit security. It is the descriptive work projection of this particular classical algebraic attack, derived from an upper bound on ideal degree. It does not rule out every other attack, and it does not replace the separate QROM assumptions in the end-to-end soundness theorem. It says that this published attack does not produce a route below the intended 128-bit level for the fixed production instance.</p>
+</div>
+
+<h2 id="why-poseidon2b">Why Poseidon2b is there at all</h2>
+
+<p>The obvious question is why a binary-field system uses Poseidon2b instead of Keccak, SHA-256 or BLAKE2.</p>
+
+<p>Parano1d is not optimizing one isolated prover benchmark. It is a prove-once, verify-everywhere network. A miner constructs one recursive HistoryStep for a block. Every full node verifies it before accepting the block, and the same verification path matters when a new node authenticates current State during synchronization.</p>
+
+<p>The <a href="https://github.com/Poseidon-Hash/Poseidon2b#benchmark-results">reference Binius implementation benchmark</a> exposes that tradeoff. On its AMD Ryzen 9 7900X setup, Keccak-f proves faster in the listed multithreaded workload and produces a smaller proof, while Poseidon2b at <code>n=128, t=4</code> verifies much faster:</p>
+
+<div class="table-wrap"><table>
+  <thead><tr><th>Complete benchmark circuit</th><th>Proof</th><th>Multithreaded proving</th><th>Multithreaded verification</th></tr></thead>
+  <tbody>
+    <tr><td>Keccak-f</td><td>438 KiB</td><td>0.425 s</td><td>46.59 ms</td></tr>
+    <tr><td>Poseidon2b, <code>n=128, t=4</code></td><td>507 KiB</td><td>0.564 s</td><td>6.52 ms</td></tr>
+  </tbody>
+</table></div>
+
+<p>This is an implementation benchmark, not a theorem that Poseidon2b beats every possible Keccak or SHA circuit. It measures complete circuits inside one Binius stack. Implementation quality and arithmetization are part of the measurement.</p>
+
+<p>They are also part of the engineering decision. The width-four state consumes two 256-bit Merkle children and returns one 256-bit digest in one permutation. PCS values and Fiat–Shamir challenges already live on 128-bit binary-field lanes, so recursive verification stays in the same arithmetic. Keccak remains a legitimate alternative. BLAKE2's ARX additions are less attractive because they introduce carry logic into a binary-field proof.</p>
+
+<p>The choice is not “Poseidon is fashionable.” It is that this exact permutation, in this exact arithmetization, fits the operation that the recursive verifier repeatedly performs.</p>
+
+<h2 id="executable-correspondence">Make the correspondence executable</h2>
+
+<p>A prose audit can silently become stale. The <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/c3ea3342fbe27111c84046613010f14f13b917c6/src/poseidon2b_cryptanalysis.rs">executable cryptanalysis correspondence</a> therefore reads the snapshotted production profile before evaluating the Appendix A specialization.</p>
+
+<p>It pins:</p>
+
+<ul>
+  <li>field width, state width, rate and digest width;</li>
+  <li>S-box exponent and complete round schedule;</li>
+  <li>external and internal linear matrices;</li>
+  <li>the two-to-one feed-forward Merkle mode;</li>
+  <li>the reviewed paper revision and PDF digest.</li>
+</ul>
+
+<p>Change any of those inputs and the old audit fails instead of continuing to display the old conclusion beside a new primitive. The complete derivation is recorded in the <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/c3ea3342fbe27111c84046613010f14f13b917c6/docs/category-one.md#current-poseidon2b-cryptanalysis">Category 1 soundness document</a>, while the corresponding production implementation remains available at its <a href="https://github.com/ignotusnemo/parano1d/tree/fedbe6e3c0ddf8b8372546017bb9bc341acb8ab0/noid_poseidon2b">pinned source revision</a>.</p>
+
+<h2 id="the-claim">The claim</h2>
+
+<p>I am not claiming that the word “Poseidon” is a proof of security. I am not turning <math-inline>2^{409.87}</math-inline> into an invented security level. I am not claiming that a better cryptanalysis can never be found.</p>
+
+<p>I am claiming something narrower:</p>
+
+<blockquote><p><strong>The current published algebraic attacks do not break the exact Poseidon2b instance.</strong></p></blockquote>
+
+<p>The parameters, matrices, mode, derivation and executable checks are public. A source-pinned <a href="https://noid.network/research/poseidon2b-attack">open cryptanalysis task</a> accepts a cheaper attack, a production-reachable collision or preimage, or an error in the correspondence.</p>
+
+<p>Do not attack a family name.</p>
+
+<p><strong>Attack the exact instance.</strong></p>

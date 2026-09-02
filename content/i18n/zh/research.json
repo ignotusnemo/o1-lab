@@ -10,6 +10,17 @@
     "abstract": "Parano1d 已将当前状态有效性的依据从不断累积的执行历史移到了当下本身。从创世区块到当前状态的整条有效性路径，都由一条可执行的端到端后量子可靠性定理支撑，并达到 NIST Category 1 的资源阈值。",
     "evidence": ["Parano1d 源代码", "内置可靠性证书", "实际部署性能记录", "FROST-GKR 论文", "FROST-GKR 参考实现", "非交互式 FRI 的具体安全性", "NIST PQC 安全类别"]
   },
+  "poseidon2b-is-secure": {
+    "kind": "安全性分析",
+    "topic": "Poseidon2b 密码分析",
+    "status": "与生产源码版本绑定的审计",
+    "title": "Poseidon2b 是安全的！",
+    "shortTitle": "精确的 Poseidon2b 实例",
+    "dek": "安全性属于具体实例。先固定 GF(2^128)、四字状态、矩阵、8+58 轮与前馈压缩模式，再逐项套用公开攻击。",
+    "abstract": "本文把 Parano1d 实际部署的完整 Poseidon2b 参数与现有密码分析逐项对应。ePrint 2026/306 的宽状态跳轮攻击不适用于该实例，但附录 A 的前馈压缩攻击确实适用，因此被单独专门化并写成可执行审计。在论文模型下，该经典代数攻击的工作量投影约为 2^409.8738。这个数字不是安全位数，只说明针对固定生产实例，该公开攻击没有给出低于 128 位目标的路径。",
+    "keywords": ["Poseidon2b", "Poseidon2", "代数密码分析", "二进制域", "GF(2^128)", "Skipping Class", "Merkle 压缩", "Parano1d"],
+    "evidence": ["“Poseidon2b 是安全的”讨论", "Skipping Class 代数攻击", "可执行 Poseidon2b 密码分析审计", "精确推导与适用范围", "固定版本的生产实现", "Binius 参考基准", "与源码版本绑定的公开密码分析任务"]
+  },
   "parano1d-nist-pqc-category-one": {
     "kind": "安全性分析",
     "topic": "后量子可靠性",
