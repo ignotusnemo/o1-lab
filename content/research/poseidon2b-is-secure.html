@@ -89,6 +89,69 @@ d_I
   <p>This is not a claim of 409-bit security. It is the descriptive work projection of this particular classical algebraic attack, derived from an upper bound on ideal degree. It does not rule out every other attack, and it does not replace the separate QROM assumptions in the end-to-end soundness theorem. It says that this published attack does not produce a route below the intended 128-bit level for the fixed production instance.</p>
 </div>
 
+<h2 id="adaptive-matrix-attacks">Adaptive matrices attack a different instance</h2>
+
+<p><a href="https://eprint.iacr.org/2026/1579">Slipway</a> and <a href="https://eprint.iacr.org/2026/1760">Midpoint Reset</a> both construct weak Poseidon parameter sets by selecting an MDS matrix after the round constants are known. Slipway steers a constrained input family through the initial full rounds and into a finite subspace trail. Midpoint Reset uses the same adaptive freedom to construct a full-round collision.</p>
+
+<p>These are useful warnings for anyone generating custom parameters. Matrix checks alone do not prove that a matrix was selected independently of the constants.</p>
+
+<p>They are not attacks on the fixed production instance here. The two production matrices and the complete constant schedule are already part of the pinned permutation. An attacker does not get to replace either matrix. Midpoint Reset also works over an odd-characteristic prime field, while production uses <code>GF(2^128)</code>. Neither paper supplies a collision, witness or attack cost for the fixed matrices used by Parano1d.</p>
+
+<h2 id="sbox-skipping">At width four, S-box skipping skips nothing new</h2>
+
+<p><a href="https://eprint.iacr.org/2026/1692">From Round Skipping to S-Box Skipping</a> introduces generalized subspace restriction for the ordinary Poseidon CICO-<math-inline>k</math-inline> model. Its new partial-layer gain is <math-inline>t-2k</math-inline> skipped S-boxes.</p>
+
+<p>The closest geometry to the two constrained production output lanes is CICO-2. At width four,</p>
+
+<math-block>
+t-2k=4-2\cdot2=0.
+</math-block>
+
+<p>The paper also models ordinary CICO output constraints rather than the left-input feed-forward equations. It therefore adds no new skipped partial round and no cheaper projection for this compressor. The applicable Appendix A result above remains the relevant round-skip calculation.</p>
+
+<h2 id="nonlinear-subspaces">Nonlinear subspaces do reach the fixed matrix</h2>
+
+<p><a href="https://eprint.iacr.org/2026/1792">Beyond Linear Subspace Trails</a> cannot be dismissed by pointing to a different width or an adaptive matrix. Its compression-mode construction can be specialized to the exact production geometry.</p>
+
+<p>For a digest of two field elements, the available constraint budget is</p>
+
+<math-block>
+E_c=t-d=4-2=2.
+</math-block>
+
+<p>One S-box is active in each partial round. A linear subspace therefore covers two partial rounds, while the new nonlinear construction covers four. The paper requires a concrete rank check before that longer trail may be used. Partitioning the production internal matrix into <math-inline>A,B,C,D</math-inline> gives</p>
+
+<math-block>
+N_e=BSC A^{-1}-1,\qquad S=D-CA^{-1}B.
+</math-block>
+
+<p>Evaluated in the actual production field, the one-by-one core is</p>
+
+<math-block>
+N_e=\mathtt{0xbe32}\neq 0.
+</math-block>
+
+<p>The rank condition holds. The four-round nonlinear trail exists for this exact internal matrix, but it still covers only four of 58 partial rounds.</p>
+
+<p>I then evaluated all four applicable Macaulay models with the production round schedule and the paper's <math-inline>\omega=2</math-inline> projection:</p>
+
+<div class="table-wrap"><table>
+  <thead><tr><th>Model</th><th>Best placement</th><th>Variables</th><th><math-inline>\log_2(C^2)</math-inline></th></tr></thead>
+  <tbody>
+    <tr><td>Forward, substitution, linear</td><td><math-inline>\tau=28</math-inline></td><td>6</td><td>1090.060133886114</td></tr>
+    <tr><td>Forward, substitution, nonlinear</td><td><math-inline>\tau=27</math-inline></td><td>8</td><td>1403.209025315336</td></tr>
+    <tr><td>Forward, no substitution, linear</td><td>Direct</td><td>4</td><td>1022.830074998558</td></tr>
+    <tr><td>Forward, no substitution, nonlinear</td><td>Direct</td><td>4</td><td>1022.830074998558</td></tr>
+  </tbody>
+</table></div>
+
+<p>At width four, the extra variables introduced by substitution cost more than the longer nonlinear trail saves. The lowest projection in this family is the no-substitution linear model. It is still far above the <math-inline>409.873818620410</math-inline>-bit feed-forward projection from ePrint 2026/306, so the earlier result remains the stronger applicable attack model.</p>
+
+<div class="note">
+  <strong>This is a transferred attack model, not a collision</strong>
+  <p>The paper states its construction over <math-inline>F_p</math-inline> and reports semi-regularity experiments on prime-field instances. I transferred only the algebraic construction, performed the matrix operations and rank check in the real <code>GF(2^128)</code>, and recomputed the four complexity expressions. The result is a preimage-model work projection for the compression primitive. It is not 1022-bit security, and it is not a concrete production collision or a valid-tree reachability witness.</p>
+</div>
+
 <h2 id="why-poseidon2b">Why Poseidon2b is there at all</h2>
 
 <p>The obvious question is why a binary-field system uses Poseidon2b instead of Keccak, SHA-256 or BLAKE2.</p>
@@ -113,7 +176,7 @@ d_I
 
 <h2 id="executable-correspondence">Make the correspondence executable</h2>
 
-<p>A prose audit can silently become stale. The <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/c3ea3342fbe27111c84046613010f14f13b917c6/src/poseidon2b_cryptanalysis.rs">executable cryptanalysis correspondence</a> therefore reads the snapshotted production profile before evaluating the Appendix A specialization.</p>
+<p>A prose audit can silently become stale. The <a href="https://github.com/ignotusnemo/parano1d/blob/3cc1a652d550be236bd7796a2fec88f7a650d98e/noid_soundness/src/poseidon2b_cryptanalysis.rs">executable cryptanalysis correspondence</a> therefore reads the pinned production profile before evaluating both applicable model families.</p>
 
 <p>It pins:</p>
 
@@ -122,10 +185,10 @@ d_I
   <li>S-box exponent and complete round schedule;</li>
   <li>external and internal linear matrices;</li>
   <li>the two-to-one feed-forward Merkle mode;</li>
-  <li>the reviewed paper revision and PDF digest.</li>
+  <li>every reviewed paper revision and PDF digest.</li>
 </ul>
 
-<p>Change any of those inputs and the old audit fails instead of continuing to display the old conclusion beside a new primitive. The complete derivation is recorded in the <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/c3ea3342fbe27111c84046613010f14f13b917c6/docs/category-one.md#current-poseidon2b-cryptanalysis">Category 1 soundness document</a>, while the corresponding production implementation remains available at its <a href="https://github.com/ignotusnemo/parano1d/tree/fedbe6e3c0ddf8b8372546017bb9bc341acb8ab0/noid_poseidon2b">pinned source revision</a>.</p>
+<p>Change any of those inputs and the old audit fails instead of continuing to display the old conclusion beside a new primitive. The derivation is recorded in the <a href="https://github.com/ignotusnemo/parano1d/blob/3cc1a652d550be236bd7796a2fec88f7a650d98e/noid_soundness/docs/category-one.md#current-poseidon2b-cryptanalysis">Category 1 soundness document</a>, with the <a href="https://github.com/ignotusnemo/parano1d/blob/3cc1a652d550be236bd7796a2fec88f7a650d98e/noid_soundness/docs/poseidon2b-august-2026.md">complete paper-by-paper review</a> and the matching <a href="https://github.com/ignotusnemo/parano1d/tree/3cc1a652d550be236bd7796a2fec88f7a650d98e/noid_poseidon2b">production implementation</a> pinned to the same source revision.</p>
 
 <h2 id="the-claim">The claim</h2>
 

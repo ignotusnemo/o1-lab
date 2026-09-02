@@ -94,6 +94,69 @@ d_I
   <p>它是由 ideal degree 上界推得的某一种经典代数攻击的描述性工作量。它不能排除其他攻击，也不能替代端到端 QROM 定理中关于固定 Poseidon2b 的独立前提。这里能够得到的结论只有一个：针对这组固定参数，该公开攻击没有给出低于 128 位目标的路径。</p>
 </div>
 
+<h2 id="adaptive-matrix-attacks">自适应选择矩阵，研究的是另一组实例</h2>
+
+<p><a href="https://eprint.iacr.org/2026/1579">Slipway</a> 与 <a href="https://eprint.iacr.org/2026/1760">Midpoint Reset</a> 都是在轮常数已知后再选择 MDS 矩阵，从而构造一组弱参数。Slipway 让受约束的输入族经过开头的全轮后落入有限子空间轨迹；Midpoint Reset 则利用同一种自由度构造贯穿全部轮次的碰撞。</p>
+
+<p>这对自行生成参数的人很重要。只检查矩阵是否满足 MDS 性质还不够，还必须确认矩阵的选择不依赖轮常数。</p>
+
+<p>但它们没有攻击本文固定的生产实例。两层生产矩阵与完整轮常数表已经写入被钉住的置换，攻击者不能替换矩阵。Midpoint Reset 还要求奇特征素域，而生产实现使用 <code>GF(2^128)</code>。两篇论文都没有给出针对 Parano1d 固定矩阵的碰撞、见证或攻击成本。</p>
+
+<h2 id="sbox-skipping">状态宽度为四时，S 盒跳过法没有新增收益</h2>
+
+<p><a href="https://eprint.iacr.org/2026/1692">From Round Skipping to S-Box Skipping</a> 针对普通 Poseidon CICO-<math-inline>k</math-inline> 模型提出广义子空间限制。它在部分轮层新增的跳过量为 <math-inline>t-2k</math-inline> 个 S 盒。</p>
+
+<p>与生产压缩的两条固定输出通道最接近但并不等同的情形是 CICO-2。代入宽度四后：</p>
+
+<math-block>
+t-2k=4-2\cdot2=0.
+</math-block>
+
+<p>此外，论文约束的是普通 CICO 输出，而不是带左输入前馈的输出方程。因此，它没有额外跳过任何部分轮，也没有为这套压缩给出更低成本。上文根据附录 A 得到的结果仍是适用的 round-skipping 计算。</p>
+
+<h2 id="nonlinear-subspaces">非线性子空间确实适用于固定矩阵</h2>
+
+<p><a href="https://eprint.iacr.org/2026/1792">Beyond Linear Subspace Trails</a> 不能用“状态宽度不同”或“矩阵可自适应选择”来排除。它面向压缩模式的构造可以专门化到这组精确的生产几何。</p>
+
+<p>摘要包含两个域元素，因此可用约束预算为：</p>
+
+<math-block>
+E_c=t-d=4-2=2.
+</math-block>
+
+<p>每个部分轮只有一个 S 盒处于活跃状态。线性子空间可以覆盖两个部分轮，新的非线性构造则可以覆盖四个。使用更长轨迹之前，论文要求对具体内部矩阵做秩检验。把生产内部矩阵分块为 <math-inline>A,B,C,D</math-inline> 后得到：</p>
+
+<math-block>
+N_e=BSC A^{-1}-1,\qquad S=D-CA^{-1}B.
+</math-block>
+
+<p>在实际生产域中，这个 <math-inline>1\times1</math-inline> 核为：</p>
+
+<math-block>
+N_e=\mathtt{0xbe32}\neq 0.
+</math-block>
+
+<p>秩条件成立。四轮非线性轨迹确实存在于这组内部矩阵上，但它只覆盖 58 个部分轮中的 4 个。</p>
+
+<p>随后，我用生产轮数配置与论文的 <math-inline>\omega=2</math-inline> 投影，计算了四种适用的 Macaulay 模型：</p>
+
+<div class="table-wrap"><table>
+  <thead><tr><th>模型</th><th>最佳位置</th><th>变量数</th><th><math-inline>\log_2(C^2)</math-inline></th></tr></thead>
+  <tbody>
+    <tr><td>前向、代换、线性</td><td><math-inline>\tau=28</math-inline></td><td>6</td><td>1090.060133886114</td></tr>
+    <tr><td>前向、代换、非线性</td><td><math-inline>\tau=27</math-inline></td><td>8</td><td>1403.209025315336</td></tr>
+    <tr><td>前向、不代换、线性</td><td>直接计算</td><td>4</td><td>1022.830074998558</td></tr>
+    <tr><td>前向、不代换、非线性</td><td>直接计算</td><td>4</td><td>1022.830074998558</td></tr>
+  </tbody>
+</table></div>
+
+<p>在宽度四的实例中，代换引入的额外变量比延长非线性轨迹所节省的成本更高。这个攻击族的最低投影来自不使用代换的线性模型，仍远高于 ePrint 2026/306 给出的 <math-inline>409.873818620410</math-inline> 前馈投影。因此，先前的结果仍是成本更低、也更强的适用攻击模型。</p>
+
+<div class="note">
+  <strong>这是攻击模型的迁移，不是一次碰撞</strong>
+  <p>论文在 <math-inline>F_p</math-inline> 上定义其构造，并在素域实例上报告半正则性实验。这里仅迁移代数构造，所有矩阵运算与秩检验都直接在实际的 <code>GF(2^128)</code> 中完成，四个复杂度表达式也重新计算。所得数字是压缩原语的原像模型工作量投影，不是 1022 位安全性，也不是具体的生产碰撞或有效树可达性见证。</p>
+</div>
+
 <h2 id="why-poseidon2b">为什么在二元域里选择 Poseidon2b</h2>
 
 <p>Parano1d 不是只优化一次证明生成。矿工为每个区块生成一份递归 HistoryStep，随后所有全节点都要验证它。新节点同步当前 State 时，也会经过同一条验证路径。这是一套“生成一次、处处验证”的网络。</p>
@@ -116,11 +179,11 @@ d_I
 
 <h2 id="executable-correspondence">让参数变化自动推翻旧审计</h2>
 
-<p>一份只写在文章里的审计很容易失效。<a href="https://github.com/ignotusnemo/parano1d-soundness/blob/c3ea3342fbe27111c84046613010f14f13b917c6/src/poseidon2b_cryptanalysis.rs">可执行密码分析对照</a>会先读取冻结的生产参数，再计算附录 A 的专门化结果。</p>
+<p>一份只写在文章里的审计很容易失效。<a href="https://github.com/ignotusnemo/parano1d/blob/3cc1a652d550be236bd7796a2fec88f7a650d98e/noid_soundness/src/poseidon2b_cryptanalysis.rs">可执行密码分析对照</a>会先读取被钉住的生产参数，再计算两类真正适用的攻击模型。</p>
 
-<p>检查项包括域宽、状态宽度、速率、摘要长度、S 盒、完整轮数、两层线性矩阵和 Merkle 压缩模式。审计还钉住了所审论文版本及其 PDF 哈希。任何一项发生变化，旧审计都会直接失败，不会继续把旧结论显示在新原语旁边。</p>
+<p>检查项包括域宽、状态宽度、速率、摘要长度、S 盒、完整轮数、两层线性矩阵和 Merkle 压缩模式。审计还钉住了每篇已审论文的版本及其 PDF 哈希。任何一项发生变化，旧审计都会直接失败，不会继续把旧结论显示在新原语旁边。</p>
 
-<p>完整推导见 <a href="https://github.com/ignotusnemo/parano1d-soundness/blob/c3ea3342fbe27111c84046613010f14f13b917c6/docs/category-one.md#current-poseidon2b-cryptanalysis">Category 1 文档</a>，对应的生产实现保存在<a href="https://github.com/ignotusnemo/parano1d/tree/fedbe6e3c0ddf8b8372546017bb9bc341acb8ab0/noid_poseidon2b">固定源码版本</a>中。</p>
+<p>推导见 <a href="https://github.com/ignotusnemo/parano1d/blob/3cc1a652d550be236bd7796a2fec88f7a650d98e/noid_soundness/docs/category-one.md#current-poseidon2b-cryptanalysis">Category 1 文档</a>，另有<a href="https://github.com/ignotusnemo/parano1d/blob/3cc1a652d550be236bd7796a2fec88f7a650d98e/noid_soundness/docs/poseidon2b-august-2026.md">逐篇论文的完整审查记录</a>。对应的<a href="https://github.com/ignotusnemo/parano1d/tree/3cc1a652d550be236bd7796a2fec88f7a650d98e/noid_poseidon2b">生产实现</a>固定在同一源码版本。</p>
 
 <h2 id="the-claim">本文的结论</h2>
 

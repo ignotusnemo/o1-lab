@@ -17,9 +17,9 @@
     "title": "Poseidon2b 是安全的！",
     "shortTitle": "精确的 Poseidon2b 实例",
     "dek": "安全性属于具体实例。先固定 GF(2^128)、四字状态、矩阵、8+58 轮与前馈压缩模式，再逐项套用公开攻击。",
-    "abstract": "本文把 Parano1d 实际部署的完整 Poseidon2b 参数与现有密码分析逐项对应。ePrint 2026/306 的宽状态跳轮攻击不适用于该实例，但附录 A 的前馈压缩攻击确实适用，因此被单独专门化并写成可执行审计。在论文模型下，该经典代数攻击的工作量投影约为 2^409.8738。这个数字不是安全位数，只说明针对固定生产实例，该公开攻击没有给出低于 128 位目标的路径。",
-    "keywords": ["Poseidon2b", "Poseidon2", "代数密码分析", "二进制域", "GF(2^128)", "Skipping Class", "Merkle 压缩", "Parano1d"],
-    "evidence": ["“Poseidon2b 是安全的”讨论", "Skipping Class 代数攻击", "可执行 Poseidon2b 密码分析审计", "精确推导与适用范围", "固定版本的生产实现", "Binius 参考基准", "与源码版本绑定的公开密码分析任务"]
+    "abstract": "本文把 Parano1d 的精确生产实例与已公开的 Poseidon2b 代数攻击逐项对应。ePrint 2026/306 的前馈模型可以应用，工作量投影约为 2^409.8738。ePrint 2026/1792 的非线性子空间构造在 GF(2^128) 上通过精确秩检验后同样可以迁移，但其最低投影约为 2^1022.8301。自适应选取矩阵的攻击和新的 S 盒跳过结果都不能迁移到固定的四字压缩实例。这些数字是特定攻击模型的投影，不是安全位数。",
+    "keywords": ["Poseidon2b", "Poseidon2", "代数密码分析", "二进制域", "GF(2^128)", "Skipping Class", "S 盒跳过", "非线性子空间", "Gröbner 基", "Merkle 压缩", "Parano1d"],
+    "evidence": ["“Poseidon2b 是安全的”讨论", "Skipping Class 代数攻击", "Slipway 有限子空间轨迹", "从跳轮到跳过 S 盒", "Midpoint Reset", "用于 Gröbner 基攻击的非线性子空间", "可执行 Poseidon2b 密码分析审计", "逐篇论文的完整审查", "精确推导与适用范围", "固定版本的生产实现", "Binius 参考基准", "与源码版本绑定的公开密码分析任务"]
   },
   "parano1d-nist-pqc-category-one": {
     "kind": "安全性分析",
