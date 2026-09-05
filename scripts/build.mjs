@@ -559,7 +559,7 @@ function shell({
   const alternates = locales.map((target) => `<link rel="alternate" hreflang="${target.hreflang}" href="${absolute(pathFor(target, basePath))}">`).join("\n  ");
   const ogAlternates = locales.filter((target) => target.code !== locale.code).map((target) => `<meta property="og:locale:alternate" content="${target.ogLocale}">`).join("\n  ");
   const articleMeta = indexable && article
-    ? `<meta property="article:published_time" content="${esc(article.date)}T00:00:00Z">
+    ? `<meta property="article:published_time" content="${esc(article.date)}T00:00:00Z">${article.updated ? `\n  <meta property="article:modified_time" content="${esc(article.updated)}T00:00:00Z">` : ""}
   <meta property="article:section" content="${esc(article.topic)}">
   ${article.authors.map((author) => `<meta property="article:author" content="${esc(author)}">`).join("\n  ")}`
     : "";
@@ -778,7 +778,7 @@ function articlePage(item, index, locale, newestFirst) {
     headline: item.title,
     description: item.abstract,
     datePublished: item.date,
-    dateModified: item.date,
+    dateModified: item.updated ?? item.date,
     url: canonical,
     mainEntityOfPage: canonical,
     inLanguage: locale.htmlLang,
@@ -839,8 +839,8 @@ function rss(locale, newestFirst) {
 
 function sitemap() {
   const basePaths = ["/", "/research/", ...baseData.map((item) => `/research/${item.slug}/`)];
-  const newestDate = baseData.map((item) => item.date).sort().at(-1);
-  const dates = new Map(baseData.map((item) => [`/research/${item.slug}/`, item.date]));
+  const newestDate = baseData.map((item) => item.updated ?? item.date).sort().at(-1);
+  const dates = new Map(baseData.map((item) => [`/research/${item.slug}/`, item.updated ?? item.date]));
   return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${basePaths.flatMap((basePath) => locales.map((locale) => `<url><loc>${absolute(pathFor(locale, basePath))}</loc><lastmod>${dates.get(basePath) ?? newestDate}</lastmod>${locales.map((alternate) => `<xhtml:link rel="alternate" hreflang="${alternate.hreflang}" href="${absolute(pathFor(alternate, basePath))}"/>`).join("")}<xhtml:link rel="alternate" hreflang="x-default" href="${absolute(pathFor(defaultLocale, basePath))}"/></url>`)).join("")}</urlset>`;
 }
 

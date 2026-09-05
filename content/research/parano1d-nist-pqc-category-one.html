@@ -1,6 +1,6 @@
 <p>NIST Category 1 compares the resources required by an attack with exhaustive key search against AES-128. Its depth-aware model counts logical quantum gates, limits circuit depth and asks whether an attack can reach its target success probability inside that envelope.</p>
 
-<p>For Parano1d, the target event is acceptance of a terminal State outside the set produced by valid executions from genesis. The production proof profile meets the NIST Post-Quantum Cryptography Category 1 resource target. At the complete NIST envelope, the ideal quantum-random-oracle bound is <math-inline>0.053364140323608411</math-inline>. The dominant half-success gate-depth floor is <math-inline>2^{173.273866314232}</math-inline>, which is <math-inline>3.273866314232</math-inline> bits above the NIST <math-inline>2^{170}</math-inline> reference.</p>
+<p>For Parano1d, the target event is acceptance of a terminal State outside the set produced by valid executions from genesis. The production proof profile meets the NIST Post-Quantum Cryptography Category 1 resource target. At the complete NIST envelope, the ideal quantum-random-oracle bound is <math-inline>0.049330348213215253</math-inline>. The dominant half-success gate-depth floor is <math-inline>2^{173.391078499301}</math-inline>, which is <math-inline>3.391078499301</math-inline> bits above the NIST <math-inline>2^{170}</math-inline> reference.</p>
 
 <div class="table-wrap"><table>
   <thead><tr><th>Security statement</th><th>Production result</th></tr></thead>
@@ -9,10 +9,10 @@
     <tr><td>Reference primitive</td><td>AES-128 exhaustive key search</td></tr>
     <tr><td>NIST gate-depth reference</td><td><math-inline>GD=2^{170}</math-inline></td></tr>
     <tr><td>NIST MAXDEPTH values evaluated</td><td><math-inline>2^{40}</math-inline>, <math-inline>2^{64}</math-inline> and <math-inline>2^{96}</math-inline></td></tr>
-    <tr><td>Dominant half-success gate-depth floor</td><td><strong><math-inline>2^{173.273866314232}</math-inline></strong></td></tr>
-    <tr><td>Margin over the NIST reference</td><td><strong>3.273866314232 bits</strong></td></tr>
-    <tr><td>Complete ideal success bound at the NIST envelope</td><td><strong><math-inline>0.053364140323608411</math-inline></strong></td></tr>
-    <tr><td>Sufficient fixed-Poseidon2b condition</td><td><math-inline>\Delta_{\mathrm{P2b}}^{\mathrm{Cat1}} \lt 0.446635859676391589</math-inline></td></tr>
+    <tr><td>Dominant half-success gate-depth floor</td><td><strong><math-inline>2^{173.391078499301}</math-inline></strong></td></tr>
+    <tr><td>Margin over the NIST reference</td><td><strong>3.391078499301 bits</strong></td></tr>
+    <tr><td>Complete ideal success bound at the NIST envelope</td><td><strong><math-inline>0.049330348213215253</math-inline></strong></td></tr>
+    <tr><td>Sufficient fixed-Poseidon2b condition</td><td><math-inline>\Delta_{\mathrm{P2b}}^{\mathrm{Cat1}} \lt 0.450669651786784747</math-inline></td></tr>
     <tr><td>NIST Post-Quantum Cryptography category</td><td><strong>Category 1</strong></td></tr>
   </tbody>
 </table></div>
@@ -33,7 +33,7 @@
 
 <h2 id="production-instance">The production instance</h2>
 
-<p>The certificate is integrated into Parano1d. <a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_soundness/src/parameters.rs"><code>ProductionParameters::load</code></a> imports the wallet ledger and geometry, both History PCS profiles, the BaseFold query count, the wide-challenge support and the fixed Poseidon2b profile directly from the crates used by the production prover and verifier. The <a href="https://github.com/ignotusnemo/parano1d/releases/tag/v1.0.1">current mainnet release</a> contains this source-linked certificate.</p>
+<p>The certificate is integrated into Parano1d. <a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_soundness/src/parameters.rs"><code>ProductionParameters::load</code></a> imports the wallet ledger and geometry, both History PCS profiles, the BaseFold query count, the wide-challenge support and the fixed Poseidon2b profile directly from the crates used by the production prover and verifier. The <a href="https://github.com/ignotusnemo/parano1d/commit/7f65daaae414128aa4377ca0ac1e96fd6dbc31a5">pinned analysis revision</a> contains this source-linked certificate.</p>
 
 <div class="table-wrap"><table>
   <thead><tr><th>Input</th><th>Production value</th></tr></thead>
@@ -59,12 +59,16 @@
 
 <h3 id="wallet">Wallet authorization</h3>
 
+<p>The September 5, 2026 refinement uses distance radius <math-inline>4/5</math-inline> at the unchanged wallet rate <math-inline>1/32</math-inline>. Multiplicity-three Guruswami–Sudan interpolation bounds each list by 17 candidates. The correlated-agreement argument uses proximity multiplicity eight and preserves the common agreement set through the grouped additive folds. The <a href="https://github.com/ignotusnemo/parano1d/blob/7f65daaae414128aa4377ca0ac1e96fd6dbc31a5/noid_soundness/docs/wallet-johnson.md">complete wallet derivation</a> gives every finite interpolation margin and exceptional-set count.</p>
+
+<p>The eight proximity envelopes sum to <math-inline>701201954824</math-inline>. Adding <math-inline>17^2(156+7)=47107</math-inline> algebraic roots covers fixed-origin candidate switching and the upper-link multilinear across the 3+4 fold groups. This improves the local query exponent to <math-inline>150.925326167679</math-inline> bits without changing queries, matrices or proof formats. It does not change the Category 1 classification, classical FS-FRI result or sequential ideal-QROM boundary.</p>
+
 <p>The wallet has one query-position escape term and one union of algebraic bad coins:</p>
 
 <math-block>
-\kappa_{W,q}=\left(\frac{15}{64}\right)^{65},
+\kappa_{W,q}=\left(\frac{1}{5}\right)^{65},
 \qquad
-\kappa_{W,f}=\frac{29\,163\,918\,888}{2^{255}}.
+\kappa_{W,f}=\frac{701\,202\,001\,931}{2^{255}}.
 </math-block>
 
 <p>These belong to different verifier moves. Generalized round-by-round error takes the largest conditional escape probability:</p>
@@ -257,7 +261,7 @@ g_0d_0=200\,343\,274\,560.
 
 <h2 id="category-calculation">The Category 1 calculation</h2>
 
-<p>The resource theorem evaluates wallet query and field events together with History query, proximity, candidate-switching and joint-sidecar events. At the exact resource-aware optimum <math-inline>m=318983</math-inline>, the largest ratio <math-inline>\kappa_j/(g_jd_j)</math-inline> is the wallet query event.</p>
+<p>The resource theorem evaluates wallet query and field events together with History query, proximity, candidate-switching and joint-sidecar events. At the exact resource-aware optimum <math-inline>m=318983</math-inline>, the largest ratio <math-inline>\kappa_j/(g_jd_j)</math-inline> is the History query event.</p>
 
 <p>Solving the main term for success probability one half gives</p>
 
@@ -270,10 +274,10 @@ GD_{1/2}^{\mathrm{main}}
 
 <math-block>
 \log_2 GD_{1/2}^{\mathrm{main}}
-=173.273866314232\ldots
+=173.391078499301\ldots
 </math-block>
 
-<p>At the NIST envelope <math-inline>GD=2^{170}</math-inline>, the main term is at most <math-inline>0.051693750450980417</math-inline>. Two finite terms still have to be added.</p>
+<p>At the NIST envelope <math-inline>GD=2^{170}</math-inline>, the main term is at most <math-inline>0.047659958340587260</math-inline>. Two finite terms still have to be added.</p>
 
 <p>For every NIST depth point, the calculator derives the maximum number of cheapest coherent responses and sequential rounds from</p>
 
@@ -290,17 +294,17 @@ R=\left\lfloor\frac{D}{d_0}\right\rfloor.
 <div class="table-wrap"><table>
   <thead><tr><th>Category 1 term</th><th>Upper bound</th></tr></thead>
   <tbody>
-    <tr><td>Typed main term</td><td><math-inline>0.051693750450980417</math-inline></td></tr>
+    <tr><td>Typed main term</td><td><math-inline>0.047659958340587260</math-inline></td></tr>
     <tr><td>Finite extraction and transcript term</td><td><math-inline>0.000199022715317804</math-inline></td></tr>
     <tr><td>Global 256-bit collision term</td><td><math-inline>0.001471367157310191</math-inline></td></tr>
-    <tr><td><strong>Complete ideal envelope</strong></td><td><strong><math-inline>0.053364140323608411</math-inline></strong></td></tr>
+    <tr><td><strong>Complete ideal envelope</strong></td><td><strong><math-inline>0.049330348213215253</math-inline></strong></td></tr>
   </tbody>
 </table></div>
 
 <math-block>
 \boxed{
 \varepsilon_{\mathrm{ideal}}^{\mathrm{Cat1}}
-\le0.053364140323608411\lt\frac12.}
+\le0.049330348213215253\lt\frac12.}
 </math-block>
 
 <h2 id="fixed-poseidon">The fixed Poseidon2b boundary</h2>
@@ -319,7 +323,7 @@ R=\left\lfloor\frac{D}{d_0}\right\rfloor.
 <math-block>
 \boxed{
 \Delta_{\mathrm{P2b}}^{\mathrm{Cat1}}
-\lt0.446635859676391589.}
+\lt0.450669651786784747.}
 </math-block>
 
 <p>This is an event-specific compiler deviation for the exact public Poseidon2b permutation, transcript framing and domain separation. The <a href="https://cic.iacr.org/p/2/4/15/pdf">Poseidon2b paper</a> supplies the fixed permutation parameters and their cryptanalysis; the inequality above states the additional quantum-instantiation condition used by the end-to-end theorem.</p>
@@ -336,11 +340,11 @@ R=\left\lfloor\frac{D}{d_0}\right\rfloor.
 
 <p>All normative probabilities and optimizer boundaries use arbitrary-size integers and reduced rational numbers. Upper bounds are rounded upward. Sufficient fixed-permutation headroom is rounded downward. Floating-point logarithms are descriptive and never decide the result.</p>
 
-<p>Clone the current mainnet release and reproduce the production report:</p>
+<p>Clone the pinned analysis revision and reproduce the production report:</p>
 
 <pre><code>git clone https://github.com/ignotusnemo/parano1d.git
 cd parano1d
-git checkout v1.0.1
+git checkout 7f65daaae414128aa4377ca0ac1e96fd6dbc31a5
 cargo run --release --locked -p noid_soundness</code></pre>
 
 <p>Print every reduced rational value and optimizer boundary:</p>

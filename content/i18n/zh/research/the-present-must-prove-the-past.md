@@ -441,7 +441,7 @@ Fiat-Shamir 挑战值
 这项定理要得出实际部署配置达到 Category 1 的结论，需要两个明确前提。固定的实际部署 Poseidon2b 编译实现必须满足：
 
 ```text
-Delta_P2b^C1 < 0.446635859676391589
+Delta_P2b^C1 < 0.450669651786784747
 ```
 
 同时，定理给出的相干预言机响应所需逻辑门数量与电路深度成本下界也必须成立。
@@ -449,7 +449,7 @@ Delta_P2b^C1 < 0.446635859676391589
 在理想模型中，成功概率达到二分之一所需的主导门数与深度乘积下界为：
 
 ```text
-2^173.273866314232
+2^173.391078499301
 ```
 
 在同一套考虑电路深度的模型中，[NIST AES-128 Category 1 参考值](https://csrc.nist.gov/projects/post-quantum-cryptography/post-quantum-cryptography-standardization/evaluation-criteria/security-%28evaluation-criteria%29)为：
@@ -461,7 +461,7 @@ Delta_P2b^C1 < 0.446635859676391589
 Category 1 资源范围内，理想模型给出的完整成功概率上界为：
 
 ```text
-0.053364140323608411 < 1/2
+0.049330348213215253 < 1/2
 ```
 
 在上述两个前提成立时，为固定 Poseidon2b 预留的余量仍足以保证：在整个 Category 1 资源范围内，攻击实际部署系统的总成功概率都低于 `1/2`。完整定理、全部前提、直接关联实际部署代码的参数与可执行算术，均发布在 Parano1d 仓库内置的 [`noid_soundness` 证书](https://github.com/ignotusnemo/parano1d/tree/main/noid_soundness)中。

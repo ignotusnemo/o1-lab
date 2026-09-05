@@ -38,12 +38,13 @@
   <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/the-present-must-prove-the-past.png">
   <meta name="twitter:image:alt" content="The Present Must Prove the Past">
   <meta property="article:published_time" content="2026-08-09T00:00:00Z">
+  <meta property="article:modified_time" content="2026-09-05T00:00:00Z">
   <meta property="article:section" content="Proof-carrying State">
   <meta property="article:author" content="Ignotus Nemo">
   <title>The Present Must Prove the Past · Parano1d Lab</title>
   <link rel="stylesheet" href="/assets/site.css?v=d1220c6cc2cf">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"The Present Must Prove the Past","description":"Parano1d перенёс источник валидности текущего состояния из накопленной истории исполнения в само настоящее. Весь путь валидности от genesis до текущего состояния покрыт исполнимой теоремой о сквозной постквантовой корректности на ресурсном пороге NIST Category 1.","datePublished":"2026-08-09","dateModified":"2026-08-09","url":"https://lab.parano1d.org/ru/research/the-present-must-prove-the-past/","mainEntityOfPage":"https://lab.parano1d.org/ru/research/the-present-must-prove-the-past/","inLanguage":"ru","isAccessibleForFree":true,"citation":["https://eprint.iacr.org/2024/1161"],"author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/the-present-must-prove-the-past.png","about":"Proof-carrying State"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"The Present Must Prove the Past","description":"Parano1d перенёс источник валидности текущего состояния из накопленной истории исполнения в само настоящее. Весь путь валидности от genesis до текущего состояния покрыт исполнимой теоремой о сквозной постквантовой корректности на ресурсном пороге NIST Category 1.","datePublished":"2026-08-09","dateModified":"2026-09-05","url":"https://lab.parano1d.org/ru/research/the-present-must-prove-the-past/","mainEntityOfPage":"https://lab.parano1d.org/ru/research/the-present-must-prove-the-past/","inLanguage":"ru","isAccessibleForFree":true,"citation":["https://eprint.iacr.org/2024/1161"],"author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/the-present-must-prove-the-past.png","about":"Proof-carrying State"}</script>
 </head>
 <body class="locale-ru">
   <a class="skip-link" href="#content">К содержанию</a>
@@ -234,14 +235,14 @@
 <p>при target 128 bits.</p>
 <p><a href="https://lab.parano1d.org/research/parano1d-nist-pqc-category-one/" target="_blank" rel="noopener noreferrer">Отдельная исполняемая теорема в quantum random-oracle model</a> рассматривает всю invalid-<code>State</code> game от genesis против одного stateful quantum adversary. Все представленные предки учитываются в рамках единого бюджета ресурсов противника.</p>
 <p>Вывод о достижении Category 1 для production profile имеет две явные предпосылки. Для фиксированного production compiler Poseidon2b должно выполняться:</p>
-<figure class="flagship-diagram flagship-diagram--bound diagram-bound--16" aria-label="Delta_P2b^C1 &lt; 0.446635859676391589"><div class="diagram-bound-value">Δ<sub>P2b</sub><sup>C1</sup> &lt; 0.446635859676391589</div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
+<figure class="flagship-diagram flagship-diagram--bound diagram-bound--16" aria-label="Delta_P2b^C1 &lt; 0.450669651786784747"><div class="diagram-bound-value">Δ<sub>P2b</sub><sup>C1</sup> &lt; 0.450669651786784747</div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
 <p>Также должна выполняться заявленная нижняя граница стоимости coherent oracle responses по числу логических вентилей и глубине.</p>
 <p>В идеальной модели доминирующая граница произведения числа вентилей на глубину для успеха с вероятностью <code>1/2</code> составляет:</p>
-<figure class="flagship-diagram flagship-diagram--bound diagram-bound--17" aria-label="2^173.273866314232"><div class="diagram-bound-value">2<sup>173.273866314232</sup></div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
+<figure class="flagship-diagram flagship-diagram--bound diagram-bound--17" aria-label="2^173.391078499301"><div class="diagram-bound-value">2<sup>173.391078499301</sup></div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
 <p><a href="https://csrc.nist.gov/projects/post-quantum-cryptography/post-quantum-cryptography-standardization/evaluation-criteria/security-%28evaluation-criteria%29" target="_blank" rel="noopener noreferrer">Ресурсный ориентир NIST для AES-128 Category 1</a> в той же модели с учётом глубины составляет:</p>
 <figure class="flagship-diagram flagship-diagram--bound diagram-bound--18" aria-label="2^170"><div class="diagram-bound-value">2<sup>170</sup></div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
 <p>Полная граница вероятности успеха в идеальной модели внутри Category 1 envelope:</p>
-<figure class="flagship-diagram flagship-diagram--bound diagram-bound--19" aria-label="0.053364140323608411 &lt; 1/2"><div class="diagram-bound-value">0.053364140323608411 &lt; 1/2</div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
+<figure class="flagship-diagram flagship-diagram--bound diagram-bound--19" aria-label="0.049330348213215253 &lt; 1/2"><div class="diagram-bound-value">0.049330348213215253 &lt; 1/2</div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
 <p>При выполнении двух предпосылок запас для фиксированного Poseidon2b сохраняет полную вероятность успешной атаки на production profile ниже <code>1/2</code> во всей ресурсной области Category 1. Полная теорема, предпосылки, напрямую связанные с production-кодом параметры и исполняемая арифметика опубликованы во встроенном сертификате <a href="https://github.com/ignotusnemo/parano1d/tree/main/noid_soundness" target="_blank" rel="noopener noreferrer"> 1 </a>.</p>
 <p>Важны не только числа, но и область утверждения.</p>
 <p>Не отдельная подпись.</p>

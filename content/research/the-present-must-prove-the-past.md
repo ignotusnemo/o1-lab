@@ -441,7 +441,7 @@ against a 128-bit target.
 Its production Category 1 conclusion has two explicit premises. The fixed production Poseidon2b compiler must satisfy:
 
 ```text
-Delta_P2b^C1 < 0.446635859676391589
+Delta_P2b^C1 < 0.450669651786784747
 ```
 
 The theorem's stated lower bound on the logical gate and depth cost of coherent oracle responses must also hold.
@@ -449,7 +449,7 @@ The theorem's stated lower bound on the logical gate and depth cost of coherent 
 Inside the ideal model, the dominant half-success gate-depth floor is:
 
 ```text
-2^173.273866314232
+2^173.391078499301
 ```
 
 The [NIST AES-128 Category 1 reference](https://csrc.nist.gov/projects/post-quantum-cryptography/post-quantum-cryptography-standardization/evaluation-criteria/security-%28evaluation-criteria%29) in the same depth-aware model is:
@@ -461,7 +461,7 @@ The [NIST AES-128 Category 1 reference](https://csrc.nist.gov/projects/post-quan
 The complete ideal success bound inside the Category 1 envelope is:
 
 ```text
-0.053364140323608411 < 1/2
+0.049330348213215253 < 1/2
 ```
 
 Under the two stated premises, adding the fixed-Poseidon2b headroom keeps the complete production success probability below `1/2` throughout the Category 1 resource envelope. The full theorem, assumptions, source-linked production parameters, and executable arithmetic are published in the [`noid_soundness` certificate](https://github.com/ignotusnemo/parano1d/tree/main/noid_soundness) inside the Parano1d repository.

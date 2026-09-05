@@ -38,12 +38,13 @@
   <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/the-present-must-prove-the-past.png">
   <meta name="twitter:image:alt" content="当下必须证明过去">
   <meta property="article:published_time" content="2026-08-09T00:00:00Z">
+  <meta property="article:modified_time" content="2026-09-05T00:00:00Z">
   <meta property="article:section" content="Proof-carrying State">
   <meta property="article:author" content="Ignotus Nemo">
   <title>当下必须证明过去 · Parano1d Lab</title>
   <link rel="stylesheet" href="/assets/site.css?v=d1220c6cc2cf">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"当下必须证明过去","description":"Parano1d 已将当前状态有效性的依据从不断累积的执行历史移到了当下本身。从创世区块到当前状态的整条有效性路径，都由一条可执行的端到端后量子可靠性定理支撑，并达到 NIST Category 1 的资源阈值。","datePublished":"2026-08-09","dateModified":"2026-08-09","url":"https://lab.parano1d.org/zh/research/the-present-must-prove-the-past/","mainEntityOfPage":"https://lab.parano1d.org/zh/research/the-present-must-prove-the-past/","inLanguage":"zh-Hans","isAccessibleForFree":true,"citation":["https://eprint.iacr.org/2024/1161"],"author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/the-present-must-prove-the-past.png","about":"Proof-carrying State"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"当下必须证明过去","description":"Parano1d 已将当前状态有效性的依据从不断累积的执行历史移到了当下本身。从创世区块到当前状态的整条有效性路径，都由一条可执行的端到端后量子可靠性定理支撑，并达到 NIST Category 1 的资源阈值。","datePublished":"2026-08-09","dateModified":"2026-09-05","url":"https://lab.parano1d.org/zh/research/the-present-must-prove-the-past/","mainEntityOfPage":"https://lab.parano1d.org/zh/research/the-present-must-prove-the-past/","inLanguage":"zh-Hans","isAccessibleForFree":true,"citation":["https://eprint.iacr.org/2024/1161"],"author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/the-present-must-prove-the-past.png","about":"Proof-carrying State"}</script>
 </head>
 <body class="locale-zh">
   <a class="skip-link" href="#content">跳到正文</a>
@@ -234,14 +235,14 @@
 <p>目标安全性为 128 位。</p>
 <p><a href="https://lab.parano1d.org/research/parano1d-nist-pqc-category-one/" target="_blank" rel="noopener noreferrer">另一项可执行定理则在量子随机预言机模型中</a>，针对一个有状态量子对手，分析从创世区块开始、使验证者接受无效 <code>State</code> 的完整安全游戏，并在同一个对手资源预算下计入递归证明所表示的全部祖先。</p>
 <p>这项定理要得出实际部署配置达到 Category 1 的结论，需要两个明确前提。固定的实际部署 Poseidon2b 编译实现必须满足：</p>
-<figure class="flagship-diagram flagship-diagram--bound diagram-bound--16" aria-label="Delta_P2b^C1 &lt; 0.446635859676391589"><div class="diagram-bound-value">Δ<sub>P2b</sub><sup>C1</sup> &lt; 0.446635859676391589</div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
+<figure class="flagship-diagram flagship-diagram--bound diagram-bound--16" aria-label="Delta_P2b^C1 &lt; 0.450669651786784747"><div class="diagram-bound-value">Δ<sub>P2b</sub><sup>C1</sup> &lt; 0.450669651786784747</div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
 <p>同时，定理给出的相干预言机响应所需逻辑门数量与电路深度成本下界也必须成立。</p>
 <p>在理想模型中，成功概率达到二分之一所需的主导门数与深度乘积下界为：</p>
-<figure class="flagship-diagram flagship-diagram--bound diagram-bound--17" aria-label="2^173.273866314232"><div class="diagram-bound-value">2<sup>173.273866314232</sup></div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
+<figure class="flagship-diagram flagship-diagram--bound diagram-bound--17" aria-label="2^173.391078499301"><div class="diagram-bound-value">2<sup>173.391078499301</sup></div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
 <p>在同一套考虑电路深度的模型中，<a href="https://csrc.nist.gov/projects/post-quantum-cryptography/post-quantum-cryptography-standardization/evaluation-criteria/security-%28evaluation-criteria%29" target="_blank" rel="noopener noreferrer">NIST AES-128 Category 1 参考值</a>为：</p>
 <figure class="flagship-diagram flagship-diagram--bound diagram-bound--18" aria-label="2^170"><div class="diagram-bound-value">2<sup>170</sup></div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
 <p>Category 1 资源范围内，理想模型给出的完整成功概率上界为：</p>
-<figure class="flagship-diagram flagship-diagram--bound diagram-bound--19" aria-label="0.053364140323608411 &lt; 1/2"><div class="diagram-bound-value">0.053364140323608411 &lt; 1/2</div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
+<figure class="flagship-diagram flagship-diagram--bound diagram-bound--19" aria-label="0.049330348213215253 &lt; 1/2"><div class="diagram-bound-value">0.049330348213215253 &lt; 1/2</div><div class="diagram-bound-rule" aria-hidden="true"><span></span></div></figure>
 <p>在上述两个前提成立时，为固定 Poseidon2b 预留的余量仍足以保证：在整个 Category 1 资源范围内，攻击实际部署系统的总成功概率都低于 <code>1/2</code>。完整定理、全部前提、直接关联实际部署代码的参数与可执行算术，均发布在 Parano1d 仓库内置的 <a href="https://github.com/ignotusnemo/parano1d/tree/main/noid_soundness" target="_blank" rel="noopener noreferrer"> 1  证书</a>中。</p>
 <p>数字很重要。</p>
 <p>结论覆盖的范围更重要。</p>

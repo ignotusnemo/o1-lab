@@ -1,6 +1,7 @@
 [
   {
     "slug": "the-present-must-prove-the-past",
+    "updated": "2026-09-05",
     "date": "2026-08-09",
     "kind": "Protocol architecture",
     "topic": "Proof-carrying State",
@@ -60,6 +61,7 @@
   },
   {
     "slug": "parano1d-nist-pqc-category-one",
+    "updated": "2026-09-05",
     "date": "2026-08-05",
     "kind": "Security analysis",
     "topic": "Post-quantum soundness",
@@ -68,7 +70,7 @@
     "title": "Parano1d meets NIST PQC Category 1",
     "shortTitle": "NIST PQC Category 1",
     "dek": "An executable end-to-end theorem accounts for the complete recursive State proof, parallel quantum-oracle access, coherent Poseidon2b response cost and every NIST MAXDEPTH point.",
-    "abstract": "Parano1d's production soundness profile is evaluated in the quantum random-oracle model against the NIST Category 1 resource reference for AES-128 key search. The proof begins with the exact wallet and HistoryStep relations, composes every represented root into one invalid-State event, converts typed parallel oracle access into logical gates and circuit depth, and includes finite extraction and collision terms. At the NIST gate-depth envelope, the complete ideal success bound is 0.053364140323608411. The dominant half-success floor is 173.273866314232 bits, 3.273866314232 bits above the 2^170 reference.",
+    "abstract": "Parano1d's production soundness profile is evaluated in the quantum random-oracle model against the NIST Category 1 resource reference for AES-128 key search. The proof begins with the exact wallet and HistoryStep relations, composes every represented root into one invalid-State event, converts typed parallel oracle access into logical gates and circuit depth, and includes finite extraction and collision terms. At the NIST gate-depth envelope, the complete ideal success bound is 0.049330348213215253. The dominant half-success floor is 173.391078499301 bits, 3.391078499301 bits above the 2^170 reference.",
     "authors": ["Ignotus Nemo"],
     "art": "categoryone",
     "heroImage": "/assets/parano1d-nist-pqc-category-one-hero.webp",

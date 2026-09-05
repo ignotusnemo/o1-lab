@@ -441,7 +441,7 @@ represented ancestors
 Вывод о достижении Category 1 для production profile имеет две явные предпосылки. Для фиксированного production compiler Poseidon2b должно выполняться:
 
 ```text
-Delta_P2b^C1 < 0.446635859676391589
+Delta_P2b^C1 < 0.450669651786784747
 ```
 
 Также должна выполняться заявленная нижняя граница стоимости coherent oracle responses по числу логических вентилей и глубине.
@@ -449,7 +449,7 @@ Delta_P2b^C1 < 0.446635859676391589
 В идеальной модели доминирующая граница произведения числа вентилей на глубину для успеха с вероятностью `1/2` составляет:
 
 ```text
-2^173.273866314232
+2^173.391078499301
 ```
 
 [Ресурсный ориентир NIST для AES-128 Category 1](https://csrc.nist.gov/projects/post-quantum-cryptography/post-quantum-cryptography-standardization/evaluation-criteria/security-%28evaluation-criteria%29) в той же модели с учётом глубины составляет:
@@ -461,7 +461,7 @@ Delta_P2b^C1 < 0.446635859676391589
 Полная граница вероятности успеха в идеальной модели внутри Category 1 envelope:
 
 ```text
-0.053364140323608411 < 1/2
+0.049330348213215253 < 1/2
 ```
 
 При выполнении двух предпосылок запас для фиксированного Poseidon2b сохраняет полную вероятность успешной атаки на production profile ниже `1/2` во всей ресурсной области Category 1. Полная теорема, предпосылки, напрямую связанные с production-кодом параметры и исполняемая арифметика опубликованы во встроенном сертификате [`noid_soundness`](https://github.com/ignotusnemo/parano1d/tree/main/noid_soundness).

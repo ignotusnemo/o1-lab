@@ -1,6 +1,6 @@
 <p>NIST Category 1 把攻击所需资源与 AES-128 密钥穷举进行比较。评估同时计算量子逻辑门数并限制电路深度，以判断攻击能否在给定的资源边界内达到目标成功概率。</p>
 
-<p>对 Parano1d 而言，目标事件是验证器接受一个位于有效创世执行可达集合之外的终端状态。实际部署的证明配置达到 NIST Post-Quantum Cryptography Category 1 资源目标。在完整的 NIST 资源边界上，理想量子随机预言机模型中的上界为 <math-inline>0.053364140323608411</math-inline>。成功概率达到二分之一时，门数与深度乘积的主导下界为 <math-inline>2^{173.273866314232}</math-inline>，比 NIST 的 <math-inline>2^{170}</math-inline> 基准高 <math-inline>3.273866314232</math-inline> 比特。</p>
+<p>对 Parano1d 而言，目标事件是验证器接受一个位于有效创世执行可达集合之外的终端状态。实际部署的证明配置达到 NIST Post-Quantum Cryptography Category 1 资源目标。在完整的 NIST 资源边界上，理想量子随机预言机模型中的上界为 <math-inline>0.049330348213215253</math-inline>。成功概率达到二分之一时，门数与深度乘积的主导下界为 <math-inline>2^{173.391078499301}</math-inline>，比 NIST 的 <math-inline>2^{170}</math-inline> 基准高 <math-inline>3.391078499301</math-inline> 比特。</p>
 
 <div class="table-wrap"><table>
   <thead><tr><th>安全性结论</th><th>实际部署结果</th></tr></thead>
@@ -9,10 +9,10 @@
     <tr><td>参考原语</td><td>AES-128 密钥穷举</td></tr>
     <tr><td>NIST 门数与深度基准</td><td><math-inline>GD=2^{170}</math-inline></td></tr>
     <tr><td>已计算的 NIST MAXDEPTH</td><td><math-inline>2^{40}</math-inline>、<math-inline>2^{64}</math-inline> 与 <math-inline>2^{96}</math-inline></td></tr>
-    <tr><td>成功概率为二分之一时的门数与深度乘积主导下界</td><td><strong><math-inline>2^{173.273866314232}</math-inline></strong></td></tr>
-    <tr><td>高于 NIST 基准的余量</td><td><strong>3.273866314232 比特</strong></td></tr>
-    <tr><td>NIST 资源边界上的理想模型完整成功概率上界</td><td><strong><math-inline>0.053364140323608411</math-inline></strong></td></tr>
-    <tr><td>固定 Poseidon2b 置换的充分条件</td><td><math-inline>\Delta_{\mathrm{P2b}}^{\mathrm{Cat1}} \lt 0.446635859676391589</math-inline></td></tr>
+    <tr><td>成功概率为二分之一时的门数与深度乘积主导下界</td><td><strong><math-inline>2^{173.391078499301}</math-inline></strong></td></tr>
+    <tr><td>高于 NIST 基准的余量</td><td><strong>3.391078499301 比特</strong></td></tr>
+    <tr><td>NIST 资源边界上的理想模型完整成功概率上界</td><td><strong><math-inline>0.049330348213215253</math-inline></strong></td></tr>
+    <tr><td>固定 Poseidon2b 置换的充分条件</td><td><math-inline>\Delta_{\mathrm{P2b}}^{\mathrm{Cat1}} \lt 0.450669651786784747</math-inline></td></tr>
     <tr><td>NIST Post-Quantum Cryptography 类别</td><td><strong>Category 1</strong></td></tr>
   </tbody>
 </table></div>
@@ -33,7 +33,7 @@
 
 <h2 id="production-instance">实际部署参数</h2>
 
-<p>该证书已经集成在 Parano1d 中。<a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_soundness/src/parameters.rs"><code>ProductionParameters::load</code></a> 直接从实际部署的证明器和验证器所使用的 crates 中导入钱包参数登记表与轨迹规模、两套 History PCS 配置、BaseFold 查询数、宽挑战值取值集合以及固定的 Poseidon2b 配置。<a href="https://github.com/ignotusnemo/parano1d/releases/tag/v1.0.1">当前主网版本</a>包含这份与实际部署源码直接关联的证书。</p>
+<p>该证书已经集成在 Parano1d 中。<a href="https://github.com/ignotusnemo/parano1d/blob/main/noid_soundness/src/parameters.rs"><code>ProductionParameters::load</code></a> 直接从实际部署的证明器和验证器所使用的 crates 中导入钱包参数登记表与轨迹规模、两套 History PCS 配置、BaseFold 查询数、宽挑战值取值集合以及固定的 Poseidon2b 配置。<a href="https://github.com/ignotusnemo/parano1d/commit/7f65daaae414128aa4377ca0ac1e96fd6dbc31a5">固定的分析版本</a>包含这份与实际部署源码直接关联的证书。</p>
 
 <div class="table-wrap"><table>
   <thead><tr><th>输入</th><th>实际部署值</th></tr></thead>
@@ -59,12 +59,16 @@
 
 <h3 id="wallet">钱包授权</h3>
 
+<p>2026 年 9 月 5 日的分析改进采用距离半径 <math-inline>4/5</math-inline>，钱包码率仍为 <math-inline>1/32</math-inline>。重数为三的 Guruswami–Sudan 插值将每个列表限制为最多 17 个候选多项式。相关一致性论证使用重数八来估计邻近性，并在分组的加法折叠中保留共同的一致集合。<a href="https://github.com/ignotusnemo/parano1d/blob/7f65daaae414128aa4377ca0ac1e96fd6dbc31a5/noid_soundness/docs/wallet-johnson.md">完整的钱包推导</a>列出了各层有限插值余量及异常集合大小。</p>
+
+<p>八个邻近性异常集合上界之和为 <math-inline>701201954824</math-inline>。再加入 <math-inline>17^2(156+7)=47107</math-inline> 个代数根，覆盖固定初始列表下的候选切换，以及 3+4 折叠组中的上层链接多线性多项式。查询项的局部指数因此提高到 <math-inline>150.925326167679</math-inline> 位，而查询次数、矩阵和证明格式均未改变。Category 1 分类、经典 FS-FRI 结果和顺序理想 QROM 边界保持不变。</p>
+
 <p>钱包包含一个查询未命中被修改位置的逃逸项，以及一个汇总全部不利代数挑战值的项：</p>
 
 <math-block>
-\kappa_{W,q}=\left(\frac{15}{64}\right)^{65},
+\kappa_{W,q}=\left(\frac{1}{5}\right)^{65},
 \qquad
-\kappa_{W,f}=\frac{29\,163\,918\,888}{2^{255}}.
+\kappa_{W,f}=\frac{701\,202\,001\,931}{2^{255}}.
 </math-block>
 
 <p>它们属于不同的验证者步骤。广义逐轮误差取最大的条件逃逸概率：</p>
@@ -257,7 +261,7 @@ g_0d_0=200\,343\,274\,560.
 
 <h2 id="category-calculation">Category 1 计算</h2>
 
-<p>资源定理同时计算钱包查询事件与域上挑战值事件，以及 History 查询、邻近性、候选切换和联合 sidecar 事件。在考虑资源成本时的精确最优值 <math-inline>m=318983</math-inline> 处，最大的 <math-inline>\kappa_j/(g_jd_j)</math-inline> 来自钱包查询事件。</p>
+<p>资源定理同时计算钱包查询事件与域上挑战值事件，以及 History 查询、邻近性、候选切换和联合 sidecar 事件。在考虑资源成本时的精确最优值 <math-inline>m=318983</math-inline> 处，最大的 <math-inline>\kappa_j/(g_jd_j)</math-inline> 来自 History 查询事件。</p>
 
 <p>令主项成功概率等于二分之一，得到</p>
 
@@ -270,10 +274,10 @@ GD_{1/2}^{\mathrm{main}}
 
 <math-block>
 \log_2 GD_{1/2}^{\mathrm{main}}
-=173.273866314232\ldots
+=173.391078499301\ldots
 </math-block>
 
-<p>在 NIST 资源边界 <math-inline>GD=2^{170}</math-inline> 上，主项不超过 <math-inline>0.051693750450980417</math-inline>。还需加入两项有限规模修正。</p>
+<p>在 NIST 资源边界 <math-inline>GD=2^{170}</math-inline> 上，主项不超过 <math-inline>0.047659958340587260</math-inline>。还需加入两项有限规模修正。</p>
 
 <p>对于 NIST 的每个深度点，计算器由下式导出最便宜相干响应的最大数量与顺序轮数：</p>
 
@@ -290,17 +294,17 @@ R=\left\lfloor\frac{D}{d_0}\right\rfloor.
 <div class="table-wrap"><table>
   <thead><tr><th>Category 1 项</th><th>上界</th></tr></thead>
   <tbody>
-    <tr><td>类型化主项</td><td><math-inline>0.051693750450980417</math-inline></td></tr>
+    <tr><td>类型化主项</td><td><math-inline>0.047659958340587260</math-inline></td></tr>
     <tr><td>见证提取与交互记录的有限规模修正项</td><td><math-inline>0.000199022715317804</math-inline></td></tr>
     <tr><td>全局 256 比特碰撞项</td><td><math-inline>0.001471367157310191</math-inline></td></tr>
-    <tr><td><strong>理想模型完整上界</strong></td><td><strong><math-inline>0.053364140323608411</math-inline></strong></td></tr>
+    <tr><td><strong>理想模型完整上界</strong></td><td><strong><math-inline>0.049330348213215253</math-inline></strong></td></tr>
   </tbody>
 </table></div>
 
 <math-block>
 \boxed{
 \varepsilon_{\mathrm{ideal}}^{\mathrm{Cat1}}
-\le0.053364140323608411\lt\frac12.}
+\le0.049330348213215253\lt\frac12.}
 </math-block>
 
 <h2 id="fixed-poseidon">固定 Poseidon2b 边界</h2>
@@ -319,7 +323,7 @@ R=\left\lfloor\frac{D}{d_0}\right\rfloor.
 <math-block>
 \boxed{
 \Delta_{\mathrm{P2b}}^{\mathrm{Cat1}}
-\lt0.446635859676391589.}
+\lt0.450669651786784747.}
 </math-block>
 
 <p>这是针对公开固定 Poseidon2b 置换、精确交互记录帧编码与域分离的事件级编译器偏差。<a href="https://cic.iacr.org/p/2/4/15/pdf">Poseidon2b 论文</a>给出固定置换参数与相应密码分析；上式则陈述端到端定理采用的附加量子实例化条件。</p>
@@ -336,11 +340,11 @@ R=\left\lfloor\frac{D}{d_0}\right\rfloor.
 
 <p>所有用于结论判定的概率与优化阈值均使用任意精度整数和既约有理数计算。上界向上取整，固定置换的充分余量向下取整。浮点对数只用于展示，不参与结果判定。</p>
 
-<p>克隆当前主网版本并复现实际部署报告：</p>
+<p>克隆固定的分析版本并复现实际部署报告：</p>
 
 <pre><code>git clone https://github.com/ignotusnemo/parano1d.git
 cd parano1d
-git checkout v1.0.1
+git checkout 7f65daaae414128aa4377ca0ac1e96fd6dbc31a5
 cargo run --release --locked -p noid_soundness</code></pre>
 
 <p>输出全部既约有理数与优化阈值：</p>
