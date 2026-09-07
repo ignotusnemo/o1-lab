@@ -32,6 +32,13 @@ To add a publication, add its metadata and HTML fragment, then rebuild. Keep
 benchmark conditions next to benchmark numbers and distinguish production
 results from preserved experiments.
 
+The build maps owned GitHub URLs to Forgejo, including commit-pinned source
+files, clone commands and evidence links. Article source records and external
+research citations remain unchanged. The header Source selector opens the
+public Forgejo repository and shows GitHub as temporarily unavailable.
+The three historical AuthStream experiment commits explicitly listed in
+`scripts/source-links.mjs` retain their GitHub URLs at the maintainer's request.
+
 ## Mathematical notation
 
 Article sources use TeX inside explicit math elements:

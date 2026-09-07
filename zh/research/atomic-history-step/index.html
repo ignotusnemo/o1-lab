@@ -41,7 +41,8 @@
   <meta property="article:section" content="共识">
   <meta property="article:author" content="Parano1d Lab">
   <title>区块为何必须与递归证明一同接受 · Parano1d Lab</title>
-  <link rel="stylesheet" href="/assets/site.css?v=d1220c6cc2cf">
+  <link rel="stylesheet" href="/assets/site.css?v=265f8768ebe4">
+  <link rel="stylesheet" href="/assets/source-dialog.css?v=a9395fdbf3ff">
   <link rel="stylesheet" href="/assets/katex.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"区块为何必须与递归证明一同接受","description":"本研究比较了两种完整实现的架构。第一种架构在递归证明完成前就把区块加入规范链，随后由三阶段后台流水线生成区块证明、将其接入递归历史，并推进另一条已证明链尖。第二种架构把区块、对应的 HistoryStep 终端、State 与索引作为同一个原子结果提交。它把证明准备纳入挖矿关键路径，却消除了持久任务队列、部分提升与含糊的重启状态：每个已接受高度上的区块与递归证明始终同时存在。","datePublished":"2026-07-15","dateModified":"2026-07-15","url":"https://lab.parano1d.org/zh/research/atomic-history-step/","mainEntityOfPage":"https://lab.parano1d.org/zh/research/atomic-history-step/","inLanguage":"zh-Hans","isAccessibleForFree":true,"author":[{"@type":"Organization","name":"Parano1d Lab"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/atomic-history-step.png","about":"共识"}</script>
 </head>
@@ -61,7 +62,7 @@
         <span class="nav-rule" aria-hidden="true"></span>
         <a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">文档 <span aria-hidden="true">↗</span></a>
         <a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">Parano1d <span aria-hidden="true">↗</span></a>
-        <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="GitHub 上的 Parano1d" target="_blank" rel="noopener noreferrer"><svg class="nav-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span>GitHub</span></a>
+        <button class="nav-source" type="button" data-source-open aria-haspopup="dialog" aria-controls="source-dialog"><svg class="nav-source-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>源码</span></button>
       </nav>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
     </div>
@@ -157,9 +158,9 @@
 </div>
 </article>
     </div>
-    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">研究记录</p><h2 id="evidence-title">证据与产物</h2><p>以下链接保存了支撑本文的实现、测量或推导。</p></div><div class="evidence-links"><a href="https://github.com/ignotusnemo/parano1d/commit/53fdd75f" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>后台已选历史流水线</strong></span></span><span aria-hidden="true">↗</span></a>
-<a href="https://github.com/ignotusnemo/parano1d/commit/e825372e" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>挖矿内证明生成</strong></span></span><span aria-hidden="true">↗</span></a>
-<a href="https://github.com/ignotusnemo/parano1d/commit/f3bdd9e4" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>提交</small><strong>原子 HistoryStep 实现</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">研究记录</p><h2 id="evidence-title">证据与产物</h2><p>以下链接保存了支撑本文的实现、测量或推导。</p></div><div class="evidence-links"><a href="https://git.parano1d.org/ignotusnemo/parano1d/commit/53fdd75f" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>提交</small><strong>后台已选历史流水线</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/parano1d/commit/e825372e" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>提交</small><strong>挖矿内证明生成</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/parano1d/commit/f3bdd9e4" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>提交</small><strong>原子 HistoryStep 实现</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
     <nav class="article-next" aria-label="相邻研究"><a href="/zh/research/prove-once-search-nonces/"><small>较早</small><strong>语义区块头投影</strong><span>←</span></a><a href="/zh/research/frost-gkr-global-trace-protocol/"><small>较新</small><strong>FROST-GKR</strong><span>→</span></a></nav>
   </main>
     <footer class="site-footer">
@@ -169,11 +170,11 @@
     </div>
     <div class="footer-links">
       <div><strong>研究</strong><a href="/zh/research/">归档</a><a href="/zh/feed.xml">RSS 订阅</a></div>
-      <div><strong>项目</strong><a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">网站</a><a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">技术文档</a><a href="https://github.com/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer">源代码</a></div>
+      <div><strong>项目</strong><a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">网站</a><a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">技术文档</a><a href="https://git.parano1d.org/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer">源代码</a></div>
     </div>
     <div class="footer-bottom"><span>© 2026 ParanO(1)d Lab</span><span>lab.parano1d.org</span></div>
   </footer>
   </div>
-  <script src="/assets/site.js?v=65227f7e384f" defer></script>
+  <script src="/assets/site.js?v=1503bc96f404" defer></script>
 </body>
 </html>

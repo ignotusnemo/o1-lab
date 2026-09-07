@@ -5,15 +5,17 @@ import { fileURLToPath } from "node:url";
 import katex from "katex";
 import { artDiagrams } from "./art.mjs";
 import { defaultLocale, locales, pathFor, ui } from "./i18n.mjs";
+import { sourceLinks } from "./source-links.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const siteUrl = "https://lab.parano1d.org";
 const versionOf = (contents) => createHash("sha256").update(contents).digest("hex").slice(0, 12);
-const [siteCssVersion, siteJsVersion] = await Promise.all([
+const [siteCssVersion, siteJsVersion, sourceCssVersion] = await Promise.all([
   readFile(join(root, "assets/site.css")).then(versionOf),
-  readFile(join(root, "assets/site.js")).then(versionOf)
+  readFile(join(root, "assets/site.js")).then(versionOf),
+  readFile(join(root, "assets/source-dialog.css")).then(versionOf)
 ]);
-const baseData = JSON.parse(await readFile(join(root, "content/research.json"), "utf8"));
+const baseData = JSON.parse(sourceLinks(await readFile(join(root, "content/research.json"), "utf8")));
 
 async function loadArticles(locale) {
   const overlays = locale.code === defaultLocale.code
@@ -44,7 +46,7 @@ async function loadArticles(locale) {
     const sourcePath = locale.code === defaultLocale.code
       ? `content/research/${base.slug}.${sourceExtension}`
       : `content/i18n/${locale.code}/research/${base.slug}.${sourceExtension}`;
-    const source = await readFile(join(root, sourcePath), "utf8");
+    const source = sourceLinks(await readFile(join(root, sourcePath), "utf8"));
     const body = base.format === "markdown"
       ? renderFlagshipMarkdown(source, item, sourcePath)
       : source;
@@ -350,7 +352,13 @@ function isGithubUrl(href) {
 }
 
 function buttonContent(href, label) {
-  return `${isGithubUrl(href) ? githubIcon() : ""}<span>${esc(label)}</span>`;
+  return `${sourceIcon(href)}<span>${esc(label)}</span>`;
+}
+
+function sourceIcon(href, className = "button-icon") {
+  if (isGithubUrl(href)) return githubIcon(className);
+  if (!href.startsWith("https://git.parano1d.org/")) return "";
+  return `<svg class="${className}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 }
 
 function externalLinksInNewTabs(html) {
@@ -477,7 +485,7 @@ function header(active, locale, basePath) {
         <span class="nav-rule" aria-hidden="true"></span>
         <a href="https://docs.parano1d.org">${esc(t.navDocs)} <span aria-hidden="true">↗</span></a>
         <a href="https://parano1d.org">Parano1d <span aria-hidden="true">↗</span></a>
-        <a class="nav-github" href="https://github.com/ignotusnemo/parano1d" aria-label="${esc(t.githubAria)}">${githubIcon("nav-github-icon")}<span>GitHub</span></a>
+        <button class="nav-source" type="button" data-source-open aria-haspopup="dialog" aria-controls="source-dialog">${sourceIcon("https://git.parano1d.org/", "nav-source-icon")}<span>${esc(t.navSource)}</span></button>
       </nav>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
     </div>
@@ -493,7 +501,7 @@ function footer(locale) {
     </div>
     <div class="footer-links">
       <div><strong>${esc(t.footerResearch)}</strong><a href="${pathFor(locale, "/research/")}">${esc(t.footerArchive)}</a><a href="${pathFor(locale, "/feed.xml")}">${esc(t.footerFeed)}</a></div>
-      <div><strong>${esc(t.footerProject)}</strong><a href="https://parano1d.org">${esc(t.footerWebsite)}</a><a href="https://docs.parano1d.org">${esc(t.footerDocumentation)}</a><a href="https://github.com/ignotusnemo/parano1d">${esc(t.footerSource)}</a></div>
+      <div><strong>${esc(t.footerProject)}</strong><a href="https://parano1d.org">${esc(t.footerWebsite)}</a><a href="https://docs.parano1d.org">${esc(t.footerDocumentation)}</a><a href="https://git.parano1d.org/ignotusnemo/parano1d">${esc(t.footerSource)}</a></div>
     </div>
     <div class="footer-bottom"><span>© 2026 ParanO(1)d Lab</span><span>lab.parano1d.org</span></div>
   </footer>`;
@@ -618,6 +626,7 @@ function shell({
   ${articleMeta}
   <title>${esc(fullTitle)}</title>
   <link rel="stylesheet" href="/assets/site.css?v=${siteCssVersion}">
+  <link rel="stylesheet" href="/assets/source-dialog.css?v=${sourceCssVersion}">
   <link rel="stylesheet" href="/assets/katex.min.css">
   ${structuredData}
 </head>
@@ -745,7 +754,7 @@ function archivePage(locale, newestFirst) {
 
 function evidenceList(item, locale) {
   const t = ui[locale.code];
-  return `<aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">${esc(t.researchRecord)}</p><h2 id="evidence-title">${esc(t.evidenceTitle)}</h2><p>${esc(t.evidenceLead)}</p></div><div class="evidence-links">${item.evidence.map((entry) => `<a href="${esc(entry.href)}"><span class="evidence-entry">${isGithubUrl(entry.href) ? githubIcon("evidence-github-icon") : ""}<span><small>${esc(t.evidenceTypes[entry.type] ?? entry.type)}</small><strong>${esc(entry.label)}</strong></span></span><span aria-hidden="true">↗</span></a>`).join("\n")}</div></aside>`;
+  return `<aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">${esc(t.researchRecord)}</p><h2 id="evidence-title">${esc(t.evidenceTitle)}</h2><p>${esc(t.evidenceLead)}</p></div><div class="evidence-links">${item.evidence.map((entry) => `<a href="${esc(entry.href)}"><span class="evidence-entry">${sourceIcon(entry.href, "evidence-github-icon")}<span><small>${esc(t.evidenceTypes[entry.type] ?? entry.type)}</small><strong>${esc(entry.label)}</strong></span></span><span aria-hidden="true">↗</span></a>`).join("\n")}</div></aside>`;
 }
 
 function shareControls(item, locale, basePath) {

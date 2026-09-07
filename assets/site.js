@@ -1,141 +1,56 @@
-// Set to false when the core repository becomes public.
-const PRIVATE_REPOSITORY_GATE = false;
-
-const repositoryGateCopy = {
-  en: {
-    dialog: "Parano1d source code access",
-    closeLabel: "Close message",
-    eyebrow: "Source code",
-    title: "Code opens before launch.",
-    body: "The core repository remains private during the final preparation stage. The code for the upcoming release will be published before the public network launches.",
-    launch: "Public network launch · Aug 12, 2026",
-    contact: "Contact developer",
-    github: "GitHub",
-    dismiss: "Close"
-  },
-  ru: {
-    dialog: "Доступ к исходному коду Parano1d",
-    closeLabel: "Закрыть сообщение",
-    eyebrow: "Исходный код",
-    title: "Код откроется перед запуском.",
-    body: "Основной репозиторий остаётся закрытым на финальном этапе подготовки. Код будущего релиза будет опубликован перед запуском публичной сети.",
-    launch: "Запуск публичной сети · 12 августа 2026",
-    contact: "Связаться с разработчиком",
-    github: "GitHub",
-    dismiss: "Закрыть"
-  },
-  zh: {
-    dialog: "Parano1d 源代码访问说明",
-    closeLabel: "关闭提示",
-    eyebrow: "源代码",
-    title: "代码将在网络启动前公开。",
-    body: "核心代码仓库将在最终准备阶段保持私有。即将发布版本的代码将在公共网络启动前公开。",
-    launch: "公共网络启动 · 2026 年 8 月 12 日",
-    contact: "联系开发者",
-    github: "GitHub",
-    dismiss: "关闭"
-  }
+const sourceCopy = {
+  en: { title: "Source code", close: "Close source selection", unavailable: "Temporarily unavailable" },
+  ru: { title: "Исходный код", close: "Закрыть выбор репозитория", unavailable: "Временно недоступен" },
+  zh: { title: "源代码", close: "关闭仓库选择", unavailable: "暂时不可用" }
 };
-
-function isPrivateRepositoryLink(link) {
-  if (!PRIVATE_REPOSITORY_GATE || !(link instanceof HTMLAnchorElement)) return false;
-  try {
-    const url = new URL(link.href, location.href);
-    return url.hostname.toLowerCase() === "github.com"
-      && /^\/ignotusnemo\/parano1d(?:\/|$)/i.test(url.pathname);
-  } catch {
-    return false;
-  }
-}
-
-const repositoryGateLanguage = document.documentElement.lang.startsWith("ru")
-  ? "ru"
-  : document.documentElement.lang.startsWith("zh")
-    ? "zh"
-    : "en";
-const repositoryGateText = repositoryGateCopy[repositoryGateLanguage];
-const repositoryGate = document.createElement("section");
-repositoryGate.className = "repository-gate-layer";
-repositoryGate.hidden = true;
-repositoryGate.setAttribute("role", "dialog");
-repositoryGate.setAttribute("aria-modal", "true");
-repositoryGate.setAttribute("aria-label", repositoryGateText.dialog);
-repositoryGate.innerHTML = `
-  <div class="repository-gate-dialog">
-    <button class="repository-gate-close" type="button" aria-label="${repositoryGateText.closeLabel}">
-      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3 3 10 10M13 3 3 13"/></svg>
-    </button>
-    <p class="repository-gate-eyebrow">${repositoryGateText.eyebrow}</p>
-    <h2>${repositoryGateText.title}</h2>
-    <p class="repository-gate-copy">${repositoryGateText.body}</p>
-    <div class="repository-gate-meta">
-      <p>${repositoryGateText.launch}</p>
-      <p>${repositoryGateText.contact} · <a href="mailto:dev@parano1d.org">dev@parano1d.org</a></p>
-      <p>${repositoryGateText.github} · <a href="https://github.com/ignotusnemo" target="_blank" rel="noopener noreferrer">github.com/ignotusnemo</a></p>
-    </div>
-    <button class="repository-gate-dismiss" type="button">${repositoryGateText.dismiss}</button>
-  </div>`;
-document.body.append(repositoryGate);
-
-const repositoryGateClose = repositoryGate.querySelector(".repository-gate-close");
-const repositoryGateDismiss = repositoryGate.querySelector(".repository-gate-dismiss");
-let repositoryGateLastFocus = null;
-let repositoryGateCloseTimer = 0;
-
-function openRepositoryGate() {
-  if (!repositoryGate.hidden) return;
-  clearTimeout(repositoryGateCloseTimer);
-  repositoryGateLastFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-  repositoryGate.hidden = false;
-  document.body.classList.add("repository-gate-open");
-  requestAnimationFrame(() => {
-    repositoryGate.classList.add("is-open");
-    repositoryGateClose?.focus({ preventScroll: true });
+const sourceLanguage = document.documentElement.lang.startsWith("ru") ? "ru"
+  : document.documentElement.lang.startsWith("zh") ? "zh" : "en";
+const sourceText = sourceCopy[sourceLanguage];
+const sourceDialog = document.createElement("dialog");
+sourceDialog.id = "source-dialog";
+sourceDialog.className = "source-dialog";
+sourceDialog.setAttribute("aria-labelledby", "source-dialog-title");
+sourceDialog.innerHTML =
+  '<div class="source-dialog-card">' +
+    '<button class="source-dialog-close" type="button" autofocus aria-label="' + sourceText.close + '">' +
+      '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3 3 10 10M13 3 3 13"/></svg>' +
+    '</button>' +
+    '<h2 id="source-dialog-title">' + sourceText.title + '</h2>' +
+    '<div class="source-providers">' +
+      '<a class="source-provider" href="https://git.parano1d.org/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer">' +
+        '<span><b>Forgejo</b><small>git.parano1d.org</small></span><span aria-hidden="true">↗</span>' +
+      '</a>' +
+      '<button class="source-provider" type="button" disabled aria-disabled="true">' +
+        '<span><b>GitHub</b><small>' + sourceText.unavailable + '</small></span>' +
+      '</button>' +
+    '</div>' +
+  '</div>';
+document.body.append(sourceDialog);
+let sourceReturnFocus = null;
+let sourceBodyOverflow = "";
+document.querySelectorAll("[data-source-open]").forEach((opener) => {
+  opener.addEventListener("click", () => {
+    if (sourceDialog.open) return;
+    const toggle = document.querySelector(".nav-toggle");
+    const menu = document.querySelector(".site-nav");
+    const mobile = toggle && getComputedStyle(toggle).display !== "none";
+    sourceReturnFocus = mobile ? toggle : opener;
+    menu?.classList.remove("is-open");
+    toggle?.setAttribute("aria-expanded", "false");
+    document.querySelectorAll(".language-switcher[open]").forEach((item) => item.removeAttribute("open"));
+    sourceBodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    sourceDialog.showModal();
   });
-}
-
-function closeRepositoryGate() {
-  if (repositoryGate.hidden) return;
-  repositoryGate.classList.remove("is-open");
-  document.body.classList.remove("repository-gate-open");
-  repositoryGateCloseTimer = setTimeout(() => { repositoryGate.hidden = true; }, 220);
-  repositoryGateLastFocus?.focus?.({ preventScroll: true });
-}
-
-function gatePrivateRepositoryNavigation(event) {
-  const link = event.target instanceof Element ? event.target.closest("a[href]") : null;
-  if (!isPrivateRepositoryLink(link)) return;
-  event.preventDefault();
-  event.stopImmediatePropagation();
-  openRepositoryGate();
-}
-
-document.addEventListener("click", gatePrivateRepositoryNavigation, true);
-document.addEventListener("auxclick", gatePrivateRepositoryNavigation, true);
-repositoryGateClose?.addEventListener("click", closeRepositoryGate);
-repositoryGateDismiss?.addEventListener("click", closeRepositoryGate);
-repositoryGate.addEventListener("click", (event) => {
-  if (event.target === repositoryGate) closeRepositoryGate();
 });
-repositoryGate.addEventListener("keydown", (event) => {
-  if (event.key !== "Tab") return;
-  const controls = [...repositoryGate.querySelectorAll("a[href], button:not([disabled])")];
-  const first = controls[0];
-  const last = controls[controls.length - 1];
-  if (event.shiftKey && document.activeElement === first) {
-    event.preventDefault();
-    last.focus();
-  } else if (!event.shiftKey && document.activeElement === last) {
-    event.preventDefault();
-    first.focus();
-  }
+sourceDialog.querySelector(".source-dialog-close").addEventListener("click", () => sourceDialog.close());
+sourceDialog.addEventListener("click", (event) => {
+  if (event.target === sourceDialog) sourceDialog.close();
 });
-document.addEventListener("keydown", (event) => {
-  if (event.key !== "Escape" || repositoryGate.hidden) return;
-  event.preventDefault();
-  event.stopImmediatePropagation();
-  closeRepositoryGate();
-}, true);
+sourceDialog.addEventListener("close", () => {
+  document.body.style.overflow = sourceBodyOverflow;
+  sourceReturnFocus?.focus({ preventScroll: true });
+});
 
 const navToggle = document.querySelector(".nav-toggle");
 const nav = document.querySelector(".site-nav");
