@@ -35,8 +35,8 @@ results from preserved experiments.
 The build maps owned GitHub URLs to Forgejo, including commit-pinned source
 files, clone commands and evidence links. Article source records and external
 research citations remain unchanged. The header Source selector opens the
-canonical Forgejo repository or its public GitLab mirror and shows GitHub as
-temporarily unavailable.
+canonical Forgejo repository, identifies GitLab and GitHub as public mirrors,
+and shows GitHub as temporarily unavailable.
 The three historical AuthStream experiment commits explicitly listed in
 `scripts/source-links.mjs` retain their GitHub URLs at the maintainer's request.
 

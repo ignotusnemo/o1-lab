@@ -18,13 +18,13 @@ sourceDialog.innerHTML =
     '<h2 id="source-dialog-title">' + sourceText.title + '</h2>' +
     '<div class="source-providers">' +
       '<a class="source-provider" href="https://git.parano1d.org/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer">' +
-        '<span><b>Forgejo</b><small>git.parano1d.org</small></span><span aria-hidden="true">↗</span>' +
+        '<span><b>Forgejo (canonical)</b><small>git.parano1d.org</small></span><span aria-hidden="true">↗</span>' +
       '</a>' +
       '<a class="source-provider" href="https://gitlab.com/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer">' +
-        '<span><b>GitLab</b><small>gitlab.com</small></span><span aria-hidden="true">↗</span>' +
+        '<span><b>GitLab (mirror)</b><small>gitlab.com</small></span><span aria-hidden="true">↗</span>' +
       '</a>' +
       '<button class="source-provider" type="button" disabled aria-disabled="true">' +
-        '<span><b>GitHub</b><small>' + sourceText.unavailable + '</small></span>' +
+        '<span><b>GitHub (mirror)</b><small>' + sourceText.unavailable + '</small></span>' +
       '</button>' +
     '</div>' +
   '</div>';
