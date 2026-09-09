@@ -10,6 +10,28 @@
     "abstract": "Parano1d 已将当前状态有效性的依据从不断累积的执行历史移到了当下本身。从创世区块到当前状态的整条有效性路径，都由一条可执行的端到端后量子可靠性定理支撑，并达到 NIST Category 1 的资源阈值。",
     "evidence": ["Parano1d 源代码", "内置可靠性证书", "实际部署性能记录", "FROST-GKR 论文", "FROST-GKR 参考实现", "非交互式 FRI 的具体安全性", "NIST PQC 安全类别"]
   },
+  "decentralization-across-time": {
+    "kind": "架构随笔",
+    "topic": "去中心化",
+    "status": "已公开的设计方向",
+    "title": "跨越时间的去中心化",
+    "shortTitle": "跨越时间的去中心化",
+    "dek": "网络不应仅仅因为逐渐变老，就变得越来越不去中心化。",
+    "abstract": "几十年后才加入 Parano1d 的人，仍应能够验证网络，而不必信任替它保存历史的人或服务。网络携带有效当下的证明，参与者只保存对自己重要的过去 receipts。同一原则还可以从货币延伸到权利、义务和未来的协议迁移。",
+    "keywords": ["Parano1d", "时间维度的去中心化", "proof-carrying State", "receipts", "证明可组合性", "递归证明", "协议迁移"],
+    "evidence": ["X 上的原始文章", "当下必须证明过去", "Proof-carrying State 同步", "Parano1d receipts", "当前 Parano1d 源代码"]
+  },
+  "onethics": {
+    "kind": "协议实践",
+    "topic": "去中心化",
+    "status": "参与者准则",
+    "title": "ONETHICS ①",
+    "shortTitle": "ONETHICS ①",
+    "dek": "运行自己的验证器。不要让共享 State 无谓膨胀。保存真正与你有关的证明。",
+    "abstract": "Parano1d 让独立验证变得可行，但只有人们真正去做，网络才能保持去中心化。ONETHICS 是一套很短的准则：在本地验证，避免无意义的 State 增长，保存 receipts，保护钱包密钥，并质疑每一项安全主张——也包括我们的主张。",
+    "keywords": ["Parano1d", "ONETHICS", "自主验证", "Live State", "receipts", "钱包备份", "去中心化"],
+    "evidence": ["当下必须证明过去", "运行并自主验证节点", "Live State 与扩容", "Receipts 与独立验证", "钱包备份与恢复", "可执行可靠性证书"]
+  },
   "poseidon2b-is-secure": {
     "kind": "安全性分析",
     "topic": "Poseidon2b 密码分析",

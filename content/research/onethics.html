@@ -1,0 +1,85 @@
+<p>I have watched blockchains drift toward the very thing they were meant to destroy. History grows without end. Verification becomes heavier. People stop determining truth for themselves and borrow it from APIs, explorers, exchanges, foundations and data centres.</p>
+
+<blockquote><p>This is not decentralization. It is rented verification.</p></blockquote>
+
+<p>Parano1d changes the architecture, but architecture alone cannot keep a network decentralized. It can make independent participation practical. It cannot make participants choose it. Users still have to behave like participants rather than customers.</p>
+
+<p>ONETHICS is not a moral authority and it is not a code enforced by a foundation. It is an operating discipline for a network built to have no trusted operator.</p>
+
+<h2 id="verify-for-yourself">1. Verify for yourself</h2>
+
+<p>Do not use an explorer, exchange or API as your source of truth. They are useful interfaces, not consensus.</p>
+
+<p>Open the Parano1d GUI and use its Search page. The GUI is not a thin wallet pointed at somebody else’s server. It runs a full node on your computer, verifies proof of work, headers, HistoryStep and Live State locally, relays network data and participates in the P2P mesh.</p>
+
+<p>While it is open, you are not borrowing another company’s view of the network. You are determining the canonical State yourself and helping other nodes communicate.</p>
+
+<p>This distinction matters most when services disagree, disappear or decide that your question is no longer profitable to answer. Convenience is useful. Convenience is not verification.</p>
+
+<h2 id="keep-state-compact">2. Keep the shared State compact</h2>
+
+<p>Every live UTXO occupies a State slot that every full node must carry. Historical transaction bodies can disappear after the reorganization window. Live obligations cannot. They remain shared because the network must still prevent them from being spent twice.</p>
+
+<p>When occupancy reaches at least 75% in 10 of 18 hard-finalized headers, the State domain expands. Every expansion also moves the block subsidy to the next lower tier, halving it until the permanent 1 NOID floor is reached.</p>
+
+<p>This makes consolidation more than wallet housekeeping. If your wallet accumulates many small UTXOs, periodically combine them. The GUI can consolidate up to 64 UTXOs into one output, freeing the remaining slots. Consolidation pays ordinary transaction fees but no State-growth burn because it reduces Live State.</p>
+
+<p>Pools should use sensible payout thresholds. Users should consolidate accumulated small outputs. Neither rule is centrally imposed, but both reduce the burden carried by every node and allow the current subsidy tier to remain active for longer.</p>
+
+<p>Expansion is deliberately irreversible. Once the network has committed to a larger State domain, a later decline in occupancy does not rewrite that history or restore an earlier subsidy. Keep State compact before unnecessary pressure becomes permanent.</p>
+
+<h2 id="preserve-your-proofs">3. Preserve your own proofs</h2>
+
+<p>Parano1d removes full block bodies after they leave the 18-block reorganization window. Permanent compact headers retain the transaction root, but the network is not your personal transaction archive.</p>
+
+<p>A saved payment receipt contains the transaction summary and its Merkle path to the permanent header. It remains independently verifiable after the original block body has been removed. The network preserves the anchor. You preserve the particular evidence that matters to you.</p>
+
+<p>Export important receipts or retain <code>wallet.receipts</code>. Receipts are not derived from your wallet key and cannot be recreated from that key later. A master secret proves control of value; it does not reconstruct evidence that an old payment occurred.</p>
+
+<p>Do not expect an explorer, exchange, foundation or the original developers to preserve your evidence for you. If a fact matters to you, carry its proof.</p>
+
+<h2 id="protect-your-key">4. Protect the key that controls your value</h2>
+
+<p>Your wallet key is the only thing that controls your NOID. There is no password reset or recovery service. Make a private offline backup before receiving funds or mining.</p>
+
+<p>In the GUI:</p>
+
+<pre><code>Settings → EXPORT KEY → COPY KEY</code></pre>
+
+<p>From the command line:</p>
+
+<pre><code>parano1d --export-wallet-secret</code></pre>
+
+<p>For a custom data directory:</p>
+
+<pre><code>parano1d --data-dir /path/to/data --export-wallet-secret</code></pre>
+
+<p>You can also preserve <code>wallet.key</code> directly:</p>
+
+<pre><code>Linux/macOS: ~/.parano1d/data/wallet.key
+Windows:     %USERPROFILE%\.parano1d\data\wallet.key
+Custom node: DATA_DIR/wallet.key</code></pre>
+
+<p>The exported secret is a 64-character hexadecimal value. Keep it private and offline. Never paste it into a website, issue report, chat or support message.</p>
+
+<p>If you created a wallet from a photo, the photo is input to the derivation of the same ordinary 256-bit wallet key. Keep the exact original file, export the hexadecimal secret, or copy <code>wallet.key</code>—preferably more than one, in separate private locations. The decoded pixels must remain identical. A thumbnail, screenshot, edited image, cloud preview or messenger copy may derive a different key.</p>
+
+<p>Do not keep the only backup on the same computer.</p>
+
+<p><strong>Do not be the next James Howells.</strong></p>
+
+<h2 id="verify-claims">5. Verify claims, not marketing</h2>
+
+<p>The post-quantum transition is not a matter of replacing one signature algorithm. Post-quantum primitives do not automatically make an entire protocol post-quantum.</p>
+
+<p>Wallet authorization, State transitions, commitments, recursive verification, Fiat–Shamir compilation, the random-oracle model and the complete validity path from genesis must be considered together. Every claim has a scope. Every proof has premises.</p>
+
+<p>Security targets and conjectures are not proofs. Large numbers copied from a paper about a different parameter set are not proofs. Marketing is not soundness.</p>
+
+<p>Do not trust Parano1d because this article tells you to. Read the premises. Inspect the source. Reproduce the executable certificate. Challenge the assumptions and publish a cheaper attack if you find one.</p>
+
+<p>Parano1d removes historical debt from the architecture. It does not remove responsibility from its users.</p>
+
+<blockquote><p><strong>Verify your own truth. Keep the shared State compact. Preserve your proofs.</strong></p></blockquote>
+
+<p><strong>The present proves the past. Verify the present yourself.</strong></p>

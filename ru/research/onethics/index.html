@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Запускайте собственный верификатор. Не раздувайте общий State. Храните доказательства, которые важны вам.">
+  <meta name="author" content="Parano1d Lab">
+  <meta name="keywords" content="Parano1d, ONETHICS, самостоятельная проверка, Live State, receipts, резервная копия кошелька, децентрализация, Parano1d Lab">
+  <link rel="canonical" href="https://lab.parano1d.org/ru/research/onethics/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/onethics/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/onethics/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/onethics/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/onethics/">
+  <link rel="alternate" type="application/rss+xml" title="Исследования Parano1d Lab" href="https://lab.parano1d.org/ru/feed.xml">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Исследования Parano1d Lab">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:url" content="https://lab.parano1d.org/ru/research/onethics/">
+  <meta property="og:title" content="ONETHICS ① · Parano1d Lab">
+  <meta property="og:description" content="Запускайте собственный верификатор. Не раздувайте общий State. Храните доказательства, которые важны вам.">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og/onethics.png">
+  <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/onethics.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ONETHICS ①">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ONETHICS ① · Parano1d Lab">
+  <meta name="twitter:description" content="Запускайте собственный верификатор. Не раздувайте общий State. Храните доказательства, которые важны вам.">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/onethics.png">
+  <meta name="twitter:image:alt" content="ONETHICS ①">
+  <meta property="article:published_time" content="2026-08-24T00:00:00Z">
+  <meta property="article:modified_time" content="2026-09-09T00:00:00Z">
+  <meta property="article:section" content="Децентрализация">
+  <meta property="article:author" content="Ignotus Nemo">
+  <title>ONETHICS ① · Parano1d Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=265f8768ebe4">
+  <link rel="stylesheet" href="/assets/source-dialog.css?v=a9395fdbf3ff">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"ONETHICS ①","description":"Parano1d делает независимую проверку практичной, но сеть остаётся децентрализованной только тогда, когда люди действительно ею пользуются. ONETHICS — короткий кодекс: проверяйте всё локально, не создавайте лишний рост State, храните receipts, защищайте ключ кошелька и ставьте под сомнение каждое заявление о безопасности — включая наши.","datePublished":"2026-08-24","dateModified":"2026-09-09","url":"https://lab.parano1d.org/ru/research/onethics/","mainEntityOfPage":"https://lab.parano1d.org/ru/research/onethics/","inLanguage":"ru","isAccessibleForFree":true,"keywords":["Parano1d","ONETHICS","самостоятельная проверка","Live State","receipts","резервная копия кошелька","децентрализация"],"author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/onethics.png","about":"Децентрализация"}</script>
+</head>
+<body class="locale-ru">
+  <a class="skip-link" href="#content">К содержанию</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/ru/" aria-label="Главная ParanO(1)d Lab">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>ParanO(1)d Lab</strong><small>Исследования</small></span>
+    </a>
+    <div class="header-controls">
+      <details class="language-switcher"><summary aria-label="Выбрать язык"><span>RU</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="Язык"><a href="/research/onethics/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/onethics/" lang="ru" hreflang="ru" aria-current="true"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/onethics/" lang="zh-Hans" hreflang="zh-Hans"><span>中文</span><strong>简体中文</strong></a></div></details>
+      <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
+        <a href="/ru/#latest">Новое</a>
+        <a aria-current="page" href="/ru/research/">Все исследования</a>
+        <span class="nav-rule" aria-hidden="true"></span>
+        <a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">Документация <span aria-hidden="true">↗</span></a>
+        <a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">Parano1d <span aria-hidden="true">↗</span></a>
+        <button class="nav-source" type="button" data-source-open aria-haspopup="dialog" aria-controls="source-dialog"><svg class="nav-source-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Исходники</span></button>
+      </nav>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    </div>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/ru/research/">← Все исследования</a><div class="article-meta"><span>Практика протокола</span><span>Децентрализация</span><time datetime="2026-08-24">24 авг. 2026 г.</time></div><h1>ONETHICS ①</h1><p class="article-dek">Запускайте собственный верификатор. Не раздувайте общий State. Храните доказательства, которые важны вам.</p><div class="article-byline"><span>Автор Ignotus Nemo</span><span>4 мин чтения</span><span>Кодекс участника</span></div><div class="article-share" aria-label="Поделиться исследованием"><span class="article-share-label">Поделиться</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/ru/research/onethics/" data-copy-default="Копировать ссылку" data-copy-success="Скопировано" data-copy-failure="Не удалось скопировать" aria-label="Скопировать ссылку на статью" title="Копировать ссылку"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">Копировать ссылку</span></button><a class="share-action" href="https://x.com/intent/post?text=ONETHICS%20%E2%91%A0&amp;url=https%3A%2F%2Flab.parano1d.org%2Fru%2Fresearch%2Fonethics%2F" aria-label="Поделиться статьёй в X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Поделиться в X</span></a></div></div>
+      <div class="research-image" aria-hidden="true"><img src="/assets/onethics-hero.webp" alt="" loading="eager" decoding="async"></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="В этой статье"><strong>В этой статье</strong><a href="#verify-for-yourself">1. Проверяйте сами</a><a href="#keep-state-compact">2. Сохраняйте общий State компактным</a><a href="#preserve-your-proofs">3. Храните собственные доказательства</a><a href="#protect-your-key">4. Защищайте ключ, управляющий вашими средствами</a><a href="#verify-claims">5. Проверяйте заявления, а не маркетинг</a></aside>
+      <article class="article-body"><p>Я видел, как блокчейны постепенно превращались именно в то, что собирались уничтожить. История растёт без конца. Проверка становится всё тяжелее. Люди перестают самостоятельно устанавливать истину и заимствуют её у API, обозревателей, бирж, фондов и дата-центров.</p>
+
+<blockquote><p>Это не децентрализация. Это арендованная проверка.</p></blockquote>
+
+<p>Parano1d меняет архитектуру, но одной архитектуры недостаточно, чтобы сеть оставалась децентрализованной. Она может сделать независимое участие практичным. Она не может заставить участников выбрать его. Пользователям всё равно придётся вести себя как участникам, а не как клиентам.</p>
+
+<p>ONETHICS — не моральный авторитет и не кодекс, исполнение которого контролирует фонд. Это рабочая дисциплина для сети, в которой не должно быть доверенного оператора.</p>
+
+<h2 id="verify-for-yourself">1. Проверяйте сами</h2>
+
+<p>Не используйте обозреватель, биржу или API как источник истины. Это полезные интерфейсы, но не консенсус.</p>
+
+<p>Откройте GUI Parano1d и используйте страницу Search. GUI — не тонкий кошелёк, подключённый к чужому серверу. Он запускает полный узел на вашем компьютере, локально проверяет proof of work, заголовки, HistoryStep и Live State, ретранслирует сетевые данные и участвует в P2P-сети.</p>
+
+<p>Пока он работает, вы не заимствуете у другой компании её представление о сети. Вы самостоятельно определяете канонический State и помогаете другим узлам обмениваться данными.</p>
+
+<p>Разница особенно важна, когда сервисы расходятся в ответах, исчезают или решают, что отвечать на ваш вопрос больше невыгодно. Удобство полезно. Удобство — не проверка.</p>
+
+<h2 id="keep-state-compact">2. Сохраняйте общий State компактным</h2>
+
+<p>Каждый живой UTXO занимает слот State, который обязан хранить каждый полный узел. Исторические тела транзакций могут исчезнуть после окна реорганизации. Действующие обязательства исчезнуть не могут: сеть должна продолжать предотвращать их повторную трату.</p>
+
+<p>Когда заполнение достигает как минимум 75% в 10 из 18 заголовков с hard finality, домен State расширяется. Каждое расширение также переводит награду за блок на следующий, вдвое меньший уровень, пока она не достигнет постоянного минимума в 1 NOID.</p>
+
+<p>Поэтому консолидация — не просто обслуживание кошелька. Если в нём накопилось много небольших UTXO, периодически объединяйте их. GUI может собрать до 64 UTXO в один выход и освободить остальные слоты. Консолидация платит обычную комиссию транзакции, но не платит State-growth burn, потому что уменьшает Live State.</p>
+
+<p>Пулам следует выбирать разумные пороги выплат. Пользователям — консолидировать накопившиеся мелкие выходы. Ни одно из этих правил не навязывается из центра, но оба снижают нагрузку на каждый узел и позволяют дольше сохранять текущий уровень эмиссии.</p>
+
+<p>Расширение намеренно необратимо. Когда сеть уже зафиксировала больший домен State, последующее снижение заполнения не переписывает историю и не возвращает прежнюю награду. Сохраняйте State компактным до того, как лишнее давление станет постоянным.</p>
+
+<h2 id="preserve-your-proofs">3. Храните собственные доказательства</h2>
+
+<p>Parano1d удаляет полные тела блоков после выхода из 18-блочного окна реорганизации. Постоянные компактные заголовки сохраняют корень транзакций, но сеть не является вашим личным архивом транзакций.</p>
+
+<p>Сохранённый receipt содержит сводку транзакции и её Merkle path до постоянного заголовка. Он остаётся независимо проверяемым после удаления исходного тела блока. Сеть хранит якорь. Вы храните конкретное доказательство, которое важно вам.</p>
+
+<p>Экспортируйте важные receipts или сохраняйте <code>wallet.receipts</code>. Receipts не выводятся из ключа кошелька, поэтому позднее восстановить их по этому ключу нельзя. Master secret доказывает контроль над средствами; он не восстанавливает доказательство того, что давний платёж состоялся.</p>
+
+<p>Не рассчитывайте, что обозреватель, биржа, фонд или первоначальные разработчики сохранят ваши доказательства за вас. Если факт важен вам, носите его доказательство с собой.</p>
+
+<h2 id="protect-your-key">4. Защищайте ключ, управляющий вашими средствами</h2>
+
+<p>Ключ кошелька — единственное, что управляет вашими NOID. Здесь нет сброса пароля или службы восстановления. Сделайте закрытую офлайн-копию до получения средств или начала майнинга.</p>
+
+<p>В GUI:</p>
+
+<pre><code>Settings → EXPORT KEY → COPY KEY</code></pre>
+
+<p>В командной строке:</p>
+
+<pre><code>parano1d --export-wallet-secret</code></pre>
+
+<p>При нестандартном каталоге данных:</p>
+
+<pre><code>parano1d --data-dir /path/to/data --export-wallet-secret</code></pre>
+
+<p>Можно также сохранить сам файл <code>wallet.key</code>:</p>
+
+<pre><code>Linux/macOS: ~/.parano1d/data/wallet.key
+Windows:     %USERPROFILE%\.parano1d\data\wallet.key
+Custom node: DATA_DIR/wallet.key</code></pre>
+
+<p>Экспортированный секрет — это 64 шестнадцатеричных символа. Храните его закрыто и офлайн. Никогда не вставляйте его на сайт, в issue, чат или сообщение поддержке.</p>
+
+<p>Если кошелёк создан из фотографии, фотография служит входом для получения того же обычного 256-битного ключа. Сохраните точный исходный файл, экспортируйте шестнадцатеричный секрет или скопируйте <code>wallet.key</code> — лучше использовать несколько вариантов в разных закрытых местах. Декодированные пиксели должны совпасть полностью. Миниатюра, скриншот, отредактированная версия, облачный preview или копия из мессенджера могут дать другой ключ.</p>
+
+<p>Не храните единственную копию на том же компьютере.</p>
+
+<p><strong>Не становитесь следующим Джеймсом Хауэллсом.</strong></p>
+
+<h2 id="verify-claims">5. Проверяйте заявления, а не маркетинг</h2>
+
+<p>Постквантовый переход не сводится к замене одного алгоритма подписи. Постквантовые примитивы не делают весь протокол постквантовым автоматически.</p>
+
+<p>Нужно вместе рассматривать авторизацию кошелька, переходы State, обязательства, рекурсивную проверку, компиляцию Fiat–Shamir, модель случайного оракула и полный путь валидности от genesis. У каждого утверждения есть область применимости. У каждого доказательства есть предпосылки.</p>
+
+<p>Целевые уровни безопасности и гипотезы — не доказательства. Большие числа, скопированные из статьи о другом наборе параметров, — не доказательства. Маркетинг — не soundness.</p>
+
+<p>Не доверяйте Parano1d потому, что эта статья просит вас доверять. Прочитайте предпосылки. Изучите исходный код. Воспроизведите исполняемый сертификат. Проверяйте допущения и опубликуйте более дешёвую атаку, если найдёте её.</p>
+
+<p>Parano1d убирает исторический долг из архитектуры. Он не снимает ответственность с пользователей.</p>
+
+<blockquote><p><strong>Проверяйте истину сами. Сохраняйте общий State компактным. Храните собственные доказательства.</strong></p></blockquote>
+
+<p><strong>Настоящее доказывает прошлое. Проверяйте настоящее сами.</strong></p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Материалы исследования</p><h2 id="evidence-title">Доказательства и артефакты</h2><p>Здесь сохранены реализации, измерения и выводы, на которых основана статья.</p></div><div class="evidence-links"><a href="/research/the-present-must-prove-the-past/"><span class="evidence-entry"><span><small>Архитектура</small><strong>Настоящее должно доказывать прошлое</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/operate/node" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Документация</small><strong>Запуск и самостоятельная проверка узла</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/architecture/state" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Документация</small><strong>Live State и расширение</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/wallet/receipts" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Документация</small><strong>Receipts и независимая проверка</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/wallet/backup-recovery" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Документация</small><strong>Резервное копирование и восстановление кошелька</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/parano1d/src/branch/main/noid_soundness" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>Код и доказательства</small><strong>Исполняемый сертификат корректности</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Соседние исследования"><a href="/ru/research/parano1d-nist-pqc-category-one/"><small>Ранее</small><strong>NIST PQC Category 1</strong><span>←</span></a><a href="/ru/research/poseidon2b-is-secure/"><small>Позднее</small><strong>Точная инстанциация Poseidon2b</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>ParanO(1)d Lab</strong><p>Исследования протокола ParanO(1)d.</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>Исследования</strong><a href="/ru/research/">Архив</a><a href="/ru/feed.xml">RSS-лента</a></div>
+      <div><strong>Проект</strong><a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">Сайт</a><a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">Документация</a><a href="https://git.parano1d.org/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer">Исходный код</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 ParanO(1)d Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=9b68da6e3934" defer></script>
+</body>
+</html>

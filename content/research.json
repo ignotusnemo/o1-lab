@@ -30,6 +30,57 @@
     ]
   },
   {
+    "slug": "decentralization-across-time",
+    "date": "2026-09-03",
+    "updated": "2026-09-09",
+    "kind": "Architecture essay",
+    "topic": "Decentralization",
+    "status": "Published design direction",
+    "featured": true,
+    "showAbstract": false,
+    "title": "Decentralization Across Time",
+    "shortTitle": "Decentralization across time",
+    "dek": "A network should not become less decentralized simply because it gets older.",
+    "abstract": "Someone joining Parano1d decades from now should be able to verify the network without trusting the people and services that preserved its history. The network carries proof of the valid present. Participants keep the receipts from the past that matter to them. The same idea can extend from money to rights, obligations and future protocol migrations.",
+    "authors": ["Ignotus Nemo"],
+    "art": "state",
+    "heroImage": "/assets/decentralization-across-time-hero.webp",
+    "keywords": ["Parano1d", "temporal decentralization", "proof-carrying State", "receipts", "proof composability", "recursive proofs", "protocol migration"],
+    "evidence": [
+      {"label": "Original article on X", "href": "https://x.com/ignotus_nemo/status/2095510580152951034", "type": "Article"},
+      {"label": "The Present Must Prove the Past", "href": "/research/the-present-must-prove-the-past/", "type": "Architecture"},
+      {"label": "Proof-carrying State synchronization", "href": "/research/proof-carrying-state-sync/", "type": "Systems research"},
+      {"label": "Parano1d receipts", "href": "https://docs.parano1d.org/concepts/receipts", "type": "Documentation"},
+      {"label": "Current Parano1d source", "href": "https://github.com/ignotusnemo/parano1d", "type": "Code"}
+    ]
+  },
+  {
+    "slug": "onethics",
+    "date": "2026-08-24",
+    "updated": "2026-09-09",
+    "kind": "Protocol practice",
+    "topic": "Decentralization",
+    "status": "Participant code",
+    "featured": true,
+    "showAbstract": false,
+    "title": "ONETHICS ①",
+    "shortTitle": "ONETHICS ①",
+    "dek": "Run your own verifier. Keep the shared State lean. Save the proofs that matter to you.",
+    "abstract": "Parano1d makes independent verification practical, but the network stays decentralized only if people actually use it. ONETHICS is a short code for doing that: verify locally, avoid needless State growth, keep your receipts, protect your wallet key and question every security claim—including ours.",
+    "authors": ["Ignotus Nemo"],
+    "art": "state",
+    "heroImage": "/assets/onethics-hero.webp",
+    "keywords": ["Parano1d", "ONETHICS", "self-verification", "Live State", "receipts", "wallet backup", "decentralization"],
+    "evidence": [
+      {"label": "The Present Must Prove the Past", "href": "/research/the-present-must-prove-the-past/", "type": "Architecture"},
+      {"label": "Run and verify a node", "href": "https://docs.parano1d.org/operate/node", "type": "Documentation"},
+      {"label": "Live State and expansion", "href": "https://docs.parano1d.org/architecture/state", "type": "Documentation"},
+      {"label": "Receipts and independent verification", "href": "https://docs.parano1d.org/wallet/receipts", "type": "Documentation"},
+      {"label": "Wallet backup and recovery", "href": "https://docs.parano1d.org/wallet/backup-recovery", "type": "Documentation"},
+      {"label": "Executable soundness certificate", "href": "https://github.com/ignotusnemo/parano1d/tree/main/noid_soundness", "type": "Code and proofs"}
+    ]
+  },
+  {
     "slug": "poseidon2b-is-secure",
     "date": "2026-09-02",
     "kind": "Security analysis",

@@ -184,7 +184,7 @@ export const ui = {
     notFoundAction: "На главную",
     rssDescription: "Статьи, протокольные разработки, воспроизводимые инженерные исследования и результаты Parano1d Lab.",
     evidenceTypes: {
-      "Code and tests": "Код и тесты", "Proof": "Доказательство", "Commit": "Коммит", "Source": "Источник", "Analysis": "Анализ", "Paper": "Статья", "PDF": "PDF", "Code": "Код", "Data": "Данные", "Artifact": "Артефакт"
+      "Code and tests": "Код и тесты", "Code and proofs": "Код и доказательства", "Proof": "Доказательство", "Commit": "Коммит", "Source": "Источник", "Analysis": "Анализ", "Article": "Статья", "Architecture": "Архитектура", "Systems research": "Системное исследование", "Documentation": "Документация", "Discussion": "Обсуждение", "Paper": "Статья", "PDF": "PDF", "Code": "Код", "Data": "Данные", "Artifact": "Артефакт"
     }
   },
   zh: {
@@ -260,7 +260,7 @@ export const ui = {
     notFoundAction: "返回首页",
     rssDescription: "Parano1d Lab 的论文、协议工作、可复现的工程研究及其成果。",
     evidenceTypes: {
-      "Code and tests": "代码与测试", "Proof": "证明", "Commit": "提交", "Source": "来源", "Analysis": "分析", "Paper": "论文", "PDF": "PDF", "Code": "代码", "Data": "数据", "Artifact": "研究产物"
+      "Code and tests": "代码与测试", "Code and proofs": "代码与证明", "Proof": "证明", "Commit": "提交", "Source": "来源", "Analysis": "分析", "Article": "文章", "Architecture": "架构", "Systems research": "系统研究", "Documentation": "文档", "Discussion": "讨论", "Paper": "论文", "PDF": "PDF", "Code": "代码", "Data": "数据", "Artifact": "研究产物"
     }
   }
 };

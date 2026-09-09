@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="网络不应仅仅因为逐渐变老，就变得越来越不去中心化。">
+  <meta name="author" content="Parano1d Lab">
+  <meta name="keywords" content="Parano1d, 时间维度的去中心化, proof-carrying State, receipts, 证明可组合性, 递归证明, 协议迁移, Parano1d Lab">
+  <link rel="canonical" href="https://lab.parano1d.org/zh/research/decentralization-across-time/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/decentralization-across-time/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/decentralization-across-time/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/decentralization-across-time/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/decentralization-across-time/">
+  <link rel="alternate" type="application/rss+xml" title="Parano1d Lab 研究" href="https://lab.parano1d.org/zh/feed.xml">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Parano1d Lab 研究">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:url" content="https://lab.parano1d.org/zh/research/decentralization-across-time/">
+  <meta property="og:title" content="跨越时间的去中心化 · Parano1d Lab">
+  <meta property="og:description" content="网络不应仅仅因为逐渐变老，就变得越来越不去中心化。">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og/decentralization-across-time.png">
+  <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/decentralization-across-time.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="跨越时间的去中心化">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="跨越时间的去中心化 · Parano1d Lab">
+  <meta name="twitter:description" content="网络不应仅仅因为逐渐变老，就变得越来越不去中心化。">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/decentralization-across-time.png">
+  <meta name="twitter:image:alt" content="跨越时间的去中心化">
+  <meta property="article:published_time" content="2026-09-03T00:00:00Z">
+  <meta property="article:modified_time" content="2026-09-09T00:00:00Z">
+  <meta property="article:section" content="去中心化">
+  <meta property="article:author" content="Ignotus Nemo">
+  <title>跨越时间的去中心化 · Parano1d Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=265f8768ebe4">
+  <link rel="stylesheet" href="/assets/source-dialog.css?v=a9395fdbf3ff">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"跨越时间的去中心化","description":"几十年后才加入 Parano1d 的人，仍应能够验证网络，而不必信任替它保存历史的人或服务。网络携带有效当下的证明，参与者只保存对自己重要的过去 receipts。同一原则还可以从货币延伸到权利、义务和未来的协议迁移。","datePublished":"2026-09-03","dateModified":"2026-09-09","url":"https://lab.parano1d.org/zh/research/decentralization-across-time/","mainEntityOfPage":"https://lab.parano1d.org/zh/research/decentralization-across-time/","inLanguage":"zh-Hans","isAccessibleForFree":true,"keywords":["Parano1d","时间维度的去中心化","proof-carrying State","receipts","证明可组合性","递归证明","协议迁移"],"author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/decentralization-across-time.png","about":"去中心化"}</script>
+</head>
+<body class="locale-zh">
+  <a class="skip-link" href="#content">跳到正文</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/zh/" aria-label="ParanO(1)d Lab 首页">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>ParanO(1)d Lab</strong><small>研究</small></span>
+    </a>
+    <div class="header-controls">
+      <details class="language-switcher"><summary aria-label="切换语言"><span>中文</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="语言"><a href="/research/decentralization-across-time/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/decentralization-across-time/" lang="ru" hreflang="ru"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/decentralization-across-time/" lang="zh-Hans" hreflang="zh-Hans" aria-current="true"><span>中文</span><strong>简体中文</strong></a></div></details>
+      <nav class="site-nav" id="site-nav" aria-label="主导航">
+        <a href="/zh/#latest">最新</a>
+        <a aria-current="page" href="/zh/research/">全部研究</a>
+        <span class="nav-rule" aria-hidden="true"></span>
+        <a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">文档 <span aria-hidden="true">↗</span></a>
+        <a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">Parano1d <span aria-hidden="true">↗</span></a>
+        <button class="nav-source" type="button" data-source-open aria-haspopup="dialog" aria-controls="source-dialog"><svg class="nav-source-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>源码</span></button>
+      </nav>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    </div>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>架构随笔</span><span>去中心化</span><time datetime="2026-09-03">2026年9月03日</time></div><h1>跨越时间的去中心化</h1><p class="article-dek">网络不应仅仅因为逐渐变老，就变得越来越不去中心化。</p><div class="article-byline"><span>作者 Ignotus Nemo</span><span>6 分钟阅读</span><span>已公开的设计方向</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/zh/research/decentralization-across-time/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接" title="复制链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=%E8%B7%A8%E8%B6%8A%E6%97%B6%E9%97%B4%E7%9A%84%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fdecentralization-across-time%2F" aria-label="将本文分享到 X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
+      <div class="research-image" aria-hidden="true"><img src="/assets/decentralization-across-time-hero.webp" alt="" loading="eager" decoding="async"></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#forget-without-losing-truth">网络可以遗忘数据，而不丢失真相</a><a href="#portable-causality">下一步是可携带的因果关系</a><a href="#proof-carrying-objects">携带证明的对象</a><a href="#what-can-we-build">我们可以在其上构建什么？</a><a href="#outlive-cryptography">能够活得比自身密码学更久的协议</a><a href="#conclusion">结论</a></aside>
+      <article class="article-body"><p>我们知道如何衡量空间上的去中心化：统计节点、矿工、国家和独立运营者。但这些数字只描述网络今天的样子。</p>
+
+<p><strong>我们遗漏了什么？</strong></p>
+
+<p><strong>时间。</strong></p>
+
+<p>五十年或一百年后会怎样？那时才加入的人，能否用一台普通电脑，像网络诞生之初的参与者一样独立验证一切？还是必须信任档案服务、检查点、RPC 提供商，以及继承网络历史的机构？</p>
+
+<p>大多数区块链把过去不断推给未来。每一笔新交易都会成为所有未来验证者的一项永久义务。把数据移入档案、rollup 或独立的数据可用性层，并没有消除这项义务，只是换了一个承担者。</p>
+
+<p>Parano1d 选择另一条路。未来的参与者不应继承每一份历史数据。他们需要的是当前 State，以及它由一段有效历史产生的证明。这就是跨越时间的去中心化。</p>
+
+<p>Parano1d 已经以这种方式运行。新节点验证 Live State 及其递归证明，而不是重放全部交易历史。同步完成后，它可以像任何其他节点一样验证网络、发送交易和挖矿。</p>
+
+<h2 id="forget-without-losing-truth">网络可以遗忘数据，而不丢失真相</h2>
+
+<p>Parano1d 最激进的部分之一，看起来却和一张普通 receipt 一样平常。</p>
+
+<p>剪枝后，网络不再保存一笔旧付款的交易体。发送者保留 receipt。十年以后，他可以把它交给任何第三方，对方只用普通的 Parano1d 钱包就能验证付款。</p>
+
+<p>Receipt 能验证付款的精确内容、金额与接收者，交易在区块中的位置、Merkle 路径，以及该区块是否属于规范链。</p>
+
+<p>用户生成一份与精确交易绑定的授权证明。修改交易中的任何部分，证明就会失效。交易被网络接受后，这笔花费的有效性由递归证明持续带向未来。Receipt 不需要保留原始授权证明，却依然是付款已经发生的持久证据。</p>
+
+<p>历史没有消失，只是换了持有者。共识保存当下；人们保存自己将来可能需要的过去证明。网络不必永远承载每一笔交易，而旧付款仍然可以在不依赖区块浏览器、档案运营者或最初开发者的情况下得到验证。</p>
+
+<h2 id="portable-causality">下一步是可携带的因果关系</h2>
+
+<p>大多数合约平台围绕永久共享数据库构建：一份合约读取另一份合约的 State、搜索事件，或调用对方的函数。Parano1d 允许另一种模型。</p>
+
+<p><strong>事件之间的联系由参与者随身携带。</strong></p>
+
+<blockquote><p>动作 → receipt → 条件证明 → 新动作</p></blockquote>
+
+<p>付款 receipt 可以解锁访问权；义务已经履行的证明可以释放 escrow；兑付 receipt 可以注销一项权利主张；多份 receipts 可以折叠成一份证明，说明协议的全部条件都已满足。</p>
+
+<p>应用收到的不是指向全局档案中某条旧记录的指针，而是过去恰好与当前条件相关部分的证明。一个简单版本已经可以运行：服务发出付款请求，客户端付款并保留 receipt，再把证明送回服务；服务用自己的 Parano1d 节点验证。</p>
+
+<p>没有中间商，没有索引器，没有可信付款 webhook。x402 等 HTTP 付款协议已经开始探索 API 与自主代理之间的机器支付，但验证和结算往往被放进不同的基础设施。Parano1d 不需要这层额外依赖。因果关系不必从全局历史中重新找回，而是由需要它的人直接携带。</p>
+
+<p><strong>这不是 State 可组合性，而是证明可组合性。</strong></p>
+
+<h2 id="proof-carrying-objects">携带证明的对象</h2>
+
+<p>当前 owner 字段是 <code>SpendSecret</code> 的 Poseidon2b 映像。未来的关系可以把这个 256 位字段用作对象 State 及其授权规则的承诺。对象证明负责授权转换，并将转换绑定到某个确定的 <code>PagedSpend</code>；HistoryStep 仍然证明原生价值守恒和精确的全局 State 转换。</p>
+
+<p>一种形式可能如下：</p>
+
+<pre><code>owner = H(
+    relation_id,
+    current_object_state,
+    authorization_policy
+)</code></pre>
+
+<p>花费证明将说明：</p>
+
+<ul>
+  <li>证明者知道对象的当前 State；</li>
+  <li>请求的转换符合规则；</li>
+  <li>转换绑定到某个确定的 <code>PagedSpend</code>；</li>
+  <li>转换后生成的对象有效；</li>
+  <li>原生价值保持不变。</li>
+</ul>
+
+<p>全局 State 只保留金额、incarnation 和对象的当前承诺。对象的详细 State 与特定关系的见证留在利益相关方手中。义务结束后，对象可以消失，槽位可以复用；将来可能需要证据的人则保留 receipt。</p>
+
+<p>这不是 EVM 风格的模型。合约不会搜索全局历史，也不会留下永久事件，更不会迫使所有未来节点保存其活动的永恒档案。它接收当前对象、区块上下文与必要见证，然后证明到下一 State 的完整转换。</p>
+
+<h2 id="what-can-we-build">我们可以在其上构建什么？</h2>
+
+<p>最自然的应用，是需要长期存在的数字制度。</p>
+
+<h3>有效权利</h3>
+
+<p>名称、许可证、成员资格、设备权限、软件发布权、有效密钥与撤销状态，最终都归结为一个问题：现在谁拥有这项权利？多年后加入的参与者需要当前答案；需要证明过去所有权的人保留相应证据。</p>
+
+<h3>不记名工具</h3>
+
+<p>发票、凭证、债权、门票、债券、证书等数字工具可以遵循同一模型。对象携带有效起源的证明，网络阻止互相冲突的所有权，并把每次转换放入规范顺序。</p>
+
+<h3>Vault 与有限状态合约</h3>
+
+<p>恢复机制、继承、escrow、抵押、里程碑付款和拍卖，通常只有少量真正有意义的状态，也有明确需要保存证据的相关方。它们不需要一台拥有永恒记忆的通用虚拟机。</p>
+
+<h3>自主系统</h3>
+
+<p>代理或设备不需要不受限制的钱包秘密。它可以得到一项有限授权，其中包含预算、到期时间、允许的操作，以及由所有者控制的恢复路径。代理在边界内自主行动，其委托人则收到准确记录实际行为的 receipts。</p>
+
+<h3>可验证治理</h3>
+
+<p>即使不存在永久的全局选票档案，最终投票结果也可以携带证明，说明通向结果的每次转换都有效。每位参与者保存自己的包含证明，所有人共享最终结果，同时每个人仍能验证自己的那一部分。</p>
+
+<h2 id="outlive-cryptography">能够活得比自身密码学更久的协议</h2>
+
+<p>真正的偏执不能止于删除档案。我们必须假设算法会老化、State 格式会改变，证明系统本身也终有过时的一天。携带证明的当下还提供了另一条路径：可证明的协议迁移。</p>
+
+<p>专门的 MigrationStep 可以证明旧 State 到新格式或新证明系统的精确转换。迁移完成后，未来节点不再需要旧历史，也不需要一套永无止境的兼容层来容纳网络曾经使用过的每一种证明系统。</p>
+
+<p>新的终端会证明新时代正确地延续自上一时代。对于一张准备运行数十年的网络，这一点至关重要。</p>
+
+<p>今天具备后量子安全性，并不意味着永远安全。真正的长期生存能力，是在不举行可信快照仪式、也不从头重放全部历史的情况下替换密码学。</p>
+
+<h2 id="conclusion">结论</h2>
+
+<p>Bitcoin 提出的问题是：货币能否在没有可信发行者的情况下存在？</p>
+
+<p>Parano1d 提出下一个问题：数字系统能否在没有可信历史保管者的情况下存在？</p>
+
+<p>Parano1d 的主要成就不是更小的磁盘占用，也不是更快的同步，而是消除历史贵族。几十年后才加入的人，可以像创世时就在场的人一样独立验证当下。</p>
+
+<p>下一步，是把这一原则从货币扩展到权利、义务、合约，以及协议自身的演化。</p>
+
+<blockquote><p><strong>Parano1d 是一张可以遗忘数据却不丢失真相的网络。</strong></p></blockquote>
+
+<p>当下证明过去。过去某个具体部分的证明，则留在真正需要它的人手中。</p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">研究记录</p><h2 id="evidence-title">证据与产物</h2><p>以下链接保存了支撑本文的实现、测量或推导。</p></div><div class="evidence-links"><a href="https://x.com/ignotus_nemo/status/2095510580152951034" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>文章</small><strong>X 上的原始文章</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="/research/the-present-must-prove-the-past/"><span class="evidence-entry"><span><small>架构</small><strong>当下必须证明过去</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="/research/proof-carrying-state-sync/"><span class="evidence-entry"><span><small>系统研究</small><strong>Proof-carrying State 同步</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/concepts/receipts" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>文档</small><strong>Parano1d receipts</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>代码</small><strong>当前 Parano1d 源代码</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="相邻研究"><a href="/zh/research/poseidon2b-is-secure/"><small>较早</small><strong>精确的 Poseidon2b 实例</strong><span>←</span></a><a href="/zh/research/the-present-must-prove-the-past/"><small>较新</small><strong>当下证明过去</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>ParanO(1)d Lab</strong><p>ParanO(1)d 背后的协议研究。</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>研究</strong><a href="/zh/research/">归档</a><a href="/zh/feed.xml">RSS 订阅</a></div>
+      <div><strong>项目</strong><a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">网站</a><a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">技术文档</a><a href="https://git.parano1d.org/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer">源代码</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 ParanO(1)d Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=9b68da6e3934" defer></script>
+</body>
+</html>

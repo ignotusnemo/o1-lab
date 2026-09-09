@@ -816,7 +816,7 @@ function articlePage(item, index, locale, newestFirst) {
     ${hero}
     <div class="article-layout${flagship ? " article-layout--flagship" : ""}">
       ${tocFor(item.body, locale)}
-      <article class="article-body${flagship ? " article-body--flagship" : ""}">${flagship ? "" : `<div class="article-abstract"><span>${esc(t.abstract)}</span><p>${esc(item.abstract)}</p></div>`}${item.body}</article>
+      <article class="article-body${flagship ? " article-body--flagship" : ""}">${flagship || item.showAbstract === false ? "" : `<div class="article-abstract"><span>${esc(t.abstract)}</span><p>${esc(item.abstract)}</p></div>`}${item.body}</article>
     </div>
     ${evidenceList(item, locale)}
     <nav class="article-next" aria-label="${esc(t.adjacent)}">${older ? `<a href="${pathFor(locale, `/research/${older.slug}/`)}"><small>${esc(t.earlier)}</small><strong>${esc(older.shortTitle)}</strong><span>←</span></a>` : "<span></span>"}${newer ? `<a href="${pathFor(locale, `/research/${newer.slug}/`)}"><small>${esc(t.later)}</small><strong>${esc(newer.shortTitle)}</strong><span>→</span></a>` : "<span></span>"}</nav>
