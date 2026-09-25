@@ -893,7 +893,7 @@ img, svg { max-width: 100%; }
 }
 .note, .failure, .result { margin: 34px 0; padding: 22px 24px; border: 1px solid #cfd7d1; border-radius: 9px; background: linear-gradient(135deg, #fff, #fafbf9); box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,.9); }
 .note { border-top: 3px solid var(--blue); }.failure { border-top: 3px solid var(--coral); }.result { border-top: 3px solid var(--green); }
-.note strong:first-child, .failure strong:first-child, .result strong:first-child { display: block; margin-bottom: 8px; font: 10px/1.2 "Lab Mono", monospace; letter-spacing: .09em; text-transform: uppercase; }
+.note > strong:first-child, .failure > strong:first-child, .result > strong:first-child { display: block; margin-bottom: 8px; font: 10px/1.2 "Lab Mono", monospace; letter-spacing: .09em; text-transform: uppercase; }
 .note p:last-child, .failure p:last-child, .result p:last-child { margin-bottom: 0; }
 
 .metric-row { margin: 34px 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
