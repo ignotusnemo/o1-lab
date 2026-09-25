@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Высота определяет эмиссию, заполненность — цену живого хранения. Почему мы изменили исходный график и сохранили стимул экономить State.">
+  <meta name="author" content="Parano1d Lab">
+  <meta name="keywords" content="Parano1d, Parano1d Lab, доказательства с нулевым разглашением, системы доказательств, криптография, рекурсивные доказательства, бинарные поля, полиномиальные обязательства">
+  <link rel="canonical" href="https://lab.parano1d.org/ru/research/parano1d-v2-tokenomics/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/parano1d-v2-tokenomics/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/parano1d-v2-tokenomics/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/parano1d-v2-tokenomics/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/parano1d-v2-tokenomics/">
+  <link rel="alternate" type="application/rss+xml" title="Исследования Parano1d Lab" href="https://lab.parano1d.org/ru/feed.xml">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Исследования Parano1d Lab">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:url" content="https://lab.parano1d.org/ru/research/parano1d-v2-tokenomics/">
+  <meta property="og:title" content="Parano1d v2. Токеномика · Parano1d Lab">
+  <meta property="og:description" content="Высота определяет эмиссию, заполненность — цену живого хранения. Почему мы изменили исходный график и сохранили стимул экономить State.">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og/parano1d-v2-tokenomics.png">
+  <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/parano1d-v2-tokenomics.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Parano1d v2. Токеномика">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Parano1d v2. Токеномика · Parano1d Lab">
+  <meta name="twitter:description" content="Высота определяет эмиссию, заполненность — цену живого хранения. Почему мы изменили исходный график и сохранили стимул экономить State.">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/parano1d-v2-tokenomics.png">
+  <meta name="twitter:image:alt" content="Parano1d v2. Токеномика">
+  <meta property="article:published_time" content="2026-09-25T00:00:00Z">
+  <meta property="article:section" content="Экономика сети">
+  <meta property="article:author" content="Ignotus Nemo">
+  <title>Parano1d v2. Токеномика · Parano1d Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=b87d5ca6ee03">
+  <link rel="stylesheet" href="/assets/source-dialog.css?v=a9395fdbf3ff">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Parano1d v2. Токеномика","description":"График v2 проходит девять точных значений от 16 до 1 NOID с интервалом 1 051 200 блоков от активации. Причины отказа от уменьшений по расширению State, постоянная конечная ступень и экономическая роль консолидации, комиссий и сжигания.","datePublished":"2026-09-25","dateModified":"2026-09-25","url":"https://lab.parano1d.org/ru/research/parano1d-v2-tokenomics/","mainEntityOfPage":"https://lab.parano1d.org/ru/research/parano1d-v2-tokenomics/","inLanguage":"ru","isAccessibleForFree":true,"author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/parano1d-v2-tokenomics.png","about":"Экономика сети"}</script>
+</head>
+<body class="locale-ru">
+  <a class="skip-link" href="#content">К содержанию</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/ru/" aria-label="Главная ParanO(1)d Lab">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>ParanO(1)d Lab</strong><small>Исследования</small></span>
+    </a>
+    <div class="header-controls">
+      <details class="language-switcher"><summary aria-label="Выбрать язык"><span>RU</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="Язык"><a href="/research/parano1d-v2-tokenomics/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/parano1d-v2-tokenomics/" lang="ru" hreflang="ru" aria-current="true"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/parano1d-v2-tokenomics/" lang="zh-Hans" hreflang="zh-Hans"><span>中文</span><strong>简体中文</strong></a></div></details>
+      <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
+        <a href="/ru/#latest">Новое</a>
+        <a aria-current="page" href="/ru/research/">Все исследования</a>
+        <span class="nav-rule" aria-hidden="true"></span>
+        <a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">Документация <span aria-hidden="true">↗</span></a>
+        <a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">Parano1d <span aria-hidden="true">↗</span></a>
+        <button class="nav-source" type="button" data-source-open aria-haspopup="dialog" aria-controls="source-dialog"><svg class="nav-source-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Исходники</span></button>
+      </nav>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    </div>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/ru/research/">← Все исследования</a><div class="article-meta"><span>Экономика протокола</span><span>Экономика сети</span><time datetime="2026-09-25">25 сент. 2026 г.</time></div><h1>Parano1d v2. Токеномика</h1><p class="article-dek">Высота определяет эмиссию, заполненность — цену живого хранения. Почему мы изменили исходный график и сохранили стимул экономить State.</p><div class="article-byline"><span>Автор Ignotus Nemo</span><span>5 мин чтения</span><span>Правила mainnet v2 · H210537</span></div><div class="article-share" aria-label="Поделиться исследованием"><span class="article-share-label">Поделиться</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/ru/research/parano1d-v2-tokenomics/" data-copy-default="Копировать ссылку" data-copy-success="Скопировано" data-copy-failure="Не удалось скопировать" aria-label="Скопировать ссылку на статью" title="Копировать ссылку"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">Копировать ссылку</span></button><a class="share-action" href="https://x.com/intent/post?text=Parano1d%20v2.%20%D0%A2%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%BC%D0%B8%D0%BA%D0%B0&amp;url=https%3A%2F%2Flab.parano1d.org%2Fru%2Fresearch%2Fparano1d-v2-tokenomics%2F" aria-label="Поделиться статьёй в X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Поделиться в X</span></a></div></div>
+      <div class="research-art art--economicsv2" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-economicsv2" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-economicsv2" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-economicsv2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-economicsv2" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-economicsv2" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-economicsv2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-economicsv2)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-economicsv2)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 374V394H54M586 394H606V374"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="320" y="48" text-anchor="middle">V2 · ISSUANCE FOLLOWS HEIGHT</text>
+    <path d="M48 92V330H594" fill="none" stroke="#365b45"/>
+  <path d="M48 264H594" stroke="#244032" stroke-dasharray="3 5"/><path d="M48 216H594" stroke="#244032" stroke-dasharray="3 5"/><path d="M48 168H594" stroke="#244032" stroke-dasharray="3 5"/><path d="M48 120H594" stroke="#244032" stroke-dasharray="3 5"/>
+  <path d="M62 120H125V176.39999999999998H188V216H251V244.2H314V264H377V278.04H440V288H503V295.08H566V300H596" fill="none" stroke="#30e988" stroke-width="2.5"/>
+  <circle cx="62" cy="120" r="4" fill="#30e988"/><text x="62" y="107" text-anchor="middle">16</text><circle cx="125" cy="176.39999999999998" r="4" fill="#30e988"/><text x="125" y="163.39999999999998" text-anchor="middle">11.3</text><circle cx="188" cy="216" r="4" fill="#30e988"/><text x="188" y="203" text-anchor="middle">8</text><circle cx="251" cy="244.2" r="4" fill="#30e988"/><text x="251" y="231.2" text-anchor="middle">5.65</text><circle cx="314" cy="264" r="4" fill="#30e988"/><text x="314" y="251" text-anchor="middle">4</text><circle cx="377" cy="278.04" r="4" fill="#30e988"/><text x="377" y="265.04" text-anchor="middle">2.83</text><circle cx="440" cy="288" r="4" fill="#30e988"/><text x="440" y="275" text-anchor="middle">2</text><circle cx="503" cy="295.08" r="4" fill="#30e988"/><text x="503" y="282.08" text-anchor="middle">1.41</text><circle cx="566" cy="300" r="4" fill="#30e988"/><text x="566" y="287" text-anchor="middle">1</text>
+  <text class="diagram-micro" x="62" y="350">H210537</text>
+  <text class="diagram-micro" x="580" y="350" text-anchor="end">+1,051,200 BLOCKS PER STEP</text>
+  <text class="diagram-micro" x="62" y="91">NOID / BLOCK</text>
+    <text class="diagram-caption" x="320" y="384" text-anchor="middle">Eight reductions · permanent 1 NOID tail</text>
+  </svg></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="В этой статье"><strong>В этой статье</strong><a href="#the-original-assumption">Что предполагала исходная модель</a><a href="#exact-schedule">Девять точных значений</a><a href="#shape-of-the-curve">Почему кривая устроена так</a><a href="#why-consolidate">Зачем тогда очищать State</a><a href="#independent-incentives">Два независимых ориентира</a></aside>
+      <article class="article-body"><p>У эмиссии должен быть понятный горизонт. Человек должен видеть, когда меняется награда, а приложение — вычислять её по правилам протокола. В первоначальной модели Parano1d этот горизонт зависел от расширения State. Первый период mainnet показал, почему такая связь работает иначе, чем мы рассчитывали.</p>
+<p>V2 разделяет две задачи. Высота блока определяет выпуск новых NOID. Заполненность State определяет цену увеличения общего набора живых записей. Экономить место по-прежнему выгодно, но эффективное использование сети больше не отодвигает следующую ступень эмиссии.</p>
+<div class="note"><strong>Начало отсчёта</strong><p>Новый график начинается с блока mainnet <strong>210 537</strong>. Существующие балансы не пересчитываются. Первый год в блоках отсчитывается от форка, а не от genesis и не от установки новой версии.</p></div>
+
+<h2 id="the-original-assumption">Что предполагала исходная модель</h2>
+<p>Стартовая награда составляла 50 NOID за блок. Когда устойчивое заполнение требовало увеличить область State, награда уменьшалась вдвое. Идея связывала сокращение эмиссии с ростом полезного использования сети.</p>
+<p>Но State показывает остаток: сколько выходов живы сейчас. Он не измеряет время, оборот или число уже исполненных операций. Трата освобождает слот. Консолидация заменяет много выходов меньшим числом. Контракт способен многократно обновлять право, почти не увеличивая живой набор.</p>
+<p>В начале mainnet заполнение оставалось низким, и у уменьшения награды не было предсказуемого срока. Дело не только в том, что активность оказалась ниже ожиданий. Сам показатель может оставаться небольшим даже у полезного, активно работающего приложения, если оно хорошо переиспользует State.</p>
+<p>Получалось противоречие между двумя желательными результатами: хранить меньше записей и иметь видимый график снижения эмиссии. Чтобы приблизить очередное уменьшение награды, сети требовалось больше живых выходов; чтобы снизить нагрузку на будущие узлы, их следовало создавать экономно. Новый график устраняет эту зависимость.</p>
+
+<h2 id="exact-schedule">Девять точных значений</h2>
+<p>Пусть <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>=</mo><mn>210537</mn></mrow><annotation encoding="application/x-tex">H=210537</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">210537</span></span></span></span></span>, а интервал <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo>=</mo><mn>1051200</mn></mrow><annotation encoding="application/x-tex">I=1051200</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1051200</span></span></span></span></span> блоков. Для высоты <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>≥</mo><mi>H</mi></mrow><annotation encoding="application/x-tex">h\ge H</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8304em;vertical-align:-0.136em;"></span><span class="mord mathnormal">h</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span></span> номер ступени определяется целочисленно:</p>
+<div class="math-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>k</mi><mo stretchy="false">(</mo><mi>h</mi><mo stretchy="false">)</mo><mo>=</mo><mi>min</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><mrow><mo fence="true">⌊</mo><mfrac><mrow><mi>h</mi><mo>−</mo><mi>H</mi></mrow><mi>I</mi></mfrac><mo fence="true">⌋</mo></mrow><mo separator="true">,</mo><mn>8</mn><mo fence="true">)</mo></mrow><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">k(h)=\min\left(\left\lfloor\frac{h-H}{I}\right\rfloor,8\right).</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mopen">(</span><span class="mord mathnormal">h</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4em;vertical-align:-0.95em;"></span><span class="mop">min</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">⌊</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">h</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">⌋</span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">8</span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">.</span></span></span></span></span></div>
+<div class="table-wrap"><table><thead><tr><th>Номинальные годы от v2</th><th>Первая высота</th><th>NOID за блок</th><th>Валовая субсидия за полный интервал</th></tr></thead><tbody>
+<tr><td>0</td><td>210 537</td><td>16</td><td>16 819 200</td></tr><tr><td>1</td><td>1 261 737</td><td>11,30</td><td>11 878 560</td></tr><tr><td>2</td><td>2 312 937</td><td>8</td><td>8 409 600</td></tr><tr><td>3</td><td>3 364 137</td><td>5,65</td><td>5 939 280</td></tr><tr><td>4</td><td>4 415 337</td><td>4</td><td>4 204 800</td></tr><tr><td>5</td><td>5 466 537</td><td>2,83</td><td>2 974 896</td></tr><tr><td>6</td><td>6 517 737</td><td>2</td><td>2 102 400</td></tr><tr><td>7</td><td>7 568 937</td><td>1,41</td><td>1 482 192</td></tr><tr><td>8 и далее</td><td>8 620 137</td><td>1</td><td>1 051 200 за каждый последующий интервал</td></tr>
+</tbody></table></div>
+<p>При целевом интервале 30 секунд это 365 дней на ступень. Календарная дата зависит от фактического выхода блоков. Консенсус оперирует целыми μNOID: в одном NOID их 1 000 000. Значения таблицы заданы точно, без вычислений с плавающей точкой и без решения оператора в момент перехода.</p>
+<p>Расширение State не ускоряет и не перезапускает график. Выбор награды по аутентифицированной высоте проверяется в отношении блока.</p>
+
+<h2 id="shape-of-the-curve">Почему кривая устроена так</h2>
+<p>Отправные условия — постоянная конечная ступень 1 NOID и четыре эквивалента халвинга за восемь номинальных лет. Они задают опорный ряд <strong>16 → 8 → 4 → 2 → 1</strong> с шагом в два года. Промежуточные ежегодные уменьшения распределяют изменение награды между этими точками.</p>
+<p>Приблизительный множитель одного года равен <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><msqrt><mn>2</mn></msqrt></mrow><annotation encoding="application/x-tex">1/\sqrt{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1572em;vertical-align:-0.25em;"></span><span class="mord">1/</span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9072em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord">2</span></span></span><span style="top:-2.8672em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="1.08em" viewBox="0 0 400000 1080" preserveAspectRatio="xMinYMin slice"><path d="M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1328em;"><span></span></span></span></span></span></span></span></span></span>. В коде зафиксированы суммы <strong>11,30; 5,65; 2,83; 1,41</strong>, поэтому сеть не вычисляет квадратный корень и не выбирает способ округления заново.</p>
+<p>Уменьшается и стартовая скорость выпуска. 50 NOID при цели 20 секунд соответствовали 216 000 NOID за номинальные сутки. 16 NOID при цели 30 секунд — 46 080. Снижение составляет <strong>78,67%</strong> относительно исходной награды прежнего профиля, до возможных уменьшений по старому правилу.</p>
+<p>Восемь интервалов до постоянной ступени дают <strong>53 810 928 NOID</strong> запланированной валовой субсидии. Далее продолжается выпуск по 1 NOID на блок, или 1 051 200 за номинальный год. Жёсткого максимума предложения поэтому нет. Сумма субсидий сама по себе не определяет обращающееся предложение: нужно учитывать сжигание и суммы, которые не были выпущены или востребованы.</p>
+<p>Постоянная субсидия сохраняет источник вознаграждения наряду с комиссиями. Рыночную стоимость дохода майнеров она не фиксирует. Её задача — оставить явную продолжающуюся составляющую выпуска после завершения восьми ступеней снижения.</p>
+
+<h2 id="why-consolidate">Зачем тогда очищать State</h2>
+<p>Потому что новые живые слоты стоят дороже по мере заполнения сети. Минимальная комиссия состоит из базовой части, платы за входы и выходы и компонента за чистое увеличение числа живых слотов. Последний компонент сжигается; обычные составляющие комиссии и добровольная доплата могут быть востребованы майнером.</p>
+<div class="table-wrap"><table><thead><tr><th>Заполнение родительского State</th><th>Множитель платы за рост</th></tr></thead><tbody><tr><td>Менее 50%</td><td>1×</td></tr><tr><td>От 50% до менее 75%</td><td>2×</td></tr><tr><td>От 75% до менее 90%</td><td>4×</td></tr><tr><td>90% и выше</td><td>8×</td></tr></tbody></table></div>
+<p>Платёж с одним входом и двумя выходами при минимальном давлении требует по консенсусу 5 000 + 100 + 1 400 + 2 500 μNOID, то есть <strong>0,009 NOID</strong>. При максимальном давлении компонент роста становится 20 000 μNOID, а итог — <strong>0,0265 NOID</strong>. Локальная политика ретрансляции может потребовать больше.</p>
+<p>Консолидация, создающая меньше выходов, чем расходует, не увеличивает число живых слотов и не платит за рост. Базовая плата и плата за входы/выходы сохраняются. Этот стимул работает внутри каждого уровня State, ещё до необходимости расширить его область.</p>
+<p>Контракты оплачивают свой фактический след по тем же правилам. Вызов может заменить один выход преемником, а может дополнительно создать платёжный выход и увеличить живой набор. Счётчики программы не освобождают её от обычного учёта стоимости и хранения.</p>
+
+<h2 id="independent-incentives">Два независимых ориентира</h2>
+<p>Высота сообщает, какой выпуск разрешён сейчас и когда наступит следующая ступень. Заполненность сообщает, сколько стоит добавить постоянную запись в общее состояние. Пользователь может уменьшить второе консолидацией, не сдвигая первое.</p>
+<p>Это и есть основание изменения модели. Хорошее переиспользование State должно оставаться преимуществом для сети. Одновременно эмиссии нужен график, который можно прочитать и проверить заранее, не прогнозируя количество будущих UTXO.</p>
+<p>В <a href="https://docs.parano1d.org/ru/protocol/economics" target="_blank" rel="noopener noreferrer">справочнике экономики</a> приведены полные формулы и правила комиссий. В следующей статье — <a href="/ru/research/parano1d-v2-live-rights/">как контрактные приложения используют живые права, сохраняя State небольшим</a>.</p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Материалы исследования</p><h2 id="evidence-title">Доказательства и артефакты</h2><p>Здесь сохранены реализации, измерения и выводы, на которых основана статья.</p></div><div class="evidence-links"><a href="https://docs.parano1d.org/protocol/economics" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Документация</small><strong>Экономика сети и точный график</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c83c453efbe4b2d235ed1c6d579e3d869e751575/noid_chain/src/consensus/emission.rs" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>Код</small><strong>Целочисленный график эмиссии в исходном коде</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c83c453efbe4b2d235ed1c6d579e3d869e751575/noid_chain/src/consensus/fees.rs" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>Код</small><strong>Правила комиссий и сжигания</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/protocol/state" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Документация</small><strong>Живой State и расширение</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/archive/legacy-profiles" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Archive</small><strong>Архив параметров протокола</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Соседние исследования"><a href="/ru/research/decentralization-across-time/"><small>Ранее</small><strong>Децентрализация во времени</strong><span>←</span></a><a href="/ru/research/parano1d-v2-capacity-and-consensus/"><small>Позднее</small><strong>V2 · Вместимость и консенсус</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>ParanO(1)d Lab</strong><p>Исследования протокола ParanO(1)d.</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>Исследования</strong><a href="/ru/research/">Архив</a><a href="/ru/feed.xml">RSS-лента</a></div>
+      <div><strong>Проект</strong><a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">Сайт</a><a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">Документация</a><a href="https://git.parano1d.org/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer">Исходный код</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 ParanO(1)d Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=07f922a53399" defer></script>
+</body>
+</html>

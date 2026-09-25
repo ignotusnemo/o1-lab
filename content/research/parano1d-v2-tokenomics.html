@@ -1,0 +1,48 @@
+<p>A monetary schedule needs a clock people can read. Parano1d originally used expansion of the live State as that clock. Early mainnet operation exposed the problem: a measure of outstanding outputs cannot reliably measure the passage of time or the amount of useful activity.</p>
+<p>V2 assigns each mechanism a clear job. Block height advances issuance. State occupancy prices the cost of adding persistent live records. Efficient reuse of State remains valuable, and future issuance becomes calculable from published constants.</p>
+<div class="note"><strong>Activation</strong><p>The schedule begins at mainnet block <strong>210,537</strong>. Existing balances are preserved. Its first interval starts at the fork itself, rather than at genesis or the date a user installs the release.</p></div>
+
+<h2 id="why-the-original-clock-drifted">Why State growth was the wrong monetary clock</h2>
+<p>The original rule started at 50 NOID per block and halved the reward when sustained occupancy required a larger State domain. The intended connection was understandable: as the network grew, new issuance would decline.</p>
+<p>But live State counts what remains unspent. It does not count transactions already completed. Spending releases slots. Consolidation turns many live outputs into fewer. A contract can update the same funded right repeatedly while leaving the size of the live set almost unchanged.</p>
+<p>Low occupancy during early mainnet operation left reward reductions without a visible horizon. More importantly, that uncertainty was structural. Even a useful, heavily used application could reuse State efficiently and never provide the expansion event that the monetary schedule expected.</p>
+<p>Linking both mechanisms to occupancy also sent conflicting signals. Users should have a reason to consolidate and keep shared State small. They should not need to create more persistent records to make the next reward reduction arrive. V2 separates those decisions.</p>
+
+<h2 id="the-published-schedule">The published schedule</h2>
+<p>From the activation height <math-inline>H=210537</math-inline>, one interval contains <math-inline>I=1051200</math-inline> blocks. The reward index at height <math-inline>h\ge H</math-inline> is:</p>
+<math-block>k(h)=\min\left(\left\lfloor\frac{h-H}{I}\right\rfloor,8\right).</math-block>
+<p>The exact gross subsidy is selected from this table:</p>
+<div class="table-wrap"><table><thead><tr><th>Nominal years from v2</th><th>First block</th><th>NOID per block</th><th>Gross subsidy per full interval</th></tr></thead><tbody>
+<tr><td>0</td><td>210,537</td><td>16</td><td>16,819,200</td></tr>
+<tr><td>1</td><td>1,261,737</td><td>11.30</td><td>11,878,560</td></tr>
+<tr><td>2</td><td>2,312,937</td><td>8</td><td>8,409,600</td></tr>
+<tr><td>3</td><td>3,364,137</td><td>5.65</td><td>5,939,280</td></tr>
+<tr><td>4</td><td>4,415,337</td><td>4</td><td>4,204,800</td></tr>
+<tr><td>5</td><td>5,466,537</td><td>2.83</td><td>2,974,896</td></tr>
+<tr><td>6</td><td>6,517,737</td><td>2</td><td>2,102,400</td></tr>
+<tr><td>7</td><td>7,568,937</td><td>1.41</td><td>1,482,192</td></tr>
+<tr><td>8 onward</td><td>8,620,137</td><td>1</td><td>1,051,200 per interval thereafter</td></tr>
+</tbody></table></div>
+<p>At the 30-second target, an interval is 365 days. Actual calendar dates depend on block production. The consensus calculation uses integer μNOID, with 1,000,000 μNOID in one NOID. No floating-point approximation or administrator chooses the amount at a boundary.</p>
+<p>State expansion neither advances nor resets this schedule. The reward selected by authenticated height is checked inside the block relation.</p>
+
+<h2 id="why-this-curve">Why 16, and why these steps</h2>
+<p>The design joins a permanent 1 NOID tail to four halving equivalents over eight nominal years. That gives the two-year anchors <strong>16 → 8 → 4 → 2 → 1</strong>. One intermediate reduction per year spreads the change between those anchors.</p>
+<p>The approximate annual multiplier is <math-inline>1/\sqrt{2}</math-inline>. Consensus uses the fixed intermediate amounts <strong>11.30, 5.65, 2.83 and 1.41</strong>, rather than computing square roots. The complete sequence is visible before the first v2 block.</p>
+<p>The transition also reduces the initial gross issuance rate. The old starting profile issued 50 NOID per 20-second target; v2 starts with 16 per 30-second target. Those rates are 216,000 and 46,080 NOID per nominal day respectively: a <strong>78.67% reduction</strong>, before any reduction under the old State schedule.</p>
+<p>The eight intervals before the tail sum to <strong>53,810,928 NOID</strong> of scheduled gross subsidy. The tail continues at 1 NOID per block, or 1,051,200 per nominal year. There is therefore no fixed maximum supply. These sums describe the subsidy schedule; actual circulating supply also depends on burns and value that is not issued or claimed.</p>
+<p>A permanent tail maintains a subsidy alongside fees. It does not fix the market value of mining revenue or guarantee any particular security budget. Its role is to keep an explicit ongoing issuance component after the transition has finished.</p>
+
+<h2 id="the-price-of-live-state">The price of live State still rises with use</h2>
+<p>Removing occupancy from issuance leaves its storage-pricing role intact. The minimum fee includes a base amount, live-input and live-output charges, and a charge for each <em>net-new</em> live slot. Only that growth component is burned; ordinary fee components and voluntary tips remain miner-claimable.</p>
+<div class="table-wrap"><table><thead><tr><th>Parent-State occupancy</th><th>Growth-fee multiplier</th></tr></thead><tbody>
+<tr><td>Below 50%</td><td>1×</td></tr><tr><td>50% to below 75%</td><td>2×</td></tr><tr><td>75% to below 90%</td><td>4×</td></tr><tr><td>90% and above</td><td>8×</td></tr>
+</tbody></table></div>
+<p>For a one-input, two-output payment, the consensus minimum is 5,000 + 100 + 1,400 + 2,500 μNOID at the lowest pressure: <strong>0.009 NOID</strong>. At the highest pressure, the growth term becomes 20,000 μNOID and the total becomes <strong>0.0265 NOID</strong>. Local relay policy can require a higher fee.</p>
+<p>A consolidation with fewer outputs than inputs adds no live slots and pays no growth charge. The base and input/output fees still apply. This incentive operates within every State level, before another expansion is needed.</p>
+<p>Contracts follow the same footprint accounting. A continuing call can replace one live record with a successor. A call that also creates a payment output can add a slot and incur the corresponding growth charge. The program's counters do not create a separate exemption from ordinary value and storage rules.</p>
+
+<h2 id="a-clock-and-a-price">A clock and a price</h2>
+<p>Block height gives issuance a public timetable. Occupancy gives scarce shared storage a price. Consolidation and State reuse can improve the latter without delaying the former.</p>
+<p>This is the reason for changing the original rule. The live set tells us what the network must retain now; it cannot also provide a predictable schedule for future issuance. V2 preserves the incentive to keep that set efficient while making every reward tier independently calculable.</p>
+<p>The exact implementation and full fee rules are linked below. The next article, <a href="/research/parano1d-v2-live-rights/">From live value to live rights</a>, explains why repeated useful contract activity can coexist with a small live State.</p>

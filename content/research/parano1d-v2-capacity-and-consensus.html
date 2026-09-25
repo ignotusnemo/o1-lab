@@ -1,0 +1,45 @@
+<p>A proof-native block has to fit two budgets. Its transactions must fit the transition relation, and the proof of that relation must be practical for the machines producing and verifying the network. Increasing the number printed beside “transactions per block” solves only the first half of that problem.</p>
+<p>Parano1d v2 makes the relationship explicit: a default Small class, an optional Large class, the same contract core in both, and a 30-second block target. Capacity, proof construction and consensus timing form one design.</p>
+<div class="note"><strong>The v2 profile</strong><p>These rules apply from mainnet block <strong>210,537</strong>. Version 2.0.0 switches automatically at that height. The existing genesis and the earlier v1 → v1.1 transition are preserved.</p></div>
+
+<h2 id="what-a-page-buys">Start with the page</h2>
+<p>The physical unit is a <code>Tx8x2</code> page: up to eight inputs and two outputs, encoded in 323 bytes. An ordinary payment with one input and two outputs fits one page. A larger logical payment can join pages through <code>PagedSpend</code>, retaining one transaction identifier, authorization capsule, fee and receipt.</p>
+<p>Page count therefore measures physical capacity. Logical transaction count depends on the workload. A consolidation can use several pages; a contract call uses one page and consumes one exact contract output. The active input limit applies across the entire block, including both kinds of work.</p>
+<div class="table-wrap"><table><thead><tr><th>V2 class</th><th>Matrix domain</th><th>User pages</th><th>Live inputs</th><th>Contract calls</th><th>Production</th></tr></thead><tbody>
+<tr><td>Small</td><td>m23</td><td>63</td><td>504</td><td>63</td><td>Default</td></tr>
+<tr><td>Large</td><td>m24</td><td>206</td><td>504</td><td>63</td><td>Server opt-in</td></tr>
+</tbody></table></div>
+<p>The three limits apply together. Small can hold 63 ordinary one-page payments, 63 calls, or a mixture totalling 63 pages. Large can hold 206 one-page payments, or 63 calls plus 143 one-page payments, provided the combined inputs fit 504. Large provides more payment room around the same contract workload.</p>
+<p>The primary coinbase is separate. An additional mandatory system page, when required, uses one of those positions, leaving 62 or 205 user pages. An ordinary logical transaction can span at most 128 pages, further restricted by its block class and the shared input budget.</p>
+
+<h2 id="one-core-two-classes">One contract core, two production choices</h2>
+<p>The parameter <code>m</code> identifies the padded binary proof domain: m23 has <math-inline>2^{23}</math-inline> positions, m24 has <math-inline>2^{24}</math-inline>. Those positions pay for the whole recursive relation: authorization, exact State updates, contract execution, prior-proof verification and the other consensus checks. They are not transaction slots.</p>
+<p>Both classes implement the same 16-instruction contract core with two persistent counters. A program accepted under Small has the same meaning under Large. Application developers do not select a weaker execution environment to reach ordinary nodes.</p>
+<p>A producing server enables Large with <code>--v2-large-blocks</code>. The flag permits fee-based class selection; it does not force every candidate into Large. The GUI has no corresponding switch. Every validating node accepts and verifies either class under the same consensus rules.</p>
+<p>This matters economically. Larger proving work must be worthwhile for the producer. An almost empty block does not become cheap in direct proportion to its transaction count: the selected class still proves its fixed relation. A default that depends on every miner choosing the largest possible workload would be a poor fit for that cost structure.</p>
+
+<h2 id="the-thirty-second-budget">What thirty seconds means</h2>
+<p>Block production still follows the atomic path: construct the exact candidate, prove its transition, freeze the template, then search proof-of-work nonces. An accepted block contains both the block and its matching HistoryStep terminal. There is no second chain tip waiting for proofs to catch up.</p>
+<p>The 30-second target describes the network's mean block interval. It includes the full production path. It is neither a fixed allowance for proving followed by another 30 seconds of mining, nor a promise that any particular machine will produce a block every half minute.</p>
+<p>At that target, 63 one-page payments per Small block correspond to <strong>2.1 payments per second</strong>; 206 per Large block correspond to about <strong>6.87</strong>. Both classes allow at most <strong>2.1 contract calls per second</strong> at the target. These are workload-specific capacity ceilings. Actual throughput also depends on class selection, multi-page transactions, available inputs, proving time and block arrival times.</p>
+
+<h2 id="timing-rules">The clocks around the block</h2>
+<p>Changing the interval affects every rule whose duration is expressed in blocks. V2 keeps those quantities explicit and adjusts the difficulty schedule across the activation boundary.</p>
+<div class="table-wrap"><table><thead><tr><th>Rule</th><th>V2 value</th><th>At the target interval</th></tr></thead><tbody>
+<tr><td>ASERT reference epoch / half-life</td><td>6 blocks / 180 seconds</td><td>Difficulty follows the new cadence</td></tr>
+<tr><td>Transaction epoch</td><td>144 blocks</td><td>72 minutes</td></tr>
+<tr><td>Hard finality / maximum rollback</td><td>18 / 17 blocks</td><td>Finality around 9 minutes</td></tr>
+<tr><td>Retained bodies / undo data</td><td>42 / 36 blocks</td><td>21 / 18 minutes</td></tr>
+<tr><td>Median-time-past / future allowance</td><td>11 headers / 120 seconds</td><td>Separate timestamp checks</td></tr>
+</tbody></table></div>
+<p>ASERT counts the old and new target intervals on their respective sides of the fork. Candidate-height rule selection is repeated after a reorganization. A deadline in a contract uses its inclusion height, so “one day” means a nominal 2,880 blocks and still needs confirmation headroom.</p>
+
+<h2 id="a-bounded-network-object">A bounded network object</h2>
+<p>The terminal transport cap remains <strong>1,100,000 bytes</strong>. The v2 bounds are 1,014,132 bytes for Small and 1,081,396 for Large. Increasing execution capacity does not silently enlarge the terminal a peer must accept.</p>
+<p>The first v2 proof binds to the authenticated last pre-v2 block. The transition release carries both matrix generations. The retirement mechanism supports later builds that omit the old matrices while preserving the authenticated connection to the earlier chain. Removing old files cannot mean replacing that connection with an assumed snapshot.</p>
+<p>Likewise, a Large block's proof obligations remain represented in subsequent history. The verifier can cache exact carried claims it has already authenticated, avoiding repeated work while continuing to verify new claims and transitions. Class switching preserves the proof chain.</p>
+
+<h2 id="what-the-profile-achieves">Capacity with a defined cost</h2>
+<p>V2 gives the network a larger default payment budget and a real contract budget, while making the more expensive production choice explicit. The same limits govern admission, block construction, verification and the application's view of available capacity.</p>
+<p>The resulting profile is concrete enough to build against: 30-second blocks, one contract core, two production classes, bounded terminals and a height-authenticated transition. The <a href="https://docs.parano1d.org/reference/performance">performance record</a> provides measurements with their exact workloads and hardware; the <a href="https://docs.parano1d.org/protocol/parameters">parameter reference</a> gives the complete limits.</p>
+<p>Continue with <a href="/research/parano1d-v2-tokenomics/">Parano1d v2. Tokenomics</a>, then <a href="/research/parano1d-v2-live-rights/">From live value to live rights</a>.</p>

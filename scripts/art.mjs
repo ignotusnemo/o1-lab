@@ -351,7 +351,51 @@ const categoryone = `<svg viewBox="0 0 640 420" role="presentation">
   </g>
 </svg>`;
 
+const capacityv2 = frame("capacityv2", "V2 · ONE CORE, TWO BLOCK CLASSES", `
+  <g class="${tone("green")}"><rect x="62" y="100" width="238" height="152" rx="14"/>
+    <text x="181" y="132" text-anchor="middle">SMALL · m23</text>
+    <text class="diagram-value" style="font-size:42px" x="181" y="192" text-anchor="middle">63</text>
+    <text class="diagram-micro" x="181" y="228" text-anchor="middle">USER PAGES · DEFAULT</text></g>
+  <g class="${tone("blue")}"><rect x="340" y="100" width="238" height="152" rx="14"/>
+    <text x="459" y="132" text-anchor="middle">LARGE · m24</text>
+    <text class="diagram-value" style="font-size:42px" x="459" y="192" text-anchor="middle">206</text>
+    <text class="diagram-micro" x="459" y="228" text-anchor="middle">USER PAGES · SERVER OPT-IN</text></g>
+  <path d="M181 252V282H459V252M320 282V300" fill="none" stroke="#508e6b"/>
+  <g class="${tone()}"><rect x="104" y="300" width="432" height="42" rx="10"/>
+    <text x="320" y="326" text-anchor="middle">504 INPUTS · 63 CALLS · 30-SECOND TARGET</text></g>
+`, "Shared budgets · one call uses one page and one input");
+
+const rewardPoints = [16, 11.3, 8, 5.65, 4, 2.83, 2, 1.41, 1].map((value, index) => ({ value, x: 62 + index * 63, y: 312 - value * 12 }));
+const economicsv2 = frame("economicsv2", "V2 · ISSUANCE FOLLOWS HEIGHT", `
+  <path d="M48 92V330H594" fill="none" stroke="#365b45"/>
+  ${[4, 8, 12, 16].map(value => `<path d="M48 ${312 - value * 12}H594" stroke="#244032" stroke-dasharray="3 5"/>`).join("")}
+  <path d="${rewardPoints.map((p, i) => i ? `H${p.x}V${p.y}` : `M${p.x} ${p.y}`).join("")}H596" fill="none" stroke="#30e988" stroke-width="2.5"/>
+  ${rewardPoints.map(p => `<circle cx="${p.x}" cy="${p.y}" r="4" fill="#30e988"/><text x="${p.x}" y="${p.y - 13}" text-anchor="middle">${p.value}</text>`).join("")}
+  <text class="diagram-micro" x="62" y="350">H210537</text>
+  <text class="diagram-micro" x="580" y="350" text-anchor="end">+1,051,200 BLOCKS PER STEP</text>
+  <text class="diagram-micro" x="62" y="91">NOID / BLOCK</text>
+`, "Eight reductions · permanent 1 NOID tail");
+
+const rightsv2 = frame("rightsv2", "V2 · FROM LIVE VALUE TO LIVE RIGHTS", `
+  <g class="${tone("green")}"><rect x="46" y="119" width="214" height="148" rx="14"/>
+    <text x="153" y="151" text-anchor="middle">CURRENT RIGHT</text>
+    <text class="diagram-micro" x="153" y="184" text-anchor="middle">VALUE · PROGRAM · POLICY</text>
+    <text class="diagram-value" x="153" y="222" text-anchor="middle">state0, state1</text></g>
+  <g class="${tone("blue")}"><rect x="380" y="119" width="214" height="148" rx="14"/>
+    <text x="487" y="151" text-anchor="middle">SUCCESSOR RIGHT</text>
+    <text class="diagram-micro" x="487" y="184" text-anchor="middle">SAME PROGRAM · SAME POLICY</text>
+    <text class="diagram-value" x="487" y="222" text-anchor="middle">state0′, state1′</text></g>
+  ${arrow("rightsv2", "M260 194H380")}
+  <circle cx="320" cy="194" r="32" fill="#09241a" stroke="#30e988"/>
+  <text x="320" y="203" text-anchor="middle" style="font-size:28px">π</text>
+  <text class="diagram-micro" x="320" y="294" text-anchor="middle">ONE SHARED RECURSIVE BLOCK PROOF</text>
+  <text class="diagram-micro" x="320" y="328" text-anchor="middle">PARTICIPANTS KEEP TERMS + RECEIPTS</text>
+`, "Old bodies can be pruned · current rights remain verifiable");
+
 export const artDiagrams = {
+  capacityv2,
+  economicsv2,
+  rightsv2,
   frost,
   kernel,
   state,

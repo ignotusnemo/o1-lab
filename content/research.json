@@ -1,5 +1,154 @@
 [
   {
+    "slug": "parano1d-v2-live-rights",
+    "date": "2026-09-25",
+    "kind": "Protocol architecture",
+    "topic": "Proof-native contracts",
+    "status": "V2 mainnet rules · H210537",
+    "featured": true,
+    "pinned": true,
+    "pinnedLabel": "Pinned",
+    "showAbstract": false,
+    "title": "Parano1d v2. From live value to live rights.",
+    "shortTitle": "V2 · Live rights",
+    "dek": "Proof-native smart contracts: programmable rights whose current validity survives the pruning of their interaction history.",
+    "abstract": "A detailed account of Parano1d v2 contracts: committed programs and authorities, persistent integer state, execution inside the shared recursive block relation, six application templates, exact instance semantics, portable receipts and recovery after offline pruning.",
+    "authors": [
+      "Ignotus Nemo"
+    ],
+    "art": "rightsv2",
+    "evidence": [
+      {
+        "label": "Contract core and ABI 3",
+        "href": "https://docs.parano1d.org/contracts/core",
+        "type": "Documentation"
+      },
+      {
+        "label": "Contract lifecycle",
+        "href": "https://docs.parano1d.org/contracts/lifecycle",
+        "type": "Documentation"
+      },
+      {
+        "label": "Receipts and two-party recovery",
+        "href": "https://docs.parano1d.org/contracts/receipts-and-recovery",
+        "type": "Documentation"
+      },
+      {
+        "label": "Pinned contract model",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c83c453efbe4b2d235ed1c6d579e3d869e751575/noid_tx/src/experimental_object.rs",
+        "type": "Code"
+      },
+      {
+        "label": "Pinned integer interpreter",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c83c453efbe4b2d235ed1c6d579e3d869e751575/noid_tx/src/experimental_object/integer_program.rs",
+        "type": "Code"
+      },
+      {
+        "label": "Application tests",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c83c453efbe4b2d235ed1c6d579e3d869e751575/noid_tx/tests/object_applications.rs",
+        "type": "Tests"
+      },
+      {
+        "label": "GUI and API documentation",
+        "href": "https://docs.parano1d.org/contracts",
+        "type": "Documentation"
+      },
+      {
+        "label": "Decentralization Across Time",
+        "href": "/research/decentralization-across-time/",
+        "type": "Architecture"
+      }
+    ]
+  },
+  {
+    "slug": "parano1d-v2-capacity-and-consensus",
+    "date": "2026-09-25",
+    "kind": "Protocol design",
+    "topic": "Capacity and consensus",
+    "status": "V2 mainnet rules · H210537",
+    "featured": true,
+    "showAbstract": false,
+    "title": "Parano1d v2. Capacity and consensus",
+    "shortTitle": "V2 · Capacity and consensus",
+    "dek": "Two block classes, one contract core and a 30-second target. The computational budget becomes an explicit network profile.",
+    "abstract": "V2 defines a 63-page Small class and an optional 206-page Large class, both with 504 live inputs and 63 contract calls. This article explains the shared budgets, atomic proving path, height-aware timing, bounded terminals and continuity across matrix generations.",
+    "authors": [
+      "Ignotus Nemo"
+    ],
+    "art": "capacityv2",
+    "evidence": [
+      {
+        "label": "Complete v2 consensus parameters",
+        "href": "https://docs.parano1d.org/protocol/parameters",
+        "type": "Documentation"
+      },
+      {
+        "label": "Measured production workloads",
+        "href": "https://docs.parano1d.org/reference/performance",
+        "type": "Data"
+      },
+      {
+        "label": "Pinned height-selected rules",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c83c453efbe4b2d235ed1c6d579e3d869e751575/noid_chain/src/consensus/forks.rs",
+        "type": "Code"
+      },
+      {
+        "label": "Pinned consensus parameters",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c83c453efbe4b2d235ed1c6d579e3d869e751575/noid_chain/src/consensus/params.rs",
+        "type": "Code"
+      },
+      {
+        "label": "Matrix retirement and continuity",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c83c453efbe4b2d235ed1c6d579e3d869e751575/noid_soundness/docs/v2-retirement.md",
+        "type": "Analysis"
+      }
+    ]
+  },
+  {
+    "slug": "parano1d-v2-tokenomics",
+    "date": "2026-09-25",
+    "kind": "Protocol economics",
+    "topic": "Network economics",
+    "status": "V2 mainnet rules · H210537",
+    "featured": true,
+    "showAbstract": false,
+    "title": "Parano1d v2. Tokenomics",
+    "shortTitle": "V2 · Tokenomics",
+    "dek": "Height advances issuance. Occupancy prices live storage. Why the original monetary clock changed, and what remains worth conserving.",
+    "abstract": "The v2 schedule moves from 16 to 1 NOID through nine exact subsidy levels at 1,051,200-block intervals from activation. The article explains the mismatch exposed by State-triggered reductions, the permanent tail and the continued incentive to consolidate through occupancy-sensitive growth fees and burns.",
+    "authors": [
+      "Ignotus Nemo"
+    ],
+    "art": "economicsv2",
+    "evidence": [
+      {
+        "label": "Network economics and exact schedule",
+        "href": "https://docs.parano1d.org/protocol/economics",
+        "type": "Documentation"
+      },
+      {
+        "label": "Pinned integer emission schedule",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c83c453efbe4b2d235ed1c6d579e3d869e751575/noid_chain/src/consensus/emission.rs",
+        "type": "Code"
+      },
+      {
+        "label": "Pinned fee and burn rules",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c83c453efbe4b2d235ed1c6d579e3d869e751575/noid_chain/src/consensus/fees.rs",
+        "type": "Code"
+      },
+      {
+        "label": "Live State and expansion",
+        "href": "https://docs.parano1d.org/protocol/state",
+        "type": "Documentation"
+      },
+      {
+        "label": "Archived protocol profiles",
+        "href": "https://docs.parano1d.org/archive/legacy-profiles",
+        "type": "Archive"
+      }
+    ]
+  },
+  {
     "slug": "the-present-must-prove-the-past",
     "updated": "2026-09-05",
     "date": "2026-08-09",
@@ -7,8 +156,6 @@
     "topic": "Proof-carrying State",
     "status": "Production architecture",
     "featured": true,
-    "pinned": true,
-    "pinnedLabel": "Pinned",
     "layout": "flagship",
     "format": "markdown",
     "title": "The Present Must Prove the Past",

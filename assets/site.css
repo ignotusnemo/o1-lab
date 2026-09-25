@@ -26,7 +26,7 @@
    the two site families without replacing their Latin letterforms. */
 @font-face {
   font-family: "Lab Sans";
-  src: url("/assets/fonts/NotoSansSC-Subset-Regular.woff2") format("woff2");
+  src: url("/assets/fonts/NotoSansSC-Subset-Regular.woff2?v=v2-20260925") format("woff2");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -34,7 +34,7 @@
 
 @font-face {
   font-family: "Lab Sans";
-  src: url("/assets/fonts/NotoSansSC-Subset-Bold.woff2") format("woff2");
+  src: url("/assets/fonts/NotoSansSC-Subset-Bold.woff2?v=v2-20260925") format("woff2");
   font-style: normal;
   font-weight: 700;
   font-display: swap;
@@ -42,7 +42,7 @@
 
 @font-face {
   font-family: "Lab Mono";
-  src: url("/assets/fonts/NotoSansSC-Subset-Regular.woff2") format("woff2");
+  src: url("/assets/fonts/NotoSansSC-Subset-Regular.woff2?v=v2-20260925") format("woff2");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -50,7 +50,7 @@
 
 @font-face {
   font-family: "Lab Mono";
-  src: url("/assets/fonts/NotoSansSC-Subset-Bold.woff2") format("woff2");
+  src: url("/assets/fonts/NotoSansSC-Subset-Bold.woff2?v=v2-20260925") format("woff2");
   font-style: normal;
   font-weight: 700;
   font-display: swap;
@@ -886,6 +886,11 @@ img, svg { max-width: 100%; }
 .flow-step strong { display: block; font-size: 15px; line-height: 1.25; }
 .flow-step span { display: block; margin-top: 9px; color: var(--muted); font-size: 11px; line-height: 1.45; }
 .flow-arrow { align-self: center; flex: 0 0 auto; color: var(--green); font: 17px/1 "Lab Mono", monospace; }
+@media (max-width: 640px) {
+  .protocol-flow--contracts { flex-direction: column; gap: 12px; }
+  .protocol-flow--contracts .flow-step { min-width: 0; flex: none; }
+  .protocol-flow--contracts .flow-arrow { transform: rotate(90deg); }
+}
 .note, .failure, .result { margin: 34px 0; padding: 22px 24px; border: 1px solid #cfd7d1; border-radius: 9px; background: linear-gradient(135deg, #fff, #fafbf9); box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,.9); }
 .note { border-top: 3px solid var(--blue); }.failure { border-top: 3px solid var(--coral); }.result { border-top: 3px solid var(--green); }
 .note strong:first-child, .failure strong:first-child, .result strong:first-child { display: block; margin-bottom: 8px; font: 10px/1.2 "Lab Mono", monospace; letter-spacing: .09em; text-transform: uppercase; }

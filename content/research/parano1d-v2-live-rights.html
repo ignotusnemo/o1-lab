@@ -1,0 +1,101 @@
+<p>A balance answers a narrow question: how much value can this owner spend? Many useful agreements need a richer answer. How much may a delegate spend during the current period? When may a beneficiary claim the next payment? Which authority can recover the remainder after a deadline?</p>
+<p>These are statements about rights that still exist. Their validity depends on earlier actions, but a future participant should not have to inherit every earlier action merely to check them.</p>
+<p>In <a href="/research/decentralization-across-time/">Decentralization Across Time</a>, I described the possibility of extending proof-carrying State from money to rights and obligations. Parano1d v2 implements a concrete first core for that model. A live output can commit to a program, its authorities and its current counters. Every accepted change to that object is proved inside the shared recursive block relation.</p>
+<blockquote><p><strong>The current right carries the validity of the path that produced it.</strong></p></blockquote>
+<p>The practical consequence is substantial. A contract can remain independently verifiable after its old interaction bodies have been pruned. Applications gain programmable rules without making every completed interaction a permanent storage obligation for every future node.</p>
+<div class="note"><strong>Proof-native contracts in v2</strong><p>The contract rules apply from mainnet block <strong>210,537</strong>. They are available through the official wallet, CLI and public RPC interface. The implementation is a bounded integer core with six templates and custom programs; its exact capabilities are described below.</p></div>
+
+<h2 id="what-a-live-right-is">What a live right is</h2>
+<p>An ordinary output binds value to an owner. Spending it requires valid authorization for the exact transaction. A contract output adds a committed rule for how that value may change hands and how the contract's own state may advance.</p>
+<p>Here, “right” has a precise protocol meaning: permission to consume a particular live output under particular conditions. The conditions may restrict the authority, recipient, amount, inclusion height or the next counter values. Consensus enforces those conditions on native value. Any interpretation as access to a service or fulfilment of an external obligation belongs to the application using that right.</p>
+<p>Three things then become distinct: the value that exists now, the rules for its next permitted transition, and evidence of an earlier transition. V2 gives each an explicit representation.</p>
+
+<h2 id="the-live-object">A small live record, exact public terms</h2>
+<p>The global live record contains an amount, an owner commitment and its creation identity. For a contract, that owner commitment binds immutable program and policy together with two persistent counters. The public opening supplies the data behind the commitment.</p>
+<div class="equation">current right = live value + commitment(program, policy, state0, state1)</div>
+<p>The ABI 3 opening is <strong>699 bytes</strong>. It includes 16 instructions, the counter pair, claim and recovery authorities, their closing recipients, a deadline and spending limits. Domain-separated commitments bind the program, policy and live object state. There is no separate globally registered contract account whose history must be preserved.</p>
+<p>A continuing call keeps the program and policy fixed and may change the counters. A changed counter pair produces a changed commitment and therefore a new contract address. The wallet groups related states under the same immutable terms so a person can work with one contract in the interface. Consensus still authenticates the exact current commitment.</p>
+<p>The slot is also an exact object, not just a location. Its <code>creation_id</code> distinguishes the live instance from a previous occupant of a reused slot. A call identifies both the slot and its incarnation.</p>
+
+<h2 id="define-fund-call">Define, fund, call</h2>
+<p>Creating terms is local. Anyone can construct, inspect, save or share a program and policy without broadcasting a deployment transaction. Saving those terms is free.</p>
+<p>Funding is a separate ordinary payment to the contract commitment. It creates a live instance with value. A shared term file alone does not establish that funds were deposited; the wallet checks verified State, and a funding receipt can preserve evidence of the payment.</p>
+<p>Every deposit creates an independent instance. Two deposits to the same opening do not become one shared counter or budget. Each instance has its own value and state, and one call consumes one instance. This is an essential design choice when building an application around allowances.</p>
+<p>At the inclusion height, the committed deadline selects the authority branch. Before the deadline, the claim branch applies. At the deadline and afterward, the recovery branch applies. Each branch separately permits continuation, closing, both or neither.</p>
+<div class="table-wrap"><table><thead><tr><th>Operation</th><th>Result</th></tr></thead><tbody>
+<tr><td>Continue without a payment</td><td>One successor contract output; the fee is paid from the consumed value</td></tr>
+<tr><td>Continue with a payment</td><td>A successor contract output and a permitted payment output</td></tr>
+<tr><td>Close</td><td>The remainder goes to the branch's committed closing recipient, after the fee</td></tr>
+</tbody></table></div>
+<p>The selected authority proves knowledge of its spending secret through a fresh capsule bound to the complete transaction. Possessing that authority does not let it bypass the program or alter the committed policy. There is no implicit administrator.</p>
+
+<p>Every live output must retain positive value. A zero-balance contract cannot remain as a free standalone storage record.</p>
+
+<h2 id="where-execution-is-proved">Where execution is proved</h2>
+<p>The wallet reviews a concrete proposed call. The mempool checks admission and conflicts. The miner then constructs a block whose recursive relation checks the contract execution itself.</p>
+<div class="protocol-flow protocol-flow--contracts" aria-label="Contract proof flow"><div class="flow-step"><small>Participant</small><strong>Authorize the exact call</strong><span>Opening, instance, outputs and fee</span></div><div class="flow-arrow">→</div><div class="flow-step"><small>Producer</small><strong>Prove the transition</strong><span>Contract rules + State + prior proof</span></div><div class="flow-arrow">→</div><div class="flow-step"><small>Verifier</small><strong>Authenticate the result</strong><span>Accept the proved successor</span></div></div>
+<p>The relation binds the supplied opening to the consumed commitment, checks the selected authority, executes the integer program, enforces the permitted output shape and proves the exact State changes. Value is conserved across the retained amount, payout and fee. The new HistoryStep also carries the validity of its predecessor.</p>
+<p>Contract execution therefore belongs to the same proof that makes the block's State transition valid. Mempool acceptance is not a substitute for that proof. A producer cannot introduce a different result merely by claiming that it ran the program correctly.</p>
+<p>All applications use the same interpreter and frozen block matrices. A new program that fits the existing core needs no application-specific matrix and no separate execution proof for each contract. Ordinary transaction authorization still supplies its own fresh wallet proof.</p>
+<p>After confirmation and eventual pruning, the network retains the current State and authenticated recursive continuity. A joining node checks that continuity rather than replaying the contract's lifetime of calls. It still downloads live State and validates chain ordering; the proof does not make the live data or proof of work disappear.</p>
+
+<h2 id="a-real-budget">A budget that survives its history</h2>
+<p>Consider an automated client allowed to spend from a funded instance of 100 NOID. Its policy caps each payment at 3 NOID, sets a fee ceiling, preserves a reserve and assigns a separate recovery authority. Its program permits a total of 10 NOID, including fees, per height-based period.</p>
+<p>The two persistent counters hold the remaining budget and the next period boundary. Suppose the client requests a payment of 2 NOID with a fee of 0.01 NOID during the current period. A successful call leaves 97.99 NOID in the instance and 7.99 NOID in the period budget. Those are different quantities, proved by the same transition.</p>
+<p>A second call cannot pretend the remaining budget is still 10. Its opening must match the live commitment produced by the first call. A payment over the per-call ceiling fails. Spending the same incarnation twice fails. Supplying a different program fails.</p>
+<p>At or after the saved period boundary, the next successful call resets the budget and sets a new boundary at that call's inclusion height plus the period. Unused allowance does not accumulate. The template uses a call-started height window; an application should describe it that way rather than promise a calendar-day reset.</p>
+<p>Now remove the old call bodies from ordinary node storage. The current 7.99 budget is still authenticated through the current commitment and recursive proof. A future verifier can establish that the present is valid without retrieving the first payment from an archival provider.</p>
+<p>The example applies to one funded instance. Funding two instances creates two independently usable budgets. An application requiring one aggregate budget must account for that explicitly.</p>
+
+<h2 id="the-integer-core">The integer core</h2>
+<p>The execution budget is fixed: <strong>16 ordered instructions, two persistent unsigned 64-bit counters and two scratch registers</strong>. Scratch registers begin at zero on every call. Later instructions observe earlier writes.</p>
+<p>The operations include copying, checked addition and subtraction, minimum and maximum, comparisons and assertions. Operands can read the registers, integer constants, inclusion height, amounts and fee, branch flags, output recipient words and exact instance or slot identifiers. Predicates select whether an instruction runs.</p>
+<p>Arithmetic overflow, underflow, a false assertion or a non-Boolean predicate rejects the call. The core has no loops, unbounded storage or network access. Those bounds make the execution cost part of the block relation's defined budget.</p>
+<p>One detail matters for custom programs: context operands refer to physical output positions. On continuation, output 0 is the retained contract and output 1 is the payment. On close, output 0 pays the closing recipient and output 1 is absent. A program handling both forms must use the <code>terminal</code> flag correctly; the semantic “payout” shown by an API is not the same thing as the program's physical output-1 operand on close.</p>
+<p>Closing still executes the program and respects the fee ceiling. The policy's continuing-payment cap and minimum retained amount do not themselves limit a closing withdrawal. A custom policy must review every permitted branch, especially recovery and close.</p>
+
+<h2 id="six-usable-forms">Six usable forms of the same model</h2>
+<p>The templates are wallet conveniences compiled to the common core. Their names are not a consensus whitelist.</p>
+<div class="table-wrap"><table><thead><tr><th>Template</th><th>What it enforces</th><th>Application use</th></tr></thead><tbody>
+<tr><td>Payment with refund</td><td>Payee collects before expiry; payer recovers from expiry</td><td>Payments with a defined collection window</td></tr>
+<tr><td>Timelocked vault</td><td>No permitted spend before the height, including by the owner</td><td>Delayed access to saved value</td></tr>
+<tr><td>Allowance wallet</td><td>Capped continuing payments, reserve and a recovery path</td><td>A limited spending key for a person, service or device</td></tr>
+<tr><td>Period budget</td><td>A fee-inclusive budget tracked across calls</td><td>Bounded automated operating expenditure</td></tr>
+<tr><td>Recurring payment</td><td>One exact payment when due; next due height follows the successful call</td><td>A funded recurring claim</td></tr>
+<tr><td>Gradual unlock</td><td>One fixed tranche per due step, then closing at maturity</td><td>Staged release to a beneficiary</td></tr>
+</tbody></table></div>
+<p>A per-call allowance does not enforce a period budget. A recurring payment does not accumulate missed periods; its next due height is the successful claim's inclusion height plus the period. Gradual unlock advances from the previously scheduled due height, so missed tranches can be claimed one call at a time.</p>
+<p>Every scheduled operation still needs an authorized transaction. A bot, wallet or service can submit it. Consensus has no background timer that wakes up and pays somebody. A fee ceiling of 1 NOID permits a fee up to that amount; it is not a 1 NOID charge for creating terms.</p>
+
+<h2 id="evidence-belongs-to-participants">Current rights and portable evidence</h2>
+<p>Three questions require three different answers:</p>
+<div class="table-wrap"><table><thead><tr><th>Question</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>Can this known instance be spent now?</td><td>Authenticated current State and its public opening</td></tr>
+<tr><td>Did this earlier call occur on the selected chain?</td><td>A verified contract receipt and canonical inclusion</td></tr>
+<tr><td>What interactions does this wallet know about?</td><td>Its retained and imported local journal</td></tr>
+</tbody></table></div>
+<p>A receipt proves a past call. It does not establish that the resulting output remains unspent today. Conversely, current State can reveal whether a known commitment has funds without supplying every historical interaction that produced it.</p>
+<p>This separation allows the network to prune old bodies while participants retain evidence useful to them. An application can verify a receipt with its own node before granting access to an external service. That application-level workflow does not imply that the v2 integer program can ingest arbitrary historical receipts, call another contract or consult an oracle. Those operations are outside the current core.</p>
+
+<h2 id="two-parties-and-an-offline-wallet">Two parties and an offline wallet</h2>
+<p>Alice creates terms, funds an instance and sends its public contract file to Bob. Bob opens it, checks his authority and current balance, and saves it. An online wallet watching those terms can retain relevant calls authorized by either party.</p>
+<p>Alice then goes offline. Bob makes a permitted call that changes a counter and keeps the receipt. When Alice returns after the body-retention window, her node still verifies current State. But the old commitment alone cannot reveal the unknown successor opening. A hash authenticates data supplied to it; it cannot recreate data nobody retained.</p>
+<p>Bob can send a contract receipt or a shared file carrying the update. Alice verifies it, imports the successor terms or closing evidence, then checks current State again. Import merges verified evidence, deduplicates repeated transaction IDs and preserves her own records and local name. An older opening does not overwrite a newer known live state.</p>
+<p>A shared contract file carries terms and at most one matching receipt. It does not synchronize an entire journal. Additional relevant receipts can be exported and imported individually. Ordinary payment receipts, including deposits, use the ordinary receipt interface; contract interaction receipts use the contract workflow.</p>
+<p>Backups therefore include both the wallet secret and public contract data. The secret restores authority. Terms and receipts restore the information needed to exercise and explain that authority. If every holder loses an opening and no retained body or receipt can supply it, the commitment cannot reconstruct the program.</p>
+
+<h2 id="the-product-surface">From a proved core to a usable product</h2>
+<p>The official GUI exposes <strong>F7 Contracts</strong>. Create prepares a template or custom program and reviews funding. My Contracts opens saved instances, balances, actions, rules and the operations journal. Open File accepts shared terms, updates and contract receipts. Settings moves to F8.</p>
+<p>Applications use the same operations through CLI and RPC. The useful integration boundary is the reviewed call: <code>previewObjectCall</code> returns the concrete input, fee, outputs and successor, together with guards for submission. A changed chain tip can change the inclusion height, authority branch, availability or output allocation. The caller refreshes and reviews that changed transaction before authorizing it.</p>
+<p>Submission is not confirmation. A conflicting call may win, and a permitted reorganization may replace a recent confirmation. The wallet checks canonical headers and live State instead of treating a saved status label as final evidence. The network keeps its 18-block finality boundary and 17-block maximum rollback.</p>
+<p>Developers can begin with the <a href="https://docs.parano1d.org/contracts/gui">GUI walkthrough</a>, the <a href="https://docs.parano1d.org/contracts/api">API guide</a> and the <a href="https://docs.parano1d.org/contracts/core">exact core and ABI</a>. Creating another application within that core does not require permission from a registry or a new network matrix.</p>
+
+<h2 id="capacity-and-boundaries">Capacity and boundaries</h2>
+<p>Both v2 classes allow 63 contract calls and 504 live inputs. Small has 63 user pages; Large has 206. Each call uses one page and one input, so Large can carry the same 63 calls alongside up to 143 ordinary one-page payments, subject to the shared input limit. An additional mandatory system page consumes a position when required.</p>
+<p>At the 30-second target, the call ceiling is 2.1 per second. This is a concrete bounded execution budget. Programs have no cross-contract calls, arbitrary state database or in-place upgrade mechanism. A permitted transfer can move value into new terms. New instruction semantics would require new consensus work.</p>
+<p>The strongest immediate applications fit that shape: funded agreements with a small state, clear authorities, explicit limits and participants who keep their evidence. More elaborate services can coordinate several such rights outside the core, while treating each one's on-chain authorization and value limits as independently enforced.</p>
+
+<h2 id="the-extension">The extension</h2>
+<p>The important change is what the present can mean. It can now represent a remaining allowance, a recovery path, a next due payment or a beneficiary's unclaimed tranche, with proof that the rules leading to that state were followed.</p>
+<p>That opens a practical route from proof-carrying money to proof-carrying applications. Their active obligations occupy live State. Their fulfilled obligations need not become a permanent execution archive for every future participant. People and services preserve the evidence they need, and new nodes can still establish the validity of the current network for themselves.</p>
+<p><strong>Live value was the starting point. Live rights make that same independently verifiable present programmable.</strong></p>

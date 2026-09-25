@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Proof-native смарт-контракты: программируемые права, которые остаются проверяемыми после удаления истории взаимодействий.">
+  <meta name="author" content="Parano1d Lab">
+  <meta name="keywords" content="Parano1d, Parano1d Lab, доказательства с нулевым разглашением, системы доказательств, криптография, рекурсивные доказательства, бинарные поля, полиномиальные обязательства">
+  <link rel="canonical" href="https://lab.parano1d.org/ru/research/parano1d-v2-live-rights/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/parano1d-v2-live-rights/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/parano1d-v2-live-rights/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/parano1d-v2-live-rights/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/parano1d-v2-live-rights/">
+  <link rel="alternate" type="application/rss+xml" title="Исследования Parano1d Lab" href="https://lab.parano1d.org/ru/feed.xml">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Исследования Parano1d Lab">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:url" content="https://lab.parano1d.org/ru/research/parano1d-v2-live-rights/">
+  <meta property="og:title" content="Parano1d v2. От живой стоимости к живым правам · Parano1d Lab">
+  <meta property="og:description" content="Proof-native смарт-контракты: программируемые права, которые остаются проверяемыми после удаления истории взаимодействий.">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og/parano1d-v2-live-rights.png">
+  <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/parano1d-v2-live-rights.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Parano1d v2. От живой стоимости к живым правам">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Parano1d v2. От живой стоимости к живым правам · Parano1d Lab">
+  <meta name="twitter:description" content="Proof-native смарт-контракты: программируемые права, которые остаются проверяемыми после удаления истории взаимодействий.">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/parano1d-v2-live-rights.png">
+  <meta name="twitter:image:alt" content="Parano1d v2. От живой стоимости к живым правам">
+  <meta property="article:published_time" content="2026-09-25T00:00:00Z">
+  <meta property="article:section" content="Proof-native контракты">
+  <meta property="article:author" content="Ignotus Nemo">
+  <title>Parano1d v2. От живой стоимости к живым правам · Parano1d Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=b87d5ca6ee03">
+  <link rel="stylesheet" href="/assets/source-dialog.css?v=a9395fdbf3ff">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Parano1d v2. От живой стоимости к живым правам","description":"Как устроены контракты v2: обязательства программ и полномочий, целочисленное состояние, исполнение внутри рекурсивного доказательства блока, шесть шаблонов, независимые экземпляры, переносимые квитанции и восстановление после офлайн-периода.","datePublished":"2026-09-25","dateModified":"2026-09-25","url":"https://lab.parano1d.org/ru/research/parano1d-v2-live-rights/","mainEntityOfPage":"https://lab.parano1d.org/ru/research/parano1d-v2-live-rights/","inLanguage":"ru","isAccessibleForFree":true,"author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/parano1d-v2-live-rights.png","about":"Proof-native контракты"}</script>
+</head>
+<body class="locale-ru">
+  <a class="skip-link" href="#content">К содержанию</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/ru/" aria-label="Главная ParanO(1)d Lab">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>ParanO(1)d Lab</strong><small>Исследования</small></span>
+    </a>
+    <div class="header-controls">
+      <details class="language-switcher"><summary aria-label="Выбрать язык"><span>RU</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="Язык"><a href="/research/parano1d-v2-live-rights/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/parano1d-v2-live-rights/" lang="ru" hreflang="ru" aria-current="true"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/parano1d-v2-live-rights/" lang="zh-Hans" hreflang="zh-Hans"><span>中文</span><strong>简体中文</strong></a></div></details>
+      <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
+        <a href="/ru/#latest">Новое</a>
+        <a aria-current="page" href="/ru/research/">Все исследования</a>
+        <span class="nav-rule" aria-hidden="true"></span>
+        <a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">Документация <span aria-hidden="true">↗</span></a>
+        <a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">Parano1d <span aria-hidden="true">↗</span></a>
+        <button class="nav-source" type="button" data-source-open aria-haspopup="dialog" aria-controls="source-dialog"><svg class="nav-source-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Исходники</span></button>
+      </nav>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    </div>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/ru/research/">← Все исследования</a><div class="article-meta"><span>Архитектура протокола</span><span>Proof-native контракты</span><time datetime="2026-09-25">25 сент. 2026 г.</time></div><h1>Parano1d v2. От живой стоимости к живым правам</h1><p class="article-dek">Proof-native смарт-контракты: программируемые права, которые остаются проверяемыми после удаления истории взаимодействий.</p><div class="article-byline"><span>Автор Ignotus Nemo</span><span>10 мин чтения</span><span>Правила mainnet v2 · H210537</span></div><div class="article-share" aria-label="Поделиться исследованием"><span class="article-share-label">Поделиться</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/ru/research/parano1d-v2-live-rights/" data-copy-default="Копировать ссылку" data-copy-success="Скопировано" data-copy-failure="Не удалось скопировать" aria-label="Скопировать ссылку на статью" title="Копировать ссылку"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">Копировать ссылку</span></button><a class="share-action" href="https://x.com/intent/post?text=Parano1d%20v2.%20%D0%9E%D1%82%20%D0%B6%D0%B8%D0%B2%D0%BE%D0%B9%20%D1%81%D1%82%D0%BE%D0%B8%D0%BC%D0%BE%D1%81%D1%82%D0%B8%20%D0%BA%20%D0%B6%D0%B8%D0%B2%D1%8B%D0%BC%20%D0%BF%D1%80%D0%B0%D0%B2%D0%B0%D0%BC&amp;url=https%3A%2F%2Flab.parano1d.org%2Fru%2Fresearch%2Fparano1d-v2-live-rights%2F" aria-label="Поделиться статьёй в X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Поделиться в X</span></a></div></div>
+      <div class="research-art art--rightsv2" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-rightsv2" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-rightsv2" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-rightsv2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-rightsv2" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-rightsv2" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-rightsv2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-rightsv2)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-rightsv2)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 374V394H54M586 394H606V374"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="320" y="48" text-anchor="middle">V2 · FROM LIVE VALUE TO LIVE RIGHTS</text>
+    <g class="diagram-panel diagram-panel--green"><rect x="46" y="119" width="214" height="148" rx="14"/>
+    <text x="153" y="151" text-anchor="middle">CURRENT RIGHT</text>
+    <text class="diagram-micro" x="153" y="184" text-anchor="middle">VALUE · PROGRAM · POLICY</text>
+    <text class="diagram-value" x="153" y="222" text-anchor="middle">state0, state1</text></g>
+  <g class="diagram-panel diagram-panel--blue"><rect x="380" y="119" width="214" height="148" rx="14"/>
+    <text x="487" y="151" text-anchor="middle">SUCCESSOR RIGHT</text>
+    <text class="diagram-micro" x="487" y="184" text-anchor="middle">SAME PROGRAM · SAME POLICY</text>
+    <text class="diagram-value" x="487" y="222" text-anchor="middle">state0′, state1′</text></g>
+  <path class="diagram-arrow " d="M260 194H380" marker-end="url(#arrow-rightsv2)"/>
+  <circle cx="320" cy="194" r="32" fill="#09241a" stroke="#30e988"/>
+  <text x="320" y="203" text-anchor="middle" style="font-size:28px">π</text>
+  <text class="diagram-micro" x="320" y="294" text-anchor="middle">ONE SHARED RECURSIVE BLOCK PROOF</text>
+  <text class="diagram-micro" x="320" y="328" text-anchor="middle">PARTICIPANTS KEEP TERMS + RECEIPTS</text>
+    <text class="diagram-caption" x="320" y="384" text-anchor="middle">Old bodies can be pruned · current rights remain verifiable</text>
+  </svg></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="В этой статье"><strong>В этой статье</strong><a href="#from-owner-to-policy">От владельца к правилу расходования</a><a href="#what-state-retains">Что остаётся в State</a><a href="#a-funded-instance">Условия и деньги появляются отдельно</a><a href="#permitted-transitions">Кто и что может сделать</a><a href="#one-proved-block">Исполнение внутри доказательства блока</a><a href="#budget-example">Пример: ограниченный бюджет программы</a><a href="#bounded-program">Что умеет программа</a><a href="#templates">Шесть готовых сценариев</a><a href="#state-receipt-journal">State, квитанция и журнал</a><a href="#offline-recovery">Две стороны, одна из них офлайн</a><a href="#gui-and-api">Как этим пользоваться</a><a href="#scope">Границы, на которых можно строить</a><a href="#programmable-present">Проверяемое настоящее становится программируемым</a></aside>
+      <article class="article-body"><p>Представим программу, которой разрешено тратить деньги владельца. Ей нужен рабочий бюджет, но давать ей неограниченный ключ от кошелька нельзя. Требуются предел одной выплаты, общий лимит за период и понятный путь возврата оставшихся средств.</p>
+<p>Чтобы проверить такую систему через несколько лет, нам важно знать, какие полномочия действуют сейчас и какой бюджет остался. Для этого не обязательно заставлять каждый новый узел хранить каждую прежнюю операцию программы.</p>
+<p>В статье <a href="/ru/research/decentralization-across-time/">«Децентрализация во времени»</a> я описывал возможность распространить proof-carrying State с денег на права и обязательства. В Parano1d v2 для этого появляется конкретное контрактное ядро: живой выход фиксирует программу, правила доступа и текущие счётчики, а допустимость каждого изменения входит в общее рекурсивное доказательство блока.</p>
+<blockquote><p><strong>Текущее право несёт проверяемую связь со всеми допустимыми переходами, которые его создали.</strong></p></blockquote>
+<p>Отсюда следует важная возможность: после удаления старых тел взаимодействий контракт остаётся проверяемым. Приложение получает программируемые правила, а будущему участнику сети не приходится наследовать полный журнал его работы.</p>
+<div class="note"><strong>Контракты v2</strong><p>Правила действуют с блока mainnet <strong>210 537</strong>. Контракты доступны в официальном GUI, CLI и RPC. Ядро исполняет ограниченную целочисленную программу; шесть шаблонов и пользовательские программы используют одну и ту же схему доказательства.</p></div>
+
+<h2 id="from-owner-to-policy">От владельца к правилу расходования</h2>
+<p>У обычного выхода есть сумма и владелец. Для его траты нужно доказать авторизацию конкретной транзакции. Контрактный выход дополнительно фиксирует условия: кто вправе действовать, кому можно платить, сколько разрешено потратить, на какой высоте и с каким следующим состоянием.</p>
+<p>Слово «право» здесь имеет протокольный смысл: разрешение израсходовать определённый живой выход при заданных условиях. Сеть обеспечивает эти условия для нативной стоимости. Если приложение связывает такой платёж с доступом к сервису или исполнением внешнего обязательства, эту связь определяет уже само приложение.</p>
+<p>Текущая сумма, условия следующей операции и доказательство прошлого события оказываются разными объектами. Это различие позволяет добавить программируемость, сохранив архитектуру, которая проверяет настоящее без воспроизведения всей истории.</p>
+
+<h2 id="what-state-retains">Что остаётся в State</h2>
+<p>Живая запись содержит сумму, обязательство владельца и идентификатор создания. У контракта обязательство связано с неизменными программой и политикой, а также двумя постоянными счётчиками. Открытие контракта — публичные данные, по которым это обязательство можно восстановить и проверить.</p>
+<div class="equation">живое право = стоимость + обязательство(программа, политика, state0, state1)</div>
+<p>Каноническое открытие ABI 3 занимает <strong>699 байт</strong>. В него входят 16 инструкций, два счётчика, полномочия основной и возвратной ветвей, получатели при закрытии, высота границы и ограничения расходования. Программа, политика и текущее состояние связываются отдельными доменами хеширования.</p>
+<p>При продолжающем вызове программа и политика сохраняются, а счётчики могут измениться. Новое значение счётчика меняет обязательство и адрес. GUI объединяет связанные состояния по неизменным условиям, чтобы пользователь работал с одним понятным контрактом. В консенсусе по-прежнему проверяется точное обязательство конкретного состояния.</p>
+<p>Номер слота также недостаточен для идентификации входа. После траты слот может занять другой выход. Пара <code>slot_index</code> и <code>creation_id</code> отличает действующий экземпляр от прежнего содержимого того же места.</p>
+
+<h2 id="a-funded-instance">Условия и деньги появляются отдельно</h2>
+<p>Программу и условия можно создать, изучить, сохранить и передать другому человеку локально. Само сохранение условий бесплатно и не требует транзакции регистрации.</p>
+<p>Пополнение — отдельный обычный платёж на адрес контрактного обязательства. Он создаёт живой экземпляр со стоимостью. Файл условий не доказывает, что деньги уже внесены: для этого кошелёк проверяет текущий State, а квитанция пополнения позволяет сохранить свидетельство платежа.</p>
+<p>Каждое пополнение создаёт самостоятельный экземпляр. Если внести средства дважды, это будут два выхода с собственными суммами и счётчиками. Они не сливаются автоматически в общий бюджет. Один вызов расходует один экземпляр — это нужно учитывать при проектировании приложения.</p>
+
+<h2 id="permitted-transitions">Кто и что может сделать</h2>
+<p>Ветка авторизации определяется высотой включения. До заданной границы действует основная ветка, с самой границы — возвратная. Каждая независимо разрешает продолжение, закрытие, оба действия либо ни одного.</p>
+<div class="table-wrap"><table><thead><tr><th>Действие</th><th>Следующее состояние</th></tr></thead><tbody>
+<tr><td>Продолжить без выплаты</td><td>Один контрактный выход-преемник; комиссия вычитается из суммы входа</td></tr>
+<tr><td>Продолжить с выплатой</td><td>Преемник и платёж допустимому получателю</td></tr>
+<tr><td>Закрыть</td><td>Остаток за вычетом комиссии уходит получателю, закреплённому для этой ветки</td></tr>
+</tbody></table></div>
+<p>Сторона с нужными полномочиями создаёт свежую капсулу доказательства знания секрета, привязанную ко всей транзакции. Само наличие ключа не даёт возможности обойти программу или переписать политику. Скрытого административного пути нет.</p>
+<p>Сумма входа сохраняется между остатком, выплатой и комиссией. Живой выход обязан содержать положительную стоимость: контракт нельзя оставить бесплатной записью с нулевым балансом.</p>
+
+<h2 id="one-proved-block">Исполнение внутри доказательства блока</h2>
+<p>Кошелёк сначала показывает конкретный вызов. Mempool проверяет допустимость приёма и конфликты. Затем производитель блока доказывает выполнение контрактных правил вместе с остальным переходом сети.</p>
+<div class="protocol-flow protocol-flow--contracts" aria-label="Проверка контрактного перехода"><div class="flow-step"><small>Участник</small><strong>Авторизация вызова</strong><span>Экземпляр, выходы и комиссия</span></div><div class="flow-arrow">→</div><div class="flow-step"><small>Производитель</small><strong>Доказательство перехода</strong><span>Программа, State и прежний proof</span></div><div class="flow-arrow">→</div><div class="flow-step"><small>Проверяющий узел</small><strong>Проверка результата</strong><span>Аутентификация преемника</span></div></div>
+<p>Отношение связывает открытие с расходуемым обязательством, проверяет полномочия выбранной ветви, исполняет целочисленную программу, проверяет форму выходов и точные изменения State. Новый HistoryStep одновременно переносит вперёд допустимость предыдущего перехода.</p>
+<p>Таким образом, контракт не держится на доверии к предварительной проверке mempool или заявлению майнера об успешном исполнении. Его правила входят в доказательство, на основании которого блок становится допустимым.</p>
+<p>Все приложения используют общий интерпретатор и матрицы блока. Для новой программы в пределах ядра не нужно создавать свою матрицу или отдельное доказательство исполнения каждого контракта. Обычная авторизация транзакции при этом по-прежнему использует свежий proof кошелька.</p>
+<p>Когда старые тела будут удалены, сеть сохранит живой State и рекурсивную связь с допустимым прошлым. Новый узел проверяет эту связь вместо повторного выполнения всех вызовов за время жизни приложения. Загрузка текущего State и проверка порядка цепи всё ещё необходимы.</p>
+
+<h2 id="budget-example">Пример: ограниченный бюджет программы</h2>
+<p>Вернёмся к автоматизированному клиенту. В его экземпляр внесено 100 NOID. Политика разрешает выплату не более 3 NOID за вызов, ограничивает комиссию, сохраняет резерв и предусматривает отдельный ключ возврата. Программа дополнительно задаёт бюджет 10 NOID за период, включая комиссии.</p>
+<p>Два постоянных счётчика хранят остаток бюджета и следующую границу периода. Выплата 2 NOID с комиссией 0,01 NOID оставит 97,99 NOID в экземпляре и 7,99 NOID доступного бюджета. Это разные величины, и переход должен доказать обе.</p>
+<p>Следующий вызов не может снова объявить бюджет равным 10. Его открытие обязано совпасть с живым обязательством после предыдущей операции. Выплата выше ограничения не пройдёт. Повторная трата того же экземпляра не пройдёт. Подстановка другой программы также не пройдёт.</p>
+<p>Когда сохранённая граница достигнута, следующий успешный вызов обновляет бюджет и задаёт новую границу как свою высоту включения плюс длина периода. Неиспользованный бюджет не накапливается. Это окно, запускаемое вызовом и измеряемое блоками; обещание «сброс ровно в полночь» описывало бы другую систему.</p>
+<p>После удаления старых тел остаток 7,99 всё ещё аутентифицирован текущим обязательством и рекурсивным доказательством. Для проверки его допустимости будущему узлу не нужен архив первого платежа.</p>
+<p>Но это бюджет одного экземпляра. Два пополнения создадут два независимых бюджета. Приложение с общим лимитом обязано явно учитывать эту границу модели.</p>
+
+<h2 id="bounded-program">Что умеет программа</h2>
+<p>В распоряжении автора <strong>16 последовательных инструкций, два постоянных u64-счётчика и два временных регистра</strong>. Временные регистры начинают каждый вызов с нуля. Последующие инструкции видят результаты предыдущих.</p>
+<p>Ядро поддерживает копирование, проверяемое сложение и вычитание, минимум, максимум, сравнения и утверждения. Операндами служат регистры, целые константы, высота включения, суммы и комиссия, флаги ветвления, слова обязательства получателя и точные идентификаторы экземпляра и слотов. Предикат решает, выполнять ли инструкцию.</p>
+<p>Переполнение, отрицательный результат вычитания, ложное утверждение или небулев предикат отклоняют вызов. Циклов, неограниченного хранилища и доступа к сети у программы нет. Это делает её работу частью заранее определённого бюджета блока.</p>
+<p>Для пользовательских программ важно различать физические позиции выходов. При продолжении выход 0 хранит преемника, а выход 1 — выплату. При закрытии выход 0 уже платит получателю закрытия, а выход 1 отсутствует. Поэтому программа с обоими режимами должна правильно обрабатывать флаг <code>terminal</code>: смысл слова «выплата» в ответе RPC не всегда совпадает с операндом физического выхода 1.</p>
+<p>Закрытие исполняет программу и соблюдает предел комиссии. Ограничение обычной продолжающей выплаты и минимальный остаток сами по себе не ограничивают вывод остатка при закрытии. Автор должен проверить каждую разрешённую ветку, особенно возврат и закрытие.</p>
+
+<h2 id="templates">Шесть готовых сценариев</h2>
+<p>Шаблон — удобный способ получить программу общего ядра. Его название не является записью в разрешительном списке консенсуса.</p>
+<div class="table-wrap"><table><thead><tr><th>Шаблон</th><th>Правило</th><th>Применение</th></tr></thead><tbody>
+<tr><td>Платёж с возвратом</td><td>Получатель забирает до срока; отправитель возвращает с наступлением срока</td><td>Платёж с определённым окном получения</td></tr>
+<tr><td>Сейф по высоте</td><td>До разблокировки тратить не может даже владелец</td><td>Отложенный доступ к средствам</td></tr>
+<tr><td>Кошелёк с лимитом</td><td>Ограничение выплаты за вызов, резерв и путь возврата</td><td>Рабочий ключ человека, сервиса или устройства</td></tr>
+<tr><td>Бюджет периода</td><td>Общий лимит учитывается между вызовами вместе с комиссиями</td><td>Ограниченные расходы автоматизации</td></tr>
+<tr><td>Регулярный платёж</td><td>Точная сумма после наступления срока; новая дата зависит от успешного вызова</td><td>Предварительно обеспеченное повторяющееся требование</td></tr>
+<tr><td>Постепенная разблокировка</td><td>Один фиксированный транш на шаг, затем закрытие при наступлении зрелости</td><td>Поэтапная выдача средств получателю</td></tr>
+</tbody></table></div>
+<p>У лимита на вызов и бюджета периода разный смысл. Регулярный платёж не накапливает пропущенные периоды: новый срок считается от высоты успешного получения. Постепенная разблокировка двигает прежнюю плановую границу на один период, поэтому пропущенные транши можно получать по одному вызову.</p>
+<p>Для любого действия по расписанию нужна авторизованная транзакция. Её отправляет кошелёк, бот или сервис. Фонового таймера, который сам просыпается и выплачивает средства, в консенсусе нет. Поле max call fee со значением 1 NOID задаёт верхнюю границу комиссии; создание условий не стоит 1 NOID.</p>
+
+<h2 id="state-receipt-journal">State, квитанция и журнал</h2>
+<p>Здесь особенно полезно разделить три вопроса.</p>
+<div class="table-wrap"><table><thead><tr><th>Вопрос</th><th>Источник ответа</th></tr></thead><tbody>
+<tr><td>Можно ли сейчас потратить известный экземпляр?</td><td>Проверенный текущий State и его открытие</td></tr>
+<tr><td>Произошёл ли конкретный вызов в выбранной цепи?</td><td>Квитанция вызова и проверка канонического включения</td></tr>
+<tr><td>Какие взаимодействия знает этот кошелёк?</td><td>Сохранённый и импортированный локальный журнал</td></tr>
+</tbody></table></div>
+<p>Квитанция доказывает событие прошлого, но не гарантирует, что его выход до сих пор не потрачен. Текущий State позволяет проверить наличие денег у известного обязательства, но не обязан выдавать весь путь, который к нему привёл.</p>
+<p>Участник может принести квитанцию сервису, а сервис — проверить её своим узлом и открыть доступ к внешней услуге. Это полезная прикладная связь между действиями. Она не означает, что целочисленная программа v2 сама принимает любые исторические квитанции, вызывает другие контракты или обращается к оракулу: таких операций в нынешнем ядре нет.</p>
+
+<h2 id="offline-recovery">Две стороны, одна из них офлайн</h2>
+<p>Алиса создаёт условия, пополняет экземпляр и передаёт публичный файл Бобу. Боб открывает его, проверяет свою роль и баланс, затем сохраняет контракт. Работающий онлайн кошелёк, наблюдающий эти условия, может удерживать применимые вызовы обеих сторон.</p>
+<p>Алиса уходит офлайн. Боб выполняет разрешённый вызов, меняет счётчик и сохраняет квитанцию. К её возвращению старое тело уже удалено. Узел Алисы всё равно проверит нынешний State, однако из прежнего хеша нельзя восстановить неизвестное открытие преемника.</p>
+<p>Боб отправляет квитанцию взаимодействия или файл контракта с обновлением. Алиса проверяет его, импортирует новые условия либо свидетельство закрытия и снова запрашивает текущее состояние. Импорт добавляет проверенные сведения, убирает дубли по txid и сохраняет её записи и локальное название. Старое открытие не затирает более новое известное живое состояние.</p>
+<p>Файл контракта содержит условия и максимум одну подходящую квитанцию. Это не формат полного обмена журналами: другие нужные записи передаются отдельными квитанциями. Чеки обычных платежей, включая пополнение, относятся к обычному разделу квитанций; чеки контрактных взаимодействий — к контрактному процессу.</p>
+<p>Поэтому резервная копия включает секрет кошелька и публичные данные контрактов. Секрет восстанавливает полномочия. Условия и квитанции восстанавливают сведения, необходимые для их использования. Если все стороны утратят открытие, а в сохранённых телах и квитанциях его не окажется, хеш не восстановит программу.</p>
+
+<h2 id="gui-and-api">Как этим пользоваться</h2>
+<p>В официальном GUI появился раздел <strong>F7 Contracts</strong>. Create готовит шаблон или пользовательскую программу и позволяет проверить пополнение. My Contracts показывает сохранённые контракты, их балансы, действия, правила и журнал. Open File открывает условия, обновления и контрактные квитанции. Настройки находятся на F8.</p>
+<p>Через CLI и RPC доступны те же основные процессы. Важная точка интеграции — предварительный просмотр: <code>previewObjectCall</code> возвращает конкретный вход, комиссию, выходы, преемника и условия проверки перед отправкой. Изменение вершины может изменить высоту включения, доступный вход, ветку или размещение выходов. Изменившуюся транзакцию нужно вновь просмотреть и авторизовать.</p>
+<p>Отправленная операция ещё не подтверждена. Другой вызов может первым потратить тот же экземпляр; допустимый реорг может заменить недавнее подтверждение. Кошелёк проверяет канонические заголовки и живое состояние. Граница финальности остаётся 18 блоков, максимальный откат — 17.</p>
+<p>Практический вход — <a href="https://docs.parano1d.org/ru/contracts/gui" target="_blank" rel="noopener noreferrer">инструкция GUI</a>, <a href="https://docs.parano1d.org/ru/contracts/api" target="_blank" rel="noopener noreferrer">руководство API</a> и <a href="https://docs.parano1d.org/ru/contracts/core" target="_blank" rel="noopener noreferrer">описание ABI</a>. Приложению в пределах этого ядра не требуется отдельная регистрация или новая матрица сети.</p>
+
+<h2 id="scope">Границы, на которых можно строить</h2>
+<p>Оба класса v2 имеют предел 63 вызова и 504 входа. У Small 63 пользовательские страницы, у Large — 206. Вызов занимает страницу и вход, поэтому Large может вместить 63 вызова и ещё 143 одностраничных платежа в общем лимите входов. Дополнительная обязательная системная страница при необходимости занимает одну позицию.</p>
+<p>При цели 30 секунд предел составляет 2,1 вызова в секунду. У программы нет межконтрактных вызовов, произвольной базы данных и обновления кода на месте. Разрешённый перевод может перенести стоимость в новые условия. Добавление новых операций ядра потребует отдельной работы над консенсусом.</p>
+<p>Естественные приложения этой модели — обеспеченные стоимостью соглашения с небольшим состоянием, понятными полномочиями и сторонами, которым важно сохранить доказательства. Более сложный сервис может координировать несколько таких прав вне ядра, опираясь на независимую проверку каждого ограничения и перехода.</p>
+
+<h2 id="programmable-present">Проверяемое настоящее становится программируемым</h2>
+<p>Теперь State может представлять остаток делегированного бюджета, право возврата, следующий срок выплаты или ещё не полученный транш. У этого настоящего есть доказательство того, что предыдущие изменения соблюдали правила.</p>
+<p>Так появляется путь от proof-native денег к приложениям. Действующие обязательства занимают живое состояние. Исполненные обязательства не превращаются автоматически в вечный архив исполнения для каждого будущего узла. Заинтересованные стороны сохраняют нужные свидетельства, а новый участник по-прежнему может самостоятельно проверить нынешнюю сеть.</p>
+<p><strong>Живая стоимость дала основу. Живые права позволяют задавать правила её использования внутри того же независимо проверяемого настоящего.</strong></p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Материалы исследования</p><h2 id="evidence-title">Доказательства и артефакты</h2><p>Здесь сохранены реализации, измерения и выводы, на которых основана статья.</p></div><div class="evidence-links"><a href="https://docs.parano1d.org/contracts/core" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Документация</small><strong>Контрактное ядро и ABI 3</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/contracts/lifecycle" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Документация</small><strong>Жизненный цикл контракта</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/contracts/receipts-and-recovery" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Документация</small><strong>Квитанции и восстановление двух сторон</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c83c453efbe4b2d235ed1c6d579e3d869e751575/noid_tx/src/experimental_object.rs" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>Код</small><strong>Модель контрактов в фиксированном исходном коде</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c83c453efbe4b2d235ed1c6d579e3d869e751575/noid_tx/src/experimental_object/integer_program.rs" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>Код</small><strong>Целочисленный интерпретатор</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c83c453efbe4b2d235ed1c6d579e3d869e751575/noid_tx/tests/object_applications.rs" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>Tests</small><strong>Проверки прикладных сценариев</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/contracts" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Документация</small><strong>Документация GUI и API</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="/research/decentralization-across-time/"><span class="evidence-entry"><span><small>Архитектура</small><strong>Децентрализация во времени</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Соседние исследования"><a href="/ru/research/parano1d-v2-capacity-and-consensus/"><small>Ранее</small><strong>V2 · Вместимость и консенсус</strong><span>←</span></a><span></span></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>ParanO(1)d Lab</strong><p>Исследования протокола ParanO(1)d.</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>Исследования</strong><a href="/ru/research/">Архив</a><a href="/ru/feed.xml">RSS-лента</a></div>
+      <div><strong>Проект</strong><a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">Сайт</a><a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">Документация</a><a href="https://git.parano1d.org/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer">Исходный код</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 ParanO(1)d Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=07f922a53399" defer></script>
+</body>
+</html>

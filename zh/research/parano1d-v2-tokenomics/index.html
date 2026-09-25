@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="高度推进发行，占用率为活跃存储定价。重新审视原有发行时钟，同时保留精简 State 的经济价值。">
+  <meta name="author" content="Parano1d Lab">
+  <meta name="keywords" content="Parano1d, Parano1d Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺">
+  <link rel="canonical" href="https://lab.parano1d.org/zh/research/parano1d-v2-tokenomics/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/parano1d-v2-tokenomics/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/parano1d-v2-tokenomics/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/parano1d-v2-tokenomics/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/parano1d-v2-tokenomics/">
+  <link rel="alternate" type="application/rss+xml" title="Parano1d Lab 研究" href="https://lab.parano1d.org/zh/feed.xml">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Parano1d Lab 研究">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:url" content="https://lab.parano1d.org/zh/research/parano1d-v2-tokenomics/">
+  <meta property="og:title" content="Parano1d v2：NOID 的发行与状态经济 · Parano1d Lab">
+  <meta property="og:description" content="高度推进发行，占用率为活跃存储定价。重新审视原有发行时钟，同时保留精简 State 的经济价值。">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og/parano1d-v2-tokenomics.png">
+  <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/parano1d-v2-tokenomics.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Parano1d v2：NOID 的发行与状态经济">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Parano1d v2：NOID 的发行与状态经济 · Parano1d Lab">
+  <meta name="twitter:description" content="高度推进发行，占用率为活跃存储定价。重新审视原有发行时钟，同时保留精简 State 的经济价值。">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/parano1d-v2-tokenomics.png">
+  <meta name="twitter:image:alt" content="Parano1d v2：NOID 的发行与状态经济">
+  <meta property="article:published_time" content="2026-09-25T00:00:00Z">
+  <meta property="article:section" content="网络经济">
+  <meta property="article:author" content="Ignotus Nemo">
+  <title>Parano1d v2：NOID 的发行与状态经济 · Parano1d Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=b87d5ca6ee03">
+  <link rel="stylesheet" href="/assets/source-dialog.css?v=a9395fdbf3ff">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Parano1d v2：NOID 的发行与状态经济","description":"V2 从激活高度起每 1,051,200 个区块下降一档，经过九个固定金额从 16 NOID 到 1 NOID。文章解释 State 触发减半的结构性问题、持续尾部发行，以及占用率费用和销毁如何继续鼓励合并与复用。","datePublished":"2026-09-25","dateModified":"2026-09-25","url":"https://lab.parano1d.org/zh/research/parano1d-v2-tokenomics/","mainEntityOfPage":"https://lab.parano1d.org/zh/research/parano1d-v2-tokenomics/","inLanguage":"zh-Hans","isAccessibleForFree":true,"author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/parano1d-v2-tokenomics.png","about":"网络经济"}</script>
+</head>
+<body class="locale-zh">
+  <a class="skip-link" href="#content">跳到正文</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/zh/" aria-label="ParanO(1)d Lab 首页">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>ParanO(1)d Lab</strong><small>研究</small></span>
+    </a>
+    <div class="header-controls">
+      <details class="language-switcher"><summary aria-label="切换语言"><span>中文</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="语言"><a href="/research/parano1d-v2-tokenomics/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/parano1d-v2-tokenomics/" lang="ru" hreflang="ru"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/parano1d-v2-tokenomics/" lang="zh-Hans" hreflang="zh-Hans" aria-current="true"><span>中文</span><strong>简体中文</strong></a></div></details>
+      <nav class="site-nav" id="site-nav" aria-label="主导航">
+        <a href="/zh/#latest">最新</a>
+        <a aria-current="page" href="/zh/research/">全部研究</a>
+        <span class="nav-rule" aria-hidden="true"></span>
+        <a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">文档 <span aria-hidden="true">↗</span></a>
+        <a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">Parano1d <span aria-hidden="true">↗</span></a>
+        <button class="nav-source" type="button" data-source-open aria-haspopup="dialog" aria-controls="source-dialog"><svg class="nav-source-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>源码</span></button>
+      </nav>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    </div>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>协议经济</span><span>网络经济</span><time datetime="2026-09-25">2026年9月25日</time></div><h1>Parano1d v2：NOID 的发行与状态经济</h1><p class="article-dek">高度推进发行，占用率为活跃存储定价。重新审视原有发行时钟，同时保留精简 State 的经济价值。</p><div class="article-byline"><span>作者 Ignotus Nemo</span><span>5 分钟阅读</span><span>V2 主网规则 · H210537</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/zh/research/parano1d-v2-tokenomics/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接" title="复制链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=Parano1d%20v2%EF%BC%9ANOID%20%E7%9A%84%E5%8F%91%E8%A1%8C%E4%B8%8E%E7%8A%B6%E6%80%81%E7%BB%8F%E6%B5%8E&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fparano1d-v2-tokenomics%2F" aria-label="将本文分享到 X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
+      <div class="research-art art--economicsv2" aria-hidden="true"><svg viewBox="0 0 640 420" role="presentation">
+    <defs>
+    <pattern id="grid-economicsv2" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="rgba(116,167,139,.105)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="rgba(155,205,176,.18)"/>
+    </pattern>
+    <radialGradient id="halo-economicsv2" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#0d3b28" stop-opacity=".52"/>
+      <stop offset=".58" stop-color="#082118" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#07120d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel-economicsv2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10231a" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0a1711" stop-opacity=".98"/>
+    </linearGradient>
+    <filter id="shadow-economicsv2" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <filter id="glow-economicsv2" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-economicsv2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 8 4 0 8Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+    <rect width="640" height="420" fill="#07120d"/>
+    <rect width="640" height="420" fill="url(#halo-economicsv2)"/>
+    <rect x="18" y="18" width="604" height="384" rx="18" fill="url(#grid-economicsv2)"/>
+    <path class="diagram-frame-tick" d="M34 54V34H54M586 34H606V54M34 374V394H54M586 394H606V374"/>
+    <text class="diagram-kicker diagram-kicker--strong" x="320" y="48" text-anchor="middle">V2 · ISSUANCE FOLLOWS HEIGHT</text>
+    <path d="M48 92V330H594" fill="none" stroke="#365b45"/>
+  <path d="M48 264H594" stroke="#244032" stroke-dasharray="3 5"/><path d="M48 216H594" stroke="#244032" stroke-dasharray="3 5"/><path d="M48 168H594" stroke="#244032" stroke-dasharray="3 5"/><path d="M48 120H594" stroke="#244032" stroke-dasharray="3 5"/>
+  <path d="M62 120H125V176.39999999999998H188V216H251V244.2H314V264H377V278.04H440V288H503V295.08H566V300H596" fill="none" stroke="#30e988" stroke-width="2.5"/>
+  <circle cx="62" cy="120" r="4" fill="#30e988"/><text x="62" y="107" text-anchor="middle">16</text><circle cx="125" cy="176.39999999999998" r="4" fill="#30e988"/><text x="125" y="163.39999999999998" text-anchor="middle">11.3</text><circle cx="188" cy="216" r="4" fill="#30e988"/><text x="188" y="203" text-anchor="middle">8</text><circle cx="251" cy="244.2" r="4" fill="#30e988"/><text x="251" y="231.2" text-anchor="middle">5.65</text><circle cx="314" cy="264" r="4" fill="#30e988"/><text x="314" y="251" text-anchor="middle">4</text><circle cx="377" cy="278.04" r="4" fill="#30e988"/><text x="377" y="265.04" text-anchor="middle">2.83</text><circle cx="440" cy="288" r="4" fill="#30e988"/><text x="440" y="275" text-anchor="middle">2</text><circle cx="503" cy="295.08" r="4" fill="#30e988"/><text x="503" y="282.08" text-anchor="middle">1.41</text><circle cx="566" cy="300" r="4" fill="#30e988"/><text x="566" y="287" text-anchor="middle">1</text>
+  <text class="diagram-micro" x="62" y="350">H210537</text>
+  <text class="diagram-micro" x="580" y="350" text-anchor="end">+1,051,200 BLOCKS PER STEP</text>
+  <text class="diagram-micro" x="62" y="91">NOID / BLOCK</text>
+    <text class="diagram-caption" x="320" y="384" text-anchor="middle">Eight reductions · permanent 1 NOID tail</text>
+  </svg></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#what-occupancy-measures">占用率究竟衡量什么</a><a href="#exact-amounts">每一步都可以算出来</a><a href="#why-these-steps">这条曲线如何形成</a><a href="#state-price">保持 State 精简仍然有经济价值</a><a href="#two-independent-signals">让发行进度与存储价格各司其职</a></aside>
+      <article class="article-body"><p>用户需要能够提前知道，下一次区块补贴降低发生在什么位置。最初的 Parano1d 把这个时间点交给 State 扩容决定。主网上线后的运行揭示了一个问题：当前尚未花费的输出数量，无法同时充当时间、交易活跃度和采用程度的刻度。</p>
+<p>V2 为两种机制重新分工。区块高度决定发行进度，State 占用率决定新增持久记录的价格。保持状态精简依然有利，但高效复用状态不再推迟补贴下降。</p>
+<div class="note"><strong>从分叉区块开始计数</strong><p>新曲线从主网区块 <strong>210,537</strong> 开始。既有余额不作缩放。第一个发行区间从该区块起算，与创世时间、版本发布日期以及个人升级时间无关。</p></div>
+
+<h2 id="what-occupancy-measures">占用率究竟衡量什么</h2>
+<p>最初的规则从每块 50 NOID 开始。当持续占用触发更大的 State 域时，补贴减半。其设想是让发行下降跟随网络的有效使用增长。</p>
+<p>但活跃状态衡量的是余额式的存量：现在还存在多少个未花费输出。已经完成的交易不会继续计入其中。花费释放槽位，合并交易减少输出，合约可以多次更新同一项权利而几乎不增加活跃记录数量。</p>
+<p>主网早期占用率较低，补贴下降也就缺少可见的时间边界。这个问题不仅来自初期活动不足。即使某个应用很活跃，只要它有效复用 State，也可能长期不触发扩容。</p>
+<p>于是两个原本都值得鼓励的目标发生了牵制：一方面，希望大家减少长期占用；另一方面，发行曲线却要等更多长期记录出现才能前进。V2 让发行进度不再依赖这种存量变化。</p>
+
+<h2 id="exact-amounts">每一步都可以算出来</h2>
+<p>设起点 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>=</mo><mn>210537</mn></mrow><annotation encoding="application/x-tex">H=210537</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">210537</span></span></span></span></span>，每个区间长度 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo>=</mo><mn>1051200</mn></mrow><annotation encoding="application/x-tex">I=1051200</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1051200</span></span></span></span></span>。对于 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>≥</mo><mi>H</mi></mrow><annotation encoding="application/x-tex">h\ge H</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8304em;vertical-align:-0.136em;"></span><span class="mord mathnormal">h</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span></span>，补贴档位为：</p>
+<div class="math-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>k</mi><mo stretchy="false">(</mo><mi>h</mi><mo stretchy="false">)</mo><mo>=</mo><mi>min</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><mrow><mo fence="true">⌊</mo><mfrac><mrow><mi>h</mi><mo>−</mo><mi>H</mi></mrow><mi>I</mi></mfrac><mo fence="true">⌋</mo></mrow><mo separator="true">,</mo><mn>8</mn><mo fence="true">)</mo></mrow><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">k(h)=\min\left(\left\lfloor\frac{h-H}{I}\right\rfloor,8\right).</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mopen">(</span><span class="mord mathnormal">h</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4em;vertical-align:-0.95em;"></span><span class="mop">min</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">⌊</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">h</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">⌋</span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">8</span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">.</span></span></span></span></span></div>
+<div class="table-wrap"><table><thead><tr><th>距 v2 的名义年数</th><th>首个区块高度</th><th>每块 NOID</th><th>完整区间的计划补贴总额</th></tr></thead><tbody>
+<tr><td>0</td><td>210,537</td><td>16</td><td>16,819,200</td></tr><tr><td>1</td><td>1,261,737</td><td>11.30</td><td>11,878,560</td></tr><tr><td>2</td><td>2,312,937</td><td>8</td><td>8,409,600</td></tr><tr><td>3</td><td>3,364,137</td><td>5.65</td><td>5,939,280</td></tr><tr><td>4</td><td>4,415,337</td><td>4</td><td>4,204,800</td></tr><tr><td>5</td><td>5,466,537</td><td>2.83</td><td>2,974,896</td></tr><tr><td>6</td><td>6,517,737</td><td>2</td><td>2,102,400</td></tr><tr><td>7</td><td>7,568,937</td><td>1.41</td><td>1,482,192</td></tr><tr><td>8 及以后</td><td>8,620,137</td><td>1</td><td>之后每个区间 1,051,200</td></tr>
+</tbody></table></div>
+<p>按 30 秒目标间隔，一个区间相当于 365 天；实际日历日期由出块速度决定。共识使用整数 μNOID，每 NOID 等于 1,000,000 μNOID。表中的金额都是固定常量，边界处没有浮点计算，也不需要运营者作出选择。</p>
+<p>State 扩容既不会提前进入下一档，也不会重置计时。区块关系直接检查由认证高度选出的补贴。</p>
+
+<h2 id="why-these-steps">这条曲线如何形成</h2>
+<p>曲线以永久保留的每块 1 NOID 为终点，在八个名义年内完成四次等效减半。每两年的锚点因此是 <strong>16 → 8 → 4 → 2 → 1</strong>。在两次锚点之间增加一次年度下降，可以把补贴变化分散到更小的步骤。</p>
+<p>年度比例近似为 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><msqrt><mn>2</mn></msqrt></mrow><annotation encoding="application/x-tex">1/\sqrt{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1572em;vertical-align:-0.25em;"></span><span class="mord">1/</span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9072em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord">2</span></span></span><span style="top:-2.8672em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="1.08em" viewBox="0 0 400000 1080" preserveAspectRatio="xMinYMin slice"><path d="M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1328em;"><span></span></span></span></span></span></span></span></span></span>。实际共识并不计算平方根，而是使用固定中间值 <strong>11.30、5.65、2.83、1.41</strong>。从第一个 v2 区块起，完整序列就已经确定。</p>
+<p>初始发行速度也随之降低。旧起始配置是每 20 秒目标间隔发行 50 NOID，对应每日 216,000 NOID；v2 是每 30 秒发行 16 NOID，对应每日 46,080 NOID。与旧规则尚未发生 State 减半时的起始速度相比，降幅为 <strong>78.67%</strong>。</p>
+<p>进入尾部发行前，八个完整区间的计划补贴合计 <strong>53,810,928 NOID</strong>。此后每块继续发行 1 NOID，每个名义年为 1,051,200 NOID。因此 NOID 没有固定的最大供应量。实际流通量还受到销毁以及未发行、未领取金额的影响，不能直接用补贴总和代替。</p>
+<p>持续补贴让手续费之外仍然存在一项明确的出块激励。它不固定挖矿收入的市场价值，也不保证某个以法币计价的安全预算；它确定的是八次下降之后仍然存在的协议发行部分。</p>
+
+<h2 id="state-price">保持 State 精简仍然有经济价值</h2>
+<p>占用率继续决定新增槽位的成本。最低手续费由基础项、输入项、输出项和净新增活跃槽位的增长项组成。增长项被销毁，其余普通费用以及自愿小费可以由矿工领取。</p>
+<div class="table-wrap"><table><thead><tr><th>父 State 占用率</th><th>增长费倍率</th></tr></thead><tbody><tr><td>低于 50%</td><td>1×</td></tr><tr><td>50% 至不足 75%</td><td>2×</td></tr><tr><td>75% 至不足 90%</td><td>4×</td></tr><tr><td>90% 及以上</td><td>8×</td></tr></tbody></table></div>
+<p>一笔单输入、双输出付款在最低压力下，共识最低费用为 5,000 + 100 + 1,400 + 2,500 μNOID，即 <strong>0.009 NOID</strong>。在最高压力下，增长项升到 20,000 μNOID，总额变为 <strong>0.0265 NOID</strong>。节点的本地转发策略可能要求更高费用。</p>
+<p>如果合并交易消耗多个输出、只建立较少的新输出，就不会净增加活跃槽位，因此没有增长费。基础项和输入输出项仍然支付。这种激励在每个 State 等级内部就会起作用，无需等到下一次扩容。</p>
+<p>合约也按真实的状态占用计费。一次调用可以用后继合约替换原记录，也可以同时创建付款输出，从而增加一个槽位。程序计数器不会让应用脱离通常的价值与存储成本规则。</p>
+
+<h2 id="two-independent-signals">让发行进度与存储价格各司其职</h2>
+<p>高度告诉所有人当前允许发行多少，以及下一档从哪里开始。占用率告诉使用者新增公共状态的代价。用户通过合并与复用降低存储压力时，发行曲线仍按同一套可验证时钟前进。</p>
+<p>这正是修改原模型的原因。活跃集合适合描述网络此刻必须保留什么，却无法同时给未来发行提供稳定的时间表。V2 保留状态效率的激励，并让补贴的每个阶段都能事先独立计算。</p>
+<p><a href="https://docs.parano1d.org/zh/protocol/economics" target="_blank" rel="noopener noreferrer">网络经济文档</a>提供完整规则。下一篇<a href="/zh/research/parano1d-v2-live-rights/">《从现存价值到有效权利》</a>进一步说明，为什么反复发生的合约活动可以与较小的活跃 State 并存。</p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">研究记录</p><h2 id="evidence-title">证据与产物</h2><p>以下链接保存了支撑本文的实现、测量或推导。</p></div><div class="evidence-links"><a href="https://docs.parano1d.org/protocol/economics" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>文档</small><strong>网络经济与精确发行表</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c83c453efbe4b2d235ed1c6d579e3d869e751575/noid_chain/src/consensus/emission.rs" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>代码</small><strong>固定版本的整数发行规则</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c83c453efbe4b2d235ed1c6d579e3d869e751575/noid_chain/src/consensus/fees.rs" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>代码</small><strong>固定版本的手续费与销毁规则</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/protocol/state" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>文档</small><strong>活跃 State 与扩容</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/archive/legacy-profiles" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Archive</small><strong>历史协议参数档案</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="相邻研究"><a href="/zh/research/decentralization-across-time/"><small>较早</small><strong>跨越时间的去中心化</strong><span>←</span></a><a href="/zh/research/parano1d-v2-capacity-and-consensus/"><small>较新</small><strong>V2 · 容量与共识</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>ParanO(1)d Lab</strong><p>ParanO(1)d 背后的协议研究。</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>研究</strong><a href="/zh/research/">归档</a><a href="/zh/feed.xml">RSS 订阅</a></div>
+      <div><strong>项目</strong><a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">网站</a><a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">技术文档</a><a href="https://git.parano1d.org/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer">源代码</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 ParanO(1)d Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=07f922a53399" defer></script>
+</body>
+</html>
