@@ -2,6 +2,7 @@
   {
     "slug": "parano1d-v2-live-rights",
     "date": "2026-09-25",
+    "updated": "2026-09-26",
     "kind": "Protocol architecture",
     "topic": "Proof-native contracts",
     "status": "V2 mainnet rules · H210537",
@@ -11,8 +12,8 @@
     "showAbstract": false,
     "title": "Parano1d v2. From live value to live rights.",
     "shortTitle": "V2 · Live rights",
-    "dek": "Proof-native smart contracts: programmable rights whose current validity survives the pruning of their interaction history.",
-    "abstract": "A detailed account of Parano1d v2 contracts: committed programs and authorities, persistent integer state, execution inside the shared recursive block relation, six application templates, exact instance semantics, portable receipts and recovery after offline pruning.",
+    "dek": "Post-quantum, proof-native smart contracts: programmable rights that remain verifiable after their interaction history is pruned.",
+    "abstract": "How Parano1d v2 extends live value to programmable rights: signatureless authorization, post-quantum security under the published v2 assumptions, committed programs and counters, shared recursive execution, six application templates, portable receipts and recovery after offline pruning.",
     "authors": [
       "Ignotus Nemo"
     ],
@@ -57,6 +58,16 @@
         "label": "Decentralization Across Time",
         "href": "/research/decentralization-across-time/",
         "type": "Architecture"
+      },
+      {
+        "label": "V2 security model and assumptions",
+        "href": "https://docs.parano1d.org/protocol/security-model",
+        "type": "Documentation"
+      },
+      {
+        "label": "V2 security derivation and reproduction",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d/src/commit/69d068f2de8475cd9526474d321c52e1da41d863/noid_soundness/docs/v2-retirement.md",
+        "type": "Analysis"
       }
     ]
   },
