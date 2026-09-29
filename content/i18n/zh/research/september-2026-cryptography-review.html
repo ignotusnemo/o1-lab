@@ -1,0 +1,29 @@
+<p>九月的新论文触及 Parano1d 安全论证的四个部分：Poseidon2b 的结式算法、线性矩阵的来源、递归证明里的 Fiat-Shamir，以及量子置换与 Reed-Solomon 的界。我们逐篇对照主网使用的固定参数和源码。</p>
+
+<p>两篇研究结式求解，两篇讨论矩阵选择，一篇分析 Fiat-Shamir 自引用，另两篇更新量子或编码理论界。生产环境的 296 个 Poseidon2b 参数与作者参考实现一致；主网 v2 的安全性计算也逐字节复现了原结果。论文版本、PDF 哈希和复现命令列在<a href="https://git.parano1d.org/ignotusnemo/parano1d-soundness/src/commit/4a80aa54ddf8522978665be77ca174ebeea7aabf/docs/september-2026-eprint-review.md">技术报告</a>中。</p>
+
+<h2 id="resultants">Poseidon2b：两种结式算法</h2>
+
+<p><a href="https://eprint.iacr.org/2026/1905">A Better Bivariate Resultant Attack on Round-Reduced Poseidon</a> 提出一种求解 Poseidon CICO-2 二元方程的启发式算法。将 Parano1d 的四字状态、<code>x^7</code> 和 8+58 轮代入论文的无跳轮公式，可得形式次数 <code>delta = 7^66</code>、理想次数上界 <code>D_I &lt;= 7^74</code>。矩阵乘法指数取二时，soft-O 中的单项式为 <code>7^107</code>，其二进制对数约为 <code>300.387</code>。这一整数运算已经加入可执行审计，标记为筛查结果。</p>
+
+<p>这个数字不能直接解释成对主网的攻击成本。论文用于保证一般位置稳定性的定理要求域特征大于 <code>D_I</code>，生产环境的特征却是二。论文实验采用的是其他参数和素域。更关键的是，它固定置换的两个输出坐标；我们的 Merkle 压缩采用前馈模式，输入的一部分也进入输出。快速算法能否适用于这组实际方程，需要新的证明或实验。另一篇 <a href="https://eprint.iacr.org/2026/1969">Efficient Polynomial System Solving via Dixon Resultants: Applications to AO Primitives</a> 提出不同的求解路线，但其最快的行列式方法明确不适用于二进制扩域。</p>
+
+<p>此前<a href="https://lab.parano1d.org/zh/research/poseidon2b-is-secure/">针对前馈压缩的分析</a>仍描述它所研究的攻击模型。那个模型中的 <code>2^409.874</code> 投影，不能代替对新算法的判断。两者研究的问题不同。</p>
+
+<h2 id="matrices">矩阵来源：Nothing Up My Matrix 与 Slipway</h2>
+
+<p><a href="https://eprint.iacr.org/2026/1901">Nothing Up My Matrix: Kleptographic Backdoors in ZK-friendly Hash Functions</a> 展示了一个实际风险：若攻击者能决定哈希函数的线性矩阵，就可能选出通过常规矩阵检查、却带有预设后门的参数。修订后的 <a href="https://eprint.iacr.org/2026/1579">Slipway: Accessing Finite Subspace Trails in Poseidon</a> 也依赖按轮常量挑选矩阵。这里需要核实的，是网络最终采用了哪套参数以及它们从何而来。</p>
+
+<p>我们将生产实现与<a href="https://github.com/Poseidon-Hash/Poseidon2b/blob/7072a9438cf48f1b38ad0092cda5452626914068/binius_poseidon2b/crates/circuits/src/hades/poseidon2b_x7_128_512.rs">Poseidon2b 作者固定版本的参考代码</a>逐值比对：264 个轮常量、两组矩阵共 32 个元素，合计 296 项完全一致。新增回归测试固定了这些值的规范哈希。这能排除相对于参考代码的本地替换，但不能证明参考参数本身绝无弱点。</p>
+
+<h2 id="recursion">递归里的 Fiat-Shamir</h2>
+
+<p><a href="https://eprint.iacr.org/2026/2114">How to instantiate Fiat-Shamir Provably and Practically?</a> 讨论证明语句可能引用验证器自身挑战计算的情形。Parano1d 的递归关系会验证之前的证明，因此这个问题值得对照实现检查。我们核对了挑战域分离、固定的电路形状和验证密钥摘要。合约程序运行在有界解释器里，不能随意提供一套新的验证电路。</p>
+
+<p>这些约束缩小了攻击面，却还不是具体递归编译器免疫自引用的证明。论文提出的秘密 VRF 方案依赖一个与证明者不串通的外部求值者，无法直接替换无许可网络的公开挑战。作者的形式化结论也尚未覆盖多轮 GKR。现有证书因此继续明确列出理想编译器前提。</p>
+
+<h2 id="bounds">量子置换与 Reed-Solomon 界</h2>
+
+<p><a href="https://eprint.iacr.org/2026/2135">Improved Soundness for Compressed Permutation Oracles and Tight Quantum Preimage and Collision Bounds for the Sponge</a> 研究均匀随机置换，不能直接替换固定 Poseidon2b 的条件。<a href="https://eprint.iacr.org/2026/2056">Reed-Solomon Codes Beyond Johnson: Efficient Decoding and Smaller Cryptographic Proofs</a> 改进了渐近界，但没有给出适用于当前递归开启布局的完整有限参数替代式。共识中的查询数量没有调整。</p>
+
+<p>我们用固定的主网 v2 参数重新运行可靠性计算，输出与保存的 JSON 逐字节相同。条件性数值和限制项均未改变。新的筛查公式和常量比对已经进入可执行审计。下一步的两个具体问题是：二元结式方法能否进入实际的二进制域前馈方程，以及递归 Fiat-Shamir 编译器在具体实现中如何排除自引用攻击。</p>

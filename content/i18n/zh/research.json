@@ -1,4 +1,15 @@
 {
+  "september-2026-cryptography-review": {
+    "kind": "安全研究",
+    "topic": "月度安全报告",
+    "status": "主网参数已核对",
+    "title": "九月安全报告",
+    "shortTitle": "九月安全报告",
+    "dek": "新论文涉及 Poseidon2b 结式、矩阵后门、递归 Fiat-Shamir 和安全性界。逐项核对主网固定参数。",
+    "abstract": "九月安全报告检查新论文，涵盖四个方向：Poseidon2b 结式攻击、恶意选择线性矩阵、递归 Fiat-Shamir 自引用，以及量子置换和 Reed-Solomon 的新界。生产环境的 296 个 Poseidon2b 参数与作者参考实现一致。主网 v2 的安全性计算逐字节复现了留存结果。新结式算法能否用于二进制域前馈压缩，以及具体递归编译器如何排除自引用，仍需继续研究。",
+    "keywords": ["Parano1d", "Poseidon2b", "结式", "Nothing Up My Matrix", "Slipway", "Fiat-Shamir", "量子置换", "Reed-Solomon", "后量子安全"],
+    "evidence": ["完整技术报告与复现方法", "A Better Bivariate Resultant Attack on Round-Reduced Poseidon", "Efficient Polynomial System Solving via Dixon Resultants: Applications to AO Primitives", "Nothing Up My Matrix: Kleptographic Backdoors in ZK-friendly Hash Functions", "Slipway: Accessing Finite Subspace Trails in Poseidon", "How to instantiate Fiat-Shamir Provably and Practically?", "Improved Soundness for Compressed Permutation Oracles and Tight Quantum Preimage and Collision Bounds for the Sponge", "Reed-Solomon Codes Beyond Johnson: Efficient Decoding and Smaller Cryptographic Proofs", "Poseidon2b 作者的固定常量", "v2 可靠性推导", "精确实例的开放研究任务"]
+  },
   "parano1d-v2-live-rights": {
     "pinnedLabel": "置顶",
     "kind": "协议架构",

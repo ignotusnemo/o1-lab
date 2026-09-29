@@ -1,5 +1,36 @@
 [
   {
+    "slug": "september-2026-cryptography-review",
+    "date": "2026-09-29",
+    "kind": "Security research",
+    "topic": "Monthly security report",
+    "status": "Production parameters checked",
+    "title": "September Security Report",
+    "shortTitle": "September Security Report",
+    "dek": "New papers on Poseidon2b, matrix backdoors, recursive Fiat-Shamir and soundness bounds, checked against Parano1d's production parameters.",
+    "abstract": "This report checks new papers across four areas: Poseidon2b resultant attacks, malicious matrix selection, Fiat-Shamir self-reference in recursion, and quantum permutation and Reed-Solomon bounds. All 296 production Poseidon2b values match the authors' reference. The mainnet v2 soundness output was reproduced byte for byte. The new resultant method has not been established for Parano1d's binary feed-forward compression, and the concrete recursive compiler analysis remains open.",
+    "authors": ["Ignotus Nemo"],
+    "art": "poseidon",
+    "heroImage": "/assets/og/september-2026-cryptography-review.png",
+    "heroImageFit": "contain",
+    "ogWidth": 1672,
+    "ogHeight": 941,
+    "keywords": ["Parano1d", "Poseidon2b", "bivariate resultant", "Nothing Up My Matrix", "Slipway", "Fiat-Shamir", "quantum permutation", "Reed-Solomon", "post-quantum soundness", "September 2026"],
+    "evidence": [
+      {"label": "Full technical report and reproduction", "href": "https://git.parano1d.org/ignotusnemo/parano1d-soundness/src/commit/4a80aa54ddf8522978665be77ca174ebeea7aabf/docs/september-2026-eprint-review.md", "type": "Analysis"},
+      {"label": "A Better Bivariate Resultant Attack on Round-Reduced Poseidon", "href": "https://eprint.iacr.org/2026/1905", "type": "Paper"},
+      {"label": "Efficient Polynomial System Solving via Dixon Resultants: Applications to AO Primitives", "href": "https://eprint.iacr.org/2026/1969", "type": "Paper"},
+      {"label": "Nothing Up My Matrix: Kleptographic Backdoors in ZK-friendly Hash Functions", "href": "https://eprint.iacr.org/2026/1901", "type": "Paper"},
+      {"label": "Slipway: Accessing Finite Subspace Trails in Poseidon", "href": "https://eprint.iacr.org/2026/1579", "type": "Paper"},
+      {"label": "How to instantiate Fiat-Shamir Provably and Practically?", "href": "https://eprint.iacr.org/2026/2114", "type": "Paper"},
+      {"label": "Improved Soundness for Compressed Permutation Oracles and Tight Quantum Preimage and Collision Bounds for the Sponge", "href": "https://eprint.iacr.org/2026/2135", "type": "Paper"},
+      {"label": "Reed-Solomon Codes Beyond Johnson: Efficient Decoding and Smaller Cryptographic Proofs", "href": "https://eprint.iacr.org/2026/2056", "type": "Paper"},
+      {"label": "Poseidon2b authors' pinned constants", "href": "https://github.com/Poseidon-Hash/Poseidon2b/blob/7072a9438cf48f1b38ad0092cda5452626914068/binius_poseidon2b/crates/circuits/src/hades/poseidon2b_x7_128_512.rs", "type": "Code"},
+      {"label": "Production v2 soundness derivation", "href": "https://git.parano1d.org/ignotusnemo/parano1d/src/branch/main/noid_soundness/docs/v2-retirement.md", "type": "Analysis"},
+      {"label": "Open exact-instance research task", "href": "https://noid.network/research/poseidon2b-attack", "type": "Source"}
+    ]
+  },
+  {
     "slug": "parano1d-v2-live-rights",
     "date": "2026-09-25",
     "updated": "2026-09-26",
@@ -241,6 +272,7 @@
   {
     "slug": "poseidon2b-is-secure",
     "date": "2026-09-02",
+    "updated": "2026-09-29",
     "kind": "Security analysis",
     "topic": "Poseidon2b cryptanalysis",
     "status": "Source-pinned production audit",

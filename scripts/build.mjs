@@ -462,7 +462,7 @@ function artMarkup(kind, compact = false) {
 
 function articleArtMarkup(item, compact = false) {
   if (!item.heroImage) return artMarkup(item.art, compact);
-  return `<div class="research-image${compact ? " research-image--compact" : ""}" aria-hidden="true"><img src="${esc(item.heroImage)}" alt="" loading="${compact ? "lazy" : "eager"}" decoding="async"></div>`;
+  return `<div class="research-image${compact ? " research-image--compact" : ""}${item.heroImageFit === "contain" ? " research-image--contain" : ""}" aria-hidden="true"><img src="${esc(item.heroImage)}" alt="" loading="${compact ? "lazy" : "eager"}" decoding="async"></div>`;
 }
 
 function languageSwitcher(locale, basePath) {
@@ -554,6 +554,8 @@ function shell({
   article,
   imagePath = "/assets/og-lab-hero.png",
   imageAlt = title,
+  imageWidth = 1200,
+  imageHeight = 630,
   indexable = true
 }) {
   const t = ui[locale.code];
@@ -588,8 +590,8 @@ function shell({
   <meta property="og:image" content="${image}">
   <meta property="og:image:secure_url" content="${image}">
   <meta property="og:image:type" content="image/png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
+  <meta property="og:image:width" content="${imageWidth}">
+  <meta property="og:image:height" content="${imageHeight}">
   <meta property="og:image:alt" content="${esc(imageAlt)}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${esc(fullTitle)}">
@@ -833,7 +835,9 @@ function articlePage(item, index, locale, newestFirst) {
     schema: articleSchema,
     article: item,
     imagePath,
-    imageAlt: item.title
+    imageAlt: item.title,
+    imageWidth: item.ogWidth ?? 1200,
+    imageHeight: item.ogHeight ?? 630
   });
 }
 

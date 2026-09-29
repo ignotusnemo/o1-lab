@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="New papers on Poseidon2b, matrix backdoors, recursive Fiat-Shamir and soundness bounds, checked against Parano1d&#039;s production parameters.">
+  <meta name="author" content="Parano1d Lab">
+  <meta name="keywords" content="Parano1d, Poseidon2b, bivariate resultant, Nothing Up My Matrix, Slipway, Fiat-Shamir, quantum permutation, Reed-Solomon, post-quantum soundness, September 2026, Parano1d Lab">
+  <link rel="canonical" href="https://lab.parano1d.org/research/september-2026-cryptography-review/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/september-2026-cryptography-review/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/september-2026-cryptography-review/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/september-2026-cryptography-review/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/september-2026-cryptography-review/">
+  <link rel="alternate" type="application/rss+xml" title="Parano1d Lab Research" href="https://lab.parano1d.org/feed.xml">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Parano1d Lab Research">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:url" content="https://lab.parano1d.org/research/september-2026-cryptography-review/">
+  <meta property="og:title" content="September Security Report · Parano1d Lab">
+  <meta property="og:description" content="New papers on Poseidon2b, matrix backdoors, recursive Fiat-Shamir and soundness bounds, checked against Parano1d&#039;s production parameters.">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og/september-2026-cryptography-review.png">
+  <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/september-2026-cryptography-review.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1672">
+  <meta property="og:image:height" content="941">
+  <meta property="og:image:alt" content="September Security Report">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="September Security Report · Parano1d Lab">
+  <meta name="twitter:description" content="New papers on Poseidon2b, matrix backdoors, recursive Fiat-Shamir and soundness bounds, checked against Parano1d&#039;s production parameters.">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/september-2026-cryptography-review.png">
+  <meta name="twitter:image:alt" content="September Security Report">
+  <meta property="article:published_time" content="2026-09-29T00:00:00Z">
+  <meta property="article:section" content="Monthly security report">
+  <meta property="article:author" content="Ignotus Nemo">
+  <title>September Security Report · Parano1d Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=ff9e513ef7ac">
+  <link rel="stylesheet" href="/assets/source-dialog.css?v=a9395fdbf3ff">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"September Security Report","description":"This report checks new papers across four areas: Poseidon2b resultant attacks, malicious matrix selection, Fiat-Shamir self-reference in recursion, and quantum permutation and Reed-Solomon bounds. All 296 production Poseidon2b values match the authors' reference. The mainnet v2 soundness output was reproduced byte for byte. The new resultant method has not been established for Parano1d's binary feed-forward compression, and the concrete recursive compiler analysis remains open.","datePublished":"2026-09-29","dateModified":"2026-09-29","url":"https://lab.parano1d.org/research/september-2026-cryptography-review/","mainEntityOfPage":"https://lab.parano1d.org/research/september-2026-cryptography-review/","inLanguage":"en","isAccessibleForFree":true,"keywords":["Parano1d","Poseidon2b","bivariate resultant","Nothing Up My Matrix","Slipway","Fiat-Shamir","quantum permutation","Reed-Solomon","post-quantum soundness","September 2026"],"citation":["https://eprint.iacr.org/2026/1905","https://eprint.iacr.org/2026/1969","https://eprint.iacr.org/2026/1901","https://eprint.iacr.org/2026/1579","https://eprint.iacr.org/2026/2114","https://eprint.iacr.org/2026/2135","https://eprint.iacr.org/2026/2056"],"author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/september-2026-cryptography-review.png","about":"Monthly security report"}</script>
+</head>
+<body class="locale-en">
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/" aria-label="ParanO(1)d Lab home">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>ParanO(1)d Lab</strong><small>Research</small></span>
+    </a>
+    <div class="header-controls">
+      <details class="language-switcher"><summary aria-label="Change language"><span>EN</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="Language"><a href="/research/september-2026-cryptography-review/" lang="en" hreflang="en" aria-current="true"><span>EN</span><strong>English</strong></a><a href="/ru/research/september-2026-cryptography-review/" lang="ru" hreflang="ru"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/september-2026-cryptography-review/" lang="zh-Hans" hreflang="zh-Hans"><span>中文</span><strong>简体中文</strong></a></div></details>
+      <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+        <a href="/#latest">Latest</a>
+        <a aria-current="page" href="/research/">All research</a>
+        <span class="nav-rule" aria-hidden="true"></span>
+        <a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">Docs <span aria-hidden="true">↗</span></a>
+        <a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">Parano1d <span aria-hidden="true">↗</span></a>
+        <button class="nav-source" type="button" data-source-open aria-haspopup="dialog" aria-controls="source-dialog"><svg class="nav-source-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Source</span></button>
+      </nav>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    </div>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/research/">← All research</a><div class="article-meta"><span>Security research</span><span>Monthly security report</span><time datetime="2026-09-29">29 Sept 2026</time></div><h1>September Security Report</h1><p class="article-dek">New papers on Poseidon2b, matrix backdoors, recursive Fiat-Shamir and soundness bounds, checked against Parano1d&#039;s production parameters.</p><div class="article-byline"><span>By Ignotus Nemo</span><span>4 min read</span><span>Production parameters checked</span></div><div class="article-share" aria-label="Share this research"><span class="article-share-label">Share</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/research/september-2026-cryptography-review/" data-copy-default="Copy link" data-copy-success="Copied" data-copy-failure="Copy failed" aria-label="Copy article link" title="Copy link"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">Copy link</span></button><a class="share-action" href="https://x.com/intent/post?text=September%20Security%20Report&amp;url=https%3A%2F%2Flab.parano1d.org%2Fresearch%2Fseptember-2026-cryptography-review%2F" aria-label="Share this article on X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Share on X</span></a></div></div>
+      <div class="research-image research-image--contain" aria-hidden="true"><img src="/assets/og/september-2026-cryptography-review.png" alt="" loading="eager" decoding="async"></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#resultants">Poseidon2b: two resultant methods</a><a href="#matrices">Matrix provenance: Nothing Up My Matrix and Slipway</a><a href="#recursion">Fiat-Shamir inside recursion</a><a href="#bounds">Quantum permutation and Reed-Solomon bounds</a></aside>
+      <article class="article-body"><div class="article-abstract"><span>Abstract</span><p>This report checks new papers across four areas: Poseidon2b resultant attacks, malicious matrix selection, Fiat-Shamir self-reference in recursion, and quantum permutation and Reed-Solomon bounds. All 296 production Poseidon2b values match the authors&#039; reference. The mainnet v2 soundness output was reproduced byte for byte. The new resultant method has not been established for Parano1d&#039;s binary feed-forward compression, and the concrete recursive compiler analysis remains open.</p></div><p>New September papers touch four parts of Parano1d's security argument: Poseidon2b resultants, matrix provenance, Fiat-Shamir inside recursion, and quantum permutation and Reed-Solomon bounds. We checked each against the fixed production code and parameters.</p>
+
+<p>Two papers develop resultant solvers; two examine malicious matrix selection; one analyzes Fiat-Shamir self-reference; and two revisit quantum or code bounds. The production Poseidon2b values match the authors' reference, and the mainnet v2 soundness rerun is byte-identical. The <a href="https://git.parano1d.org/ignotusnemo/parano1d-soundness/src/commit/4a80aa54ddf8522978665be77ca174ebeea7aabf/docs/september-2026-eprint-review.md" target="_blank" rel="noopener noreferrer">technical report</a> records paper versions, PDF hashes and reproduction commands.</p>
+
+<h2 id="resultants">Poseidon2b: two resultant methods</h2>
+
+<p><a href="https://eprint.iacr.org/2026/1905" target="_blank" rel="noopener noreferrer">A Better Bivariate Resultant Attack on Round-Reduced Poseidon</a> proposes a faster heuristic solver for bivariate CICO-2 systems. Applying its no-skip formal degrees to Parano1d's width-four, <code>x^7</code>, 8+58-round tuple gives <code>delta = 7^66</code> and <code>D_I &lt;= 7^74</code>. At matrix-multiplication exponent two, the soft-O monomial is <code>7^107</code>, or about <code>2^300.387</code>. We added this exact calculation to the executable soundness audit as a screening result.</p>
+
+<p>That number is a screening calculation, not an attack cost for Parano1d. The paper's generic-coordinate theorem assumes the field characteristic exceeds <code>D_I</code>; our field has characteristic two. Its experiments use other parameters and prime fields. Its equations constrain two output coordinates of a permutation, while our Merkle compressor includes the input in the output through feed-forward. Applying the faster algorithm to those equations still needs a proof or experiment. <a href="https://eprint.iacr.org/2026/1969" target="_blank" rel="noopener noreferrer">Efficient Polynomial System Solving via Dixon Resultants: Applications to AO Primitives</a> offers another route, but its fastest determinant setting explicitly excludes binary extension fields.</p>
+
+<p>The earlier <a href="https://lab.parano1d.org/research/poseidon2b-is-secure/" target="_blank" rel="noopener noreferrer">feed-forward analysis</a> still applies to its own attack model. Its <code>2^409.874</code> projection does not answer whether the newer method transfers. The two figures describe different algorithms and equations.</p>
+
+<h2 id="matrices">Matrix provenance: Nothing Up My Matrix and Slipway</h2>
+
+<p><a href="https://eprint.iacr.org/2026/1901" target="_blank" rel="noopener noreferrer">Nothing Up My Matrix: Kleptographic Backdoors in ZK-friendly Hash Functions</a> shows how an adversary who controls the choice of a linear matrix can install a backdoor while passing ordinary matrix checks. The revised <a href="https://eprint.iacr.org/2026/1579" target="_blank" rel="noopener noreferrer">Slipway: Accessing Finite Subspace Trails in Poseidon</a> likewise selects a matrix in response to round constants. Both papers make the origin of the fixed production matrices worth checking.</p>
+
+<p>We compared the production constants with the <a href="https://github.com/Poseidon-Hash/Poseidon2b/blob/7072a9438cf48f1b38ad0092cda5452626914068/binius_poseidon2b/crates/circuits/src/hades/poseidon2b_x7_128_512.rs" target="_blank" rel="noopener noreferrer">Poseidon2b authors' pinned reference</a>: 264 round constants and 32 matrix entries, all 296 values, matched exactly. A regression test now checks their canonical digest. This rules out a local parameter substitution relative to that reference. It does not prove the reference itself free of weaknesses.</p>
+
+<h2 id="recursion">Fiat-Shamir inside recursion</h2>
+
+<p><a href="https://eprint.iacr.org/2026/2114" target="_blank" rel="noopener noreferrer">How to instantiate Fiat-Shamir Provably and Practically?</a> revisits diagonalization when a prover can build statements that refer to the verifier's own challenge computation. Parano1d's recursive proof verifies earlier proofs, so we checked the actual boundary: framed hash operations, separated transcript domains, pinned verifier-key digests and fixed circuit shapes. Contract programs run inside a bounded interpreter rather than selecting an arbitrary verifier circuit.</p>
+
+<p>These checks limit how a prover can construct such a statement. They do not establish a concrete Fiat-Shamir security theorem for the recursive compiler. The paper's suggested secret-key VRF needs a separate noncolluding evaluator and cannot directly replace a permissionless public transcript. Its formal result also stops short of multi-round GKR. The certificate therefore retains its ideal-compiler premise.</p>
+
+<h2 id="bounds">Quantum permutation and Reed-Solomon bounds</h2>
+
+<p><a href="https://eprint.iacr.org/2026/2135" target="_blank" rel="noopener noreferrer">Improved Soundness for Compressed Permutation Oracles and Tight Quantum Preimage and Collision Bounds for the Sponge</a> studies a uniformly random permutation. Parano1d uses a public fixed Poseidon2b instance, so that bound cannot replace the fixed-permutation condition in its certificate. <a href="https://eprint.iacr.org/2026/2056" target="_blank" rel="noopener noreferrer">Reed-Solomon Codes Beyond Johnson: Efficient Decoding and Smaller Cryptographic Proofs</a> improves an asymptotic agreement bound in every characteristic; its beyond-Johnson results need large characteristic. Neither paper supplies a complete finite-parameter replacement for Parano1d's typed recursive openings. No consensus query count was changed.</p>
+
+<p>We reran the mainnet v2 soundness calculator against the pinned bank. Its JSON output matched the saved result byte for byte; the conditional arithmetic and limiting event are unchanged. The audit now includes the new screening calculation and a test of the production constants. Applying the resultant algorithm to our binary feed-forward compressor and analyzing the concrete recursive Fiat-Shamir compiler remain open tasks.</p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Research record</p><h2 id="evidence-title">Evidence and artifacts</h2><p>The links below preserve the implementation, measurement or derivation behind this article.</p></div><div class="evidence-links"><a href="https://git.parano1d.org/ignotusnemo/parano1d-soundness/src/commit/4a80aa54ddf8522978665be77ca174ebeea7aabf/docs/september-2026-eprint-review.md" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>Analysis</small><strong>Full technical report and reproduction</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://eprint.iacr.org/2026/1905" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Paper</small><strong>A Better Bivariate Resultant Attack on Round-Reduced Poseidon</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://eprint.iacr.org/2026/1969" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Paper</small><strong>Efficient Polynomial System Solving via Dixon Resultants: Applications to AO Primitives</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://eprint.iacr.org/2026/1901" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Paper</small><strong>Nothing Up My Matrix: Kleptographic Backdoors in ZK-friendly Hash Functions</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://eprint.iacr.org/2026/1579" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Paper</small><strong>Slipway: Accessing Finite Subspace Trails in Poseidon</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://eprint.iacr.org/2026/2114" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Paper</small><strong>How to instantiate Fiat-Shamir Provably and Practically?</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://eprint.iacr.org/2026/2135" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Paper</small><strong>Improved Soundness for Compressed Permutation Oracles and Tight Quantum Preimage and Collision Bounds for the Sponge</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://eprint.iacr.org/2026/2056" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Paper</small><strong>Reed-Solomon Codes Beyond Johnson: Efficient Decoding and Smaller Cryptographic Proofs</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://github.com/Poseidon-Hash/Poseidon2b/blob/7072a9438cf48f1b38ad0092cda5452626914068/binius_poseidon2b/crates/circuits/src/hades/poseidon2b_x7_128_512.rs" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .7C5.7.7.9 5.5.9 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.7 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.3 1.1-3.1-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.3-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.1 5.5 18.3.7 12 .7Z"/></svg><span><small>Code</small><strong>Poseidon2b authors&#039; pinned constants</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/parano1d/src/branch/main/noid_soundness/docs/v2-retirement.md" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>Analysis</small><strong>Production v2 soundness derivation</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://noid.network/research/poseidon2b-attack" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Source</small><strong>Open exact-instance research task</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Adjacent research"><a href="/research/parano1d-v2-capacity-and-consensus/"><small>Earlier</small><strong>V2 · Capacity and consensus</strong><span>←</span></a><a href="/research/parano1d-v2-live-rights/"><small>Later</small><strong>V2 · Live rights</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>ParanO(1)d Lab</strong><p>Protocol research behind ParanO(1)d.</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>Research</strong><a href="/research/">Archive</a><a href="/feed.xml">RSS feed</a></div>
+      <div><strong>Project</strong><a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">Website</a><a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">Documentation</a><a href="https://git.parano1d.org/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer">Source</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 ParanO(1)d Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=07f922a53399" defer></script>
+</body>
+</html>

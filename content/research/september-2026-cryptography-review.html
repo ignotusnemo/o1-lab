@@ -1,0 +1,29 @@
+<p>New September papers touch four parts of Parano1d's security argument: Poseidon2b resultants, matrix provenance, Fiat-Shamir inside recursion, and quantum permutation and Reed-Solomon bounds. We checked each against the fixed production code and parameters.</p>
+
+<p>Two papers develop resultant solvers; two examine malicious matrix selection; one analyzes Fiat-Shamir self-reference; and two revisit quantum or code bounds. The production Poseidon2b values match the authors' reference, and the mainnet v2 soundness rerun is byte-identical. The <a href="https://git.parano1d.org/ignotusnemo/parano1d-soundness/src/commit/4a80aa54ddf8522978665be77ca174ebeea7aabf/docs/september-2026-eprint-review.md">technical report</a> records paper versions, PDF hashes and reproduction commands.</p>
+
+<h2 id="resultants">Poseidon2b: two resultant methods</h2>
+
+<p><a href="https://eprint.iacr.org/2026/1905">A Better Bivariate Resultant Attack on Round-Reduced Poseidon</a> proposes a faster heuristic solver for bivariate CICO-2 systems. Applying its no-skip formal degrees to Parano1d's width-four, <code>x^7</code>, 8+58-round tuple gives <code>delta = 7^66</code> and <code>D_I &lt;= 7^74</code>. At matrix-multiplication exponent two, the soft-O monomial is <code>7^107</code>, or about <code>2^300.387</code>. We added this exact calculation to the executable soundness audit as a screening result.</p>
+
+<p>That number is a screening calculation, not an attack cost for Parano1d. The paper's generic-coordinate theorem assumes the field characteristic exceeds <code>D_I</code>; our field has characteristic two. Its experiments use other parameters and prime fields. Its equations constrain two output coordinates of a permutation, while our Merkle compressor includes the input in the output through feed-forward. Applying the faster algorithm to those equations still needs a proof or experiment. <a href="https://eprint.iacr.org/2026/1969">Efficient Polynomial System Solving via Dixon Resultants: Applications to AO Primitives</a> offers another route, but its fastest determinant setting explicitly excludes binary extension fields.</p>
+
+<p>The earlier <a href="https://lab.parano1d.org/research/poseidon2b-is-secure/">feed-forward analysis</a> still applies to its own attack model. Its <code>2^409.874</code> projection does not answer whether the newer method transfers. The two figures describe different algorithms and equations.</p>
+
+<h2 id="matrices">Matrix provenance: Nothing Up My Matrix and Slipway</h2>
+
+<p><a href="https://eprint.iacr.org/2026/1901">Nothing Up My Matrix: Kleptographic Backdoors in ZK-friendly Hash Functions</a> shows how an adversary who controls the choice of a linear matrix can install a backdoor while passing ordinary matrix checks. The revised <a href="https://eprint.iacr.org/2026/1579">Slipway: Accessing Finite Subspace Trails in Poseidon</a> likewise selects a matrix in response to round constants. Both papers make the origin of the fixed production matrices worth checking.</p>
+
+<p>We compared the production constants with the <a href="https://github.com/Poseidon-Hash/Poseidon2b/blob/7072a9438cf48f1b38ad0092cda5452626914068/binius_poseidon2b/crates/circuits/src/hades/poseidon2b_x7_128_512.rs">Poseidon2b authors' pinned reference</a>: 264 round constants and 32 matrix entries, all 296 values, matched exactly. A regression test now checks their canonical digest. This rules out a local parameter substitution relative to that reference. It does not prove the reference itself free of weaknesses.</p>
+
+<h2 id="recursion">Fiat-Shamir inside recursion</h2>
+
+<p><a href="https://eprint.iacr.org/2026/2114">How to instantiate Fiat-Shamir Provably and Practically?</a> revisits diagonalization when a prover can build statements that refer to the verifier's own challenge computation. Parano1d's recursive proof verifies earlier proofs, so we checked the actual boundary: framed hash operations, separated transcript domains, pinned verifier-key digests and fixed circuit shapes. Contract programs run inside a bounded interpreter rather than selecting an arbitrary verifier circuit.</p>
+
+<p>These checks limit how a prover can construct such a statement. They do not establish a concrete Fiat-Shamir security theorem for the recursive compiler. The paper's suggested secret-key VRF needs a separate noncolluding evaluator and cannot directly replace a permissionless public transcript. Its formal result also stops short of multi-round GKR. The certificate therefore retains its ideal-compiler premise.</p>
+
+<h2 id="bounds">Quantum permutation and Reed-Solomon bounds</h2>
+
+<p><a href="https://eprint.iacr.org/2026/2135">Improved Soundness for Compressed Permutation Oracles and Tight Quantum Preimage and Collision Bounds for the Sponge</a> studies a uniformly random permutation. Parano1d uses a public fixed Poseidon2b instance, so that bound cannot replace the fixed-permutation condition in its certificate. <a href="https://eprint.iacr.org/2026/2056">Reed-Solomon Codes Beyond Johnson: Efficient Decoding and Smaller Cryptographic Proofs</a> improves an asymptotic agreement bound in every characteristic; its beyond-Johnson results need large characteristic. Neither paper supplies a complete finite-parameter replacement for Parano1d's typed recursive openings. No consensus query count was changed.</p>
+
+<p>We reran the mainnet v2 soundness calculator against the pinned bank. Its JSON output matched the saved result byte for byte; the conditional arithmetic and limiting event are unchanged. The audit now includes the new screening calculation and a test of the production constants. Applying the resultant algorithm to our binary feed-forward compressor and analyzing the concrete recursive Fiat-Shamir compiler remain open tasks.</p>

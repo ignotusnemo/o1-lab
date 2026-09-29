@@ -1123,6 +1123,7 @@ img, svg { max-width: 100%; }
   background: #07110d;
 }
 .research-image img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center; }
+.research-image--contain img { object-fit: contain; }
 .research-image--compact { aspect-ratio: 640 / 420; }
 .article-hero > .research-image {
   align-self: center;

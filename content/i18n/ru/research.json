@@ -1,4 +1,15 @@
 {
+  "september-2026-cryptography-review": {
+    "kind": "Исследование безопасности",
+    "topic": "Ежемесячный отчёт по безопасности",
+    "status": "Параметры сети проверены",
+    "title": "Сентябрьский отчёт по безопасности",
+    "shortTitle": "Отчёт за сентябрь",
+    "dek": "Новые работы о Poseidon2b, закладках в матрицах, Fiat-Shamir и границах soundness. Проверяем их на параметрах работающей сети.",
+    "abstract": "Сентябрьский отчёт разбирает новые работы по четырём направлениям: атаки через результанты на Poseidon2b, злонамеренный выбор матриц, самоссылка Fiat-Shamir в рекурсии и новые границы для квантовых запросов и кодов Рида-Соломона. Все 296 рабочих значений Poseidon2b совпали с эталоном авторов. Повторный расчёт soundness для v2 побайтно совпал с сохранённым результатом. Перенос нового алгоритма на бинарную компрессию с feed-forward и анализ конкретного рекурсивного компилятора остаются открытыми задачами.",
+    "keywords": ["Parano1d", "Poseidon2b", "результанты", "Nothing Up My Matrix", "Slipway", "Fiat-Shamir", "квантовая перестановка", "Reed-Solomon", "постквантовая безопасность"],
+    "evidence": ["Полный технический отчёт и воспроизведение", "A Better Bivariate Resultant Attack on Round-Reduced Poseidon", "Efficient Polynomial System Solving via Dixon Resultants: Applications to AO Primitives", "Nothing Up My Matrix: Kleptographic Backdoors in ZK-friendly Hash Functions", "Slipway: Accessing Finite Subspace Trails in Poseidon", "How to instantiate Fiat-Shamir Provably and Practically?", "Improved Soundness for Compressed Permutation Oracles and Tight Quantum Preimage and Collision Bounds for the Sponge", "Reed-Solomon Codes Beyond Johnson: Efficient Decoding and Smaller Cryptographic Proofs", "Константы Poseidon2b из эталона авторов", "Вывод soundness для v2", "Открытая задача для точной реализации"]
+  },
   "parano1d-v2-live-rights": {
     "pinnedLabel": "Закреплено",
     "kind": "Архитектура протокола",

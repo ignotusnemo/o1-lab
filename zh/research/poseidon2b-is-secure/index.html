@@ -38,13 +38,14 @@
   <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/poseidon2b-is-secure.png">
   <meta name="twitter:image:alt" content="Poseidon2b 是安全的！">
   <meta property="article:published_time" content="2026-09-02T00:00:00Z">
+  <meta property="article:modified_time" content="2026-09-29T00:00:00Z">
   <meta property="article:section" content="Poseidon2b 密码分析">
   <meta property="article:author" content="Ignotus Nemo">
   <title>Poseidon2b 是安全的！ · Parano1d Lab</title>
-  <link rel="stylesheet" href="/assets/site.css?v=8700632d03a9">
+  <link rel="stylesheet" href="/assets/site.css?v=ff9e513ef7ac">
   <link rel="stylesheet" href="/assets/source-dialog.css?v=a9395fdbf3ff">
   <link rel="stylesheet" href="/assets/katex.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Poseidon2b 是安全的！","description":"本文把 Parano1d 的精确生产实例与已公开的 Poseidon2b 代数攻击逐项对应。ePrint 2026/306 的前馈模型可以应用，工作量投影约为 2^409.8738。ePrint 2026/1792 的非线性子空间构造在 GF(2^128) 上通过精确秩检验后同样可以迁移，但其最低投影约为 2^1022.8301。自适应选取矩阵的攻击和新的 S 盒跳过结果都不能迁移到固定的四字压缩实例。这些数字是特定攻击模型的投影，不是安全位数。","datePublished":"2026-09-02","dateModified":"2026-09-02","url":"https://lab.parano1d.org/zh/research/poseidon2b-is-secure/","mainEntityOfPage":"https://lab.parano1d.org/zh/research/poseidon2b-is-secure/","inLanguage":"zh-Hans","isAccessibleForFree":true,"keywords":["Poseidon2b","Poseidon2","代数密码分析","二进制域","GF(2^128)","Skipping Class","S 盒跳过","非线性子空间","Gröbner 基","Merkle 压缩","Parano1d"],"citation":["https://eprint.iacr.org/2026/306","https://eprint.iacr.org/2026/1579","https://eprint.iacr.org/2026/1692","https://eprint.iacr.org/2026/1760","https://eprint.iacr.org/2026/1792"],"author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/poseidon2b-is-secure.png","about":"Poseidon2b 密码分析"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Poseidon2b 是安全的！","description":"本文把 Parano1d 的精确生产实例与已公开的 Poseidon2b 代数攻击逐项对应。ePrint 2026/306 的前馈模型可以应用，工作量投影约为 2^409.8738。ePrint 2026/1792 的非线性子空间构造在 GF(2^128) 上通过精确秩检验后同样可以迁移，但其最低投影约为 2^1022.8301。自适应选取矩阵的攻击和新的 S 盒跳过结果都不能迁移到固定的四字压缩实例。这些数字是特定攻击模型的投影，不是安全位数。","datePublished":"2026-09-02","dateModified":"2026-09-29","url":"https://lab.parano1d.org/zh/research/poseidon2b-is-secure/","mainEntityOfPage":"https://lab.parano1d.org/zh/research/poseidon2b-is-secure/","inLanguage":"zh-Hans","isAccessibleForFree":true,"keywords":["Poseidon2b","Poseidon2","代数密码分析","二进制域","GF(2^128)","Skipping Class","S 盒跳过","非线性子空间","Gröbner 基","Merkle 压缩","Parano1d"],"citation":["https://eprint.iacr.org/2026/306","https://eprint.iacr.org/2026/1579","https://eprint.iacr.org/2026/1692","https://eprint.iacr.org/2026/1760","https://eprint.iacr.org/2026/1792"],"author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/poseidon2b-is-secure.png","about":"Poseidon2b 密码分析"}</script>
 </head>
 <body class="locale-zh">
   <a class="skip-link" href="#content">跳到正文</a>
@@ -74,7 +75,9 @@
     </header>
     <div class="article-layout">
       <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#fix-the-instance">先把实例钉死</a><a href="#what-skipping-class-attacks">Skipping Class 攻击覆盖了什么</a><a href="#the-part-that-does-apply">真正命中的部分在附录 A</a><a href="#adaptive-matrix-attacks">自适应选择矩阵，研究的是另一组实例</a><a href="#sbox-skipping">状态宽度为四时，S 盒跳过法没有新增收益</a><a href="#nonlinear-subspaces">非线性子空间确实适用于固定矩阵</a><a href="#why-poseidon2b">为什么在二元域里选择 Poseidon2b</a><a href="#executable-correspondence">让参数变化自动推翻旧审计</a><a href="#the-claim">本文的结论</a></aside>
-      <article class="article-body"><div class="article-abstract"><span>摘要</span><p>本文把 Parano1d 的精确生产实例与已公开的 Poseidon2b 代数攻击逐项对应。ePrint 2026/306 的前馈模型可以应用，工作量投影约为 2^409.8738。ePrint 2026/1792 的非线性子空间构造在 GF(2^128) 上通过精确秩检验后同样可以迁移，但其最低投影约为 2^1022.8301。自适应选取矩阵的攻击和新的 S 盒跳过结果都不能迁移到固定的四字压缩实例。这些数字是特定攻击模型的投影，不是安全位数。</p></div><p><strong>“Poseidon2b 是安全的”这句话故意只说了一半。</strong></p>
+      <article class="article-body"><div class="article-abstract"><span>摘要</span><p>本文把 Parano1d 的精确生产实例与已公开的 Poseidon2b 代数攻击逐项对应。ePrint 2026/306 的前馈模型可以应用，工作量投影约为 2^409.8738。ePrint 2026/1792 的非线性子空间构造在 GF(2^128) 上通过精确秩检验后同样可以迁移，但其最低投影约为 2^1022.8301。自适应选取矩阵的攻击和新的 S 盒跳过结果都不能迁移到固定的四字压缩实例。这些数字是特定攻击模型的投影，不是安全位数。</p></div><div class="note"><strong>2026 年九月补充</strong><p>新的<a href="/zh/research/september-2026-cryptography-review/">月度复核</a>分析了更快的 CICO-2 结式算法。它的形式投影低于本文讨论的旧模型，但能否迁移到本协议的二进制域前馈压缩尚未确定。下文仍是截至九月二日、针对当时已发表方法的源码对应分析。</p></div>
+
+<p><strong>“Poseidon2b 是安全的”这句话故意只说了一半。</strong></p>
 
 <p>在密码学里，算法名称从来不是安全性结论。只有把底层域、状态宽度、速率、容量、摘要长度、S 盒、轮数、线性层、工作模式和攻击模型全部固定下来，“安全”二字才有明确对象。</p>
 
