@@ -33,6 +33,9 @@
 <p>The eight intervals before the tail sum to <strong>53,810,928 NOID</strong> of scheduled gross subsidy. The tail continues at 1 NOID per block, or 1,051,200 per nominal year. There is therefore no fixed maximum supply. These sums describe the subsidy schedule; actual circulating supply also depends on burns and value that is not issued or claimed.</p>
 <p>A permanent tail maintains a subsidy alongside fees. It does not fix the market value of mining revenue or guarantee any particular security budget. Its role is to keep an explicit ongoing issuance component after the transition has finished.</p>
 
+<h2 id="allocation">The three-year allocation stays intact</h2>
+<p>The subsidy split remains 90% to miners and 5% to each development fund. Its original three nominal years from genesis do not restart at the fork. With blocks now targeting 30 rather than 20 seconds, fewer blocks fit in the remaining time: the allocation ends at H3,223,778 instead of H4,730,400. Fund payouts occur every 2,880 blocks, first at H213,416; there is no fund payout at H210,537. The unfinished old day from H207,361 to H210,536 is not paid, leaving 15,880 NOID of fund shares unissued at the 50 NOID tier. The final payout covers 762 blocks. See the <a href="https://docs.parano1d.org/protocol/economics">exact allocation rules</a>.</p>
+
 <h2 id="the-price-of-live-state">The price of live State still rises with use</h2>
 <p>Removing occupancy from issuance leaves its storage-pricing role intact. The minimum fee includes a base amount, live-input and live-output charges, and a charge for each <em>net-new</em> live slot. Only that growth component is burned; ordinary fee components and voluntary tips remain miner-claimable.</p>
 <div class="table-wrap"><table><thead><tr><th>Parent-State occupancy</th><th>Growth-fee multiplier</th></tr></thead><tbody>
