@@ -1,5 +1,74 @@
 [
   {
+    "slug": "live-agents",
+    "date": "2026-09-30",
+    "kind": "Application research",
+    "topic": "AI agents",
+    "status": "Research prototype",
+    "showAbstract": false,
+    "title": "Live Agents. Autonomy without trusted APIs.",
+    "shortTitle": "Live Agents · Agent Core",
+    "dek": "Each participant checks funding and authority through its own Agent Core and exchanges verifiable receipts with other agents. No explorer or hosted API decides what is valid. Parano1d makes this practical without downloading and replaying the network's full transaction history.",
+    "abstract": "Live Agents explores how agents and services can independently verify rights, funding and past actions. Agent Core combines native P2P synchronization, authenticated live State and portable receipt checks. Parano1d removes historical execution replay and permanent storage of old transaction bodies. An isolated v2 experiment tests shared authority, conflicting requests, replay, expiry and recovery; a recorded demonstration shows three agents checking the evidence through their own Core processes.",
+    "authors": [
+      "Ignotus Nemo"
+    ],
+    "art": "rightsv2",
+    "heroImage": "/assets/og/live-agents.png",
+    "heroImageFit": "contain",
+    "ogWidth": 1672,
+    "ogHeight": 941,
+    "keywords": [
+      "Live Agents",
+      "Agent Core",
+      "agcore",
+      "Parano1d",
+      "AI agents",
+      "agent authorization",
+      "shared allowance",
+      "proof-native contracts",
+      "portable receipts",
+      "independent verification"
+    ],
+    "evidence": [
+      {
+        "label": "Live Agents research and reproduction",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d/src/commit/16af0c6b6806bde7cf8a033be9e800b80d31a545/research/live_agents/README.md",
+        "type": "Systems research"
+      },
+      {
+        "label": "Agent Core source and interface",
+        "href": "https://git.parano1d.org/ignotusnemo/agcore",
+        "type": "Code"
+      },
+      {
+        "label": "Recording, tasks and complete evidence",
+        "href": "https://git.parano1d.org/ignotusnemo/agcore/src/commit/10a8198744b1492d3ce14e4dd1749372c12a086a/demo/live-agents-2026-09-30",
+        "type": "Artifact"
+      },
+      {
+        "label": "Experiment results and saved receipts",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d/src/commit/16af0c6b6806bde7cf8a033be9e800b80d31a545/research/live_agents/results/2026-09-30",
+        "type": "Data"
+      },
+      {
+        "label": "Raw agent calls and responses",
+        "href": "https://git.parano1d.org/ignotusnemo/agcore/src/commit/10a8198744b1492d3ce14e4dd1749372c12a086a/demo/live-agents-2026-09-30/agents",
+        "type": "Data"
+      },
+      {
+        "label": "Bounded Capability Receipts, draft 06",
+        "href": "https://datatracker.ietf.org/doc/draft-schrock-ep-bounded-capability-receipts/06/",
+        "type": "Source"
+      },
+      {
+        "label": "Contract receipts and recovery",
+        "href": "https://docs.parano1d.org/contracts/receipts-and-recovery",
+        "type": "Documentation"
+      }
+    ]
+  },
+  {
     "slug": "september-2026-cryptography-review",
     "date": "2026-09-29",
     "kind": "Security research",

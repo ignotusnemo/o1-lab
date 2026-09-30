@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Каждый участник проверяет средства и полномочия через собственный Agent Core и обменивается проверяемыми чеками с другими агентами.">
+  <meta name="author" content="Parano1d Lab">
+  <meta name="keywords" content="Live Agents, Agent Core, agcore, Parano1d, ИИ-агенты, авторизация агентов, общий лимит, proof-native контракты, чеки, независимая проверка, Parano1d Lab">
+  <link rel="canonical" href="https://lab.parano1d.org/ru/research/live-agents/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/live-agents/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/live-agents/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/live-agents/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/live-agents/">
+  <link rel="alternate" type="application/rss+xml" title="Исследования Parano1d Lab" href="https://lab.parano1d.org/ru/feed.xml">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Исследования Parano1d Lab">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:url" content="https://lab.parano1d.org/ru/research/live-agents/">
+  <meta property="og:title" content="Live Agents · Agent Core · Parano1d Lab">
+  <meta property="og:description" content="Каждый участник проверяет средства и полномочия через собственный Agent Core и обменивается проверяемыми чеками с другими агентами.">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og/live-agents.png">
+  <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/live-agents.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1672">
+  <meta property="og:image:height" content="941">
+  <meta property="og:image:alt" content="Live Agents. Самостоятельность без доверия к чужому API.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Live Agents · Agent Core · Parano1d Lab">
+  <meta name="twitter:description" content="Каждый участник проверяет средства и полномочия через собственный Agent Core и обменивается проверяемыми чеками с другими агентами.">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/live-agents.png">
+  <meta name="twitter:image:alt" content="Live Agents. Самостоятельность без доверия к чужому API.">
+  <meta property="article:published_time" content="2026-09-30T00:00:00Z">
+  <meta property="article:section" content="ИИ-агенты">
+  <meta property="article:author" content="Ignotus Nemo">
+  <title>Live Agents · Agent Core · Parano1d Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=e350fff844fe">
+  <link rel="stylesheet" href="/assets/source-dialog.css?v=a9395fdbf3ff">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Live Agents. Самостоятельность без доверия к чужому API.","description":"Live Agents исследует, как агентам и сервисам самостоятельно проверять права, средства и прошлые операции. Agent Core объединяет P2P-синхронизацию, проверку текущего State и переносимых чеков. Архитектура Parano1d избавляет от повторного исполнения истории и постоянного хранения старых тел транзакций. В изолированной сети v2 проверены общий лимит, конфликтующие запросы, повторное использование разрешений, истечение срока и возврат средств. На видео три агента проверяют полученные доказательства через собственные процессы Core.","datePublished":"2026-09-30","dateModified":"2026-09-30","url":"https://lab.parano1d.org/ru/research/live-agents/","mainEntityOfPage":"https://lab.parano1d.org/ru/research/live-agents/","inLanguage":"ru","isAccessibleForFree":true,"keywords":["Live Agents","Agent Core","agcore","Parano1d","ИИ-агенты","авторизация агентов","общий лимит","proof-native контракты","чеки","независимая проверка"],"author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/live-agents.png","about":"ИИ-агенты"}</script>
+</head>
+<body class="locale-ru">
+  <a class="skip-link" href="#content">К содержанию</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/ru/" aria-label="Главная ParanO(1)d Lab">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>ParanO(1)d Lab</strong><small>Исследования</small></span>
+    </a>
+    <div class="header-controls">
+      <details class="language-switcher"><summary aria-label="Выбрать язык"><span>RU</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="Язык"><a href="/research/live-agents/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/live-agents/" lang="ru" hreflang="ru" aria-current="true"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/live-agents/" lang="zh-Hans" hreflang="zh-Hans"><span>中文</span><strong>简体中文</strong></a></div></details>
+      <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
+        <a href="/ru/#latest">Новое</a>
+        <a aria-current="page" href="/ru/research/">Все исследования</a>
+        <span class="nav-rule" aria-hidden="true"></span>
+        <a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">Документация <span aria-hidden="true">↗</span></a>
+        <a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">Parano1d <span aria-hidden="true">↗</span></a>
+        <button class="nav-source" type="button" data-source-open aria-haspopup="dialog" aria-controls="source-dialog"><svg class="nav-source-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Исходники</span></button>
+      </nav>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    </div>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/ru/research/">← Все исследования</a><div class="article-meta"><span>Прикладное исследование</span><span>ИИ-агенты</span><time datetime="2026-09-30">30 сент. 2026 г.</time></div><h1>Live Agents. Самостоятельность без доверия к чужому API.</h1><p class="article-dek">Каждый участник проверяет средства и полномочия через собственный Agent Core и обменивается проверяемыми чеками с другими агентами. Эксплорер или чужой API не определяет, что считать валидным. Parano1d делает это практичным без скачивания и повторного исполнения всей истории транзакций сети.</p><div class="article-byline"><span>Автор Ignotus Nemo</span><span>10 мин чтения</span><span>Исследовательский прототип</span></div><div class="article-share" aria-label="Поделиться исследованием"><span class="article-share-label">Поделиться</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/ru/research/live-agents/" data-copy-default="Копировать ссылку" data-copy-success="Скопировано" data-copy-failure="Не удалось скопировать" aria-label="Скопировать ссылку на статью" title="Копировать ссылку"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">Копировать ссылку</span></button><a class="share-action" href="https://x.com/intent/post?text=Live%20Agents.%20%D0%A1%D0%B0%D0%BC%D0%BE%D1%81%D1%82%D0%BE%D1%8F%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%B1%D0%B5%D0%B7%20%D0%B4%D0%BE%D0%B2%D0%B5%D1%80%D0%B8%D1%8F%20%D0%BA%20%D1%87%D1%83%D0%B6%D0%BE%D0%BC%D1%83%20API.&amp;url=https%3A%2F%2Flab.parano1d.org%2Fru%2Fresearch%2Flive-agents%2F" aria-label="Поделиться статьёй в X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Поделиться в X</span></a></div></div>
+      <div class="research-image research-image--contain" aria-hidden="true"><img src="/assets/og/live-agents.png" alt="" loading="eager" decoding="async"></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="В этой статье"><strong>В этой статье</strong><a href="#the-problem">Полномочия между сервисами</a><a href="#why-parano1d">Независимость без наследования всей истории</a><a href="#rights-and-receipts">Что участник может установить сам</a><a href="#receipts">Чеки для машинного обмена</a><a href="#agent-core">Agent Core</a><a href="#the-experiment">Что установил эксперимент</a><a href="#three-agents">Три агента со своим Core</a><a href="#directions">Что можно строить дальше</a><a href="#next-steps">От работающего Core к Live Agents</a></aside>
+      <article class="article-body"><p>Агент получает заказ от незнакомого сервиса. До начала работы ему нужно проверить, действительно ли внесены обещанные средства, на каких условиях их можно получить и состоялся ли платёж, о котором сообщает другая сторона. Одного ответа API для этого недостаточно.</p>
+<p><strong>В модели Live Agents участники сами проверяют действующие права и обмениваются доказательствами прошлых операций.</strong> Parano1d предоставляет проверяемое текущее состояние (State), proof-native контракты и переносимые чеки. <a href="https://git.parano1d.org/ignotusnemo/agcore" target="_blank" rel="noopener noreferrer">Agent Core</a> открывает эти возможности через компактный машинный интерфейс, который каждый агент запускает у себя.</p>
+<p>Так может работать и временный агент, и новая модель, и недавно появившийся сервис. Агенту, который подключится через десять лет, не придётся повторно исполнять и постоянно хранить транзакции за все предыдущие годы.</p>
+<p>В <a href="#the-experiment">эксперименте в изолированной сети v2</a> эта модель проверяется на общем лимите, конфликтующих запросах, истечении срока и возврате средств. Затем <a href="#three-agents">три ИИ-агента на видео</a> проверяют полученные доказательства через собственные процессы Core.</p>
+
+<h2 id="the-problem">Полномочия между сервисами</h2>
+<p>Когда агент тратит деньги и использует ресурсы от чужого имени, выдать ему доступ недостаточно. Сервисам нужно знать, какие действия всё ещё разрешены, сколько осталось в пределах лимита и какие операции уже состоялись. Учётная запись или ключ сами по себе на эти вопросы не отвечают.</p>
+<p><a href="https://www.nist.gov/blogs/cybersecurity-insights/back-future-why-agentic-ai-needs-strong-identity-foundation" target="_blank" rel="noopener noreferrer">NIST разбирает</a> идентификацию агентов, избыточные права и общие учётные данные, а также применимость OAuth и SPIFFE. <a href="https://fidoalliance.org/fido-alliance-to-develop-standards-for-trusted-ai-agent-interactions/" target="_blank" rel="noopener noreferrer">FIDO разрабатывает стандарты</a> проверяемой авторизации и заданных пользователем ограничений, используя наработки Google AP2 и Mastercard Verifiable Intent.</p>
+<p>Конкретная задача учёта сформулирована в сентябрьской версии <a href="https://datatracker.ietf.org/doc/draft-schrock-ep-bounded-capability-receipts/06/" target="_blank" rel="noopener noreferrer">Bounded Capability Receipts and Durable Spend Control for Agent Actions</a>: копии агента, повторные запросы и разные исполнители должны расходовать один общий бюджет. Предложенная конструкция доверяет общей транзакционной базе, которая последовательно учитывает расход. Это индивидуальный Internet-Draft, а не принятый стандарт IETF.</p>
+<p>Один оператор может учитывать общий лимит в своей транзакционной базе. Между независимыми операторами возникает другой вопрос: чьим сведениям об остатке доверять? Если все обращаются к одному API, все зависят от его владельца. Для самостоятельной проверки нужны доказательства, которые каждая сторона может проверить, даже получив их от ненадёжного посредника.</p>
+<p>Live Agents исследует, могут ли участники проверять эти факты самостоятельно и сохранять такую возможность по мере роста сети.</p>
+
+<h2 id="why-parano1d">Независимость без наследования всей истории</h2>
+<p>Контракт проверяет соблюдение правил при изменении состояния. Но приложению ещё нужно убедиться в подлинности полученных состояния и условий. Если баланс или условия контракта известны только из ответа удалённого сервиса, эта часть решения остаётся зависимой от него.</p>
+<p>В Parano1d рекурсивное доказательство подтверждает корректность переходов, которые привели к текущему State. Agent Core проверяет доказательство и порядок цепи, получает State и применяет недавние блоки. Так он устанавливает корректность состояния от генезиса без скачивания и повторного исполнения всех прежних транзакций.</p>
+<p>Прунинг удаляет старые тела транзакций в обычном режиме работы. Вместе эти два механизма позволяют агенту проверять сеть самостоятельно: без повторного исполнения истории при запуске и без постоянного архива транзакций во время работы.</p>
+<p>Узел по-прежнему получает текущий State, хранит компактные заголовки для выбора цепи и проверки чеков, а также данные недавних блоков. Объём заголовков растёт с высотой, размер State зависит от числа действующих выходов. Эти затраты описаны в <a href="https://docs.parano1d.org/architecture/synchronization" target="_blank" rel="noopener noreferrer">документации синхронизации</a>.</p>
+<p>V2 распространяет эту архитектуру на программируемые права распоряжения NOID. Выход контракта со средствами криптографически фиксирует программу, полномочия, ограничения и текущие счётчики. Допустимый вызов расходует конкретный экземпляр, а при продолжении создаёт следующий по заданным правилам. Рекурсивное доказательство блока проверяет авторизацию, исполнение и сохранение стоимости.</p>
+<p>Агент может проверить оставшийся лимит, не восстанавливая каждое прежнее обращение. Корректность переходов, которые привели к этому остатку, подтверждает рекурсивное доказательство.</p>
+<blockquote><p><strong>Каждый участник может прийти со своим Agent Core.</strong></p></blockquote>
+<p>Авторизация кошелька, исполнение контрактов и рекурсивное подтверждение истории используют один стек доказательств на бинарных полях. Его постквантовая безопасность опирается на <a href="https://docs.parano1d.org/protocol/security-model" target="_blank" rel="noopener noreferrer">опубликованные предпосылки</a>. Agent Core использует эти же проверки. Модель контрактов описана в статье <a href="/ru/research/parano1d-v2-live-rights/">«От живой стоимости к живым правам»</a>.</p>
+
+<h2 id="rights-and-receipts">Что участник может установить сам</h2>
+<p>Собственный Core позволяет проверять основания для разных решений:</p>
+<div class="table-wrap"><table class="comparison-table"><thead><tr><th>Решение</th><th>Что проверяется</th></tr></thead><tbody>
+<tr><td>Принять обеспеченное средствами предложение</td><td>Публичные условия и конкретный действующий экземпляр: сумма, полномочия и срок</td></tr>
+<tr><td>Использовать выданный лимит</td><td>Текущий экземпляр и счётчики; для расхода нужен авторизованный переход по программе</td></tr>
+<tr><td>Подтвердить прошлый платёж или вызов</td><td>Чек, подтверждающий включение операции в локально проверенную цепь</td></tr>
+<tr><td>Установить, что произойдёт после истечения срока</td><td>Зафиксированная ветвь возврата, текущая высота и оставшиеся средства</td></tr>
+</tbody></table></div>
+<p>Проверки работают в обе стороны. Исполнитель проверяет внесённые заказчиком средства и условия. Поставщик ресурса проверяет разрешение, предъявленное исполнителем. Плательщик или позднее подключившийся аудитор проверяет чек. Каждый использует свой Agent Core; маркетплейс или мессенджер передаёт данные между ними.</p>
+<p>Валидный чек прошлой операции не означает, что право всё ещё доступно. Действующие полномочия проверяются по текущему State.</p>
+<p>Важно, какой именно экземпляр права предъявлен. Одни и те же условия можно профинансировать дважды и получить два независимых экземпляра. Сервис должен узнавать конкретное разрешение, которое зарегистрировал владелец ресурса, по слоту и идентификатору создания. Совпадение условий само по себе не даёт права на чужой ресурс.</p>
+<div class="protocol-flow protocol-flow--contracts" aria-label="Сервис передаёт условия и доказательства, Agent Core проверяет факты сети, приложение обеспечивает правила действия"><div class="flow-step"><small>Любой сервис</small><strong>Передаёт условия и доказательства</strong><span>Предложения, экземпляры и чеки</span></div><div class="flow-arrow" aria-hidden="true">→</div><div class="flow-step"><small>Agent Core</small><strong>Проверяет факты сети</strong><span>Аутентифицированный State, права и прошлые вызовы</span></div><div class="flow-arrow" aria-hidden="true">→</div><div class="flow-step"><small>Приложение</small><strong>Проверяет допустимость действия</strong><span>Авторизованный вызов или задача, связанная с проверенным разрешением</span></div></div>
+<p>Консенсус проверяет правила распоряжения NOID. Если сервис считает вызов контракта разрешением использовать GPU, API или другой ресурс, он должен проверить это разрешение перед запуском работы. Приложение связывает подтверждённые полномочия с конкретным внешним действием.</p>
+
+<h2 id="receipts">Чеки для машинного обмена</h2>
+<p>Один агент передаёт чек другому. Получатель проверяет его своим Agent Core и получает структурированный ответ: какая операция зафиксирована, включена ли она в выбранную цепь и финализирована ли. Проверенные поля платежа или вызова можно сопоставить с ожидаемой операцией.</p>
+<p>Эксплорер в этом обмене не участвует. Не нужно разбирать веб-страницы или верить ответу стороннего сервиса поиска транзакций. Идентификатор транзакции может оставаться удобным локальным индексом. Само проверяемое доказательство передаётся в чеке.</p>
+<p>Сервис может приложить чек к ответу о расчёте, а агент сохранить его вместе с задачей. Сменивший его агент или позднее подключившийся аудитор проверит тот же файл самостоятельно и сопоставит подтверждённые поля с нужной задачей, получателем и условиями.</p>
+<p>Стороны хранят нужные им условия, файлы и чеки. Новый участник проверяет эти чеки без старых тел транзакций и без зависимости от сервиса, который первоначально сообщил о платеже.</p>
+
+<h2 id="agent-core">Agent Core</h2>
+<p>Agent Core реализует первую часть Live Agents: отдельную нативную программу со своей P2P-синхронизацией и проверкой доказательств, текущего State и чеков. Она использует реализацию консенсуса из зафиксированной версии исходного кода Parano1d. Запросы не переадресуются чужому узлу.</p>
+<p>Интерфейс предназначен для программ. Запросы и ответы передаются строками JSON через выделенные каналы stdin/stdout. Асинхронный клиент Python запускает Core и сопоставляет ответы с запросами. Агент может проверить конкретный экземпляр права или чек, а также повторно проверить ранее принятый чек контракта относительно текущей выбранной цепи.</p>
+<pre><code class="language-python">import asyncio
+from pathlib import Path
+from agcore import AgentCore
+
+async def main():
+    async with AgentCore("./target/release/agcore", "./agent-state") as core:
+        await core.wait_ready()
+        result = await core.verify_receipt(Path("settlement.receipt"))
+        print(result)
+
+asyncio.run(main())</code></pre>
+<p>В ответах указаны вершина выбранной цепи, готовность Core, актуальность данных и статус подтверждений. Доказательство может быть корректным для старого State. Поэтому запрос действующего права требует свежего проверенного состояния и достаточных сведений от пиров. Само по себе доказательство не подтверждает, что изолированный узел уже увидел последнюю цепь.</p>
+<p>Пока Core работает только на чтение: не хранит ключ расходования и не отправляет транзакции. Модель получает проверенные факты и может предложить действие. Допустимые пределы должен соблюдать отдельный модуль авторизации или шлюз исполнения. Проверка остатка не резервирует его: для расхода нужен авторизованный переход контракта.</p>
+<p>Исходники и интерфейс доступны в <a href="https://git.parano1d.org/ignotusnemo/agcore" target="_blank" rel="noopener noreferrer">каноническом репозитории</a>, а также на зеркалах <a href="https://github.com/proof-native/agcore" target="_blank" rel="noopener noreferrer">GitHub</a> и <a href="https://gitlab.com/ignotusnemo/agcore" target="_blank" rel="noopener noreferrer">GitLab</a>.</p>
+
+<h2 id="the-experiment">Что установил эксперимент</h2>
+<p>В первом эксперименте два клиента получили копии одного ключа и общий лимит на десять обращений к двум шлюзам исполнения. Каждый шлюз проверял разрешение перед запуском внешней задачи. Сеть работала изолированно по правилам v2, узлы были отдельными процессами.</p>
+<p>Каждый вызов с продолжением контракта уменьшал счётчик на единицу и требовал выплаты 0,1 NOID. Ключ клиента позволял продолжать контракт, но не закрывать его. После срока владелец мог вернуть остаток. У каждой задачи был уникальный адрес выплаты, зарегистрированный на одном из шлюзов; он связывал разрешение с этой задачей.</p>
+<p>Перед запуском шлюз проверял чек контракта, сверял разрешение и задачу и ждал восемнадцать блоков подтверждения. Затем он записывал разрешение в свою базу, чтобы не запустить задачу дважды. Работой служил фиксированный расчёт SHA-256. Выплата 0,1 NOID обозначала разрешение на этот расчёт, а не его рыночную цену.</p>
+<div class="table-wrap"><table class="comparison-table"><thead><tr><th>Свойство</th><th>Результат</th></tr></thead><tbody>
+<tr><td>Общий лимит при копировании ключа</td><td>Десять вызовов снизили счётчик до нуля. Предварительная проверка одиннадцатого не прошла у обоих клиентов.</td></tr>
+<tr><td>Конкурирующий расход одного экземпляра</td><td>Одна заявка принята, другая отклонена с <code>SlotConflict</code>.</td></tr>
+<tr><td>Актуальные условия и полномочия</td><td>Отклонены устаревшие условия, подменённый счётчик, неверный ключ, запрещённое закрытие и неправильная выплата.</td></tr>
+<tr><td>Привязка к зарегистрированному разрешению</td><td>Второй пополненный экземпляр имел валидный чек и те же начальные условия, но шлюз отклонил его как другое разрешение.</td></tr>
+<tr><td>Привязка к задаче и исполнителю</td><td>Запуск до нужной глубины подтверждений и предъявление чека другому шлюзу отклонены.</td></tr>
+<tr><td>Повторное использование и перезапуск шлюза</td><td>Все десять повторных попыток отклонены, затем отклонены снова после открытия сохранённых баз.</td></tr>
+<tr><td>Срок и возврат остатка</td><td>Обращение после срока отклонено даже при неизрасходованном лимите. Возврат оставшихся средств владельцу прошёл на высоте 45.</td></tr>
+<tr><td>Проверка доказательств новым участником</td><td>На высоте 64 тела десяти вызовов уже отсутствовали. Узел с пустым каталогом данных подключился, достиг той же вершины цепи и проверил все десять чеков.</td></tr>
+</tbody></table></div>
+<p>Один сбой вызвали после записи разрешения в базу, до завершения работы. Перезапущенный шлюз отказался исполнять его повторно: девять задач завершились, одно разрешение осталось отмеченным как использованное, но без готового результата. Лимит не был превышен. Что делать с неопределённым исходом, должно решать приложение.</p>
+<p>Контрольный опыт с базой показал, зачем нужна координация. Восемь независимых копий счётчика на десять обращений пропустили восемьдесят запросов. Одна общая транзакционная база пропустила десять. В опыте с Parano1d действовал общий лимит, состояние которого каждый участник проверял собственным узлом.</p>
+<p>Сеть дошла до высоты 64 и пересекла два запланированных тестовых форка. Клиенты были детерминированными. Шлюзы использовали отдельные SQLite-базы в одном процессе Python; узлы работали отдельными процессами на том же компьютере. Конкурирующие заявки проверяли приём конфликтующих расходов, а не гонку добытых блоков. В <a href="https://git.parano1d.org/ignotusnemo/parano1d/src/commit/16af0c6b6806bde7cf8a033be9e800b80d31a545/research/live_agents/README.md" target="_blank" rel="noopener noreferrer">материалах исследования</a> доступны сценарий и команды воспроизведения, а также <a href="https://git.parano1d.org/ignotusnemo/parano1d/src/commit/16af0c6b6806bde7cf8a033be9e800b80d31a545/research/live_agents/results/2026-09-30" target="_blank" rel="noopener noreferrer">результаты, проверки привязки экземпляра и чеки</a>.</p>
+
+<h2 id="three-agents">Три агента со своим Core</h2>
+<p>На видео три ИИ-агента в Codex CLI проверяют доказательства из эксперимента, каждый через отдельный процесс Agent Core. Два опорных узла предоставляют подготовленную цепь v2 в изолированной сети с доступом только через loopback.</p>
+<figure class="figure live-agents-video"><video controls playsinline preload="metadata" width="1680" height="1050" poster="/assets/og/live-agents.png" aria-label="Демонстрация трёх агентов с отдельными процессами Agent Core" aria-describedby="demo-caption"><source src="/assets/video/live-agents-2026-09-30.webm" type="video/webm"><p><a href="/assets/video/live-agents-2026-09-30.webm">Скачать оригинальную запись WebM</a>.</p></video><figcaption id="demo-caption">2:09, без звука. Агенты заново проверяют данные подготовленной цепи v2. Во время записи не создавались новые платежи, вызовы контрактов или оплаченные задачи. <a href="https://git.parano1d.org/ignotusnemo/agcore/src/commit/10a8198744b1492d3ce14e4dd1749372c12a086a/demo/live-agents-2026-09-30" target="_blank" rel="noopener noreferrer">Задания, полные ответы агентов, логи узлов и доказательства</a>. <a href="/assets/video/live-agents-2026-09-30.webm">Оригинал WebM</a>.</figcaption></figure>
+<p><strong>Requester:</strong> брокер предлагает уже израсходованный экземпляр контракта как источник средств для новой задачи. Агент проверяет этот экземпляр по текущему State и отклоняет предложение.</p>
+<p><strong>Provider:</strong> агент проверяет сохранённый финализированный чек контракта и заново вычисляет записанный в тесте результат SHA-256. Чек подтверждает вызов и выплату, отдельное вычисление проверяет результат.</p>
+<p><strong>Auditor:</strong> новый Core подключается после удаления старого тела транзакции. Агент отклоняет изменённый чек, принимает оригинал, проверяет отсутствие старого тела и повторяет расчёт.</p>
+<p>В репозитории доступны точные задания, полные вызовы инструментов и ответы, расшифровки сессий, журналы узлов, схема процессов и хеши файлов.</p>
+
+<h2 id="directions">Что можно строить дальше</h2>
+<p>Общий лимит является одним из применений. На существующих возможностях v2 можно развивать Live Agents и в других направлениях:</p>
+<p><strong>Заказы между незнакомыми участниками.</strong> Маркетплейс знакомит заказчика с исполнителем и передаёт условия. Исполнитель через Agent Core проверяет средства в конкретном экземпляре контракта, свои полномочия и срок получения выплаты. Заказчик проверяет чеки расчётов. Никому из них не нужно верить маркетплейсу на слово о средствах и платежах. Как принимать работу, стороны по-прежнему определяют в соглашении.</p>
+<p><strong>Общий лимит для нескольких сервисов.</strong> Разные поставщики ресурсов могут принимать одно зарегистрированное разрешение. Каждый проверяет его расход и связывает конкретный вызов со своей задачей. В эксперименте проверен небольшой вариант такой схемы, включая отказ от повторного запуска после перезапуска шлюза или сбоя с неопределённым результатом.</p>
+<p><strong>Бюджеты для длительной работы.</strong> В v2 уже есть <a href="https://docs.parano1d.org/contracts/templates" target="_blank" rel="noopener noreferrer">бюджеты на период, регулярные платежи и ветви возврата средств</a>. На их основе приложение может ограничивать расходы агента, разрешать повторяющиеся выплаты и возвращать неиспользованный остаток. Каждый платёж требует авторизованного вызова; автоматически по расписанию консенсус их не выполняет.</p>
+<p><strong>Смена модели или оператора.</strong> Агент, который продолжает чужую работу, может проверить действующие права и сохранённые чеки своим Core, даже если API прежнего оператора исчез. Для этого стороны должны сохранить и передать нужные файлы и условия, а приложение восстановить пропущенные обновления контракта. Это позволяет проверить финансовые факты, но не внутреннюю память модели или произвольный пересказ выполненной работы.</p>
+
+<h2 id="next-steps">От работающего Core к Live Agents</h2>
+<p>Agent Core уже выполняет локальные проверки. Теперь нужно связать предложения, разрешения, задачи, ограничения действий и обмен чеками в удобный протокол. Прототип шлюза также должен научиться восстанавливать пропущенные переходы, учитывать реорганизации цепи и пройти проверку на независимых машинах.</p>
+<p>Синхронизация Core и ожидание подтверждений нового вызова занимают разное время. В эксперименте перед выполнением новой задачи ждали восемнадцать блоков, что при целевом интервале v2 составляет девять минут. Такая схема подходит для выдачи разрешения на задачу или сессию. Для подтверждения каждого токена или быстрого обращения к инструменту потребуется другой порядок исполнения.</p>
+<p>Валидный чек подтверждает операцию в сети, но не то, что внешний сервис выполнил полезную работу. Он также не мешает агенту напрасно тратить законно выданный лимит. Соблюдение правил сервисом, изоляция ключей и ограничения приложения остаются необходимыми.</p>
+<p>Я хочу, чтобы агенты работали с незнакомыми участниками, самостоятельно проверяя условия, действующие права и расчёты. Agent Core уже даёт первый работающий компонент этой модели. Вокруг него я хочу построить Live Agents.</p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">Материалы исследования</p><h2 id="evidence-title">Доказательства и артефакты</h2><p>Здесь сохранены реализации, измерения и выводы, на которых основана статья.</p></div><div class="evidence-links"><a href="https://git.parano1d.org/ignotusnemo/parano1d/src/commit/16af0c6b6806bde7cf8a033be9e800b80d31a545/research/live_agents/README.md" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>Системное исследование</small><strong>Исследование Live Agents и воспроизведение</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/agcore" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>Код</small><strong>Исходники и интерфейс Agent Core</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/agcore/src/commit/10a8198744b1492d3ce14e4dd1749372c12a086a/demo/live-agents-2026-09-30" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>Артефакт</small><strong>Запись, задания и все доказательства</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/parano1d/src/commit/16af0c6b6806bde7cf8a033be9e800b80d31a545/research/live_agents/results/2026-09-30" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>Данные</small><strong>Результаты опыта и сохранённые чеки</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/agcore/src/commit/10a8198744b1492d3ce14e4dd1749372c12a086a/demo/live-agents-2026-09-30/agents" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>Данные</small><strong>Полные вызовы и ответы агентов</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://datatracker.ietf.org/doc/draft-schrock-ep-bounded-capability-receipts/06/" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Источник</small><strong>Проект о разрешениях с ограниченным бюджетом, версия 06</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/contracts/receipts-and-recovery" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Документация</small><strong>Чеки контрактов и восстановление</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="Соседние исследования"><a href="/ru/research/september-2026-cryptography-review/"><small>Ранее</small><strong>Отчёт за сентябрь</strong><span>←</span></a><a href="/ru/research/parano1d-v2-live-rights/"><small>Позднее</small><strong>V2 · Живые права</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>ParanO(1)d Lab</strong><p>Исследования протокола ParanO(1)d.</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>Исследования</strong><a href="/ru/research/">Архив</a><a href="/ru/feed.xml">RSS-лента</a></div>
+      <div><strong>Проект</strong><a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">Сайт</a><a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">Документация</a><a href="https://git.parano1d.org/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer">Исходный код</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 ParanO(1)d Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=07f922a53399" defer></script>
+</body>
+</html>

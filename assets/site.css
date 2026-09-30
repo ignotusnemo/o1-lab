@@ -917,6 +917,7 @@ img, svg { max-width: 100%; }
 .timeline-item p { margin: 0; color: var(--ink-soft); font-size: 15px; line-height: 1.65; }
 .figure { margin: 42px 0; }
 .figure img { display: block; width: 100%; border: 1px solid var(--line); border-radius: 10px; background: var(--black-green); box-shadow: var(--shadow-lg); }
+.live-agents-video video { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 10px; background: #07120d; box-shadow: var(--shadow-lg); }
 .figure figcaption { margin-top: 12px; color: var(--muted); font-size: 12px; line-height: 1.55; }
 
 .article-body pre,

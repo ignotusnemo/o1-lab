@@ -1,4 +1,34 @@
 {
+  "live-agents": {
+    "kind": "应用研究",
+    "topic": "AI 智能体",
+    "status": "研究原型",
+    "title": "Live Agents：无需信任远程 API 的自主参与",
+    "shortTitle": "Live Agents · Agent Core",
+    "dek": "每位参与者通过自己的 Agent Core 检查资金与权限，并与其他智能体交换可验证的回执。有效性由本地检查确定，无需相信区块浏览器或托管 API。Parano1d 让这种独立参与无需下载并重放网络的完整交易历史。",
+    "abstract": "Live Agents 研究智能体与服务如何独立核实权限、资金和过去操作。Agent Core 集成原生 P2P 同步、当前 State 验证和便携回执检查。Parano1d 免去历史执行重放和永久保存旧交易体的负担。隔离的 v2 实验测试了共享额度、冲突请求、重复使用许可、到期与资金收回；录像展示三个智能体各自通过 Core 验证实验留下的证据。",
+    "keywords": [
+      "Live Agents",
+      "Agent Core",
+      "agcore",
+      "Parano1d",
+      "AI 智能体",
+      "智能体授权",
+      "共享额度",
+      "证明原生合约",
+      "便携回执",
+      "独立验证"
+    ],
+    "evidence": [
+      "Live Agents 研究与复现",
+      "Agent Core 源码与接口",
+      "录像、任务与完整证据",
+      "实验结果与留存回执",
+      "智能体原始调用和响应",
+      "有限授权与持久支出控制草案第 06 版",
+      "合约回执与恢复"
+    ]
+  },
   "september-2026-cryptography-review": {
     "kind": "安全研究",
     "topic": "月度安全报告",
