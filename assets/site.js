@@ -17,6 +17,9 @@ sourceDialog.innerHTML =
     '</button>' +
     '<h2 id="source-dialog-title">' + sourceText.title + '</h2>' +
     '<div class="source-providers">' +
+      '<a class="source-provider" href="https://github.com/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer">' +
+        '<span><b>GitHub (ignotusnemo)</b><small>github.com/ignotusnemo</small></span><span aria-hidden="true">↗</span>' +
+      '</a>' +
       '<a class="source-provider" href="https://git.parano1d.org/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer">' +
         '<span><b>Forgejo (canonical)</b><small>git.parano1d.org</small></span><span aria-hidden="true">↗</span>' +
       '</a>' +
