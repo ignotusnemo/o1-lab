@@ -115,16 +115,38 @@
     "keywords": ["Parano1d", "时间维度的去中心化", "proof-carrying State", "receipts", "证明可组合性", "递归证明", "协议迁移"],
     "evidence": ["X 上的原始文章", "当下必须证明过去", "Proof-carrying State 同步", "Parano1d receipts", "当前 Parano1d 源代码"]
   },
-  "onethics": {
+  "onethics-v2": {
     "kind": "协议实践",
     "topic": "去中心化",
     "status": "参与者准则",
     "title": "ONETHICS ①",
     "shortTitle": "ONETHICS ①",
-    "dek": "运行自己的验证器。不要让共享 State 无谓膨胀。保存真正与你有关的证明。",
-    "abstract": "Parano1d 让独立验证变得可行，但只有人们真正去做，网络才能保持去中心化。ONETHICS 是一套很短的准则：在本地验证，避免无意义的 State 增长，保存 receipts，保护钱包密钥，并质疑每一项安全主张——也包括我们的主张。",
-    "keywords": ["Parano1d", "ONETHICS", "自主验证", "Live State", "receipts", "钱包备份", "去中心化"],
-    "evidence": ["当下必须证明过去", "运行并自主验证节点", "Live State 与扩容", "Receipts 与独立验证", "钱包备份与恢复", "可执行可靠性证书"]
+    "dek": "验证当下。了解自己的权利。保存证明。为后来者建设。",
+    "abstract": "参与 Parano1d 的七项原则：本地验证、检查已注资权利、保存支付和合约证据、承担共享 State 的成本、自主评价独立建设者、挑战密码学假设，以及让未来验证独立于创始人。",
+    "keywords": [
+      "Parano1d",
+      "ONETHICS",
+      "独立验证",
+      "有效权利",
+      "证明原生合约",
+      "收据",
+      "State 经济",
+      "community builds",
+      "密码学研究",
+      "跨时间去中心化"
+    ],
+    "evidence": [
+      "当下必须证明过去",
+      "运行并自主验证节点",
+      "证明原生的有效权利",
+      "合约收据与恢复",
+      "State 定价与发行",
+      "钱包备份与恢复",
+      "跨时间去中心化",
+      "固定发布版本的安全证书",
+      "V2 矩阵退役与条件",
+      "开放密码学研究"
+    ]
   },
   "poseidon2b-is-secure": {
     "kind": "安全性分析",

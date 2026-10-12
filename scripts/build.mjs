@@ -869,6 +869,22 @@ function outputPath(locale, basePath) {
   return pagePath.endsWith("/") ? `${pagePath}index.html` : pagePath;
 }
 
+function articleRedirect(item, locale) {
+  const target = absolute(pathFor(locale, `/research/${item.slug}/`));
+  return `<!doctype html>
+<html lang="${locale.htmlLang}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="${target}">
+  <meta http-equiv="refresh" content="0;url=${target}">
+  <title>${esc(item.title)}</title>
+</head>
+<body><p><a href="${target}">${esc(item.title)}</a></p></body>
+</html>`;
+}
+
 await installKatexAssets();
 for (const locale of locales) {
   const newestFirst = articleSets.get(locale.code);
@@ -876,6 +892,12 @@ for (const locale of locales) {
   await emit(outputPath(locale, "/research/"), archivePage(locale, newestFirst));
   for (const [index, item] of newestFirst.entries()) {
     await emit(outputPath(locale, `/research/${item.slug}/`), articlePage(item, index, locale, newestFirst));
+    for (const alias of item.aliases ?? []) {
+      if (!/^[a-z0-9-]+$/.test(alias) || baseData.some((article) => article.slug === alias)) {
+        throw new Error(`Invalid article alias: ${alias}`);
+      }
+      await emit(outputPath(locale, `/research/${alias}/`), articleRedirect(item, locale));
+    }
   }
   await emit(outputPath(locale, "/feed.xml"), rss(locale, newestFirst));
   const t = ui[locale.code];

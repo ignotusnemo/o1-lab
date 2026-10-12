@@ -31,6 +31,11 @@ To add a publication, add its metadata and HTML fragment, then rebuild. Keep
 benchmark conditions next to benchmark numbers and distinguish production
 results from preserved experiments.
 
+When an article moves, its `aliases` list creates a localized `noindex` redirect
+for each previous slug. Only the current address appears in RSS and the sitemap.
+Article social cards use `assets/og/SLUG.png`; ONETHICS uses the article's
+illustration without text overlays.
+
 The build maps owned GitHub URLs to Forgejo, including commit-pinned source files, clone commands and evidence links. Article source records and external research citations remain unchanged. The header Source selector lists GitHub (`ignotusnemo`) first, followed by canonical Forgejo and the GitLab and GitHub (`proof-native`) mirrors.
 The three historical AuthStream experiment commits explicitly listed in
 `scripts/source-links.mjs` retain their GitHub URLs at the maintainer's request.

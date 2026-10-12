@@ -1,0 +1,87 @@
+<p>Parano1d makes independent verification practical: verify the present, carry the evidence you need and leave future participants a network they can still check for themselves. V2 extends that practice to contracts. We can now ask who holds a live right, what governs its use and what evidence remains after it has been exercised.</p>
+
+<p>The people who use and build on the network keep that independence alive.</p>
+
+<p>ONETHICS is a participant's operating discipline. Its principles are voluntary, and their authority comes from what each person can verify.</p>
+
+<h2 id="verify-for-yourself">1. Verify, don't borrow</h2>
+
+<p>Every wallet should be a participant in the network, able to establish what it accepts. An explorer, API or exchange can provide a useful service. Consensus truth comes from checking the network's rules and evidence.</p>
+
+<p>The Parano1d GUI runs a full node on your computer. It checks proof of work, headers, HistoryStep and the authenticated live State, relays network data and joins the P2P mesh. Proofs establish validity. Proof of work establishes canonical order.</p>
+
+<p>Seed nodes help you discover peers. Their role is to introduce your node to the mesh; the data you receive still goes through local verification. Maintaining independent peers and entry points lets participation continue when a particular service or seed disappears.</p>
+
+<p>If an external service reports the wrong balance or shows a different history, your own verifier gives you a basis for checking its claim. If it closes, you can continue through the network. A wallet should make its synchronization status clear, so you can distinguish the last verified State from a current view of the chain.</p>
+
+<h2 id="rights-not-promises">2. Rights, not promises</h2>
+
+<blockquote><p><strong>A promise is not a contract. A contract is not a receipt.</strong></p></blockquote>
+
+<p>Someone can promise to pay you 100 NOID. That tells you what they intend. A funded contract gives you something you can inspect: the committed program and policy, the authorities, the amount and the conditions under which the value can move.</p>
+
+<p>Verify that the public terms match the commitment in your authenticated current State, and that the exact output incarnation remains unspent. Check who can claim, recover or close it, at which height and under which limits. Funding establishes that value exists; the terms determine which rights you actually have over it.</p>
+
+<p>A successful call proves an authorized transition. It can make a payment, update the remaining right or close the obligation. A saved contract receipt preserves evidence of that particular action after the old block body has been pruned.</p>
+
+<p>This gives each stage of an agreement its own evidence: the promise expresses an intention, the funded contract establishes enforceable current rights, and the receipt records what was fulfilled. ONETHICS applies to how we deal with one another as much as to how we hold money.</p>
+
+<h2 id="preserve-your-proofs">3. Keep your proofs</h2>
+
+<blockquote><p><strong>The network preserves validity. You preserve the evidence that matters to you.</strong></p></blockquote>
+
+<p>Nodes retain the latest 42 complete blocks. Older bodies and transactions are pruned; permanent headers retain their transaction roots. A saved payment receipt carries the payment data and Merkle inclusion evidence. Checking its root against the canonical header establishes where that payment belongs.</p>
+
+<p>Contract receipts also preserve the public terms and evidence of an accepted call or close. Export important receipts and contract files, and keep copies you control. They let another participant check an event without depending on the original application or an archive operator.</p>
+
+<p>Current State and a historical receipt answer different questions. State authenticates a known right that is live now. A receipt proves an earlier action. Before acting on a successor described in a receipt, check its exact slot and creation identifier in current State: it may already have been spent.</p>
+
+<p id="protect-your-key">Back up your wallet secret separately from public contract terms and receipts. The secret controls ordinary funds and your contract authority. Restoring it recovers that authority; recovering a contract's program, public opening or past interactions requires the corresponding evidence. Keep the secret private and offline, with a copy away from the device you use every day.</p>
+
+<h2 id="keep-state-compact">4. Your State is everyone's responsibility</h2>
+
+<blockquote><p><strong>Shared State is not free just because someone else stores it.</strong></p></blockquote>
+
+<p>Each live output occupies a slot carried by full nodes. Payments and contracts share this resource. Spending clears occupied slots, and new outputs can reuse them with fresh creation identifiers. A continuing contract can update a right without accumulating all its old states in the live set.</p>
+
+<p>The fee for net-new live slots rises with occupancy, and that growth component is burned. A consolidation that turns several inputs into fewer outputs frees slots and pays no State-growth burn; ordinary transaction fees still apply. Contract operations pay for their actual live footprint under the same rules.</p>
+
+<p>Choose payout thresholds, consolidation and application layouts with that shared cost in mind. Keeping many small outputs may serve a purpose. Keeping them should be a considered choice. Efficient use of State reduces the storage burden other participants must carry.</p>
+
+<p>V2 separates storage pricing from issuance. The block subsidy follows its height schedule; expanding the State domain leaves that schedule intact. Responsible State use helps the network remain practical for independent operators.</p>
+
+<h2 id="independent-builders">5. Independent builders, independent judgment</h2>
+
+<blockquote><p><strong>Open source means anyone can build. It doesn't mean everyone must trust what they build.</strong></p></blockquote>
+
+<p>People can build wallets, pools, explorers and applications on Parano1d. Each builder is responsible for their software, infrastructure and promises. A listing among community builds identifies a contribution; official status or endorsement requires a separate, explicit statement.</p>
+
+<p>A third-party wallet developer speaks for that wallet. A pool operator speaks for that pool. Users should know whose software they are running, who controls the keys, what is verified locally and which services the application depends on.</p>
+
+<p>Core development prioritizes protocol correctness, independent verification and practical node operation. Builders who need an archive or complete historical statistics should provide their own collection and storage and make gaps visible to users.</p>
+
+<p>Ignotus Nemo should not become the network's permanent arbiter of every application. Builders need room to make their own decisions. Participants need the evidence and freedom to make their own judgments.</p>
+
+<h2 id="verify-claims">6. Challenge the cryptography</h2>
+
+<blockquote><p><strong>If you can break an assumption, publish the evidence. That's how the network gets stronger.</strong></p></blockquote>
+
+<p>Verify claims, including ours, against the exact construction they describe. The validity path includes authorization, execution, commitments, recursive verification and Fiat–Shamir compilation. Read the theorem conditions, the security certificate, the source revision and the production parameters together.</p>
+
+<p><a href="https://noid.network/">noid.network</a> publishes research tasks, claim dependencies and reviewed evidence. Reproduce a calculation. Inspect a bound. Look for a cheaper attack or response circuit. Report the model, parameters, source pin, cost accounting and reproducer so that others can check the result. Failed attacks and inconclusive experiments are useful records when their methods and limits are stated clearly.</p>
+
+<p>The current v2 assessment retains explicit conditions for all-root composition and compiler lifting, fixed-Poseidon2b deviation, honest public preprocessing and response resource prices. Research obligations remain for complete adaptive compiler closure, the fixed-hash condition and minimum response prices. These are concrete subjects for investigation.</p>
+
+<p>A reproduced calculation establishes the result it actually checked. An independent audit of the full cryptography has a broader scope: construction, assumptions, composition and implementation. Publish the scope of each review so that later readers can judge what evidence supports a claim.</p>
+
+<h2 id="people-who-come-after-us">7. Build for the people who come after us</h2>
+
+<p>Decentralization has a time dimension. Imagine someone joining fifty years from now. They should be able to authenticate the present without depending on an explorer, a vanished developer or an institution that inherited exclusive custody of the past.</p>
+
+<p>That requires more than deleting old data. Future participants need public protocol rules, reproducible implementations, preserved verification artifacts and evidence that accepted transitions carry the history they claim.</p>
+
+<p>V2 already includes a defined transition that binds legacy ancestry and permits old proof matrices to be retired. That is a concrete step toward continuity across generations. The longer-term goal is authenticated transitions between generations of cryptography, with a defined conversion relation and a security analysis spanning both generations. Each transition must preserve independently checkable history under its stated conditions.</p>
+
+<p>Every participant has an interest in Parano1d becoming independent of Ignotus Nemo. Publish enough for another team to implement the rules, inspect the assumptions, reproduce the artifacts and continue the work. Our successors should inherit that ability.</p>
+
+<p><strong>The present proves the past. Leave the next participant able to verify it.</strong></p>

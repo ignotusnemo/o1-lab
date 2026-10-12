@@ -313,9 +313,10 @@
     ]
   },
   {
-    "slug": "onethics",
-    "date": "2026-08-24",
-    "updated": "2026-09-09",
+    "slug": "onethics-v2",
+    "aliases": ["onethics"],
+    "date": "2026-10-12",
+    "updated": "2026-10-12",
     "kind": "Protocol practice",
     "topic": "Decentralization",
     "status": "Participant code",
@@ -323,19 +324,76 @@
     "showAbstract": false,
     "title": "ONETHICS ①",
     "shortTitle": "ONETHICS ①",
-    "dek": "Run your own verifier. Keep the shared State lean. Save the proofs that matter to you.",
-    "abstract": "Parano1d makes independent verification practical, but the network stays decentralized only if people actually use it. ONETHICS is a short code for doing that: verify locally, avoid needless State growth, keep your receipts, protect your wallet key and question every security claim—including ours.",
-    "authors": ["Ignotus Nemo"],
+    "dek": "Verify the present. Know your rights. Keep your proofs. Build for those who come after us.",
+    "abstract": "Seven principles for participating in Parano1d: verify locally, inspect funded rights, preserve payment and contract evidence, account for shared State, judge independent builders, challenge cryptographic assumptions and keep future verification independent of the founders.",
+    "authors": [
+      "Ignotus Nemo"
+    ],
     "art": "state",
     "heroImage": "/assets/onethics-hero.webp",
-    "keywords": ["Parano1d", "ONETHICS", "self-verification", "Live State", "receipts", "wallet backup", "decentralization"],
+    "keywords": [
+      "Parano1d",
+      "ONETHICS",
+      "independent verification",
+      "live rights",
+      "proof-native contracts",
+      "receipts",
+      "State economics",
+      "community builds",
+      "cryptographic research",
+      "decentralization across time"
+    ],
     "evidence": [
-      {"label": "The Present Must Prove the Past", "href": "/research/the-present-must-prove-the-past/", "type": "Architecture"},
-      {"label": "Run and verify a node", "href": "https://docs.parano1d.org/operate/node", "type": "Documentation"},
-      {"label": "Live State and expansion", "href": "https://docs.parano1d.org/architecture/state", "type": "Documentation"},
-      {"label": "Receipts and independent verification", "href": "https://docs.parano1d.org/wallet/receipts", "type": "Documentation"},
-      {"label": "Wallet backup and recovery", "href": "https://docs.parano1d.org/wallet/backup-recovery", "type": "Documentation"},
-      {"label": "Executable soundness certificate", "href": "https://github.com/ignotusnemo/parano1d/tree/main/noid_soundness", "type": "Code and proofs"}
+      {
+        "label": "The Present Must Prove the Past",
+        "href": "/research/the-present-must-prove-the-past/",
+        "type": "Architecture"
+      },
+      {
+        "label": "Run and verify a node",
+        "href": "https://docs.parano1d.org/operate/node",
+        "type": "Documentation"
+      },
+      {
+        "label": "Proof-native live rights",
+        "href": "/research/parano1d-v2-live-rights/",
+        "type": "Protocol"
+      },
+      {
+        "label": "Contract receipts and recovery",
+        "href": "https://docs.parano1d.org/contracts/receipts-and-recovery",
+        "type": "Documentation"
+      },
+      {
+        "label": "State pricing and issuance",
+        "href": "https://docs.parano1d.org/protocol/economics",
+        "type": "Documentation"
+      },
+      {
+        "label": "Wallet backup and recovery",
+        "href": "https://docs.parano1d.org/wallet/backup-recovery",
+        "type": "Documentation"
+      },
+      {
+        "label": "Decentralization across time",
+        "href": "/research/decentralization-across-time/",
+        "type": "Architecture"
+      },
+      {
+        "label": "Release-pinned soundness certificate",
+        "href": "https://github.com/ignotusnemo/parano1d/tree/50d6dac5a37b9f1be425b5e6cd823de48f843b50/noid_soundness",
+        "type": "Code and proofs"
+      },
+      {
+        "label": "V2 retirement and conditions",
+        "href": "https://github.com/ignotusnemo/parano1d/blob/50d6dac5a37b9f1be425b5e6cd823de48f843b50/noid_soundness/docs/v2-retirement.md",
+        "type": "Derivation"
+      },
+      {
+        "label": "Open cryptographic research",
+        "href": "https://noid.network/",
+        "type": "Research"
+      }
     ]
   },
   {

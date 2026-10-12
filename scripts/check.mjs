@@ -23,6 +23,13 @@ const titles = new Map();
 const errors = [];
 const siteUrl = "https://lab.parano1d.org";
 const expectedHreflangs = new Set([...locales.map((locale) => locale.hreflang), "x-default"]);
+const articleData = JSON.parse(await readFile(join(root, "content/research.json"), "utf8"));
+const redirects = new Map(articleData.flatMap((item) =>
+  (item.aliases ?? []).flatMap((alias) => locales.map((locale) => {
+    const prefix = locale.code === "en" ? "" : `/${locale.code}`;
+    return [`${prefix}/research/${alias}/`, `${siteUrl}${prefix}/research/${item.slug}/`];
+  }))
+));
 
 function pageIdentity(file) {
   const parts = relative(root, file).split(sep);
@@ -49,6 +56,7 @@ for (const file of htmlFiles) {
   const html = await readFile(file, "utf8");
   const { locale, path } = pageIdentity(file);
   const isNotFound = path.endsWith("/404.html") || path === "/404.html";
+  const redirectTarget = redirects.get(path);
   const lang = html.match(/<html lang="([^"]+)"/)?.[1];
   const title = html.match(/<title>([^<]+)<\/title>/)?.[1];
   const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
@@ -61,6 +69,11 @@ for (const file of htmlFiles) {
     if (canonical) errors.push(`${file}: 404 page must not declare a canonical URL`);
     if (alternateLinks.length) errors.push(`${file}: 404 page must not declare language alternates`);
     if (/<meta property="og:|<meta name="twitter:|application\/ld\+json/.test(html)) errors.push(`${file}: 404 page exposes indexable social or structured metadata`);
+  } else if (redirectTarget) {
+    if (canonical !== redirectTarget) errors.push(`${file}: invalid redirect canonical`);
+    if (!html.includes(`<meta http-equiv="refresh" content="0;url=${redirectTarget}">`)) errors.push(`${file}: missing redirect target`);
+    if (!/<meta name="robots" content="noindex,follow">/.test(html)) errors.push(`${file}: redirect must be noindex`);
+    if (alternateLinks.length || /<meta property="og:|<meta name="twitter:|application\/ld\+json/.test(html)) errors.push(`${file}: redirect exposes indexable metadata`);
   } else {
     if (canonical !== `${siteUrl}${path}`) errors.push(`${file}: invalid canonical ${canonical ?? "none"}`);
     for (const hreflang of expectedHreflangs) {
@@ -77,7 +90,7 @@ for (const file of htmlFiles) {
       try { await stat(join(root, "assets", "og", `${slug}.png`)); } catch { errors.push(`${file}: missing article Open Graph asset assets/og/${slug}.png`); }
     }
   }
-  if (title) {
+  if (title && !redirectTarget) {
     const titleKey = `${locale.code}:${title}`;
     if (titles.has(titleKey)) errors.push(`${file}: duplicate ${locale.code} title with ${titles.get(titleKey)}`);
     titles.set(titleKey, file);
@@ -102,7 +115,7 @@ const sitemap = await readFile(join(root, "sitemap.xml"), "utf8");
 if (/<changefreq>|<priority>/.test(sitemap)) {
   errors.push("sitemap.xml: obsolete changefreq or priority field present");
 }
-const indexablePageCount = htmlFiles.length - locales.length;
+const indexablePageCount = htmlFiles.length - locales.length - redirects.size;
 const lastmodCount = sitemap.match(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g)?.length ?? 0;
 if (lastmodCount !== indexablePageCount) {
   errors.push(`sitemap.xml: expected ${indexablePageCount} lastmod values, found ${lastmodCount}`);

@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="验证当下。了解自己的权利。保存证明。为后来者建设。">
+  <meta name="author" content="Parano1d Lab">
+  <meta name="keywords" content="Parano1d, ONETHICS, 独立验证, 有效权利, 证明原生合约, 收据, State 经济, community builds, 密码学研究, 跨时间去中心化, Parano1d Lab">
+  <link rel="canonical" href="https://lab.parano1d.org/zh/research/onethics-v2/">
+  <link rel="alternate" hreflang="en" href="https://lab.parano1d.org/research/onethics-v2/">
+  <link rel="alternate" hreflang="ru" href="https://lab.parano1d.org/ru/research/onethics-v2/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://lab.parano1d.org/zh/research/onethics-v2/">
+  <link rel="alternate" hreflang="x-default" href="https://lab.parano1d.org/research/onethics-v2/">
+  <link rel="alternate" type="application/rss+xml" title="Parano1d Lab 研究" href="https://lab.parano1d.org/zh/feed.xml">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Parano1d Lab 研究">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:url" content="https://lab.parano1d.org/zh/research/onethics-v2/">
+  <meta property="og:title" content="ONETHICS ① · Parano1d Lab">
+  <meta property="og:description" content="验证当下。了解自己的权利。保存证明。为后来者建设。">
+  <meta property="og:image" content="https://lab.parano1d.org/assets/og/onethics-v2.png">
+  <meta property="og:image:secure_url" content="https://lab.parano1d.org/assets/og/onethics-v2.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ONETHICS ①">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ONETHICS ① · Parano1d Lab">
+  <meta name="twitter:description" content="验证当下。了解自己的权利。保存证明。为后来者建设。">
+  <meta name="twitter:image" content="https://lab.parano1d.org/assets/og/onethics-v2.png">
+  <meta name="twitter:image:alt" content="ONETHICS ①">
+  <meta property="article:published_time" content="2026-10-12T00:00:00Z">
+  <meta property="article:modified_time" content="2026-10-12T00:00:00Z">
+  <meta property="article:section" content="去中心化">
+  <meta property="article:author" content="Ignotus Nemo">
+  <title>ONETHICS ① · Parano1d Lab</title>
+  <link rel="stylesheet" href="/assets/site.css?v=e350fff844fe">
+  <link rel="stylesheet" href="/assets/source-dialog.css?v=a9395fdbf3ff">
+  <link rel="stylesheet" href="/assets/katex.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"ONETHICS ①","description":"参与 Parano1d 的七项原则：本地验证、检查已注资权利、保存支付和合约证据、承担共享 State 的成本、自主评价独立建设者、挑战密码学假设，以及让未来验证独立于创始人。","datePublished":"2026-10-12","dateModified":"2026-10-12","url":"https://lab.parano1d.org/zh/research/onethics-v2/","mainEntityOfPage":"https://lab.parano1d.org/zh/research/onethics-v2/","inLanguage":"zh-Hans","isAccessibleForFree":true,"keywords":["Parano1d","ONETHICS","独立验证","有效权利","证明原生合约","收据","State 经济","community builds","密码学研究","跨时间去中心化"],"author":[{"@type":"Person","name":"Ignotus Nemo"}],"publisher":{"@type":"Organization","name":"Parano1d Lab","url":"https://lab.parano1d.org"},"image":"https://lab.parano1d.org/assets/og/onethics-v2.png","about":"去中心化"}</script>
+</head>
+<body class="locale-zh">
+  <a class="skip-link" href="#content">跳到正文</a>
+  <div class="page-shell">
+    <header class="site-header">
+    <a class="brand" href="/zh/" aria-label="ParanO(1)d Lab 首页">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <span class="brand-copy"><strong>ParanO(1)d Lab</strong><small>研究</small></span>
+    </a>
+    <div class="header-controls">
+      <details class="language-switcher"><summary aria-label="切换语言"><span>中文</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="语言"><a href="/research/onethics-v2/" lang="en" hreflang="en"><span>EN</span><strong>English</strong></a><a href="/ru/research/onethics-v2/" lang="ru" hreflang="ru"><span>RU</span><strong>Русский</strong></a><a href="/zh/research/onethics-v2/" lang="zh-Hans" hreflang="zh-Hans" aria-current="true"><span>中文</span><strong>简体中文</strong></a></div></details>
+      <nav class="site-nav" id="site-nav" aria-label="主导航">
+        <a href="/zh/#latest">最新</a>
+        <a aria-current="page" href="/zh/research/">全部研究</a>
+        <span class="nav-rule" aria-hidden="true"></span>
+        <a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">文档 <span aria-hidden="true">↗</span></a>
+        <a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">Parano1d <span aria-hidden="true">↗</span></a>
+        <button class="nav-source" type="button" data-source-open aria-haspopup="dialog" aria-controls="source-dialog"><svg class="nav-source-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>源码</span></button>
+      </nav>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    </div>
+  </header>
+    <div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page">
+    <header class="article-hero">
+      <div class="article-hero-copy"><a class="back-link" href="/zh/research/">← 全部研究</a><div class="article-meta"><span>协议实践</span><span>去中心化</span><time datetime="2026-10-12">2026年10月12日</time></div><h1>ONETHICS ①</h1><p class="article-dek">验证当下。了解自己的权利。保存证明。为后来者建设。</p><div class="article-byline"><span>作者 Ignotus Nemo</span><span>6 分钟阅读</span><span>参与者准则</span></div><div class="article-share" aria-label="分享本研究"><span class="article-share-label">分享</span><button class="share-action share-action--icon" type="button" data-copy-link="https://lab.parano1d.org/zh/research/onethics-v2/" data-copy-default="复制链接" data-copy-success="已复制" data-copy-failure="复制失败" aria-label="复制文章链接" title="复制链接"><svg class="share-icon share-icon--link" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><svg class="share-icon share-icon--check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12.5 4.2 4.2L19 7"/></svg><span class="visually-hidden" data-copy-label aria-live="polite">复制链接</span></button><a class="share-action" href="https://x.com/intent/post?text=ONETHICS%20%E2%91%A0&amp;url=https%3A%2F%2Flab.parano1d.org%2Fzh%2Fresearch%2Fonethics-v2%2F" aria-label="将本文分享到 X" target="_blank" rel="noopener noreferrer"><svg class="share-icon share-icon--x" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>分享到 X</span></a></div></div>
+      <div class="research-image" aria-hidden="true"><img src="/assets/onethics-hero.webp" alt="" loading="eager" decoding="async"></div>
+    </header>
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="本文目录"><strong>本文目录</strong><a href="#verify-for-yourself">1. 亲自验证，不借用判断</a><a href="#rights-not-promises">2. 权利，而非承诺</a><a href="#preserve-your-proofs">3. 保存自己的证明</a><a href="#keep-state-compact">4. 你的 State 是共同责任</a><a href="#independent-builders">5. 独立建设，自主判断</a><a href="#verify-claims">6. 挑战密码学</a><a href="#people-who-come-after-us">7. 为后来者建设</a></aside>
+      <article class="article-body"><p>Parano1d 让独立验证变得可行：验证当下，保存自己需要的证据，并为未来参与者留下一个仍然可以自主验证的网络。V2 将这种实践扩展到合约。我们现在可以检查谁拥有有效权利、哪些规则约束权利的使用，以及行使权利后还会留下什么证据。</p>
+
+<p>网络用户和建设者的实践，让这种独立性持续下去。</p>
+
+<p>ONETHICS 是参与者的实践准则。它的原则出于自愿，其权威来自每个人能够亲自验证的事实。</p>
+
+<h2 id="verify-for-yourself">1. 亲自验证，不借用判断</h2>
+
+<p>每个钱包都应成为网络参与者，能够自主确认自己接受的内容。浏览器、API 或交易所可以提供有用的服务。共识事实来自对网络规则和证据的验证。</p>
+
+<p>Parano1d GUI 在你的计算机上运行完整节点。它检查工作量证明、区块头、HistoryStep 和经过认证的当前 State，转发网络数据，并加入 P2P 网络。证明确立有效性，工作量证明确立规范顺序。</p>
+
+<p>种子节点帮助你发现对等节点。它们负责引导你的节点进入网络；收到的数据仍须经过本地验证。独立的对等节点和入口，让参与能够在某个服务或种子节点消失后继续。</p>
+
+<p>如果外部服务报告错误余额或显示不同历史，你自己的验证器能够提供检查其主张的依据。如果服务关闭，你仍然可以通过网络继续参与。钱包应清楚显示同步状态，让你区分最后一次验证的 State 和当前链状态。</p>
+
+<h2 id="rights-not-promises">2. 权利，而非承诺</h2>
+
+<blockquote><p><strong>承诺不是合约。合约不是收据。</strong></p></blockquote>
+
+<p>有人可以承诺支付给你 100 NOID。这说明了他的意图。已经注资的合约提供了可以检查的内容：被承诺绑定的程序和策略、各方权限、金额，以及价值可以转移的条件。</p>
+
+<p>验证公开条款是否与经过认证的当前 State 中的承诺一致，以及具体输出实例是否仍未花费。检查谁可以领取、收回或关闭合约，允许的高度和限额是什么。注资证明价值存在；条款决定你对这些价值实际拥有哪些权利。</p>
+
+<p>一次成功调用证明了被授权的转换。它可以完成支付、更新剩余权利或结束义务。保存的合约收据能够在旧区块体被剪枝后，继续证明这次具体行动。</p>
+
+<p>这样，协议的每个阶段都有自己的证据：承诺表达意图，已注资合约确立可执行的当前权利，收据记录已经完成的履行。ONETHICS 既涉及我们如何持有资金，也涉及我们如何彼此协作。</p>
+
+<h2 id="preserve-your-proofs">3. 保存自己的证明</h2>
+
+<blockquote><p><strong>网络保存有效性。你保存对自己重要的证据。</strong></p></blockquote>
+
+<p>节点保留最近 42 个完整区块。更旧的区块体和交易会被剪枝；永久区块头保留交易根。保存的支付收据携带支付数据和 Merkle 包含证明。将其根与规范区块头核对，可以确定这笔支付属于哪条链。</p>
+
+<p>合约收据还保存公开条款，以及已接受调用或关闭的证据。导出重要收据和合约文件，并保留自己掌控的副本。其他参与者可以据此检查事件，无须依赖原始应用或归档运营者。</p>
+
+<p>当前 State 和历史收据回答不同的问题。State 认证已知权利现在仍然有效。收据证明过去发生的行动。在使用收据描述的后继状态前，应在当前 State 中检查准确的槽位和创建标识：该输出可能已经被花费。</p>
+
+<p id="protect-your-key">将钱包秘密与公开合约条款和收据分别备份。秘密控制普通资金和你的合约权限。恢复秘密可以恢复这些权限；恢复合约程序、公开开封数据或过去的交互，则需要相应证据。秘密应保密并离线保存，另留一份副本在日常使用的设备之外。</p>
+
+<h2 id="keep-state-compact">4. 你的 State 是共同责任</h2>
+
+<blockquote><p><strong>共享 State 不会因为由别人存储就变得免费。</strong></p></blockquote>
+
+<p>每个有效输出都占用完整节点需要维护的槽位。支付和合约使用同一项共享资源。花费会清空已占用槽位，新输出可以用新的创建标识复用它们。持续运行的合约能够更新权利，而无需将所有旧状态累积到当前活跃集合中。</p>
+
+<p>净新增活跃槽位的费用随占用率上升，这部分增长费用会被销毁。将多个输入合并为更少输出的归集会释放槽位，无须支付 State 增长销毁费用；普通交易费用仍然适用。合约操作按同样规则为自己的实际活跃状态占用付费。</p>
+
+<p>选择支付阈值、归集方式和应用结构时，应考虑这项共同成本。保留许多小额输出可能有用途。保留它们应当是经过考虑的选择。高效使用 State 能够减少其他参与者承担的存储负担。</p>
+
+<p>V2 将存储定价与发行分开。区块补贴遵循高度计划；State 域扩展时，这项计划保持不变。负责任地使用 State，有助于网络持续适合独立运营者。</p>
+
+<h2 id="independent-builders">5. 独立建设，自主判断</h2>
+
+<blockquote><p><strong>开源意味着任何人都能建设。它不意味着所有人都必须信任建设出来的东西。</strong></p></blockquote>
+
+<p>人们可以在 Parano1d 上开发钱包、矿池、浏览器和应用。每个建设者都应对自己的软件、基础设施和承诺负责。列入 community builds 表明一项生态贡献；官方身份或背书需要另外作出明确声明。</p>
+
+<p>第三方钱包开发者代表自己的钱包，矿池运营者代表自己的矿池。用户应知道自己运行的是谁的软件、谁控制密钥、哪些内容在本地验证，以及应用依赖哪些服务。</p>
+
+<p>核心开发优先关注协议正确性、独立验证和切实可行的节点运行。需要归档或完整历史统计的建设者，应自行组织数据收集和存储，并向用户明确展示缺失。</p>
+
+<p>Ignotus Nemo 不应成为网络中每个应用的永久质量裁判。建设者需要自行决策的空间。参与者需要证据，以及自主判断的自由。</p>
+
+<h2 id="verify-claims">6. 挑战密码学</h2>
+
+<blockquote><p><strong>如果你能推翻一个假设，就公开证据。网络正是这样变得更强。</strong></p></blockquote>
+
+<p>针对主张所描述的准确构造进行验证，也包括我们的主张。有效性路径涵盖授权、执行、承诺、递归验证和 Fiat–Shamir 编译。应将定理条件、安全证书、源代码版本和生产参数放在一起审查。</p>
+
+<p><a href="https://noid.network/" target="_blank" rel="noopener noreferrer">noid.network</a> 发布研究任务、主张依赖关系和经过审阅的证据。复现一项计算，检查一条界限，寻找成本更低的攻击或响应电路。报告模型、参数、准确源代码提交、成本核算和复现程序，让其他人能够检查结果。只要清楚说明方法和局限，失败的攻击和未得出明确结论的实验也有记录价值。</p>
+
+<p>当前 v2 评估保留了明确条件：全根组合与编译器提升、固定 Poseidon2b 相对理想模型的偏差、诚实的公开预处理，以及响应电路的资源成本。完整自适应编译器闭合、固定哈希条件和最低响应成本仍是研究义务。这些都是具体的研究对象。</p>
+
+<p>复现计算确立的是实际检查过的结果。对完整密码学进行独立审计，范围更广，涵盖构造、假设、组合和实现。公布每项审查的范围，让未来读者能够判断哪些证据支持某项主张。</p>
+
+<h2 id="people-who-come-after-us">7. 为后来者建设</h2>
+
+<p>去中心化还有时间维度。想象一个五十年后加入的人。他应该能够认证当下，无须依赖浏览器、早已消失的开发者，或继承了对过去独占控制的机构。</p>
+
+<p>做到这一点需要的不只是删除旧数据。未来参与者需要公开的协议规则、可复现的实现、保存下来的验证产物，以及被接受的转换确实承载其声称历史的证据。</p>
+
+<p>V2 已经包含一个明确定义的转换，绑定旧链祖先关系，并允许旧证明矩阵退役。这是跨代延续的具体一步。更长期的目标，是在不同密码学代际之间进行经过认证的转换，定义准确的转换关系，并提供涵盖两个代际的安全分析。每次转换都必须在明确声明的条件下保留可独立验证的历史。</p>
+
+<p>网络用户应当希望 Parano1d 逐渐独立于 Ignotus Nemo。公开足够的材料，让另一支团队能够实现规则、审查假设、复现产物并继续工作。我们的继任者应当继承这种能力。</p>
+
+<p><strong>当下证明过去。让下一位参与者仍然能够验证。</strong></p>
+</article>
+    </div>
+    <aside class="evidence-panel" aria-labelledby="evidence-title"><div><p class="section-index">研究记录</p><h2 id="evidence-title">证据与产物</h2><p>以下链接保存了支撑本文的实现、测量或推导。</p></div><div class="evidence-links"><a href="/research/the-present-must-prove-the-past/"><span class="evidence-entry"><span><small>架构</small><strong>当下必须证明过去</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/operate/node" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>文档</small><strong>运行并自主验证节点</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="/research/parano1d-v2-live-rights/"><span class="evidence-entry"><span><small>Protocol</small><strong>证明原生的有效权利</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/contracts/receipts-and-recovery" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>文档</small><strong>合约收据与恢复</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/protocol/economics" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>文档</small><strong>State 定价与发行</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://docs.parano1d.org/wallet/backup-recovery" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>文档</small><strong>钱包备份与恢复</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="/research/decentralization-across-time/"><span class="evidence-entry"><span><small>架构</small><strong>跨时间去中心化</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/parano1d/src/commit/50d6dac5a37b9f1be425b5e6cd823de48f843b50/noid_soundness" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>代码与证明</small><strong>固定发布版本的安全证书</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://git.parano1d.org/ignotusnemo/parano1d/src/commit/50d6dac5a37b9f1be425b5e6cd823de48f843b50/noid_soundness/docs/v2-retirement.md" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><svg class="evidence-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>Derivation</small><strong>V2 矩阵退役与条件</strong></span></span><span aria-hidden="true">↗</span></a>
+<a href="https://noid.network/" target="_blank" rel="noopener noreferrer"><span class="evidence-entry"><span><small>Research</small><strong>开放密码学研究</strong></span></span><span aria-hidden="true">↗</span></a></div></aside>
+    <nav class="article-next" aria-label="相邻研究"><a href="/zh/research/live-agents/"><small>较早</small><strong>Live Agents · Agent Core</strong><span>←</span></a><a href="/zh/research/parano1d-v2-live-rights/"><small>较新</small><strong>V2 · 有效权利</strong><span>→</span></a></nav>
+  </main>
+    <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">①</span>
+      <div><strong>ParanO(1)d Lab</strong><p>ParanO(1)d 背后的协议研究。</p></div>
+    </div>
+    <div class="footer-links">
+      <div><strong>研究</strong><a href="/zh/research/">归档</a><a href="/zh/feed.xml">RSS 订阅</a></div>
+      <div><strong>项目</strong><a href="https://parano1d.org" target="_blank" rel="noopener noreferrer">网站</a><a href="https://docs.parano1d.org" target="_blank" rel="noopener noreferrer">技术文档</a><a href="https://git.parano1d.org/ignotusnemo/parano1d" target="_blank" rel="noopener noreferrer">源代码</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 ParanO(1)d Lab</span><span>lab.parano1d.org</span></div>
+  </footer>
+  </div>
+  <script src="/assets/site.js?v=d87e8bb907f1" defer></script>
+</body>
+</html>
