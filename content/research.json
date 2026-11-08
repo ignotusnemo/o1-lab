@@ -1,5 +1,101 @@
 [
   {
+    "slug": "october-2026-security-review",
+    "locales": [
+      "en"
+    ],
+    "date": "2026-11-06",
+    "updated": "2026-11-07",
+    "kind": "Security research",
+    "topic": "Monthly security report",
+    "status": "v2.1 certificate renewed",
+    "title": "October Security Report",
+    "shortTitle": "October Security Report",
+    "dek": "Parano1d v2.1 certificate renewed. 648 October ePrint entries screened, 421 finite Reed–Solomon layers checked, 138 matrix minors verified and 33 native checks passed. The charged ideal-model bound is preserved.",
+    "abstract": "The October 2026 review renews Parano1d's production v2.1 certificate for Small, Large and Native and their complete retained ancestry. Screening covers 648 October ePrint entries and 135 November follow-ups. Exact checks verify the Johnson and multiplicity conditions on 421 finite Reed–Solomon layers, 138 external-matrix and inverse-matrix minors, and the selected authorization configuration. All 33 completed native checks pass. The November 7 follow-up establishes grouped source restoration, authenticated preprocessing and activation, three-class transcript binding and canonical State-installation interfaces. The resource theorem preserves the complete charged ideal-model success envelope of approximately 0.04937 at the declared Category 1 reference budgets and the dominant-term half-success gate-depth floor of approximately 2^173.39 in that model. The calculation retains twenty historical events and adds six current events. Production lifting uses two global conditions: coupled all-root composition and fixed-Poseidon2b compiler-event deviation over the actual total logical resource budget. Public proofs, immutable source links, exact calculations and reproduction commands accompany the review.",
+    "authors": [
+      "Ignotus Nemo"
+    ],
+    "art": "poseidon",
+    "ogWidth": 1200,
+    "ogHeight": 630,
+    "ogAlt": "October 2026 Parano1d soundness review: 648 October entries, 421 Reed–Solomon layers, 138 matrix minors and 33 native checks. v2.1 certificate renewed.",
+    "keywords": [
+      "Parano1d",
+      "October 2026",
+      "post-quantum soundness",
+      "v2.1 certificate",
+      "Reed–Solomon",
+      "Poseidon2b",
+      "Fiat–Shamir",
+      "quantum preprocessing",
+      "source restoration",
+      "all-root composition"
+    ],
+    "evidence": [
+      {
+        "label": "October Security Report (PDF)",
+        "href": "/papers/october-2026-security-report.pdf",
+        "type": "PDF"
+      },
+      {
+        "label": "October review and complete reproduction record",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d-soundness/src/commit/1c1eb9b54e70b6eb9e4b0a6e5e978ef16bce9c6f/docs/october-2026-security-review.md",
+        "type": "Analysis"
+      },
+      {
+        "label": "Exact v2.1 rational certificate",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d-soundness/src/commit/1c1eb9b54e70b6eb9e4b0a6e5e978ef16bce9c6f/research/evidence/artifacts/2026-11-06/v21-soundness-mainnet.json",
+        "type": "Data"
+      },
+      {
+        "label": "Literature screening catalogue and paper digests",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d-soundness/src/commit/1c1eb9b54e70b6eb9e4b0a6e5e978ef16bce9c6f/research/evidence/artifacts/2026-11-06/literature-review.json",
+        "type": "Data"
+      },
+      {
+        "label": "Native production-profile replay",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d-soundness/src/commit/1c1eb9b54e70b6eb9e4b0a6e5e978ef16bce9c6f/research/evidence/artifacts/2026-11-06/native-profile-replay.json",
+        "type": "Artifact"
+      },
+      {
+        "label": "RS grouped-restoration proof and finite-parameter instantiation",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d-soundness/src/commit/1c1eb9b54e70b6eb9e4b0a6e5e978ef16bce9c6f/docs/v2.1-rs-grouped-restoration.md",
+        "type": "Proof"
+      },
+      {
+        "label": "All 421 layer hypotheses",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d-soundness/src/commit/1c1eb9b54e70b6eb9e4b0a6e5e978ef16bce9c6f/research/evidence/artifacts/2026-11-07/rs-grouped-restoration.json",
+        "type": "Data"
+      },
+      {
+        "label": "Current source, activation and State-installation proofs",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d-soundness/src/commit/1c1eb9b54e70b6eb9e4b0a6e5e978ef16bce9c6f/docs/v2.1-source-binding-proofs.md",
+        "type": "Proof"
+      },
+      {
+        "label": "Native audit receipt and 33 completed checks",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d-soundness/src/commit/1c1eb9b54e70b6eb9e4b0a6e5e978ef16bce9c6f/research/evidence/artifacts/2026-11-07-closure/source-binding.json",
+        "type": "Artifact"
+      },
+      {
+        "label": "Resource envelope and actual-budget fixed-primitive lifting",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d-soundness/src/commit/1c1eb9b54e70b6eb9e4b0a6e5e978ef16bce9c6f/docs/v2.1-resource-closure.md",
+        "type": "Proof"
+      },
+      {
+        "label": "Production certificate and theorem conditions",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d-soundness/src/commit/1c1eb9b54e70b6eb9e4b0a6e5e978ef16bce9c6f/docs/v2.1-certificate.md",
+        "type": "Analysis"
+      },
+      {
+        "label": "October review on noid.network",
+        "href": "https://noid.network/security/october-2026",
+        "type": "Research"
+      }
+    ]
+  },
+  {
     "slug": "native-asset-vaults",
     "locales": [
       "en"
