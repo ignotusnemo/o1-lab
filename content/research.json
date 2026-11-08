@@ -178,6 +178,118 @@
     ]
   },
   {
+    "slug": "parano1d-v2-1-native-finance",
+    "locales": [
+      "en"
+    ],
+    "date": "2026-11-04",
+    "updated": "2026-11-08",
+    "kind": "Protocol research",
+    "topic": "Native finance",
+    "status": "v2.1 mainnet · H279370",
+    "title": "Parano1d v2.1. Native Finance",
+    "shortTitle": "Parano1d v2.1. Native Finance",
+    "dek": "Backed tokens, a launchpad, permanent DEX liquidity and an NFT marketplace. Every operation settles inside the recursive block proof.",
+    "abstract": "Parano1d v2.1 represents token supply, redeemable holder backing, curve positions, DEX reserves, NFT ownership and listings as authenticated live State. The Native proof class checks their exact transition rules together with ordinary payments. Fixed-supply tokens carry at least 0.001 NOID of backing per whole token. The standard launch curve allocates 60% of supply to trading and 40% to permanent DEX liquidity, with atomic graduation. Sequential trades respect each policy's limits, and NFT purchases couple payment and delivery in one transition. The wallet reads current financial state from its own node. Live rights remain in authenticated State as recent block bodies follow their retention schedule.",
+    "authors": [
+      "Ignotus Nemo"
+    ],
+    "art": "rightsv2",
+    "ogWidth": 1200,
+    "ogHeight": 630,
+    "ogAlt": "Parano1d v2.1 native finance: backed tokens, launchpad, permanent DEX liquidity and NFTs in the recursive block proof.",
+    "keywords": [
+      "Parano1d v2.1",
+      "native finance",
+      "backed tokens",
+      "bonding curve",
+      "launchpad",
+      "permanent liquidity",
+      "DEX",
+      "NFT marketplace",
+      "recursive proofs",
+      "authenticated State"
+    ],
+    "evidence": [
+      {
+        "label": "Native Finance article (PDF)",
+        "href": "/papers/parano1d-v2-1-native-finance.pdf",
+        "type": "PDF"
+      },
+      {
+        "label": "Native-finance rules and exact arithmetic",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c63bb2999abebdde907019fb4f2d395469d456b2/docs/protocol/native-finance.md",
+        "type": "Architecture"
+      },
+      {
+        "label": "Current proof classes and block resource limits",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c63bb2999abebdde907019fb4f2d395469d456b2/docs/protocol/parameters.md",
+        "type": "Analysis"
+      },
+      {
+        "label": "Wallet guides: tokens, NFTs and committed media",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c63bb2999abebdde907019fb4f2d395469d456b2/docs/wallet",
+        "type": "Architecture"
+      }
+    ]
+  },
+  {
+    "slug": "post-quantum-signatureless-authorization",
+    "locales": [
+      "en"
+    ],
+    "date": "2026-10-29",
+    "updated": "2026-11-08",
+    "kind": "Paper",
+    "topic": "Signatureless authorization",
+    "status": "Published paper · DOI 10.5281/zenodo.23778742",
+    "title": "Post-Quantum Signatureless Authorization",
+    "shortTitle": "Post-Quantum Signatureless Authorization",
+    "dek": "A reusable authority secret. Fresh request-bound proofs. A native quantum chosen-request security reduction and recursive verification, with 25.6 ms measured native verification.",
+    "abstract": "Signatureless authorization binds knowledge of a reusable authority secret to a canonical request through a freshly randomized proof capsule. The public statement contains a request identifier and a 32-byte authority commitment. A binary-field construction combines a masked degree-ten authority reduction with a bank-and-companion code proof. The paper proves source restoration, adaptive simulation and a native quantum fresh-intent security reduction in an address-compatible random-completion model with explicit finite orbit-profile and resource conditions. The combined simulation and extraction loss is below 2⁻⁶⁷ at up to 2²⁴ charged native calls. Recursive composition enforces the selected capsules' equations under exact arithmetic, complete coverage and authenticated statement and transcript bindings. Parano1d supplies the implementation. Four-thread reference measurements give 0.81–0.89 seconds proving and approximately 25.6 milliseconds native verification. The paper and reproducibility artifact accompany the results.",
+    "authors": [
+      "Ignotus Nemo"
+    ],
+    "art": "proof",
+    "ogWidth": 1200,
+    "ogHeight": 630,
+    "ogAlt": "Post-Quantum Signatureless Authorization: quantum chosen-request security reduction, recursive verification and measured 25.6 millisecond native verification.",
+    "keywords": [
+      "post-quantum cryptography",
+      "signatureless authorization",
+      "proofs of knowledge",
+      "zero knowledge",
+      "quantum chosen-request security",
+      "random permutation model",
+      "binary fields",
+      "Poseidon2b",
+      "Reed–Solomon",
+      "recursive verification"
+    ],
+    "evidence": [
+      {
+        "label": "Post-Quantum Signatureless Authorization (published PDF)",
+        "href": "/papers/post-quantum-signatureless-authorization.pdf",
+        "type": "PDF"
+      },
+      {
+        "label": "Published paper and reproducibility artifact on Zenodo",
+        "href": "https://zenodo.org/records/23778742",
+        "type": "Paper"
+      },
+      {
+        "label": "Reproducibility archive: source, checks and raw measurements",
+        "href": "https://zenodo.org/records/23778742/files/signatureless-authorization-artifact.zip?download=1",
+        "type": "Artifact"
+      },
+      {
+        "label": "Persistent publication DOI",
+        "href": "https://doi.org/10.5281/zenodo.23778742",
+        "type": "Paper"
+      }
+    ]
+  },
+  {
     "slug": "live-agents",
     "date": "2026-09-30",
     "kind": "Application research",

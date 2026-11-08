@@ -1,0 +1,83 @@
+<section>
+<h2 id="native-finance">Native finance in the block proof</h2>
+<p>Parano1d v2.1 runs backed tokens, a launchpad, a permanent-liquidity DEX and an NFT marketplace inside the State transition checked by the recursive block proof. Token quantities, holder reserves, market balances, collection counters and listing terms are live protocol objects. Their exact inputs and outputs enter the same atomic transition as NOID payments.</p>
+<p>The v2.1 profile is active from mainnet height <strong>279370</strong>. Its Native proof class checks the financial rules directly. A token creation deposits its backing, establishes its fixed supply and initializes its market together. A swap updates the market and pays its recipient together. An NFT purchase transfers the item and pays its seller together.</p>
+<p>The wallet exposes these operations through the Tokens and NFT workspaces. Current balances and market state come from the user's own node. The sections below describe the running protocol's asset rules, trading mechanics and block resource limits.</p>
+</section>
+<section>
+<h2 id="backing">Fixed supply and redeemable backing</h2>
+<p>A fungible token has six decimal places and a fixed initial supply of at least 100,000 whole tokens. Creation deposits at least <strong>0.001 NOID per whole token</strong> into its holder reserve. Creating 100,000 tokens therefore requires at least 100 NOID of backing, plus the network fee.</p>
+<p>Holder backing and trading liquidity occupy separate State objects. The backing reserve serves token redemption. Curve cash and DEX reserves serve trading. Every outstanding token counts toward the backing obligation, including tokens held by the curve or pool.</p>
+<p>Burning tokens redeems their proportional share of the holder reserve in the same operation. For reserve <em>R</em>, outstanding supply <em>S</em> and a burn of <em>q</em> base units:</p>
+<pre><code>payout = floor(R × q / S)
+remaining reserve = R − payout
+remaining supply = S − q</code></pre>
+<p>Integer rounding leaves any fractional remainder in the reserve. Backing per remaining token is nondecreasing. The wallet quotes the redemption and network fee separately, so the user sees the net NOID outcome before submitting the burn.</p>
+<p>The creation rules fix supply and reserve custody. The available creator operations preserve that fixed supply and the holders' redemption rule.</p>
+</section>
+<section>
+<h2 id="launchpad">The launch curve and automatic graduation</h2>
+<p>The standard launch allocates <strong>60% of supply to the curve</strong> and <strong>40% to DEX liquidity</strong>. Let <em>S₀</em> be the initial supply in token base units and <em>q</em> the quantity sold by the curve. Its required NOID cash is:</p>
+<div class="equation" role="math" aria-label="Launch curve cash function">C(q) = ceil((3S₀q + 5q²) / (900S₀)).</div>
+<p>Cash is measured in microNOID. Both assets have six decimal places. The marginal-price reference starts at <strong>1/300 NOID per token</strong> and reaches <strong>1/100 NOID per token</strong> at graduation. Accepted trades use exact integer differences in the cash function.</p>
+<p>The creator can include an initial purchase in the creation transaction. That operation deposits the full holder backing, places the purchase cash into market custody and delivers the purchased tokens atomically. The initial purchase can cover any amount through the full curve allocation.</p>
+<div class="table-wrap"><table>
+<caption>Standard launch allocations. Holder backing uses the minimum reserve requirement. Network fees are quoted separately.</caption>
+<thead><tr><th scope="col">Token supply</th><th scope="col">Holder backing</th><th scope="col">Curve tokens</th><th scope="col">DEX tokens</th><th scope="col">DEX NOID at graduation</th></tr></thead>
+<tbody>
+<tr><td>100,000</td><td>100 NOID</td><td>60,000</td><td>40,000</td><td>400 NOID</td></tr>
+<tr><td>1,000,000</td><td>1,000 NOID</td><td>600,000</td><td>400,000</td><td>4,000 NOID</td></tr>
+<tr><td>5,000,000</td><td>5,000 NOID</td><td>3,000,000</td><td>2,000,000</td><td>20,000 NOID</td></tr>
+</tbody></table></div>
+<p>For a one-million-token launch, a creator buying the entire curve allocation supplies 1,000 NOID of minimum holder backing and 4,000 NOID of curve cash, plus the network fee. The creator receives 600,000 tokens. The operation establishes a DEX pool containing the remaining 400,000 tokens and 4,000 NOID.</p>
+<p>Reaching the curve allocation creates the permanent pool automatically in the same transition. The token retains its asset identity and holder balances. A buy that crosses the graduation point can spend its remaining budget against the new pool. Unusable dust returns to the buyer.</p>
+</section>
+<section>
+<h2 id="dex">Permanent liquidity and exact swap rules</h2>
+<p>The initial DEX reserve ratio matches the curve's final marginal price. Its pool shares are permanently locked. Trading fees accrue inside the pool, and swaps update its reserves under the protocol's integer arithmetic.</p>
+<p>For input reserve <em>x</em>, output reserve <em>y</em> and gross input <em>g</em>:</p>
+<pre><code>fee = ceil(30 × g / 10000)
+effective input = g − fee
+output = floor(y × effective input / (x + effective input))
+next input reserve = x + g
+next output reserve = y − output</code></pre>
+<p>The swap fee is <strong>0.3% of gross input</strong>, rounded up to a base unit. Every accepted swap preserves positive reserves and a nondecreasing reserve product. The network fee is a separate charge. A crossing buy pays the DEX fee on its DEX portion. Curve execution uses the curve cash function.</p>
+<p>The permanent lock applies to liquidity shares. Actual pool balances and market prices follow accepted trades and accumulated fees.</p>
+</section>
+<section>
+<h2 id="trade-sequence">Several trades in one block</h2>
+<p>A trade policy fixes its asset, recipient, gross input, minimum output, maximum network fee and inclusion-height range. Exact funding references identify the resources available to that trade.</p>
+<p>For the selected set, the relation derives priorities from the immutable parent and each policy's principal funding input. It orders those priorities and chooses the next side according to the current price relative to the block's initial price. Buys receive preference at or below that reference. Sells receive preference above it.</p>
+<p>Each trade executes against the previous trade's resulting curve position or reserves. The proof checks the full selected sequence, intermediate prices, funding and final payouts. This permits several buys and sells in one block while checking each participant's individual limits.</p>
+<p>Producers choose inclusion. The selected set and available funding identities can affect the result. Each accepted fill must satisfy its recipient, amount, minimum-output, fee and expiry constraints. An unfilled policy leaves its funding unspent.</p>
+<p>Pending quotes use the local node's known candidate set. The confirmed block fixes the execution sequence and exact outcomes. The wallet retains pending operations and receipts across restarts.</p>
+</section>
+<section>
+<h2 id="nfts">Collections and atomic NFT purchases</h2>
+<p>Each collection has an issuance counter and a full 64-bit serial range. The creator can mint additional batches into the same collection. Every mint consumes and updates the counter. A burned serial remains issued.</p>
+<p>The wallet supports standalone items, collections, batch minting, transfers, burns and marketplace listings. The simple Create NFT flow prepares a one-item collection and then mints its item through two separately reviewed transactions. The collection workflow supports up to 122 items in one mint transaction with one NOID funding input, subject to the actual shared resource budget.</p>
+<p>A listing fixes the exact item, seller, asking price and expiry. It includes a <strong>0.1 NOID listing credit</strong>. A purchase consumes that listing, transfers the item to its buyer and pays the seller in one State transition. The seller receives the asking price and listing credit.</p>
+<p>Cancellation returns the NFT and remaining credit after the network fee. Competing purchases consume the same listing incarnation, which makes their claims conflict on the exact live object.</p>
+</section>
+<section>
+<h2 id="wallet-state">The wallet and authenticated live State</h2>
+<p><a href="https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c63bb2999abebdde907019fb4f2d395469d456b2/docs/wallet/tokens.md"><strong>F2 opens Tokens.</strong></a> My Tokens, Launchpad, DEX and Create provide balances, discovery, trading and issuance. <a href="https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c63bb2999abebdde907019fb4f2d395469d456b2/docs/wallet/nfts.md"><strong>F3 opens NFT.</strong></a> My NFTs, Marketplace, My Listings and Create provide collection and item operations.</p>
+<p>The node supplies current token balances, curve positions, reserves, ownership and listing terms. Token and collection IDs bind their definitions to the exact funding anchor used at creation. NFT identity combines the collection ID and serial. Names and tickers are descriptive metadata. The full asset ID identifies the actual token.</p>
+<p>Images, descriptions and optional HTTPS websites have committed metadata. The wallet checks retrieved manifests and image hashes against those commitments. Optional external data supplies media and historical views. Current financial state remains verifiable through the user's own node.</p>
+<p>Authenticated State synchronization carries current live openings and their required definitions. Recent block bodies follow the retention schedule. Live rights remain represented in State, and exported receipts remain checkable against canonical headers. Wallet receipt exports preserve the records a holder chooses to retain.</p>
+</section>
+<section>
+<h2 id="resources">One selected proof class per block</h2>
+<p>The authenticated bank provides Small, Large and Native classes. Native covers token, curve, DEX and NFT operations, and also admits ordinary NOID payments and ABI 3 calls within the shared budgets.</p>
+<div class="table-wrap"><table>
+<caption>Current class ceilings. Native-operation resources share the selected block's page and input limits.</caption>
+<thead><tr><th scope="col">Class</th><th scope="col">Physical pages</th><th scope="col">Ordinary live inputs</th><th scope="col">ABI 3 calls</th></tr></thead>
+<tbody>
+<tr><td>Small</td><td>63</td><td>504</td><td>63</td></tr>
+<tr><td>Large</td><td>206</td><td>504</td><td>63</td></tr>
+<tr><td>Native</td><td>63</td><td>504</td><td>63</td></tr>
+</tbody></table></div>
+<p>The Native class additionally permits up to 48 trade policies, 64 shared funding inputs, 128 typed actions and four markets. These are simultaneous ceilings. For example, 32 policies with two funding inputs each consume all 64 shared funding inputs. Actual capacity depends on the complete funding and payout shape.</p>
+<p>The node considers Small and Native automatically. The <code>--v2-large-blocks</code> option also permits Large. Template selection chooses the candidate with the greatest claimable fees and builds one proof for that candidate. Equal fees retain the earlier candidate, with Small considered first.</p>
+<p>The <a href="https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c63bb2999abebdde907019fb4f2d395469d456b2/docs/protocol/native-finance.md">native-finance specification</a> gives the exact arithmetic and transition rules. The accompanying wallet guides describe the live Tokens and NFT interfaces. <code>getNativeProtocol</code> reports the installed capacities, and the <a href="https://git.parano1d.org/ignotusnemo/parano1d/src/commit/c63bb2999abebdde907019fb4f2d395469d456b2/docs/contracts/native-templates.md">native templates</a> expose the operation types for application builders.</p>
+</section>
