@@ -1,7 +1,7 @@
 {
   "live-agents": {
     "kind": "应用研究",
-    "topic": "AI 智能体",
+    "topic": "合约与应用",
     "status": "研究原型",
     "title": "Live Agents：无需信任远程 API 的自主参与",
     "shortTitle": "Live Agents · Agent Core",
@@ -31,19 +31,20 @@
   },
   "september-2026-cryptography-review": {
     "kind": "安全研究",
-    "topic": "月度安全报告",
+    "topic": "安全",
     "status": "主网参数已核对",
     "title": "九月安全报告",
     "shortTitle": "九月安全报告",
     "dek": "新论文涉及 Poseidon2b 结式、矩阵后门、递归 Fiat-Shamir 和安全性界。逐项核对主网固定参数。",
     "abstract": "九月安全报告检查新论文，涵盖四个方向：Poseidon2b 结式攻击、恶意选择线性矩阵、递归 Fiat-Shamir 自引用，以及量子置换和 Reed-Solomon 的新界。生产环境的 296 个 Poseidon2b 参数与作者参考实现一致。主网 v2 的安全性计算逐字节复现了留存结果。新结式算法能否用于二进制域前馈压缩，以及具体递归编译器如何排除自引用，仍需继续研究。",
-    "keywords": ["Parano1d", "Poseidon2b", "结式", "Nothing Up My Matrix", "Slipway", "Fiat-Shamir", "量子置换", "Reed-Solomon", "后量子安全"],
+    "keywords": ["Parano1d", "Poseidon2b", "结式", "Nothing Up My Matrix", "Slipway", "Fiat-Shamir", "量子置换", "Reed-Solomon", "后量子安全", "月度安全报告"],
     "evidence": ["完整技术报告与复现方法", "A Better Bivariate Resultant Attack on Round-Reduced Poseidon", "Efficient Polynomial System Solving via Dixon Resultants: Applications to AO Primitives", "Nothing Up My Matrix: Kleptographic Backdoors in ZK-friendly Hash Functions", "Slipway: Accessing Finite Subspace Trails in Poseidon", "How to instantiate Fiat-Shamir Provably and Practically?", "Improved Soundness for Compressed Permutation Oracles and Tight Quantum Preimage and Collision Bounds for the Sponge", "Reed-Solomon Codes Beyond Johnson: Efficient Decoding and Smaller Cryptographic Proofs", "Poseidon2b 作者的固定常量", "v2 可靠性推导", "精确实例的开放研究任务"]
   },
   "parano1d-v2-live-rights": {
     "pinnedLabel": "置顶",
     "kind": "协议架构",
-    "topic": "证明原生合约",
+    "topic": "合约与应用",
+    "keywords": ["证明原生合约"],
     "status": "V2 主网规则 · H210537",
     "title": "Parano1d v2：从现存价值到有效权利",
     "shortTitle": "V2 · 有效权利",
@@ -64,7 +65,8 @@
   },
   "parano1d-v2-capacity-and-consensus": {
     "kind": "协议设计",
-    "topic": "容量与共识",
+    "topic": "协议与共识",
+    "keywords": ["容量与共识"],
     "status": "V2 主网规则 · H210537",
     "title": "Parano1d v2：区块容量与共识",
     "shortTitle": "V2 · 容量与共识",
@@ -80,7 +82,8 @@
   },
   "parano1d-v2-tokenomics": {
     "kind": "协议经济",
-    "topic": "网络经济",
+    "topic": "去中心化与经济",
+    "keywords": ["网络经济"],
     "status": "V2 主网规则 · H210537",
     "title": "Parano1d v2：NOID 的发行与状态经济",
     "shortTitle": "V2 · 发行与状态经济",
@@ -96,7 +99,8 @@
   },
   "the-present-must-prove-the-past": {
     "kind": "协议架构",
-    "topic": "Proof-carrying State",
+    "topic": "协议与共识",
+    "keywords": ["Proof-carrying State"],
     "status": "实际部署架构",
     "title": "当下必须证明过去",
     "shortTitle": "当下证明过去",
@@ -106,18 +110,18 @@
   },
   "decentralization-across-time": {
     "kind": "架构随笔",
-    "topic": "去中心化",
+    "topic": "去中心化与经济",
     "status": "已公开的设计方向",
     "title": "跨越时间的去中心化",
     "shortTitle": "跨越时间的去中心化",
     "dek": "网络不应仅仅因为逐渐变老，就变得越来越不去中心化。",
     "abstract": "几十年后才加入 Parano1d 的人，仍应能够验证网络，而不必信任替它保存历史的人或服务。网络携带有效当下的证明，参与者只保存对自己重要的过去 receipts。同一原则还可以从货币延伸到权利、义务和未来的协议迁移。",
-    "keywords": ["Parano1d", "时间维度的去中心化", "proof-carrying State", "receipts", "证明可组合性", "递归证明", "协议迁移"],
+    "keywords": ["Parano1d", "时间维度的去中心化", "proof-carrying State", "receipts", "证明可组合性", "递归证明", "协议迁移", "去中心化"],
     "evidence": ["X 上的原始文章", "当下必须证明过去", "Proof-carrying State 同步", "Parano1d receipts", "当前 Parano1d 源代码"]
   },
   "onethics-v2": {
     "kind": "协议实践",
-    "topic": "去中心化",
+    "topic": "去中心化与经济",
     "status": "参与者准则",
     "title": "ONETHICS ①",
     "shortTitle": "ONETHICS ①",
@@ -133,7 +137,8 @@
       "State 经济",
       "community builds",
       "密码学研究",
-      "跨时间去中心化"
+      "跨时间去中心化",
+      "去中心化"
     ],
     "evidence": [
       "当下必须证明过去",
@@ -150,18 +155,19 @@
   },
   "poseidon2b-is-secure": {
     "kind": "安全性分析",
-    "topic": "Poseidon2b 密码分析",
+    "topic": "安全",
     "status": "与生产源码版本绑定的审计",
     "title": "Poseidon2b 是安全的！",
     "shortTitle": "精确的 Poseidon2b 实例",
     "dek": "安全性属于具体实例。先固定 GF(2^128)、四字状态、矩阵、8+58 轮与前馈压缩模式，再逐项套用公开攻击。",
     "abstract": "本文把 Parano1d 的精确生产实例与已公开的 Poseidon2b 代数攻击逐项对应。ePrint 2026/306 的前馈模型可以应用，工作量投影约为 2^409.8738。ePrint 2026/1792 的非线性子空间构造在 GF(2^128) 上通过精确秩检验后同样可以迁移，但其最低投影约为 2^1022.8301。自适应选取矩阵的攻击和新的 S 盒跳过结果都不能迁移到固定的四字压缩实例。这些数字是特定攻击模型的投影，不是安全位数。",
-    "keywords": ["Poseidon2b", "Poseidon2", "代数密码分析", "二进制域", "GF(2^128)", "Skipping Class", "S 盒跳过", "非线性子空间", "Gröbner 基", "Merkle 压缩", "Parano1d"],
+    "keywords": ["Poseidon2b", "Poseidon2", "代数密码分析", "二进制域", "GF(2^128)", "Skipping Class", "S 盒跳过", "非线性子空间", "Gröbner 基", "Merkle 压缩", "Parano1d", "Poseidon2b 密码分析"],
     "evidence": ["“Poseidon2b 是安全的”讨论", "Skipping Class 代数攻击", "Slipway 有限子空间轨迹", "从跳轮到跳过 S 盒", "Midpoint Reset", "用于 Gröbner 基攻击的非线性子空间", "可执行 Poseidon2b 密码分析审计", "逐篇论文的完整审查", "精确推导与适用范围", "固定版本的生产实现", "Binius 参考基准", "与源码版本绑定的公开密码分析任务"]
   },
   "parano1d-nist-pqc-category-one": {
     "kind": "安全性分析",
-    "topic": "后量子可靠性",
+    "topic": "安全",
+    "keywords": ["后量子可靠性"],
     "status": "与实际部署源码直接关联的可执行分析",
     "title": "Parano1d 达到 NIST PQC Category 1",
     "shortTitle": "Parano1d 达到 NIST PQC Category 1",
@@ -171,7 +177,8 @@
   },
   "parano1d-block-tiwari-fs-fri": {
     "kind": "安全性分析",
-    "topic": "Fiat–Shamir 安全性",
+    "topic": "安全",
+    "keywords": ["Fiat–Shamir 安全性"],
     "status": "与实际部署源码直接关联的可执行分析",
     "title": "Parano1d 的 FS-FRI 安全性：Block–Tiwari 分析",
     "shortTitle": "Block–Tiwari FS-FRI",
@@ -182,6 +189,7 @@
   "frost-gkr-global-trace-protocol": {
     "kind": "论文",
     "topic": "证明系统",
+    "keywords": ["证明系统"],
     "status": "实际部署协议与论文",
     "title": "FROST-GKR：统一证明多次 Poseidon2b 计算的全局轨迹协议",
     "shortTitle": "FROST-GKR",
@@ -191,7 +199,8 @@
   },
   "binary-field-kernels": {
     "kind": "工程研究",
-    "topic": "二进制域",
+    "topic": "证明系统",
+    "keywords": ["二进制域"],
     "status": "正式实现",
     "title": "四条硬件路径使用同一种证明格式",
     "shortTitle": "二进制域内核",
@@ -201,7 +210,8 @@
   },
   "proof-carrying-state-sync": {
     "kind": "系统研究",
-    "topic": "Proof-carrying State",
+    "topic": "协议与共识",
+    "keywords": ["Proof-carrying State"],
     "status": "正式协议",
     "title": "从携带证明的 State 启动同步",
     "shortTitle": "携带证明的 State",
@@ -211,7 +221,8 @@
   },
   "single-global-walk": {
     "kind": "工程研究",
-    "topic": "递归证明",
+    "topic": "证明系统",
+    "keywords": ["递归证明"],
     "status": "实际部署组合",
     "title": "一次全局 Poseidon 遍历取代九次验证器遍历",
     "shortTitle": "单次全局遍历",
@@ -221,7 +232,8 @@
   },
   "owner-batched-authorization": {
     "kind": "协议设计",
-    "topic": "钱包授权",
+    "topic": "授权",
+    "keywords": ["钱包授权"],
     "status": "实际部署协议",
     "title": "一个所有者，一份授权证明",
     "shortTitle": "按所有者批量授权",
@@ -231,7 +243,8 @@
   },
   "binding-a-mixed-opening": {
     "kind": "安全性研究",
-    "topic": "多项式承诺",
+    "topic": "证明系统",
+    "keywords": ["多项式承诺"],
     "status": "实际部署构造",
     "title": "紧凑混合打开与原始承诺的绑定",
     "shortTitle": "共享查询的来源绑定",
@@ -241,7 +254,8 @@
   },
   "pcs-implementation-trail": {
     "kind": "比较研究",
-    "topic": "多项式承诺",
+    "topic": "证明系统",
+    "keywords": ["多项式承诺"],
     "status": "经测量的原型",
     "title": "三项多项式承诺实验及其暴露的瓶颈",
     "shortTitle": "三项承诺实验",
@@ -251,7 +265,8 @@
   },
   "authstream-proof-compiler": {
     "kind": "工程研究",
-    "topic": "证明工程",
+    "topic": "证明系统",
+    "keywords": ["证明工程"],
     "status": "经测量的可行性研究",
     "title": "AuthStream：约束全区块授权工作负载",
     "shortTitle": "AuthStream 编译器",
@@ -261,7 +276,8 @@
   },
   "atomic-history-step": {
     "kind": "协议研究",
-    "topic": "共识",
+    "topic": "协议与共识",
+    "keywords": ["共识"],
     "status": "已实现的比较",
     "title": "区块为何必须与递归证明一同接受",
     "shortTitle": "原子 HistoryStep",
@@ -271,7 +287,8 @@
   },
   "utxo-incarnations": {
     "kind": "协议研究",
-    "topic": "Live State",
+    "topic": "协议与共识",
+    "keywords": ["Live State"],
     "status": "已实现的比较",
     "title": "以 UTXO 代次标识取代共识隔离期",
     "shortTitle": "UTXO 代次标识",
@@ -281,7 +298,8 @@
   },
   "merkle-fusion-negative-result": {
     "kind": "负面结果",
-    "topic": "证明工程",
+    "topic": "证明系统",
+    "keywords": ["证明工程"],
     "status": "已测量并否决",
     "title": "证明缩小 20%，速度却下降 68%",
     "shortTitle": "被否决的 Merkle 融合",
@@ -291,7 +309,8 @@
   },
   "prove-once-search-nonces": {
     "kind": "协议研究",
-    "topic": "挖矿",
+    "topic": "协议与共识",
+    "keywords": ["挖矿"],
     "status": "正式构造",
     "title": "区块只证明一次，随后搜索 nonce",
     "shortTitle": "语义区块头投影",

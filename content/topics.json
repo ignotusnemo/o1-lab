@@ -1,0 +1,118 @@
+[
+  {
+    "id": "security",
+    "labels": {
+      "en": "Security",
+      "ru": "Безопасность",
+      "zh": "安全"
+    },
+    "aliases": [
+      "Fiat–Shamir security",
+      "Fiat–Shamir 安全性",
+      "Monthly security report",
+      "Poseidon2b cryptanalysis",
+      "Poseidon2b 密码分析",
+      "Post-quantum soundness",
+      "Безопасность Fiat–Shamir",
+      "Ежемесячный отчёт по безопасности",
+      "Криптоанализ Poseidon2b",
+      "Постквантовая корректность",
+      "后量子可靠性",
+      "月度安全报告"
+    ]
+  },
+  {
+    "id": "proof-systems",
+    "labels": {
+      "en": "Proof systems",
+      "ru": "Системы доказательств",
+      "zh": "证明系统"
+    },
+    "aliases": [
+      "Binary fields",
+      "Polynomial commitments",
+      "Proof engineering",
+      "Proof systems",
+      "Recursive proving",
+      "Бинарные поля",
+      "Инженерия доказательств",
+      "Полиномиальные обязательства",
+      "Рекурсивное доказательство",
+      "Системы доказательств",
+      "二进制域",
+      "多项式承诺",
+      "证明工程",
+      "证明系统",
+      "递归证明"
+    ]
+  },
+  {
+    "id": "authorization",
+    "labels": {
+      "en": "Authorization",
+      "ru": "Авторизация",
+      "zh": "授权"
+    },
+    "aliases": [
+      "Native-asset custody",
+      "Signatureless authorization",
+      "Wallet authorization",
+      "Авторизация кошелька",
+      "钱包授权"
+    ]
+  },
+  {
+    "id": "protocol",
+    "labels": {
+      "en": "Protocol & consensus",
+      "ru": "Протокол и консенсус",
+      "zh": "协议与共识"
+    },
+    "aliases": [
+      "Capacity and consensus",
+      "Consensus",
+      "Live State",
+      "Mining",
+      "Proof-carrying State",
+      "Вместимость и консенсус",
+      "Консенсус",
+      "Майнинг",
+      "共识",
+      "容量与共识",
+      "挖矿"
+    ]
+  },
+  {
+    "id": "applications",
+    "labels": {
+      "en": "Contracts & applications",
+      "ru": "Контракты и приложения",
+      "zh": "合约与应用"
+    },
+    "aliases": [
+      "AI agents",
+      "AI 智能体",
+      "Native finance",
+      "Proof-native contracts",
+      "Proof-native контракты",
+      "ИИ-агенты",
+      "证明原生合约"
+    ]
+  },
+  {
+    "id": "decentralization",
+    "labels": {
+      "en": "Decentralization & economics",
+      "ru": "Децентрализация и экономика",
+      "zh": "去中心化与经济"
+    },
+    "aliases": [
+      "Decentralization",
+      "Network economics",
+      "Децентрализация",
+      "Экономика сети",
+      "去中心化",
+      "网络经济"
+    ]
+  }
+]

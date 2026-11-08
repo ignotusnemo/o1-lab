@@ -17,7 +17,25 @@ const [siteCssVersion, siteJsVersion, sourceCssVersion, themeJsVersion] = await 
   readFile(join(root, "assets/theme.js")).then(versionOf)
 ]);
 const baseData = JSON.parse(sourceLinks(await readFile(join(root, "content/research.json"), "utf8")));
+const topicDefinitions = JSON.parse(await readFile(join(root, "content/topics.json"), "utf8"));
+const topicsByName = new Map();
+const canonicalTopics = new Map();
+for (const topic of topicDefinitions) {
+  if (!topic.id || !Array.isArray(topic.aliases) || locales.some(locale => !topic.labels?.[locale.code])) {
+    throw new Error(`Invalid topic definition: ${topic.id}`);
+  }
+  canonicalTopics.set(topic.labels[defaultLocale.code], topic);
+  for (const name of [...Object.values(topic.labels), ...topic.aliases]) {
+    if (topicsByName.has(name) && topicsByName.get(name) !== topic) {
+      throw new Error(`Ambiguous topic name: ${name}`);
+    }
+    topicsByName.set(name, topic);
+  }
+}
 for (const item of baseData) {
+  if (!canonicalTopics.has(item.topic)) {
+    throw new Error(`Unknown topic for ${item.slug}: ${item.topic}. Choose a category from content/topics.json.`);
+  }
   if (item.locales && (!Array.isArray(item.locales) || !item.locales.includes(defaultLocale.code)
     || new Set(item.locales).size !== item.locales.length
     || item.locales.some((code) => !locales.some((locale) => locale.code === code)))) {
@@ -41,6 +59,10 @@ async function loadArticles(locale) {
 
   const articles = await Promise.all(available.map(async (base) => {
     const overlay = overlays?.[base.slug];
+    const expectedTopic = canonicalTopics.get(base.topic).labels[locale.code];
+    if ((overlay?.topic ?? base.topic) !== expectedTopic) {
+      throw new Error(`${locale.code}/${base.slug}: expected topic ${expectedTopic}`);
+    }
     if (overlay?.evidence?.length !== undefined && overlay.evidence.length !== base.evidence.length) {
       throw new Error(`${locale.code}/${base.slug}: evidence translation count does not match source`);
     }
@@ -728,11 +750,12 @@ function archivePage(locale, newestFirst) {
   const t = ui[locale.code];
   const items = [...newestFirst].sort((a,b)=>b.date.localeCompare(a.date));
   const topics = [...new Set(items.map(item=>item.topic))].sort((a,b)=>a.localeCompare(b,locale.dateLocale));
+  const aliases = Object.fromEntries([...topicsByName].map(([name, topic]) => [name, topic.labels[locale.code]]));
   const body = `<main id="content" class="archive-page">
     <header class="journal-intro"><div><p class="eyebrow">PARANO1D LAB / ${esc(t.archiveNav)}</p><h1>${esc(t.allResearch)}</h1></div><p class="subtitle">${esc(t.archiveLead)}</p></header>
     <form class="archive-controls" role="search" data-archive-controls>
       <label class="archive-search"><span>${esc(t.search)}</span><span class="search-field">${icon("search")}<input type="search" name="q" placeholder="${esc(t.searchPlaceholder)}" autocomplete="off" data-archive-search></span></label>
-      <label><span>${esc(t.browseTopics)}</span><select name="topic" data-topic-select><option value="all">${esc(t.allTopics)}</option>${topics.map(topic=>`<option value="${esc(topic)}">${esc(topic)}</option>`).join("")}</select></label>
+      <label><span>${esc(t.browseTopics)}</span><select name="topic" data-topic-select data-topic-aliases="${esc(JSON.stringify(aliases))}"><option value="all">${esc(t.allTopics)}</option>${topics.map(topic=>`<option value="${esc(topic)}">${esc(topic)}</option>`).join("")}</select></label>
       <label><span>${esc(t.sortBy)}</span><select name="sort" data-sort-select><option value="newest">${esc(t.newestFirst)}</option><option value="oldest">${esc(t.oldestFirst)}</option></select></label>
     </form>
     <section id="research-results" class="archive-section">

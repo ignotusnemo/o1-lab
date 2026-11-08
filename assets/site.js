@@ -143,6 +143,7 @@ const archiveControls = document.querySelector('[data-archive-controls]');
 if (archiveControls) {
   const search = archiveControls.querySelector('[data-archive-search]');
   const topic = archiveControls.querySelector('[data-topic-select]');
+  const topicAliases = JSON.parse(topic.dataset.topicAliases || '{}');
   const sort = archiveControls.querySelector('[data-sort-select]');
   const list = document.querySelector('.archive-list');
   const rows = [...list.querySelectorAll('.archive-row')];
@@ -153,7 +154,8 @@ if (archiveControls) {
   const fromLocation = () => {
     const params = new URL(location.href).searchParams;
     search.value = params.get('q') || '';
-    const selected = params.get('topic') || 'all';
+    const requested = params.get('topic') || 'all';
+    const selected = Object.hasOwn(topicAliases, requested) ? topicAliases[requested] : requested;
     topic.value = [...topic.options].some(item => item.value === selected) ? selected : 'all';
     sort.value = params.get('sort') === 'oldest' ? 'oldest' : 'newest';
   };
@@ -190,7 +192,7 @@ if (archiveControls) {
     search.value = ''; topic.value = 'all'; sort.value = 'newest'; render('push'); search.focus();
   });
   window.addEventListener('popstate', () => { fromLocation(); render(); });
-  fromLocation(); render();
+  fromLocation(); render('replace');
 }
 
 const themeButton = document.querySelector('[data-theme-toggle]');
