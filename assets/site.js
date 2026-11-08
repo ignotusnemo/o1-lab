@@ -65,6 +65,7 @@ const languageSwitchers = [...document.querySelectorAll(".language-switcher")];
 navToggle?.addEventListener("click", () => {
   const open = nav?.classList.toggle("is-open") ?? false;
   navToggle.setAttribute("aria-expanded", String(open));
+  if (open) nav?.querySelector("a,button")?.focus();
 });
 
 document.addEventListener("click", (event) => {
@@ -138,29 +139,160 @@ if (homeResearchGrid && homeResearchPager) {
   renderPage(pageFromLocation());
 }
 
-const filters = [...document.querySelectorAll("[data-filter]")];
-const rows = [...document.querySelectorAll(".archive-row[data-topic]")];
-const empty = document.querySelector(".filter-empty");
-
-for (const filter of filters) {
-  filter.addEventListener("click", () => {
-    const value = filter.dataset.filter;
-    for (const button of filters) button.classList.toggle("is-active", button === filter);
+const archiveControls = document.querySelector('[data-archive-controls]');
+if (archiveControls) {
+  const search = archiveControls.querySelector('[data-archive-search]');
+  const topic = archiveControls.querySelector('[data-topic-select]');
+  const sort = archiveControls.querySelector('[data-sort-select]');
+  const list = document.querySelector('.archive-list');
+  const rows = [...list.querySelectorAll('.archive-row')];
+  const empty = document.querySelector('.filter-empty');
+  const count = document.querySelector('[data-results-count]');
+  const heading = document.querySelector('[data-active-topic]');
+  const normalize = value => String(value).normalize('NFKD').toLocaleLowerCase().replace(/[\u0300-\u036f]/g, '');
+  const fromLocation = () => {
+    const params = new URL(location.href).searchParams;
+    search.value = params.get('q') || '';
+    const selected = params.get('topic') || 'all';
+    topic.value = [...topic.options].some(item => item.value === selected) ? selected : 'all';
+    sort.value = params.get('sort') === 'oldest' ? 'oldest' : 'newest';
+  };
+  const render = (historyMode) => {
+    const query = normalize(search.value.trim());
     let visible = 0;
     for (const row of rows) {
-      const show = value === "all" || row.dataset.topic === value;
-      row.hidden = !show;
-      if (show) visible += 1;
+      const matches = (topic.value === 'all' || row.dataset.topic === topic.value) && normalize(row.dataset.search).includes(query);
+      row.hidden = !matches;
+      if (matches) visible++;
     }
-    if (empty) empty.hidden = visible !== 0;
+    [...rows].sort((a,b) => sort.value === 'oldest' ? a.dataset.date.localeCompare(b.dataset.date) : b.dataset.date.localeCompare(a.dataset.date)).forEach(row => list.append(row));
+    count.textContent = String(visible);
+    heading.textContent = topic.value === 'all' ? heading.dataset.allTopics : topic.value;
+    empty.hidden = visible !== 0;
+    if (historyMode) {
+      const url = new URL(location.href);
+      if (search.value.trim()) url.searchParams.set('q', search.value.trim()); else url.searchParams.delete('q');
+      if (topic.value !== 'all') url.searchParams.set('topic', topic.value); else url.searchParams.delete('topic');
+      if (sort.value !== 'newest') url.searchParams.set('sort', sort.value); else url.searchParams.delete('sort');
+      history[historyMode === 'push' ? 'pushState' : 'replaceState']({}, '', url);
+    }
+  };
+  search.addEventListener('input', () => render('replace'));
+  topic.addEventListener('change', () => render('push'));
+  sort.addEventListener('change', () => render('push'));
+  archiveControls.addEventListener('submit', event => { event.preventDefault(); render('push'); });
+  document.querySelectorAll('[data-filter]').forEach(link => link.addEventListener('click', event => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault(); topic.value = link.dataset.filter; render('push');
+    archiveControls.scrollIntoView({block:'start'});
+  }));
+  document.querySelector('[data-reset-filters]').addEventListener('click', () => {
+    search.value = ''; topic.value = 'all'; sort.value = 'newest'; render('push'); search.focus();
   });
+  window.addEventListener('popstate', () => { fromLocation(); render(); });
+  fromLocation(); render();
+}
+
+const themeButton = document.querySelector('[data-theme-toggle]');
+const updateThemeButton = () => {
+  const dark = document.documentElement.dataset.theme === 'dark';
+  themeButton?.setAttribute('aria-pressed', String(dark));
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#101216" : "#ffffff");
+  const label = dark ? themeButton?.dataset.lightLabel : themeButton?.dataset.darkLabel;
+  if (label) { themeButton.setAttribute('aria-label', label); themeButton.title = label; }
+};
+themeButton?.addEventListener('click', () => {
+  const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = theme;
+  try { localStorage.setItem('parano1d-lab-theme', theme); } catch {}
+  updateThemeButton();
+});
+updateThemeButton();
+
+const searchDialog = document.querySelector('#research-search');
+if (searchDialog) {
+  const input = searchDialog.querySelector('#global-search');
+  const results = searchDialog.querySelector('[data-search-results]');
+  const status = searchDialog.querySelector('[data-search-status]');
+  const records = JSON.parse(searchDialog.querySelector('#research-search-data').textContent);
+  const normalize = value => String(value).normalize('NFKD').toLocaleLowerCase().replace(/[\u0300-\u036f]/g, '');
+  let returnFocus = null;
+  let previousOverflow = '';
+  const render = () => {
+    const query = normalize(input.value.trim());
+    const matches = records.filter(item => normalize([item.title,item.topic,item.dek,...item.keywords].join(' ')).includes(query));
+    results.replaceChildren();
+    for (const item of matches) {
+      const li = document.createElement('li'); const link = document.createElement('a');
+      link.href = item.href;
+      const title = document.createElement('strong'); title.textContent = item.title;
+      const meta = document.createElement('small'); meta.textContent = `${item.topic} · ${item.kind}`;
+      link.append(title,meta); li.append(link); results.append(li);
+    }
+    status.textContent = `${searchDialog.querySelector('[data-search-count]').textContent}: ${matches.length}`;
+    if (!matches.length) {
+      const li = document.createElement('li'); li.className = 'search-no-results';
+      li.textContent = searchDialog.querySelector('[data-search-empty]').textContent; results.append(li);
+    }
+  };
+  const open = (opener) => {
+    if (searchDialog.open) return;
+    if (sourceDialog.open) sourceDialog.close();
+    returnFocus = opener || document.activeElement;
+    previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    nav?.classList.remove('is-open'); navToggle?.setAttribute('aria-expanded','false');
+    languageSwitchers.forEach(switcher => switcher.open = false);
+    render(); searchDialog.showModal(); input.focus(); input.select();
+  };
+  document.querySelectorAll('[data-search-open]').forEach(button => button.addEventListener('click', () => open(button)));
+  searchDialog.querySelector('[data-search-close]').addEventListener('click', () => searchDialog.close());
+  input.addEventListener('input', render);
+  searchDialog.addEventListener('click', event => { if (event.target === searchDialog) searchDialog.close(); });
+  searchDialog.addEventListener('close', () => { document.body.style.overflow = previousOverflow; returnFocus?.focus({preventScroll:true}); });
+  searchDialog.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      searchDialog.close();
+      return;
+    }
+    const links = [...results.querySelectorAll('a')];
+    const current = links.indexOf(document.activeElement);
+    if (event.key === 'ArrowDown' && links.length) { event.preventDefault(); links[(current+1)%links.length].focus(); }
+    if (event.key === 'ArrowUp' && links.length) { event.preventDefault(); if (current <= 0) input.focus(); else links[current-1].focus(); }
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === '/' && !event.ctrlKey && !event.metaKey && !event.altKey && !/INPUT|TEXTAREA|SELECT/.test(event.target.tagName) && !event.target.isContentEditable) {
+      event.preventDefault(); open(document.querySelector('[data-search-open]'));
+    }
+  });
+}
+
+const topicMenus = [...document.querySelectorAll('.topic-menu')];
+document.addEventListener('click', event => {
+  for (const menu of topicMenus) if (!menu.contains(event.target)) menu.open = false;
+});
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape') return;
+  topicMenus.forEach(menu => menu.open = false);
+  languageSwitchers.forEach(menu => menu.open = false);
+  if (nav?.classList.contains('is-open')) { nav.classList.remove('is-open'); navToggle?.setAttribute('aria-expanded','false'); navToggle?.focus(); }
+});
+const tocPanel = document.querySelector('.toc-panel');
+if (tocPanel) {
+  const wide = matchMedia('(min-width: 1280px)');
+  const layout = () => { tocPanel.open = wide.matches; };
+  wide.addEventListener('change', layout); layout();
+  tocPanel.querySelectorAll('a').forEach(link => link.addEventListener('click', () => { if (!wide.matches) tocPanel.open = false; }));
 }
 
 const progress = document.querySelector(".reading-progress span");
 if (progress) {
   const updateProgress = () => {
-    const max = document.documentElement.scrollHeight - innerHeight;
-    const ratio = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+    const article = document.querySelector(".article-body");
+    const top = article.getBoundingClientRect().top + scrollY;
+    const max = article.offsetHeight - innerHeight;
+    const ratio = max > 0 ? Math.min(1, Math.max(0, (scrollY - top + 90) / max)) : 0;
     progress.style.width = `${ratio * 100}%`;
   };
   addEventListener("scroll", updateProgress, { passive: true });
@@ -170,7 +302,7 @@ if (progress) {
 
 const tocLinks = [...document.querySelectorAll(".article-toc a")];
 if (tocLinks.length) {
-  const headings = tocLinks.map((link) => document.querySelector(link.hash)).filter(Boolean);
+  const headings = tocLinks.map((link) => document.getElementById(decodeURIComponent(link.hash.slice(1)))).filter(Boolean);
   const observer = new IntersectionObserver((entries) => {
     const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
     if (!visible) return;
@@ -240,4 +372,8 @@ for (const button of copyButtons) {
       if (label) label.textContent = failureLabel;
     }
   });
+}
+
+for (const button of document.querySelectorAll("[data-print]")) {
+  button.addEventListener("click", () => window.print());
 }

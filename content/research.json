@@ -1,5 +1,85 @@
 [
   {
+    "slug": "native-asset-vaults",
+    "locales": [
+      "en"
+    ],
+    "date": "2026-11-08",
+    "kind": "Protocol research",
+    "topic": "Native-asset custody",
+    "status": "Public testnet experiments",
+    "title": "Post-Quantum Authorization for Native-Asset Vaults",
+    "shortTitle": "Native-asset vaults · Parano1dX",
+    "dek": "EVM and Solana vaults controlled by a Parano1d secret. Public withdrawals complete on Base Sepolia in 14.46 seconds and Solana Devnet v1 in 18.08 seconds under the recorded experiment conditions.",
+    "abstract": "A Parano1d secret controls native-asset vaults through request-bound proofs of authority. Public Base Sepolia and Solana Devnet experiments complete deposits, staged verification and atomic withdrawals under ordinary transaction limits. Base uses ten authorization transactions with L2 receipt confirmation in 14.46 seconds. Solana v1 uses 88 transactions with confirmation in 18.08 seconds and recovers from packet loss and reordering in 22.34 seconds. Domain-separated derivation creates each network's authority branch. Each vault pins a public commitment and retains a persistent nonce. A freshly randomized proof authorizes the request, while a relayer delivers the verification steps. The proof backend uses hiding FRI over a small prime field with SHA-256 and Keccak commitments. Authorization safety follows under its knowledge, privacy, derivation and request-binding conditions, together with correct host-chain execution. Quantitative quantum chosen-request security and repeated-use privacy for this external-vault profile are cryptographic research targets. Source code, signed transactions, public receipt cross-checks and mainnet fee quotes accompany the experiments.",
+    "authors": [
+      "Ignotus Nemo"
+    ],
+    "art": "rightsv2",
+    "ogWidth": 1200,
+    "ogHeight": 630,
+    "ogAlt": "One Parano1d secret derives separate EVM and Solana authority commitments and deterministic native vault addresses. The secret stays inside the wallet.",
+    "keywords": [
+      "Parano1dX",
+      "Parano1d secret",
+      "post-quantum authorization",
+      "signatureless authorization",
+      "native-asset vaults",
+      "smart accounts",
+      "Base",
+      "EVM",
+      "Solana v1",
+      "program-derived addresses",
+      "KoalaBear",
+      "FRI",
+      "Poseidon2",
+      "HKDF",
+      "receipt cross-checks"
+    ],
+    "evidence": [
+      {
+        "label": "Full research article (PDF)",
+        "href": "/papers/parano1dx-native-vaults.pdf",
+        "type": "PDF"
+      },
+      {
+        "label": "Parano1dX source code and reproduction",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1dx",
+        "type": "Code"
+      },
+      {
+        "label": "Protocol and exact security conditions",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1dx/src/branch/main/experiments/native-vault/PROTOCOL.txt",
+        "type": "Architecture"
+      },
+      {
+        "label": "Reproduce the Base and Solana experiments",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1dx/src/branch/main/experiments/native-vault/README.txt",
+        "type": "Artifact"
+      },
+      {
+        "label": "Public measurements and automated receipt cross-checks",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1dx/src/branch/main/experiments/native-vault/results/public-network-summary.json",
+        "type": "Data"
+      },
+      {
+        "label": "Base Sepolia transaction journal",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1dx/src/branch/main/experiments/native-vault/results/base-sepolia/spare-public-normal-1/transaction-journal.json",
+        "type": "Data"
+      },
+      {
+        "label": "Solana Devnet v1 withdrawals and captured results",
+        "href": "https://git.parano1d.org/ignotusnemo/parano1dx/src/branch/main/experiments/native-vault/results/solana-devnet/summary.json",
+        "type": "Data"
+      },
+      {
+        "label": "Signatureless authorization model and interface",
+        "href": "https://zenodo.org/records/23778742",
+        "type": "Paper"
+      }
+    ]
+  },
+  {
     "slug": "live-agents",
     "date": "2026-09-30",
     "kind": "Application research",

@@ -1,7 +1,7 @@
 import { readFile, readdir, stat } from "node:fs/promises";
 import { join, dirname, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import { locales } from "./i18n.mjs";
+import { locales, localesFor } from "./i18n.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const ignored = new Set([".git", "content", "scripts", "node_modules"]);
@@ -22,10 +22,9 @@ const htmlFiles = files.filter((path) => path.endsWith(".html"));
 const titles = new Map();
 const errors = [];
 const siteUrl = "https://lab.parano1d.org";
-const expectedHreflangs = new Set([...locales.map((locale) => locale.hreflang), "x-default"]);
 const articleData = JSON.parse(await readFile(join(root, "content/research.json"), "utf8"));
 const redirects = new Map(articleData.flatMap((item) =>
-  (item.aliases ?? []).flatMap((alias) => locales.map((locale) => {
+  (item.aliases ?? []).flatMap((alias) => localesFor(item).map((locale) => {
     const prefix = locale.code === "en" ? "" : `/${locale.code}`;
     return [`${prefix}/research/${alias}/`, `${siteUrl}${prefix}/research/${item.slug}/`];
   }))
@@ -75,6 +74,8 @@ for (const file of htmlFiles) {
     if (!/<meta name="robots" content="noindex,follow">/.test(html)) errors.push(`${file}: redirect must be noindex`);
     if (alternateLinks.length || /<meta property="og:|<meta name="twitter:|application\/ld\+json/.test(html)) errors.push(`${file}: redirect exposes indexable metadata`);
   } else {
+    const article = articleData.find((item) => path.endsWith(`/research/${item.slug}/`));
+    const expectedHreflangs = new Set([...localesFor(article).map((target) => target.hreflang), "x-default"]);
     if (canonical !== `${siteUrl}${path}`) errors.push(`${file}: invalid canonical ${canonical ?? "none"}`);
     for (const hreflang of expectedHreflangs) {
       if (!alternateLanguages.has(hreflang)) errors.push(`${file}: missing ${hreflang} alternate`);
@@ -107,8 +108,12 @@ for (const file of htmlFiles) {
   const { locale } = pageIdentity(file);
   pagesPerLocale.set(locale.code, pagesPerLocale.get(locale.code) + 1);
 }
-if (new Set(pagesPerLocale.values()).size !== 1) {
-  errors.push(`localized page counts differ: ${[...pagesPerLocale].map(([code, count]) => `${code}=${count}`).join(", ")}`);
+for (const locale of locales) {
+  const expected = 3 + articleData.filter((item) => localesFor(item).includes(locale))
+    .reduce((total, item) => total + 1 + (item.aliases?.length ?? 0), 0);
+  if (pagesPerLocale.get(locale.code) !== expected) {
+    errors.push(`unexpected ${locale.code} page count: expected ${expected}, found ${pagesPerLocale.get(locale.code)}`);
+  }
 }
 
 const sitemap = await readFile(join(root, "sitemap.xml"), "utf8");

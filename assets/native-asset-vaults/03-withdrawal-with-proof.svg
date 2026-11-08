@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1090" viewBox="0 0 1600 1090" role="img" aria-label="A withdrawal authorized by a proof">
+<title>A withdrawal authorized by a proof</title>
+<rect width="100%" height="100%" fill="#f5f7fc"/>
+<text x="50" y="35" fill="#14243b" font-family="DejaVu Sans" font-size="38" font-weight="bold" dominant-baseline="text-before-edge">3  A withdrawal authorized by a proof</text>
+<text x="50" y="96" fill="#54657b" font-family="DejaVu Sans" font-size="24" font-weight="normal" dominant-baseline="text-before-edge">Authorization is checked on the chain that holds the funds.</text>
+<rect x="50" y="155" width="1500" height="115" rx="20" fill="#edf1fd" stroke="#b3c2ec" stroke-width="2"/>
+<text x="80" y="177" fill="#14243b" font-family="DejaVu Sans" font-size="25" font-weight="normal" dominant-baseline="text-before-edge">Request R: protocol, network, vault, verifier parameters, nonce, recipient,</text>
+<text x="80" y="222" fill="#14243b" font-family="DejaVu Sans" font-size="25" font-weight="normal" dominant-baseline="text-before-edge">native asset, amount, expiry and exact fee terms.</text>
+<rect x="60" y="335" width="415" height="275" rx="20" fill="#e9f6f3" stroke="#91cbbd" stroke-width="2"/>
+<text x="129.78125" y="360" fill="#14243b" font-family="DejaVu Sans" font-size="30" font-weight="bold" dominant-baseline="text-before-edge">Parano1d wallet</text>
+<text x="90" y="421" fill="#14243b" font-family="DejaVu Sans" font-size="24" font-weight="normal" dominant-baseline="text-before-edge">1. Constructs request R</text>
+<text x="90" y="468" fill="#14243b" font-family="DejaVu Sans" font-size="24" font-weight="normal" dominant-baseline="text-before-edge">2. Derives vault secret</text>
+<text x="90" y="515" fill="#14243b" font-family="DejaVu Sans" font-size="24" font-weight="normal" dominant-baseline="text-before-edge">3. Produces proof</text>
+<text x="90" y="562" fill="#17654f" font-family="DejaVu Sans" font-size="23" font-weight="bold" dominant-baseline="text-before-edge">Secret stays here</text>
+<rect x="590" y="375" width="335" height="200" rx="20" fill="white" stroke="#b6c3d5" stroke-width="2"/>
+<text x="693.125" y="400" fill="#14243b" font-family="DejaVu Sans" font-size="30" font-weight="bold" dominant-baseline="text-before-edge">Relayer</text>
+<text x="642.5390625" y="455" fill="#14243b" font-family="DejaVu Sans" font-size="25" font-weight="normal" dominant-baseline="text-before-edge">Submits R + proof</text>
+<text x="652.5234375" y="507" fill="#54657b" font-family="DejaVu Sans" font-size="23" font-weight="normal" dominant-baseline="text-before-edge">Pays network fees</text>
+<polyline points="475,475 590,475" fill="none" stroke="#60738c" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="590,475 575.5928463623571,481.9594485457797 575.5928463623571,468.0405514542203" fill="#60738c"/>
+<polyline points="925,475 1030,475" fill="none" stroke="#60738c" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1030,475 1015.5928463623571,481.9594485457797 1015.5928463623571,468.0405514542203" fill="#60738c"/>
+<rect x="1030" y="330" width="510" height="405" rx="20" fill="white" stroke="#9cabd1" stroke-width="2"/>
+<text x="1089.34375" y="355" fill="#14243b" font-family="DejaVu Sans" font-size="24" font-weight="bold" dominant-baseline="text-before-edge">Parano1d contract / program</text>
+<text x="1060" y="417" fill="#14243b" font-family="DejaVu Sans" font-size="24" font-weight="normal" dominant-baseline="text-before-edge">1. Reads C from vault state</text>
+<text x="1060" y="466" fill="#14243b" font-family="DejaVu Sans" font-size="24" font-weight="normal" dominant-baseline="text-before-edge">2. Checks R and proof</text>
+<text x="1060" y="515" fill="#14243b" font-family="DejaVu Sans" font-size="24" font-weight="normal" dominant-baseline="text-before-edge">3. Checks nonce and expiry</text>
+<text x="1060" y="564" fill="#14243b" font-family="DejaVu Sans" font-size="24" font-weight="normal" dominant-baseline="text-before-edge">4. Consumes the nonce</text>
+<text x="1060" y="613" fill="#14243b" font-family="DejaVu Sans" font-size="24" font-weight="normal" dominant-baseline="text-before-edge">5. Transfers native assets</text>
+<text x="1060" y="672" fill="#38528c" font-family="DejaVu Sans" font-size="23" font-weight="bold" dominant-baseline="text-before-edge">One atomic final operation</text>
+<polyline points="1285,735 1285,820" fill="none" stroke="#60738c" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1285,820 1278.0405514542203,805.5928463623571 1291.9594485457797,805.5928463623571" fill="#60738c"/>
+<rect x="1030" y="820" width="510" height="105" rx="20" fill="#e9f6f3" stroke="#91cbbd" stroke-width="2"/>
+<text x="1066.3125" y="845" fill="#14243b" font-family="DejaVu Sans" font-size="24" font-weight="bold" dominant-baseline="text-before-edge">Recipient receives native assets</text>
+<text x="60" y="690" fill="#54657b" font-family="DejaVu Sans" font-size="24" font-weight="normal" dominant-baseline="text-before-edge">Only the public request</text>
+<text x="60" y="731" fill="#54657b" font-family="DejaVu Sans" font-size="24" font-weight="normal" dominant-baseline="text-before-edge">and proof leave the wallet.</text>
+<text x="590" y="650" fill="#54657b" font-family="DejaVu Sans" font-size="22" font-weight="normal" dominant-baseline="text-before-edge">The relay signature</text>
+<text x="590" y="689" fill="#54657b" font-family="DejaVu Sans" font-size="22" font-weight="normal" dominant-baseline="text-before-edge">delivers a transaction.</text>
+<text x="590" y="728" fill="#54657b" font-family="DejaVu Sans" font-size="22" font-weight="normal" dominant-baseline="text-before-edge">The proof authorizes</text>
+<text x="590" y="767" fill="#54657b" font-family="DejaVu Sans" font-size="22" font-weight="normal" dominant-baseline="text-before-edge">the vault withdrawal.</text>
+<rect x="50" y="986" width="1500" height="64" rx="20" fill="#edf1fd" stroke="#b3c2ec" stroke-width="2"/>
+<text x="304.5625" y="1005" fill="#14243b" font-family="DejaVu Sans" font-size="25" font-weight="bold" dominant-baseline="text-before-edge">A different recipient, amount or context requires a new authorization.</text>
+</svg>

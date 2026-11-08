@@ -30,6 +30,10 @@ export const locales = [
 
 export const defaultLocale = locales[0];
 
+export function localesFor(article) {
+  return article?.locales ? locales.filter((locale) => article.locales.includes(locale.code)) : locales;
+}
+
 export function pathFor(locale, basePath) {
   const prefix = locale.code === defaultLocale.code ? "" : `/${locale.code}`;
   if (basePath === "/") return prefix ? `${prefix}/` : "/";
@@ -41,12 +45,18 @@ export const ui = {
     siteTitle: "Parano1d Lab Research",
     siteDescription: "Papers, protocol work, reproducible engineering studies and results from Parano1d Lab, the research group behind Parano1d.",
     keywords: "Parano1d, Parano1d Lab, zero-knowledge proofs, proof systems, cryptography, recursive proofs, binary fields, polynomial commitments",
+    printPdf: "Print / Save PDF",
+    originalPdf: "Original paper (PDF)",
     skip: "Skip to content",
     brandHome: "ParanO(1)d Lab home",
     brandSection: "Research",
     navLabel: "Primary navigation",
     navLatest: "Latest",
     navResearch: "All research",
+    browseResearch: "Browse research",
+    browseTopics: "Topics",
+    allTopics: "All topics",
+    articleCount: "Articles",
     navDocs: "Docs",
     navSource: "Source",
     language: "Language",
@@ -62,7 +72,7 @@ export const ui = {
     homeEyebrow: "Parano1d Lab · Technical research",
     homeTitle: "Research for proof-native systems",
     homeLead: "Cryptographic protocols, verifiable-state architectures and research results produced during the development of Parano1d.",
-    latestResearch: "Latest research",
+    researchHighlights: "Research highlights",
     openArchive: "Archive",
     fieldCommit: "commit",
     fieldReduce: "reduce",
@@ -115,12 +125,18 @@ export const ui = {
     siteTitle: "Исследования Parano1d Lab",
     siteDescription: "Статьи, протокольные разработки, воспроизводимые инженерные исследования и результаты Parano1d Lab — исследовательской группы, стоящей за Parano1d.",
     keywords: "Parano1d, Parano1d Lab, доказательства с нулевым разглашением, системы доказательств, криптография, рекурсивные доказательства, бинарные поля, полиномиальные обязательства",
+    printPdf: "Печать / PDF",
+    originalPdf: "Оригинальная статья (PDF)",
     skip: "К содержанию",
     brandHome: "Главная ParanO(1)d Lab",
     brandSection: "Исследования",
     navLabel: "Основная навигация",
     navLatest: "Новое",
     navResearch: "Все исследования",
+    browseResearch: "Навигация по исследованиям",
+    browseTopics: "Темы",
+    allTopics: "Все темы",
+    articleCount: "Статей",
     navDocs: "Документация",
     navSource: "Исходники",
     language: "Язык",
@@ -136,7 +152,7 @@ export const ui = {
     homeEyebrow: "Parano1d Lab · Технические исследования",
     homeTitle: "Исследования proof-native систем",
     homeLead: "Криптографические протоколы, архитектуры проверяемого состояния и результаты исследований, полученные при разработке Parano1d.",
-    latestResearch: "Новые исследования",
+    researchHighlights: "Избранные исследования",
     openArchive: "Архив",
     fieldCommit: "зафиксировать",
     fieldReduce: "свести",
@@ -191,12 +207,18 @@ export const ui = {
     siteTitle: "Parano1d Lab 研究",
     siteDescription: "Parano1d Lab 发布论文、协议工作、可复现的工程研究及其成果；Parano1d Lab 是 Parano1d 背后的研究团队。",
     keywords: "Parano1d, Parano1d Lab, 零知识证明, 证明系统, 密码学, 递归证明, 二进制域, 多项式承诺",
+    printPdf: "打印 / 保存 PDF",
+    originalPdf: "原始论文 (PDF)",
     skip: "跳到正文",
     brandHome: "ParanO(1)d Lab 首页",
     brandSection: "研究",
     navLabel: "主导航",
     navLatest: "最新",
     navResearch: "全部研究",
+    browseResearch: "浏览研究",
+    browseTopics: "主题",
+    allTopics: "全部主题",
+    articleCount: "文章数",
     navDocs: "文档",
     navSource: "源码",
     language: "语言",
@@ -212,7 +234,7 @@ export const ui = {
     homeEyebrow: "Parano1d Lab · 技术研究",
     homeTitle: "面向 proof-native 系统的研究",
     homeLead: "密码学协议、可验证状态架构，以及 Parano1d 开发过程中取得的研究成果。",
-    latestResearch: "最新研究",
+    researchHighlights: "研究精选",
     openArchive: "归档",
     fieldCommit: "承诺",
     fieldReduce: "归约",
@@ -264,3 +286,22 @@ export const ui = {
     }
   }
 };
+
+Object.assign(ui.en, {
+  journal: "Journal", journalTitle: "Research journal", archiveNav: "All articles", latestResearch: "Latest research",
+  search: "Search research", searchPlaceholder: "Title, topic, or keyword", searchHelp: "↑ ↓ Navigate · Enter Open · Esc Close",
+  menu: "Menu", close: "Close", lightMode: "Use light theme", darkMode: "Use dark theme",
+  sortBy: "Sort", newestFirst: "Newest first", oldestFirst: "Oldest first", resetFilters: "Reset filters"
+});
+Object.assign(ui.ru, {
+  journal: "Журнал", journalTitle: "Журнал исследований", archiveNav: "Все статьи", latestResearch: "Новые исследования",
+  search: "Поиск по статьям", searchPlaceholder: "Название, тема или ключевое слово", searchHelp: "↑ ↓ Выбрать · Enter Открыть · Esc Закрыть",
+  menu: "Меню", close: "Закрыть", lightMode: "Светлая тема", darkMode: "Тёмная тема",
+  sortBy: "Порядок", newestFirst: "Сначала новые", oldestFirst: "Сначала старые", resetFilters: "Сбросить фильтры"
+});
+Object.assign(ui.zh, {
+  journal: "研究期刊", journalTitle: "研究期刊", archiveNav: "全部文章", latestResearch: "最新研究",
+  search: "搜索研究", searchPlaceholder: "标题、主题或关键词", searchHelp: "↑ ↓ 选择 · Enter 打开 · Esc 关闭",
+  menu: "菜单", close: "关闭", lightMode: "切换浅色主题", darkMode: "切换深色主题",
+  sortBy: "排序", newestFirst: "最新优先", oldestFirst: "最早优先", resetFilters: "重置筛选"
+});

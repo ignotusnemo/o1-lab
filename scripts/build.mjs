@@ -4,33 +4,42 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import katex from "katex";
 import { artDiagrams } from "./art.mjs";
-import { defaultLocale, locales, pathFor, ui } from "./i18n.mjs";
+import { defaultLocale, locales, localesFor, pathFor, ui } from "./i18n.mjs";
 import { sourceLinks } from "./source-links.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const siteUrl = "https://lab.parano1d.org";
 const versionOf = (contents) => createHash("sha256").update(contents).digest("hex").slice(0, 12);
-const [siteCssVersion, siteJsVersion, sourceCssVersion] = await Promise.all([
+const [siteCssVersion, siteJsVersion, sourceCssVersion, themeJsVersion] = await Promise.all([
   readFile(join(root, "assets/site.css")).then(versionOf),
   readFile(join(root, "assets/site.js")).then(versionOf),
-  readFile(join(root, "assets/source-dialog.css")).then(versionOf)
+  readFile(join(root, "assets/source-dialog.css")).then(versionOf),
+  readFile(join(root, "assets/theme.js")).then(versionOf)
 ]);
 const baseData = JSON.parse(sourceLinks(await readFile(join(root, "content/research.json"), "utf8")));
+for (const item of baseData) {
+  if (item.locales && (!Array.isArray(item.locales) || !item.locales.includes(defaultLocale.code)
+    || new Set(item.locales).size !== item.locales.length
+    || item.locales.some((code) => !locales.some((locale) => locale.code === code)))) {
+    throw new Error(`Invalid article locales: ${item.slug}`);
+  }
+}
 
 async function loadArticles(locale) {
+  const available = baseData.filter((item) => localesFor(item).includes(locale));
   const overlays = locale.code === defaultLocale.code
     ? null
     : JSON.parse(await readFile(join(root, `content/i18n/${locale.code}/research.json`), "utf8"));
 
   if (overlays) {
-    const missing = baseData.map((item) => item.slug).filter((slug) => !overlays[slug]);
-    const unknown = Object.keys(overlays).filter((slug) => !baseData.some((item) => item.slug === slug));
+    const missing = available.map((item) => item.slug).filter((slug) => !overlays[slug]);
+    const unknown = Object.keys(overlays).filter((slug) => !available.some((item) => item.slug === slug));
     if (missing.length || unknown.length) {
       throw new Error(`Invalid ${locale.code} research metadata: missing=[${missing.join(", ")}], unknown=[${unknown.join(", ")}]`);
     }
   }
 
-  const articles = await Promise.all(baseData.map(async (base) => {
+  const articles = await Promise.all(available.map(async (base) => {
     const overlay = overlays?.[base.slug];
     if (overlay?.evidence?.length !== undefined && overlay.evidence.length !== base.evidence.length) {
       throw new Error(`${locale.code}/${base.slug}: evidence translation count does not match source`);
@@ -467,44 +476,61 @@ function articleArtMarkup(item, compact = false) {
 
 function languageSwitcher(locale, basePath) {
   const t = ui[locale.code];
-  return `<details class="language-switcher"><summary aria-label="${esc(t.languageMenu)}"><span>${esc(locale.shortLabel)}</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="${esc(t.language)}">${locales.map((target) => `<a href="${pathFor(target, basePath)}" lang="${target.htmlLang}" hreflang="${target.hreflang}"${target.code === locale.code ? ' aria-current="true"' : ""}><span>${esc(target.shortLabel)}</span><strong>${esc(target.label)}</strong></a>`).join("")}</div></details>`;
+  const article = baseData.find((item) => basePath === `/research/${item.slug}/`);
+  return `<details class="language-switcher"><summary aria-label="${esc(t.languageMenu)}"><span>${esc(locale.shortLabel)}</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><div class="language-menu" aria-label="${esc(t.language)}">${locales.map((target) => {
+    const available = localesFor(article).includes(target);
+    const href = pathFor(target, available ? basePath : "/research/");
+    const label = available ? target.label : `${target.label} · ${ui[target.code].footerArchive}`;
+    return `<a href="${href}" lang="${target.htmlLang}" hreflang="${target.hreflang}"${target.code === locale.code ? ' aria-current="true"' : ""}><span>${esc(target.shortLabel)}</span><strong>${esc(label)}</strong></a>`;
+  }).join("")}</div></details>`;
+}
+
+function icon(name) {
+  const paths = {
+    search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/>',
+    menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+    sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/>',
+    moon: '<path d="M20.5 13.4A8.6 8.6 0 0 1 10.6 3.5a8.7 8.7 0 1 0 9.9 9.9Z"/>',
+    close: '<path d="m6 6 12 12M18 6 6 18"/>'
+  };
+  return `<svg viewBox="0 0 24 24" aria-hidden="true">${paths[name]}</svg>`;
 }
 
 function header(active, locale, basePath) {
   const t = ui[locale.code];
-  return `<header class="site-header">
-    <a class="brand" href="${pathFor(locale, "/")}" aria-label="${esc(t.brandHome)}">
-      <span class="brand-mark" aria-hidden="true">①</span>
-      <span class="brand-copy"><strong>ParanO(1)d Lab</strong><small>${esc(t.brandSection)}</small></span>
-    </a>
+  return `<header class="site-header"><div class="header-inner">
+    <a class="brand" href="${pathFor(locale, "/")}" aria-label="${esc(t.brandHome)}">Parano1d<span class="brand-tag">LAB</span></a>
+    <nav class="site-nav" id="site-navigation" aria-label="${esc(t.navLabel)}">
+      <a href="${pathFor(locale, "/")}"${active === "latest" ? ' aria-current="page"' : ""}>${esc(t.journal)}</a>
+      <a href="${pathFor(locale, "/research/")}"${active === "research" ? ' aria-current="page"' : ""}>${esc(t.archiveNav)}</a>
+      <a href="https://docs.parano1d.org">${esc(t.navDocs)} <span aria-hidden="true">↗</span></a>
+      <button type="button" data-source-open aria-haspopup="dialog" aria-controls="source-dialog">${esc(t.navSource)}</button>
+    </nav>
     <div class="header-controls">
+      <button class="icon-button search-toggle" type="button" data-search-open aria-label="${esc(t.search)}" title="${esc(t.search)} (/)">${icon("search")}</button>
+      <button class="icon-button theme-toggle" type="button" data-theme-toggle data-light-label="${esc(t.lightMode)}" data-dark-label="${esc(t.darkMode)}" aria-label="${esc(t.darkMode)}" aria-pressed="false"><span class="theme-sun">${icon("sun")}</span><span class="theme-moon">${icon("moon")}</span></button>
       ${languageSwitcher(locale, basePath)}
-      <nav class="site-nav" id="site-nav" aria-label="${esc(t.navLabel)}">
-        <a${active === "latest" ? ' aria-current="page"' : ""} href="${pathFor(locale, "/")}#latest">${esc(t.navLatest)}</a>
-        <a${active === "research" ? ' aria-current="page"' : ""} href="${pathFor(locale, "/research/")}">${esc(t.navResearch)}</a>
-        <span class="nav-rule" aria-hidden="true"></span>
-        <a href="https://docs.parano1d.org">${esc(t.navDocs)} <span aria-hidden="true">↗</span></a>
-        <a href="https://parano1d.org">Parano1d <span aria-hidden="true">↗</span></a>
-        <button class="nav-source" type="button" data-source-open aria-haspopup="dialog" aria-controls="source-dialog">${sourceIcon("https://git.parano1d.org/", "nav-source-icon")}<span>${esc(t.navSource)}</span></button>
-      </nav>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+      <button class="icon-button nav-toggle" type="button" aria-label="${esc(t.menu)}" aria-expanded="false" aria-controls="site-navigation">${icon("menu")}</button>
     </div>
-  </header>`;
+  </div></header>`;
+}
+
+function searchDialog(locale) {
+  const t = ui[locale.code];
+  const records = articleSets.get(locale.code).map(item => ({title:item.title,topic:item.topic,kind:item.kind,dek:item.dek,date:item.date,keywords:item.keywords ?? [],href:pathFor(locale,`/research/${item.slug}/`)}));
+  return `<dialog class="search-dialog" id="research-search" aria-labelledby="search-heading">
+    <div class="search-dialog-header"><h2 id="search-heading">${esc(t.search)}</h2><button class="icon-button" type="button" data-search-close aria-label="${esc(t.close)}">${icon("close")}</button></div>
+    <label class="search-field" for="global-search">${icon("search")}<input id="global-search" type="search" placeholder="${esc(t.searchPlaceholder)}" autocomplete="off" spellcheck="false"></label>
+    <p class="search-status" data-search-status aria-live="polite"></p><ol class="search-results" data-search-results></ol>
+    <p class="search-help">${esc(t.searchHelp)}</p>
+    <script type="application/json" id="research-search-data">${JSON.stringify(records).replaceAll("<", "\\u003c")}</script>
+    <span hidden data-search-empty>${esc(t.filterEmpty)}</span><span hidden data-search-count>${esc(t.articleCount)}</span>
+  </dialog>`;
 }
 
 function footer(locale) {
   const t = ui[locale.code];
-  return `<footer class="site-footer">
-    <div class="footer-brand">
-      <span class="brand-mark" aria-hidden="true">①</span>
-      <div><strong>ParanO(1)d Lab</strong><p>${esc(t.footerDescription)}</p></div>
-    </div>
-    <div class="footer-links">
-      <div><strong>${esc(t.footerResearch)}</strong><a href="${pathFor(locale, "/research/")}">${esc(t.footerArchive)}</a><a href="${pathFor(locale, "/feed.xml")}">${esc(t.footerFeed)}</a></div>
-      <div><strong>${esc(t.footerProject)}</strong><a href="https://parano1d.org">${esc(t.footerWebsite)}</a><a href="https://docs.parano1d.org">${esc(t.footerDocumentation)}</a><a href="https://git.parano1d.org/ignotusnemo/parano1d">${esc(t.footerSource)}</a></div>
-    </div>
-    <div class="footer-bottom"><span>© 2026 ParanO(1)d Lab</span><span>lab.parano1d.org</span></div>
-  </footer>`;
+  return `<footer class="site-footer"><span>© 2026 Parano1d Lab</span><div class="footer-links" role="navigation" aria-label="${esc(t.navLabel)}"><a href="${pathFor(locale, "/")}#latest">${esc(t.navLatest)}</a><a href="${pathFor(locale, "/research/")}">${esc(t.footerArchive)}</a><a href="${pathFor(locale, "/feed.xml")}">${esc(t.footerFeed)}</a><a href="https://parano1d.org">Parano1d</a><a href="https://docs.parano1d.org">${esc(t.footerDocumentation)}</a><button type="button" data-source-open aria-haspopup="dialog" aria-controls="source-dialog">${esc(t.navSource)}</button></div></footer>`;
 }
 
 function jsonLd(value) {
@@ -566,8 +592,9 @@ function shell({
   const canonical = absolute(pagePath);
   const fullTitle = title === "Parano1d Lab" ? t.siteTitle : `${title} · Parano1d Lab`;
   const image = absolute(imagePath);
-  const alternates = locales.map((target) => `<link rel="alternate" hreflang="${target.hreflang}" href="${absolute(pathFor(target, basePath))}">`).join("\n  ");
-  const ogAlternates = locales.filter((target) => target.code !== locale.code).map((target) => `<meta property="og:locale:alternate" content="${target.ogLocale}">`).join("\n  ");
+  const availableLocales = localesFor(article);
+  const alternates = availableLocales.map((target) => `<link rel="alternate" hreflang="${target.hreflang}" href="${absolute(pathFor(target, basePath))}">`).join("\n  ");
+  const ogAlternates = availableLocales.filter((target) => target.code !== locale.code).map((target) => `<meta property="og:locale:alternate" content="${target.ogLocale}">`).join("\n  ");
   const articleMeta = indexable && article
     ? `<meta property="article:published_time" content="${esc(article.date)}T00:00:00Z">${article.updated ? `\n  <meta property="article:modified_time" content="${esc(article.updated)}T00:00:00Z">` : ""}
   <meta property="article:section" content="${esc(article.topic)}">
@@ -614,8 +641,8 @@ function shell({
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f3f2ed">
-  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="color-scheme" content="light dark">
   <meta name="description" content="${esc(description)}">
   <meta name="author" content="Parano1d Lab">
   <meta name="keywords" content="${esc(keywordContent)}">
@@ -627,6 +654,7 @@ function shell({
   ${socialMeta}
   ${articleMeta}
   <title>${esc(fullTitle)}</title>
+  <script src="/assets/theme.js?v=${themeJsVersion}"></script>
   <link rel="stylesheet" href="/assets/site.css?v=${siteCssVersion}">
   <link rel="stylesheet" href="/assets/source-dialog.css?v=${sourceCssVersion}">
   <link rel="stylesheet" href="/assets/katex.min.css">
@@ -634,124 +662,85 @@ function shell({
 </head>
 <body class="locale-${locale.code}">
   <a class="skip-link" href="#content">${esc(t.skip)}</a>
+  ${header(active, locale, basePath)}
+  ${type === "article" ? '<div class="reading-progress" aria-hidden="true"><span></span></div>' : ""}
   <div class="page-shell">
-    ${header(active, locale, basePath)}
     ${body}
     ${footer(locale)}
   </div>
+  ${searchDialog(locale)}
   <script src="/assets/site.js?v=${siteJsVersion}" defer></script>
 </body>
 </html>`;
   return externalLinksInNewTabs(document.replace(/^[ \t]+$/gm, ""));
 }
 
-function articleCard(item, locale, { large = false } = {}) {
+function articleCard(item, locale) {
   const t = ui[locale.code];
   const href = pathFor(locale, `/research/${item.slug}/`);
-  return `<article class="research-card${large ? " research-card--large" : ""}" data-topic="${esc(item.topic)}">
-    <a class="card-art-link" href="${href}" tabindex="-1" aria-hidden="true">${articleArtMarkup(item, true)}</a>
-    <div class="card-body">
-      <div class="card-meta">${item.pinned ? `<span class="editorial-pin">${esc(item.pinnedLabel)}</span>` : ""}<span>${esc(item.kind)}</span><time datetime="${item.date}">${formatDate(item.date, locale)}</time></div>
-      <h3><a href="${href}">${esc(item.title)}</a></h3>
-      <p>${esc(item.dek)}</p>
-      <div class="card-foot"><span>${readingTime(item.body, locale)} ${esc(t.minutesRead)}</span><a class="text-link" href="${href}">${esc(t.read)} <span aria-hidden="true">↗</span></a></div>
-    </div>
+  return `<article class="research-card" data-topic="${esc(item.topic)}">
+    <div class="card-meta"><time datetime="${item.date}">${formatDate(item.date, locale)}</time><a class="topic-link" href="${pathFor(locale, "/research/")}?topic=${encodeURIComponent(item.topic)}">${esc(item.topic)}</a></div>
+    <h3><a href="${href}">${esc(item.title)}</a></h3>
+    <p>${esc(compactDescription(item.dek, locale))}</p>
+    <div class="card-foot"><span>${esc(item.kind)} · ${readingTime(item.body, locale)} ${esc(t.minutesRead)}</span><a href="${href}" aria-label="${esc(t.read)}: ${esc(item.title)}">${esc(t.read)} <span aria-hidden="true">→</span></a></div>
   </article>`;
+}
+
+function topicMenu(locale, articles) {
+  const t = ui[locale.code];
+  const topics = [...new Set(articles.map(item => item.topic))].sort((a,b)=>a.localeCompare(b,locale.dateLocale));
+  return `<details class="topic-menu"><summary>${esc(t.browseTopics)} <span aria-hidden="true">+</span></summary><nav class="topic-menu-list" aria-label="${esc(t.browseTopics)}">${topics.map(topic=>`<a href="${pathFor(locale,"/research/")}?topic=${encodeURIComponent(topic)}"><span>${esc(topic)}</span><span>${articles.filter(item=>item.topic===topic).length}</span></a>`).join("")}</nav></details>`;
 }
 
 function homePage(locale, newestFirst) {
   const t = ui[locale.code];
-  const latest = newestFirst.find((item) => item.pinned) ?? newestFirst[0];
-  const remaining = newestFirst.filter((item) => item.slug !== latest.slug);
+  const featured = newestFirst.find(item=>item.pinned) ?? newestFirst[0];
+  const latest = newestFirst.filter(item=>item.slug!==featured.slug).sort((a,b)=>b.date.localeCompare(a.date));
   const pageSize = 6;
-  const pageCount = Math.max(1, Math.ceil(remaining.length / pageSize));
-  const featured = newestFirst.filter((item) => item.featured).slice(0, 4);
-  const body = `<main id="content">
-    <section class="home-hero">
-      <div class="hero-copy">
-        <p class="eyebrow">${esc(t.homeEyebrow)}</p>
-        <h1>${esc(t.homeTitle)}</h1>
-        <p class="hero-lead">${esc(t.homeLead)}</p>
-        <div class="hero-actions"><a class="button button--primary" href="#latest">${esc(t.latestResearch)}</a><a class="button button--quiet" href="${pathFor(locale, "/research/")}">${esc(t.openArchive)}</a></div>
-      </div>
-      <div class="hero-field" aria-hidden="true">
-        <div class="field-label field-label--a">${esc(t.fieldCommit)}</div><div class="field-label field-label--b">${esc(t.fieldReduce)}</div><div class="field-label field-label--c">${esc(t.fieldVerify)}</div>
-        <div class="field-plane field-plane--a"></div><div class="field-plane field-plane--b"></div><div class="field-plane field-plane--c"></div>
-        <div class="field-mark">①</div>
-      </div>
+  const pageCount = Math.max(1, Math.ceil(latest.length / pageSize));
+  const body = `<main id="content" class="journal-page">
+    <header class="journal-intro"><div><p class="eyebrow">PARANO1D LAB / ${esc(t.footerResearch)}</p><h1>${esc(t.journalTitle)}</h1></div><p class="subtitle">${esc(t.homeLead)}</p></header>
+    <section class="featured-section" aria-labelledby="featured-title">
+      <div class="section-heading"><h2 id="featured-title">${esc(t.selectedWork)}</h2><span class="section-label">${esc(featured.kind)}</span></div>
+      <article class="feature-story"><div class="feature-copy"><div class="card-meta"><time datetime="${featured.date}">${formatDate(featured.date,locale)}</time><span>${esc(featured.topic)}</span></div><h2><a href="${pathFor(locale,`/research/${featured.slug}/`)}">${esc(featured.title)}</a></h2><p>${esc(featured.dek)}</p><a class="text-link" href="${pathFor(locale,`/research/${featured.slug}/`)}">${esc(t.readResearch)} <span aria-hidden="true">→</span></a></div><div class="feature-record"><span class="eyebrow">${esc(t.researchRecord)}</span><strong>${featured.authors.map(esc).join(" · ")}</strong><span>${esc(featured.status)}</span><span>${readingTime(featured.body,locale)} ${esc(t.minutesRead)}</span><a href="${pathFor(locale,`/research/${featured.slug}/`)}#evidence-title">${esc(t.evidenceTitle)} ↗</a></div></article>
     </section>
-
-    <section class="latest-section section" id="latest">
-      <div class="section-heading"><div><p class="section-index">01 · ${esc(t.sectionLatest)}</p><h2>${esc(t.latestResearch)}</h2></div><a class="text-link" href="${pathFor(locale, "/research/")}">${esc(t.allResearch)} <span aria-hidden="true">↗</span></a></div>
-      <article class="lead-story">
-        <div class="lead-story-art">${articleArtMarkup(latest)}</div>
-        <div class="lead-story-copy">
-          <div class="story-meta">${latest.pinned ? `<span class="editorial-pin">${esc(latest.pinnedLabel)}</span>` : ""}<span>${esc(latest.kind)}</span><time datetime="${latest.date}">${formatDate(latest.date, locale)}</time></div>
-          <h3><a href="${pathFor(locale, `/research/${latest.slug}/`)}">${esc(latest.title)}</a></h3>
-          <p>${esc(latest.abstract)}</p>
-          <div class="story-actions"><a class="button button--primary" href="${pathFor(locale, `/research/${latest.slug}/`)}">${esc(t.readResearch)}</a>${latest.evidence[0] ? `<a class="button button--quiet" href="${esc(latest.evidence[0].href)}">${buttonContent(latest.evidence[0].href, latest.evidence[0].label)}</a>` : ""}</div>
-        </div>
-      </article>
-      <div class="research-grid" data-home-research-grid data-page-size="${pageSize}">${remaining.map((item) => articleCard(item, locale)).join("\n")}</div>
-      <div class="research-list-footer">
-        <div class="research-pager-shell" data-home-research-pager hidden>
-          <span class="research-page-counter" data-home-research-counter aria-live="polite"><span data-home-research-current>01</span><span aria-hidden="true"> / </span><span data-home-research-total>${String(pageCount).padStart(2, "0")}</span></span>
-          <nav class="research-pagination" aria-label="${esc(t.researchPagination)}">
-            <button class="research-page-direction" type="button" data-home-research-action="previous" aria-label="${esc(t.previousPage)}"><span aria-hidden="true">←</span></button>
-            <div class="research-page-numbers">${Array.from({ length: pageCount }, (_, index) => `<button type="button" data-home-research-page="${index + 1}" aria-label="${esc(t.pageLabel)} ${index + 1}">${String(index + 1).padStart(2, "0")}</button>`).join("")}</div>
-            <button class="research-page-direction" type="button" data-home-research-action="next" aria-label="${esc(t.nextPage)}"><span aria-hidden="true">→</span></button>
-          </nav>
-        </div>
-        <a class="text-link research-archive-link" href="${pathFor(locale, "/research/")}">${esc(t.allResearch)} <span aria-hidden="true">↗</span></a>
-      </div>
+    <section id="latest" class="research-index">
+      <div class="section-heading"><h2>${esc(t.latestResearch)}</h2><div class="section-controls">${topicMenu(locale,newestFirst)}<a class="index-link" href="${pathFor(locale,"/research/")}">${esc(t.allResearch)} <span>${newestFirst.length}</span> →</a></div></div>
+      <div class="research-grid" data-home-research-grid data-page-size="${pageSize}">${latest.map(item=>articleCard(item,locale)).join("\n")}</div>
+      <div class="research-list-footer"><div class="research-pager-shell" data-home-research-pager hidden>
+        <span class="research-page-counter" aria-live="polite">${esc(t.pageLabel)} <span data-home-research-current>01</span> / <span data-home-research-total>${String(pageCount).padStart(2,"0")}</span></span>
+        <nav class="research-pagination" aria-label="${esc(t.researchPagination)}"><button type="button" data-home-research-action="previous" aria-label="${esc(t.previousPage)}">←</button><div class="research-page-numbers">${Array.from({length:pageCount},(_,index)=>`<button type="button" data-home-research-page="${index+1}" aria-label="${esc(t.pageLabel)} ${index+1}">${index+1}</button>`).join("")}</div><button type="button" data-home-research-action="next" aria-label="${esc(t.nextPage)}">→</button></nav>
+      </div></div>
     </section>
-
-    <section class="focus-section section">
-      <div class="section-heading"><div><p class="section-index">02 · ${esc(t.selectedWork)}</p><h2>${esc(t.currentRecord)}</h2></div></div>
-      <div class="focus-list">${featured.map((item, index) => `<a href="${pathFor(locale, `/research/${item.slug}/`)}"><span class="focus-number">0${index + 1}</span><span><small>${esc(item.topic)}</small><strong>${esc(item.shortTitle)}</strong></span><span class="focus-arrow">↗</span></a>`).join("\n")}</div>
-    </section>
-
   </main>`;
-  return shell({
-    title: "Parano1d Lab",
-    locale,
-    description: t.siteDescription,
-    basePath: "/",
-    body,
-    active: "latest",
-    schema: {
-      "@context": "https://schema.org",
-      "@graph": [
-        { "@type": "Organization", "@id": `${siteUrl}/#organization`, name: "Parano1d Lab", url: siteUrl, parentOrganization: { "@type": "Organization", name: "Parano1d", url: "https://parano1d.org" } },
-        { "@type": "WebSite", "@id": `${siteUrl}/#website`, name: t.siteTitle, url: absolute(pathFor(locale, "/")), inLanguage: locale.htmlLang, publisher: { "@id": `${siteUrl}/#organization` } }
-      ]
-    }
-  });
+  return shell({locale,title:"Parano1d Lab",description:t.siteDescription,basePath:"/",body,active:"latest",
+    schema:{"@context":"https://schema.org","@graph":[
+      {"@type":"Organization","@id":`${siteUrl}/#organization`,name:"Parano1d Lab",url:siteUrl,parentOrganization:{"@type":"Organization",name:"Parano1d",url:"https://parano1d.org"}},
+      {"@type":"WebSite","@id":`${siteUrl}/#website`,name:t.siteTitle,url:absolute(pathFor(locale,"/")),inLanguage:locale.htmlLang,publisher:{"@id":`${siteUrl}/#organization`}}
+    ]}});
 }
 
 function archivePage(locale, newestFirst) {
   const t = ui[locale.code];
-  const topics = [...new Set(newestFirst.map((item) => item.topic))].sort();
+  const items = [...newestFirst].sort((a,b)=>b.date.localeCompare(a.date));
+  const topics = [...new Set(items.map(item=>item.topic))].sort((a,b)=>a.localeCompare(b,locale.dateLocale));
   const body = `<main id="content" class="archive-page">
-    <section class="archive-hero"><p class="eyebrow">${esc(t.archiveEyebrow)}</p><h1>${esc(t.allResearch)}</h1><p>${esc(t.archiveLead)}</p></section>
-    <section class="archive-section">
-      <div class="filter-bar" role="group" aria-label="${esc(t.filterByTopic)}"><button class="filter-chip is-active" type="button" data-filter="all">${esc(t.filterAll)} <span>${newestFirst.length}</span></button>${topics.map((topic) => `<button class="filter-chip" type="button" data-filter="${esc(topic)}">${esc(topic)}</button>`).join("")}</div>
-      <div class="archive-list">${newestFirst.map((item, index) => `<article class="archive-row" data-topic="${esc(item.topic)}">
-        <a class="archive-index" href="${pathFor(locale, `/research/${item.slug}/`)}">${String(index + 1).padStart(2, "0")}</a>
-        <div class="archive-copy"><div class="card-meta">${item.pinned ? `<span class="editorial-pin">${esc(item.pinnedLabel)}</span>` : ""}<span>${esc(item.kind)}</span><time datetime="${item.date}">${formatDate(item.date, locale)}</time></div><h2><a href="${pathFor(locale, `/research/${item.slug}/`)}">${esc(item.title)}</a></h2><p>${esc(item.dek)}</p><div class="archive-tags"><span>${esc(item.topic)}</span><span>${esc(item.status)}</span><span>${readingTime(item.body, locale)} ${esc(t.minutesShort)}</span></div></div>
-        <a class="archive-arrow" href="${pathFor(locale, `/research/${item.slug}/`)}" aria-label="${esc(t.readArticle)}: ${esc(item.title)}">↗</a>
-      </article>`).join("\n")}</div>
-      <p class="filter-empty" hidden>${esc(t.filterEmpty)}</p>
+    <header class="journal-intro"><div><p class="eyebrow">PARANO1D LAB / ${esc(t.archiveNav)}</p><h1>${esc(t.allResearch)}</h1></div><p class="subtitle">${esc(t.archiveLead)}</p></header>
+    <form class="archive-controls" role="search" data-archive-controls>
+      <label class="archive-search"><span>${esc(t.search)}</span><span class="search-field">${icon("search")}<input type="search" name="q" placeholder="${esc(t.searchPlaceholder)}" autocomplete="off" data-archive-search></span></label>
+      <label><span>${esc(t.browseTopics)}</span><select name="topic" data-topic-select><option value="all">${esc(t.allTopics)}</option>${topics.map(topic=>`<option value="${esc(topic)}">${esc(topic)}</option>`).join("")}</select></label>
+      <label><span>${esc(t.sortBy)}</span><select name="sort" data-sort-select><option value="newest">${esc(t.newestFirst)}</option><option value="oldest">${esc(t.oldestFirst)}</option></select></label>
+    </form>
+    <section id="research-results" class="archive-section">
+      <div class="section-heading"><h2 data-active-topic data-all-topics="${esc(t.allTopics)}">${esc(t.allTopics)}</h2><span class="result-count" aria-live="polite">${esc(t.articleCount)}: <span data-results-count>${items.length}</span></span></div>
+      <div class="archive-list">${items.map((item,index)=>`<article class="archive-row" data-topic="${esc(item.topic)}" data-date="${item.date}" data-search="${esc([item.title,item.dek,item.topic,item.kind,...(item.keywords??[])].join(" "))}">
+        <div class="archive-date"><time datetime="${item.date}">${formatDate(item.date,locale)}</time><span>${esc(item.kind)}</span></div>
+        <div class="archive-copy"><h2><a href="${pathFor(locale,`/research/${item.slug}/`)}">${esc(item.title)}</a></h2><p>${esc(compactDescription(item.dek,locale))}</p><div class="archive-tags"><a href="?topic=${encodeURIComponent(item.topic)}" data-filter="${esc(item.topic)}">${esc(item.topic)}</a><span>${readingTime(item.body,locale)} ${esc(t.minutesRead)}</span></div></div>
+        <a class="archive-arrow" href="${pathFor(locale,`/research/${item.slug}/`)}" aria-label="${esc(t.readArticle)}: ${esc(item.title)}">→</a></article>`).join("\n")}</div>
+      <div class="filter-empty" hidden><h3>${esc(t.filterEmpty)}</h3><button type="button" class="button" data-reset-filters>${esc(t.resetFilters)}</button></div>
     </section>
   </main>`;
-  return shell({
-    locale,
-    title: t.allResearch,
-    description: t.archiveDescription,
-    basePath: "/research/",
-    body,
-    active: "research"
-  });
+  return shell({locale,title:t.allResearch,description:t.archiveDescription,basePath:"/research/",body,active:"research"});
 }
 
 function evidenceList(item, locale) {
@@ -768,16 +757,17 @@ function shareControls(item, locale, basePath) {
 
 function tocFor(html, locale) {
   const t = ui[locale.code];
-  const entries = [...html.matchAll(/<h2 id="([^"]+)"[^>]*>([\s\S]*?)<\/h2>/g)]
-    .map(([, id, text]) => [id, text.replace(/<[^>]+>/g, "")]);
+  const entries = [...html.matchAll(/<h2 id="([^"]+)"[^>]*>([\s\S]*?)<\/h2>/g)].map(([,id,text])=>[id,text.replace(/<[^>]+>/g,"")]);
   if (entries.length < 2) return "";
-  return `<aside class="article-toc" aria-label="${esc(t.onThisPage)}"><strong>${esc(t.onThisPage)}</strong>${entries.map(([id, text]) => `<a href="#${esc(id)}">${text}</a>`).join("")}</aside>`;
+  return `<aside class="article-aside"><details class="toc-panel"><summary>${esc(t.onThisPage)} <span aria-hidden="true">+</span></summary><nav class="article-toc" aria-label="${esc(t.onThisPage)}"><ol>${entries.map(([id,text])=>`<li><a href="#${esc(id)}">${text}</a></li>`).join("")}</ol><a class="toc-evidence" href="#evidence-title">${esc(t.evidenceTitle)} ↗</a></nav></details></aside>`;
 }
 
 function articlePage(item, index, locale, newestFirst) {
   const t = ui[locale.code];
-  const older = newestFirst[index + 1];
-  const newer = newestFirst[index - 1];
+  const chronological = [...newestFirst].sort((a,b)=>b.date.localeCompare(a.date));
+  const position = chronological.findIndex(entry=>entry.slug===item.slug);
+  const older = chronological[position + 1];
+  const newer = chronological[position - 1];
   const basePath = `/research/${item.slug}/`;
   const canonical = absolute(pathFor(locale, basePath));
   const imagePath = `/assets/og/${item.slug}.png`;
@@ -804,24 +794,22 @@ function articlePage(item, index, locale, newestFirst) {
     about: item.topic
   };
   const flagship = item.layout === "flagship";
-  const hero = flagship
-    ? `<header class="article-hero article-hero--flagship">
-      <div class="flagship-hero-media" aria-hidden="true"><img src="${esc(item.heroImage)}" alt="" fetchpriority="high" decoding="async"></div>
-      <div class="flagship-hero-shade" aria-hidden="true"></div>
-      <div class="article-hero-copy"><a class="back-link" href="${pathFor(locale, "/research/")}">← ${esc(t.backResearch)}</a><div class="article-meta"><span>${esc(item.kind)}</span><span>${esc(item.topic)}</span><time datetime="${item.date}">${formatDate(item.date, locale)}</time></div><h1>${esc(item.title)}</h1><p class="article-dek">${esc(item.dek)}</p><div class="article-byline"><span>${esc(t.by)} ${item.authors.map(esc).join(" · ")}</span><span>${readingTime(item.body, locale)} ${esc(t.minutesRead)}</span><span>${esc(item.status)}</span></div>${shareControls(item, locale, basePath)}</div>
-    </header>`
-    : `<header class="article-hero">
-      <div class="article-hero-copy"><a class="back-link" href="${pathFor(locale, "/research/")}">← ${esc(t.backResearch)}</a><div class="article-meta"><span>${esc(item.kind)}</span><span>${esc(item.topic)}</span><time datetime="${item.date}">${formatDate(item.date, locale)}</time></div><h1>${esc(item.title)}</h1><p class="article-dek">${esc(item.dek)}</p><div class="article-byline"><span>${esc(t.by)} ${item.authors.map(esc).join(" · ")}</span><span>${readingTime(item.body, locale)} ${esc(t.minutesRead)}</span><span>${esc(item.status)}</span></div>${shareControls(item, locale, basePath)}</div>
-      ${articleArtMarkup(item)}
-    </header>`;
-  const body = `<div class="reading-progress" aria-hidden="true"><span></span></div><main id="content" class="article-page${flagship ? " article-page--flagship" : ""}">
+  const pdf = item.evidence.find((entry) => /\.pdf(?:[?#]|$)/i.test(entry.href));
+  const hero = `<header class="article-heading">
+    <p class="article-breadcrumb"><a href="${pathFor(locale,"/research/")}">${esc(t.allResearch)}</a><span aria-hidden="true">/</span><a href="${pathFor(locale,"/research/")}?topic=${encodeURIComponent(item.topic)}">${esc(item.topic)}</a></p>
+    <p class="article-kicker"><span class="type-label">${esc(item.kind)}</span><span>${esc(item.status)}</span></p>
+    <h1>${esc(item.title)}</h1><p class="subtitle">${esc(item.dek)}</p>
+    <div class="article-byline"><p><strong>${item.authors.map(esc).join(" · ")}</strong><time datetime="${item.date}">${formatDate(item.date,locale)}</time><span>${readingTime(item.body,locale)} ${esc(t.minutesRead)}</span></p><div class="article-tools">${pdf?`<a class="button" href="${esc(pdf.href)}">${esc(t.originalPdf)}</a>`:""}<button type="button" class="button" data-print>${esc(t.printPdf)}</button></div></div>
+  </header>`;
+  const body = `<main id="content" class="article-page">
     ${hero}
-    <div class="article-layout${flagship ? " article-layout--flagship" : ""}">
+    <div class="article-layout">
       ${tocFor(item.body, locale)}
       <article class="article-body${flagship ? " article-body--flagship" : ""}">${flagship || item.showAbstract === false ? "" : `<div class="article-abstract"><span>${esc(t.abstract)}</span><p>${esc(item.abstract)}</p></div>`}${item.body}</article>
     </div>
     ${evidenceList(item, locale)}
-    <nav class="article-next" aria-label="${esc(t.adjacent)}">${older ? `<a href="${pathFor(locale, `/research/${older.slug}/`)}"><small>${esc(t.earlier)}</small><strong>${esc(older.shortTitle)}</strong><span>←</span></a>` : "<span></span>"}${newer ? `<a href="${pathFor(locale, `/research/${newer.slug}/`)}"><small>${esc(t.later)}</small><strong>${esc(newer.shortTitle)}</strong><span>→</span></a>` : "<span></span>"}</nav>
+    <div class="article-actions"><a href="${pathFor(locale, "/research/")}">← ${esc(t.backResearch)}</a>${pdf ? `<a class="paper-download" href="${esc(pdf.href)}">${esc(t.originalPdf)}</a>` : ""}${shareControls(item, locale, basePath)}</div>
+    <div role="navigation" class="article-next" aria-label="${esc(t.adjacent)}">${older ? `<a href="${pathFor(locale, `/research/${older.slug}/`)}"><small>${esc(t.earlier)}</small><strong>${esc(older.shortTitle)}</strong></a>` : "<span></span>"}${newer ? `<a href="${pathFor(locale, `/research/${newer.slug}/`)}"><small>${esc(t.later)}</small><strong>${esc(newer.shortTitle)}</strong></a>` : "<span></span>"}</div>
   </main>`;
   return shell({
     title: seoTitle,
@@ -835,7 +823,7 @@ function articlePage(item, index, locale, newestFirst) {
     schema: articleSchema,
     article: item,
     imagePath,
-    imageAlt: item.title,
+    imageAlt: item.ogAlt ?? item.title,
     imageWidth: item.ogWidth ?? 1200,
     imageHeight: item.ogHeight ?? 630
   });
@@ -851,10 +839,11 @@ function rss(locale, newestFirst) {
 }
 
 function sitemap() {
-  const basePaths = ["/", "/research/", ...baseData.map((item) => `/research/${item.slug}/`)];
+  const pages = [{ basePath: "/", available: locales }, { basePath: "/research/", available: locales },
+    ...baseData.map((item) => ({ basePath: `/research/${item.slug}/`, available: localesFor(item) }))];
   const newestDate = baseData.map((item) => item.updated ?? item.date).sort().at(-1);
   const dates = new Map(baseData.map((item) => [`/research/${item.slug}/`, item.updated ?? item.date]));
-  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${basePaths.flatMap((basePath) => locales.map((locale) => `<url><loc>${absolute(pathFor(locale, basePath))}</loc><lastmod>${dates.get(basePath) ?? newestDate}</lastmod>${locales.map((alternate) => `<xhtml:link rel="alternate" hreflang="${alternate.hreflang}" href="${absolute(pathFor(alternate, basePath))}"/>`).join("")}<xhtml:link rel="alternate" hreflang="x-default" href="${absolute(pathFor(defaultLocale, basePath))}"/></url>`)).join("")}</urlset>`;
+  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${pages.flatMap(({ basePath, available }) => available.map((locale) => `<url><loc>${absolute(pathFor(locale, basePath))}</loc><lastmod>${dates.get(basePath) ?? newestDate}</lastmod>${available.map((alternate) => `<xhtml:link rel="alternate" hreflang="${alternate.hreflang}" href="${absolute(pathFor(alternate, basePath))}"/>`).join("")}<xhtml:link rel="alternate" hreflang="x-default" href="${absolute(pathFor(defaultLocale, basePath))}"/></url>`)).join("")}</urlset>`;
 }
 
 async function emit(path, contents) {
@@ -905,4 +894,4 @@ for (const locale of locales) {
 }
 await emit("sitemap.xml", sitemap());
 await emit("robots.txt", `User-agent: *\nAllow: /\nSitemap: ${siteUrl}/sitemap.xml\n`);
-console.log(`Built ${baseData.length} research articles in ${locales.length} languages for ${siteUrl}`);
+console.log(`Built ${baseData.length} research articles with their available language editions for ${siteUrl}`);

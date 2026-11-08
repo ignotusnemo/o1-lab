@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1030" viewBox="0 0 1600 1030" role="img" aria-label="Where code and native assets live">
+<title>Where code and native assets live</title>
+<rect width="100%" height="100%" fill="#f5f7fc"/>
+<text x="50" y="35" fill="#14243b" font-family="DejaVu Sans" font-size="38" font-weight="bold" dominant-baseline="text-before-edge">2  Where code and native assets live</text>
+<text x="50" y="96" fill="#54657b" font-family="DejaVu Sans" font-size="24" font-weight="normal" dominant-baseline="text-before-edge">Deploy and authenticate the account before funding it.</text>
+<rect x="40" y="165" width="735" height="760" rx="20" fill="#fff8e9" stroke="#dfc686" stroke-width="2"/>
+<rect x="825" y="165" width="735" height="760" rx="20" fill="#f4eefe" stroke="#c4b2e0" stroke-width="2"/>
+<text x="75" y="185" fill="#805d0b" font-family="DejaVu Sans" font-size="29" font-weight="bold" dominant-baseline="text-before-edge">EVM NETWORK (L1 OR L2)</text>
+<text x="860" y="185" fill="#68408b" font-family="DejaVu Sans" font-size="29" font-weight="bold" dominant-baseline="text-before-edge">SOLANA</text>
+<rect x="90" y="260" width="635" height="115" rx="20" fill="white" stroke="#d8bb73" stroke-width="2"/>
+<text x="213.078125" y="282" fill="#14243b" font-family="DejaVu Sans" font-size="30" font-weight="bold" dominant-baseline="text-before-edge">Parano1d vault factory</text>
+<text x="214.0390625" y="334" fill="#54657b" font-family="DejaVu Sans" font-size="23" font-weight="normal" dominant-baseline="text-before-edge">Deploys fixed code with CREATE2</text>
+<polyline points="407,375 407,465" fill="none" stroke="#60738c" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="407,465 400.0405514542203,450.5928463623572 413.9594485457797,450.5928463623572" fill="#60738c"/>
+<text x="430" y="405" fill="#805d0b" font-family="DejaVu Sans" font-size="23" font-weight="normal" dominant-baseline="text-before-edge">creates a personal contract</text>
+<rect x="90" y="465" width="635" height="315" rx="20" fill="white" stroke="#d8bb73" stroke-width="2"/>
+<text x="209.1953125" y="487" fill="#14243b" font-family="DejaVu Sans" font-size="29" font-weight="bold" dominant-baseline="text-before-edge">Parano1d contract: 0x...</text>
+<text x="120" y="550" fill="#14243b" font-family="DejaVu Sans" font-size="25" font-weight="normal" dominant-baseline="text-before-edge">Code: verifier + withdrawal logic</text>
+<text x="120" y="599" fill="#14243b" font-family="DejaVu Sans" font-size="25" font-weight="normal" dominant-baseline="text-before-edge">State: C_EVM, nonce, parameters</text>
+<text x="120" y="648" fill="#14243b" font-family="DejaVu Sans" font-size="25" font-weight="normal" dominant-baseline="text-before-edge">Account balance: native coin</text>
+<text x="120" y="708" fill="#54657b" font-family="DejaVu Sans" font-size="22" font-weight="normal" dominant-baseline="text-before-edge">Replay state survives an empty balance.</text>
+<rect x="875" y="260" width="635" height="115" rx="20" fill="white" stroke="#bba0d9" stroke-width="2"/>
+<text x="985.9453125" y="282" fill="#14243b" font-family="DejaVu Sans" font-size="30" font-weight="bold" dominant-baseline="text-before-edge">Parano1d vault program</text>
+<text x="994.921875" y="334" fill="#54657b" font-family="DejaVu Sans" font-size="23" font-weight="normal" dominant-baseline="text-before-edge">Fixed verifier and withdrawal logic</text>
+<polyline points="1192,375 1192,465" fill="none" stroke="#60738c" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1192,465 1185.0405514542203,450.5928463623572 1198.9594485457797,450.5928463623572" fill="#60738c"/>
+<text x="1210" y="405" fill="#68408b" font-family="DejaVu Sans" font-size="23" font-weight="normal" dominant-baseline="text-before-edge">controls its vault accounts</text>
+<rect x="875" y="465" width="635" height="315" rx="20" fill="white" stroke="#bba0d9" stroke-width="2"/>
+<text x="988.9375" y="487" fill="#14243b" font-family="DejaVu Sans" font-size="29" font-weight="bold" dominant-baseline="text-before-edge">Parano1d PDA: base58...</text>
+<text x="905" y="550" fill="#14243b" font-family="DejaVu Sans" font-size="25" font-weight="normal" dominant-baseline="text-before-edge">Account owner: vault program</text>
+<text x="905" y="599" fill="#14243b" font-family="DejaVu Sans" font-size="25" font-weight="normal" dominant-baseline="text-before-edge">State: C_SOL, nonce, parameters</text>
+<text x="905" y="648" fill="#14243b" font-family="DejaVu Sans" font-size="25" font-weight="normal" dominant-baseline="text-before-edge">Account balance: native SOL</text>
+<text x="905" y="708" fill="#54657b" font-family="DejaVu Sans" font-size="22" font-weight="normal" dominant-baseline="text-before-edge">Keep state alive with its rent reserve.</text>
+<text x="90" y="826" fill="#805d0b" font-family="DejaVu Sans" font-size="24" font-weight="normal" dominant-baseline="text-before-edge">Receive native coins at the contract.</text>
+<text x="875" y="826" fill="#68408b" font-family="DejaVu Sans" font-size="24" font-weight="normal" dominant-baseline="text-before-edge">Receive SOL at the initialized PDA.</text>
+<text x="90" y="873" fill="#805d0b" font-family="DejaVu Sans" font-size="23" font-weight="normal" dominant-baseline="text-before-edge">Code and replay state remain installed.</text>
+<text x="875" y="873" fill="#68408b" font-family="DejaVu Sans" font-size="23" font-weight="normal" dominant-baseline="text-before-edge">Persistent state prevents nonce reset.</text>
+<text x="50" y="964" fill="#14243b" font-family="DejaVu Sans" font-size="26" font-weight="bold" dominant-baseline="text-before-edge">Assets stay on their native chains. The Parano1d wallet creates withdrawal proofs.</text>
+</svg>

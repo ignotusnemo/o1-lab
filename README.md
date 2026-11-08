@@ -24,12 +24,35 @@ Then open <http://localhost:4173>.
 - `content/research/*.html` contains article bodies.
 - `scripts/build.mjs` creates the home page, archive, article pages, RSS feed,
   sitemap and structured metadata.
-- `assets/site.css` and `assets/site.js` are the complete presentation layer.
+- `assets/site.css` defines the technical journal, reading layout and print styles.
+- `assets/theme.js` restores the selected theme before the page paints.
+- `assets/site.js` implements search, navigation, filters, contents and print actions.
+- `assets/fonts/` contains self-hosted IBM Plex fonts and their OFL licenses.
 - `papers/` contains publication files linked by the journal.
+
+The journal uses high-contrast light and dark themes, IBM Plex Mono headings
+and IBM Plex Sans reading text. The selected theme persists across pages.
+A compact header provides the journal, complete archive, documentation,
+source selector, language switcher and search. Search works from any page
+and supports keyboard navigation. The archive combines text search, topic
+filtering and chronological sorting through shareable URLs.
+
+Article text uses a centered reading column. Contents stay in the right
+margin on wide screens and collapse above the text on smaller screens.
+The localized Print / Save PDF action opens the browser print dialog.
+A4 styles retain the text, mathematics, scientific figures and evidence.
+Original publication PDFs remain separate downloads. Scientific article
+bodies, citations, translations and publication files are preserved.
 
 To add a publication, add its metadata and HTML fragment, then rebuild. Keep
 benchmark conditions next to benchmark numbers and distinguish production
 results from preserved experiments.
+
+Articles use all three editions by default. Set `locales: ["en"]` in an
+article's metadata when its published text is available in English only.
+Its article, search, feed and sitemap entries use the available edition.
+The article language menu links to the localized archive when that edition
+has no translation. Existing translated articles retain their direct links.
 
 When an article moves, its `aliases` list creates a localized `noindex` redirect
 for each previous slug. Only the current address appears in RSS and the sitemap.
