@@ -694,7 +694,11 @@ function topicMenu(locale, articles) {
 
 function homePage(locale, newestFirst) {
   const t = ui[locale.code];
-  const featured = newestFirst.find(item=>item.pinned) ?? newestFirst[0];
+  const pinned = articleSets.get(defaultLocale.code).find(item=>item.pinned);
+  const featured = newestFirst.find(item=>item.slug===pinned?.slug) ?? pinned ?? newestFirst[0];
+  const featuredLocale = localesFor(featured).includes(locale) ? locale : defaultLocale;
+  const featuredHref = pathFor(featuredLocale, `/research/${featured.slug}/`);
+  const editionLabel = featuredLocale === locale ? "" : `<span lang="en">English</span>`;
   const latest = newestFirst.filter(item=>item.slug!==featured.slug).sort((a,b)=>b.date.localeCompare(a.date));
   const pageSize = 6;
   const pageCount = Math.max(1, Math.ceil(latest.length / pageSize));
@@ -702,7 +706,7 @@ function homePage(locale, newestFirst) {
     <header class="journal-intro"><div><p class="eyebrow">PARANO1D LAB / ${esc(t.footerResearch)}</p><h1>${esc(t.journalTitle)}</h1></div><p class="subtitle">${esc(t.homeLead)}</p></header>
     <section class="featured-section" aria-labelledby="featured-title">
       <div class="section-heading"><h2 id="featured-title">${esc(t.selectedWork)}</h2><span class="section-label">${esc(featured.kind)}</span></div>
-      <article class="feature-story"><div class="feature-copy"><div class="card-meta"><time datetime="${featured.date}">${formatDate(featured.date,locale)}</time><span>${esc(featured.topic)}</span></div><h2><a href="${pathFor(locale,`/research/${featured.slug}/`)}">${esc(featured.title)}</a></h2><p>${esc(featured.dek)}</p><a class="text-link" href="${pathFor(locale,`/research/${featured.slug}/`)}">${esc(t.readResearch)} <span aria-hidden="true">→</span></a></div><div class="feature-record"><span class="eyebrow">${esc(t.researchRecord)}</span><strong>${featured.authors.map(esc).join(" · ")}</strong><span>${esc(featured.status)}</span><span>${readingTime(featured.body,locale)} ${esc(t.minutesRead)}</span><a href="${pathFor(locale,`/research/${featured.slug}/`)}#evidence-title">${esc(t.evidenceTitle)} ↗</a></div></article>
+      <article class="feature-story"><div class="feature-copy"><div class="card-meta"><time datetime="${featured.date}">${formatDate(featured.date,locale)}</time><span>${esc(featured.topic)}</span>${editionLabel}</div><h2><a lang="${featuredLocale.htmlLang}" hreflang="${featuredLocale.hreflang}" href="${featuredHref}">${esc(featured.title)}</a></h2><p lang="${featuredLocale.htmlLang}">${esc(featured.dek)}</p><a class="text-link" href="${featuredHref}">${esc(t.readResearch)} <span aria-hidden="true">→</span></a></div><div class="feature-record"><span class="eyebrow">${esc(t.researchRecord)}</span><strong>${featured.authors.map(esc).join(" · ")}</strong><span>${esc(featured.status)}</span><span>${readingTime(featured.body,featuredLocale)} ${esc(t.minutesRead)}</span><a href="${featuredHref}#evidence-title">${esc(t.evidenceTitle)} ↗</a></div></article>
     </section>
     <section id="latest" class="research-index">
       <div class="section-heading"><h2>${esc(t.latestResearch)}</h2><div class="section-controls">${topicMenu(locale,newestFirst)}<a class="index-link" href="${pathFor(locale,"/research/")}">${esc(t.allResearch)} <span>${newestFirst.length}</span> →</a></div></div>
